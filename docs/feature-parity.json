@@ -2934,18 +2934,23 @@
     {
       "id": "rendering.custom_search",
       "name": "Literal and regex search",
-      "status": "planned",
+      "status": "implemented",
       "phase": "P3",
       "source_ids": [
         "search"
       ],
       "acceptance_test": "Search source, rendered content and selected text with occurrence counts and match evidence.",
-      "implementation_evidence": [],
+      "implementation_evidence": [
+        {
+          "verification_run_ids": [
+            "custom-search-redesign-local-20261018"
+          ],
+          "proves": "Opt-in literal and Rust-regex search on four explicitly selected raw/rendered HTML and captured-text sources. Exact counts require complete sources and exhausted scans; incomplete/unavailable remains unknown. UTF-8 offsets, bounded evidence, configuration/input/scan/regex-work/page-JSON/CSV budgets, raw/DOM separation, saved browser settings and inspector, full native CSV/JSON, import, genuine external pages, saved noindex reporting and two-process cold restart pass owned native fixtures. This fulfills the own grouped search criterion; vendor regex equivalence and full reference parity remain NOT_PROVEN."
+        }
+      ],
       "parity_evidence": [],
       "group": "rendering",
-      "remaining_acceptance": [
-        "Search source, rendered content and selected text with occurrence counts and match evidence."
-      ],
+      "remaining_acceptance": [],
       "parity_status": "NOT_PROVEN"
     },
     {
@@ -4599,7 +4604,7 @@
       "parity_status": "NOT_PROVEN"
     }
   ],
-  "implementation_review_date": "2026-10-14",
+  "implementation_review_date": "2026-10-18",
   "parity_status": "NOT_PROVEN",
   "verification_runs": [
     {
@@ -6619,6 +6624,14 @@
       "artifact_sha256": "c82a5265be9c4f78ece8bf778ad779ac5f1fb5c4f77f9a1b60b73f23c7b91fce",
       "result": "ROOT_ACTUAL_1722_0_0_STRICT_CLIPPY_PASS_BOUNDED_INDEPENDENT_SUITE_NOF",
       "scope": "OnlysavedHTMLspellingplannedtopartial;34newdefaultRust/40UIVM/2realAppconsumerLTtests explicitlyC2toC4productionexact-reused. CurrentRoot1722suiteandstrictClippyactual; independentactualsuiteauditNO_FINDINGS_BOUNDED_ACTUAL_AUDIT. FrozenC4has459testedinputs;publication452exact+7reviewedlegacyCIinventoryportsNOT_RUN,compiledRust/UIexact. Core11selected25RootpassnotfullNative17; Native23/24/25/26boundedindependentconsumersnotNative27/28. Source16installedunchanged, publicCI/parityNOT_PROVEN."
+    },
+    {
+      "id": "custom-search-redesign-local-20261018",
+      "recorded_at": "2026-10-18T10:46:53.536759+00:00",
+      "artifact": "docs/verification/custom-search-20261018/README.md",
+      "artifact_sha256": "1395fdd8d0a5c6c30a73038dab87f79595b6fe1580f1c7535c9c6930cd8dca92",
+      "result": "LOCAL_1750_RUST_32_UI_STRICT_CLIPPY_PASS_PUBLIC_CI_PENDING",
+      "scope": "Own custom-search grouped acceptance;32 UI suites (9 fixture/23 native),1750 executed Rust tests including4 explicit Chromium fixtures, strict Clippy, unchanged512KiB recovery,12 selected-recrawl scenarios. Source16 untouched. Full reference parity NOT_PROVEN; new public CI pending."
     }
   ],
   "reference_workflows": [
@@ -6740,9 +6753,9 @@
   ],
   "status_summary": {
     "overall": {
-      "implemented": 36,
+      "implemented": 37,
       "partial": 69,
-      "planned": 39,
+      "planned": 38,
       "total": 144
     },
     "phases": {
@@ -6759,9 +6772,9 @@
         "total": 45
       },
       "P3": {
-        "implemented": 6,
+        "implemented": 7,
         "partial": 8,
-        "planned": 10,
+        "planned": 9,
         "total": 24
       },
       "P4": {
@@ -6821,9 +6834,9 @@
         "total": 6
       },
       "rendering": {
-        "implemented": 4,
+        "implemented": 5,
         "partial": 4,
-        "planned": 6,
+        "planned": 5,
         "total": 14
       },
       "quality": {
@@ -6876,40 +6889,45 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-16T21:49:50.686Z",
+  "last_verified_at": "2026-10-18T10:46:53.536759+00:00",
   "current_work": [
     {
       "id": "specialist-workflows-e2e-20261018",
-      "title_de": "Spezialwerkzeuge mit echten Browser-Abläufen und vollständigen Exporten absichern",
+      "title_de": "Eigene Suche und Spezialwerkzeuge mit nativen Browser-Abläufen absichern",
       "priority": -2,
-      "status": "LOCAL_31_SUITES_PASS_PUBLIC_CI_FIX_PENDING",
-      "summary_de": "Alle31 registrierten UI-Suiten bestehen gemeinsam lokal: neun API-Fixtures und22 native Abläufe. Sechs neue Suiten decken Migration/Linkfehler, Verzeichnisbaum, Segmente, N-Gramme, Ressourcenquellen und die API-Freigabe-/Fehlerpfade ab. Die sichtbaren Zeilen und vollständigen Exporte werden gegen native Ergebnisse geprüft. Eine konkrete API-Fehleranzeige ist korrigiert. Öffentliche CI von db5948a besteht Renderer und Docker sowie Linux-Rust/Clippy, scheitert danach an einer widersprüchlichen Legacy-Sitemap-Fixture; Windows wurde abgebrochen. Die Fixture-Korrektur besteht lokal11 Szenarien samt zwei neuen Ablehnungsfällen; eine frische öffentliche Abnahme bleibt offen.",
+      "status": "LOCAL_1750_RUST_32_UI_PASS_PUBLIC_CI_PENDING",
+      "summary_de": "Die eigene Literal-/Regex-Suche ist für vier getrennte Roh-/DOM-/Textquellen implementiert und mit echten Browser-, API-, Speicher-, Export- und Neustartabläufen abgenommen. Alle 32 UI-Suiten bestehen gemeinsam lokal: neun API-Fixtures und 23 native Abläufe. Zusätzlich bestehen 1.746 reguläre Rust-Tests und vier separat ausgeführte Chromium-Tests sowie strenges Clippy. Die drei Fehler des öffentlichen Laufs ee4eb6a (Windows-Stack, inkonsistente Recrawl-Fixture, verspätetes Lesen einer Browserantwort) sind korrigiert und lokal geprüft. Die neue öffentliche CI bleibt offen.",
       "completed_acceptance_de": [
-        "Ein gemeinsamer31-Suiten-Lauf mit regulärem App-Abschluss0, unveränderten getrackten Quellen und identischer getesteter Binärdatei bestanden.",
-        "105 Verzeichniskinder,105 Segmentzeilen, über100 N-Grammzeilen,107 Linkfundstellen,109 Migrationszeilen und106 Ressourcen-Fundstellen über die tatsächlichen UI-Seiten und vollständigen Exporte geprüft.",
-        "Unabhängige Reviews schärfen sichtbare DOM-Zeilen, genaue Segmentzuordnung, CSV-Vollständigkeit, echte Filteranfragen und Unknown-Zustände; fünf Kontrollen bestätigen die abschließenden Runner-Gates.",
-        "API-Anreicherung zeigt echte Backend-Fehlermeldungen aus String- und Objektantworten; Vorschau, Freigabe, Invalidierung und fehlende Zugangsdaten ohne Google-Übermittlung geprüft.",
-        "Sitemap-Legacy-Fixture entfernt beide modernen abhängigen Felder; verwaiste Messungen und verwaistes Inventar müssen separat400 ohne Kinddateien und Website-Anfragen ergeben. Tatsächlicher lokaler11-Szenarien-/11-SQLite-Aufgabenlauf mit vollständigem HTTP-Drain besteht.",
-        "Strikte saubere Commit-Prüfungen auf3f3e8ea für Sitemap-Ledger, Membership und Assessment tatsächlich bestanden; alle Roh- und Hashnachweise bleiben lokal erhalten."
+        "Gemeinsamer Lauf aller 32 UI-Suiten mit regulärem App-Abschluss 0, unveränderten getrackten Quellen und identischer getesteter Binärdatei bestanden.",
+        "Eigene Suche: vier getrennte Quellen, genaue Unicode-Bytepositionen, Literal-/Regex-Zählungen, explizite Unknown-Zustände, begrenzte Arbeit und Belege; ungültige Regeln vor Website-Anfragen abgelehnt.",
+        "Zehn echte Suchabläufe einschließlich externer URLs, Noindex-Anzeigefilter, sicherem verzögertem Inspector, sieben vollständigen Browser-Downloads, Import und zwei kalten nativen Prozessen bestanden; keine Analyse-Neuabrufe.",
+        "1.746 reguläre Rust-Tests und vier separat ausgeführte echte Chromium-Tests bestehen; Clippy für alle Targets/Features mit verbotenen Warnungen bestanden. 40 UI-VM-Gruppen und 32 Zustandsregressionen sind separat geprüft.",
+        "Originaler 512-KiB-Stacktest für gespeicherte Roh-/DOM-/Recrawl-Daten besteht unoptimiert. Heap-Einlesen erhält Standardwerte, unbekannte Felder, URL-first-Arrays und Ablehnungen bei Duplikaten, falschen Typen, fehlenden Pflichtfeldern und nachgestellten Daten.",
+        "Native Such-CSV bleibt auf 64 MiB begrenzt; übergroße importierte Belege ergeben 413 ohne erfolgreichen Teil-Download. Anzeigen und CSV verwenden dieselben profil-sichtbaren internen und externen Seiten.",
+        "Verzeichnis-Test liest Vorschauantworten sofort einmal; Such-Downloads werden anhand der tatsächlichen Datei und einer unabhängigen nativen HTTP-Antwort geprüft.",
+        "Moderne Recrawl-Fixture erhält ihre tatsächliche Discovery-Konfiguration; zwölf native Szenarien und ein widersprüchlicher Inventar-Kontrollfall bestehen ohne Aufweichen der Produktionsprüfung.",
+        "Die zuvor abgenommenen Spezialwerkzeug-Szenarien mit über 100 Zeilen, vollständigen Exporten und zwei Sitemap-Orphan-Kontrollen bestehen weiterhin im gemeinsamen Lauf. Historische strikte Sitemap-Prüfungen auf 3f3e8ea bleiben gesonderte ältere Belege."
       ],
       "pending_acceptance_de": [
-        "Frische öffentliche Linux-/Windows-CI prüfen; die strikten lokalen Commit-Prüfungen für Ledger, Membership und Assessment bestehen auf3f3e8ea, ersetzen aber keinen vollständig grünen GitHub-Lauf.",
-        "Positive API-Anreicherung über den bestehenden test-only Transport-Injektionspunkt durch echten Browser/Router/Store prüfen; tatsächliche Google-Metriken separat autorisiert abnehmen.",
-        "Kalte native Wiederöffnung der neuen Spezialwerkzeuge, weitere Regel-/Operator-Kombinationen, archivübergreifende Fehler und weitere Browser ergänzen.",
-        "Als nächsten echten Funktionsausbau rendering.custom_search für Roh-HTML, DOM-HTML und ausdrücklich ausgewählte Texte implementieren; sichere Muster-/Ergebnisgrenzen, getrennte Herkunft und Unknown-Zustände erhalten.",
-        "Vollständigen144-Fähigkeiten-Katalog weiter abarbeiten;36/69/39 bleiben unverändert und Herstellerparität NOT_PROVEN."
+        "Frische öffentliche Linux-/Windows-/Renderer-/Container-CI des neuen Commits beobachten und konkrete Folgefehler beheben; lokales Grün ersetzt keine öffentliche Abnahme.",
+        "Positive API-Anreicherung mit test-only Provider-Transport durch Browser, Router, Polling, Speicherung und Wiederöffnung prüfen; echte Google-Metriken separat autorisiert abnehmen.",
+        "Kalte Wiederöffnung weiterer Spezialwerkzeuge, zusätzliche Regel-/Operator-Kombinationen, fehlerhafte Archive, konkurrierende Änderungen und weitere Browser ergänzen.",
+        "Vollständigen 144-Fähigkeiten-Katalog weiter abarbeiten: 37 eigene Abnahmen, 69 teilweise geprüft, 38 offen. Das zusätzliche Register mit 416 Filtern und 32 Ablaufverträgen bleibt eigenständig; Herstellerparität NOT_PROVEN."
       ],
       "documentation": [
         "docs/e2e-testing.md",
-        "docs/verification/specialist-e2e-20261018/README.md",
-        "docs/custom-search-plan.md"
+        "docs/custom-search-plan.md",
+        "docs/verification/custom-search-20261018/README.md"
       ],
       "gates": {
-        "local_UI_E2E": "PASS_31_9_FIXTURE_22_NATIVE",
-        "public_CI_db5948a": "RENDERER_DOCKER_PASS_LINUX_RUST_CLIPPY_PASS_LEDGER_FIXTURE_FAIL_WINDOWS_CANCELLED",
-        "ledger_fix": "PASS_DIRECT_LOCAL_11_SCENARIOS_11_SQLITE_TWO_ORPHAN_CONTROLS",
-        "strict_clean_commit_ledger": "PASS_3F3E8EA_11_SCENARIOS_11_SQLITE_TWO_ORPHAN_CONTROLS",
-        "public_CI_new_commit": "NOT_PROVEN",
+        "local_UI_E2E": "PASS_32_9_FIXTURE_23_NATIVE",
+        "workspace_Rust": "PASS_1746_ZERO_FAILURE_FOUR_EXPLICIT_RENDERER_IGNORES",
+        "explicit_Rust_Chromium": "PASS_FOUR_ACTUAL_OWNED_RENDERER",
+        "strict_clippy": "PASS_ALL_TARGETS_ALL_FEATURES",
+        "custom_search": "PASS_TEN_NATIVE_BROWSER_WORKFLOWS",
+        "selected_recrawl_fixture": "PASS_TWELVE_NATIVE_SCENARIOS_WITH_MODERN_COVERAGE_REFUSAL",
+        "public_CI_ee4eb6a": "CONTAINER_PASS_WINDOWS_STACK_FAIL_LINUX_FIXTURE_FAIL_RENDERER_BODY_READ_FAIL",
+        "public_CI_new_commit": "PENDING_AFTER_PUSH",
         "manufacturer_parity": "NOT_PROVEN",
         "installation": "UNCHANGED_SOURCE16"
       },
@@ -9480,7 +9498,6 @@
   ],
   "active_work_ids": [
     "specialist-workflows-e2e-20261018",
-    "claude-redesign-e2e-20261018",
     "combined-source-v15-20261016",
     "api-only-enrichment-20261016",
     "cdn-directory-reporting-20261016",

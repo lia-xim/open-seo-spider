@@ -15,6 +15,7 @@ There is no fixed commercial URL allowance. Your configured crawl budgets, stora
 - Opt-in saved raw/rendered HTML text, content cohorts, segments and n-gram reports, without refetching websites for saved analysis.
 - Native TLS/custom-CA and opt-in HSTS controls. Combining these active controls with browser rendering is currently refused.
 - An optional Chromium worker for JavaScript rendering, screenshots, accessibility observations and custom JavaScript.
+- Opt-in [literal and regex search](docs/custom-search-plan.md) over raw/rendered HTML and explicitly captured text, with saved source-specific counts, bounded evidence and CSV export.
 - A local API and **32 MCP tools**, plus **five optional file tools** restricted to an explicitly configured directory.
 
 See the [feature catalog](docs/feature-catalog.md), [crawl control](docs/crawl-control.md), [saved comparison](docs/saved-comparison.md), [sitemap generation](docs/sitemap-generation.md) and [MCP file-tool contract](docs/mcp-file-tools.md).
@@ -61,11 +62,11 @@ The local HTTP app must already be running. File tools require the explicit `--m
 
 ## Current limits and verification
 
-The [feature ledger](docs/feature-parity.json) tracks 144 grouped requirements: **36 independently accepted, 69 partial and 39 open**. These are project acceptance states, not a percentage of another product's functionality. The [ongoing to-do list](docs/FEATURE_TODO.md) records the remaining work.
+The [feature ledger](docs/feature-parity.json) tracks 144 grouped requirements: **37 independently accepted, 69 partial and 38 open**. These are project acceptance states, not a percentage of another product's functionality. The [ongoing to-do list](docs/FEATURE_TODO.md) records the remaining work.
 
 The saved-spelling slice has focused evidence for 34 default Rust tests, 40 extracted UI VM groups across related workflows, and two real app-consumer LanguageTool tests using English/German fixtures. Those bounded checks do not prove every UI path, language or external integration. A VM fixture is not a real browser workflow.
 
-The final Windows-local source run passed **1,722 workspace tests, with zero failures and zero ignored tests**, including four real-renderer integration tests. Strict Clippy passed for all targets and all features. The seven updated legacy CI scripts have source review but await their full CI executions. See the [selected verification records](docs/verification/source28-open-source-alpha-20261016/README.md). Public CI remains pending; these local checks do not establish universal coverage. Windows has a verified native pilot; fresh Source27/28 native front-door checks, Linux CI, Docker runtime and wider platform checks remain pending. The existing installed Windows pilot is Source16; repository Source28 source does not update that installation.
+The latest local Windows run passed **1,746 ordinary workspace tests plus all four explicitly enabled Chromium fixtures**, with zero failures. All **32 UI suites** passed together (nine API-fixture suites and 23 native suites); strict Clippy passed for all targets/features. See the [custom-search and redesign verification](docs/verification/custom-search-20261018/README.md) for exact hashes, cold restart and scope. The fresh public CI run remains pending; local evidence does not establish universal coverage. Earlier [Source28 proof](docs/verification/source28-open-source-alpha-20261016/README.md) is historical. The installed Windows pilot remains Source16 and was not updated by this work.
 
 Complete authenticated browser sessions, OCR, scheduling and comprehensive external-provider workflows remain incomplete or open. Provider features require your own authorized credentials and remain subject to provider quotas. Proprietary crawl-file compatibility and performance equivalence are not claimed.
 

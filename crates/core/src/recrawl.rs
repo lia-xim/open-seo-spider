@@ -215,8 +215,8 @@ pub fn prepare_selected_recrawl(
         !urls.is_empty() && urls.len() <= MAX_SELECTION_ROWS,
         "Select 1..=50000 requested URL occurrences"
     );
-    let base_report: CrawlReport =
-        serde_json::from_slice(snapshot_bytes).context("Invalid parent crawl snapshot")?;
+    let base_report: CrawlReport = crate::heap_deserialize::from_slice(snapshot_bytes)
+        .context("Invalid parent crawl snapshot")?;
 
     if let Some(snapshot) = &base_report.sitemap_source_measurements {
         crate::sitemap_source_store::validate_snapshot(snapshot)?;
@@ -242,6 +242,13 @@ pub fn prepare_selected_recrawl(
     let mut pages = HashMap::new();
     for (ordinal, page) in base_report.pages.iter().enumerate() {
         crate::content_binding::validate_native_content_captures(page, &config, None, false)?;
+        if let Some(results) = &page.custom_search {
+            crawler
+                .compiled_custom_search()
+                .context("Parent custom-search observations lack their configured profile")?
+                .validate_results(results)
+                .context("Invalid parent custom-search observations")?;
+        }
         ensure!(
             !pages.contains_key(page.url.as_str()),
             "Parent has ambiguous duplicate requested URL: {}",

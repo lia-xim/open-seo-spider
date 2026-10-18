@@ -213,7 +213,7 @@ impl CrawlStore {
             None
         };
         if checkpoint_valid && let Some(operation) = &operation {
-            let saved: CrawlReport = serde_json::from_str(
+            let saved: CrawlReport = crate::heap_deserialize::from_str(
                 report
                     .as_deref()
                     .context("Terminal selected checkpoint has no report")?,
@@ -246,7 +246,7 @@ impl CrawlStore {
                     .is_some_and(|value| value.sitemap_ledger == sitemap_ledger),
                 "Terminal sitemap summary differs from checkpoint binding"
             );
-            let saved: CrawlReport = serde_json::from_str(
+            let saved: CrawlReport = crate::heap_deserialize::from_str(
                 report
                     .as_deref()
                     .context("Terminal sitemap checkpoint has no report")?,
@@ -2164,7 +2164,7 @@ impl CrawlStore {
         values
             .into_iter()
             .map(|value| {
-                let page: PageRecord = serde_json::from_str(&value)?;
+                let page: PageRecord = crate::heap_deserialize::from_str(&value)?;
                 crate::validate_page_content_captures(&page)?;
                 Ok(page)
             })
@@ -2233,7 +2233,7 @@ impl CrawlStore {
                     [&page.url],
                     |row| row.get(0),
                 )?;
-                let stored: PageRecord = serde_json::from_str(&stored)?;
+                let stored: PageRecord = crate::heap_deserialize::from_str(&stored)?;
                 if stored.content_captures != page.content_captures {
                     bail!("Checkpoint capture differs from committed page observation");
                 }
@@ -2320,7 +2320,7 @@ impl CrawlStore {
         let value = bounded_saved_report_text(&transaction)?;
         let report = value
             .map(|value| -> anyhow::Result<CrawlReport> {
-                let report: CrawlReport = serde_json::from_str(&value)?;
+                let report: CrawlReport = crate::heap_deserialize::from_str(&value)?;
                 crate::validate_sitemap_coverage_inventory(
                     &report.config,
                     report.sitemap_catalog.as_ref(),
@@ -2514,7 +2514,7 @@ fn load_sitemap_read_snapshot_verified(
         Some(catalog) if catalog.inherited.is_some() => {
             let parent_bytes = parent_snapshot(connection)?
                 .context("Inherited coverage lacks immutable parent bytes")?;
-            let parent: CrawlReport = serde_json::from_slice(&parent_bytes)?;
+            let parent: CrawlReport = crate::heap_deserialize::from_slice(&parent_bytes)?;
             crate::validate_sitemap_coverage_inventory(
                 &parent.config,
                 parent.sitemap_catalog.as_ref(),
@@ -2672,7 +2672,7 @@ fn verify_saved_content_captures(connection: &Connection) -> anyhow::Result<()> 
     let mut rows = statement.query([])?;
     while let Some(row) = rows.next()? {
         let url: String = row.get(0)?;
-        let page: PageRecord = serde_json::from_str(&row.get::<_, String>(1)?)?;
+        let page: PageRecord = crate::heap_deserialize::from_str(&row.get::<_, String>(1)?)?;
         let inherited: bool = row.get(2)?;
         let committed = row
             .get::<_, Option<i64>>(3)?
@@ -2766,7 +2766,7 @@ fn verify_recrawl_rows(connection: &Connection, plan: &RunPlan) -> anyhow::Resul
         return Ok(());
     };
     let bytes = parent_snapshot(connection)?.context("Immutable parent missing")?;
-    let base: CrawlReport = serde_json::from_slice(&bytes)?;
+    let base: CrawlReport = crate::heap_deserialize::from_slice(&bytes)?;
     let run: Option<CrawlRunState> = metadata(connection, "run_state")?;
     let run_generation = run.map_or(0, |run| run.generation);
     let selected = plan.targets_set();
@@ -2859,7 +2859,7 @@ fn verify_recrawl_rows(connection: &Connection, plan: &RunPlan) -> anyhow::Resul
                 if payload.as_deref() != Some(sha256(&data).as_str()) {
                     bail!("Committed selected payload was altered");
                 }
-                let fresh: PageRecord = serde_json::from_str(&data)?;
+                let fresh: PageRecord = crate::heap_deserialize::from_str(&data)?;
                 if fresh.url != page.url
                     || fresh.depth != page.depth
                     || fresh.discovered_from != page.discovered_from

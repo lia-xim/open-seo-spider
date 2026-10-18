@@ -88,6 +88,7 @@ pub(crate) async fn render_page(
     config: &CrawlConfig,
     seeds: &[Url],
     capture: Option<&crate::CompiledContentCaptureConfig>,
+    custom_search: Option<&crate::CompiledCustomSearchConfig>,
     generation: Option<u64>,
 ) {
     let Some(renderer) = &config.renderer else {
@@ -169,6 +170,42 @@ pub(crate) async fn render_page(
             page.screenshot_base64 = document.screenshot_base64;
             page.custom_javascript_results = document.custom_javascript_results;
             page.browser_cookies = document.browser_cookies;
+            if let Some(search) = custom_search {
+                let html_type = page
+                    .rendered_headers
+                    .iter()
+                    .find(|(name, _)| name.eq_ignore_ascii_case("content-type"))
+                    .map(|(_, value)| value.split(';').next().unwrap_or("").trim())
+                    .is_some_and(|mime| {
+                        mime.eq_ignore_ascii_case("text/html")
+                            || mime.eq_ignore_ascii_case("application/xhtml+xml")
+                    });
+                let document_url = page.rendered_url.clone();
+                let complete =
+                    html_type && page.rendered_at.is_some() && page.rendered_status.is_some();
+                let revision = document_url.as_deref().map(|url| {
+                    crate::custom_search_binding::html_revision(
+                        page,
+                        crate::CustomSearchSource::RenderedHtml,
+                        &document.html,
+                        url,
+                        generation,
+                    )
+                });
+                crate::custom_search_binding::observe(
+                    page,
+                    search,
+                    crate::CustomSearchSource::RenderedHtml,
+                    crate::CustomSearchInput {
+                        text: html_type.then_some(document.html.as_str()),
+                        complete,
+                        reason: (!complete).then_some("rendered_html_unverified_or_non_html"),
+                        document_url: document_url.as_deref(),
+                        observed_generation: generation,
+                        source_revision: revision.as_deref(),
+                    },
+                );
+            }
             if let Some(capture) = capture {
                 let html_type = page
                     .rendered_headers

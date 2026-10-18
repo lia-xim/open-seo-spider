@@ -9,6 +9,7 @@ const artifactPath = require('./artifact-path.cjs');
 const app = process.env.SPIDER_APP_URL;
 assert(app && new URL(app).hostname === '127.0.0.1' && !['8787','8790'].includes(new URL(app).port), 'Use an isolated native E2E app');
 const checks = [], errors = [], hits = new Map();
+const browserEvidence = {main_frame_navigations:[],request_failures:[],response_captures:[]};
 const count = () => [...hits.values()].reduce((a,b) => a+b, 0);
 const fixture = http.createServer((req,res) => {
   hits.set(req.url, (hits.get(req.url) || 0)+1);
@@ -68,11 +69,32 @@ async function assertRenderedPage(page,value) {
   assert.equal(await page.isDisabled('#previous-page'),value.offset===0);
   assert.equal(await page.isDisabled('#next-page'),value.next_offset===null);
 }
+function captureResponse(page,predicate,label) {
+  // Start CDP body retrieval at the response event, before Playwright waits for
+  // a click's post-action work. Retain one buffer for diagnostics, parsing and
+  // integrity checks; a successful status must not eagerly call text() again.
+  return page.waitForResponse(predicate).then(async response=>{
+    const record={label,url:response.url(),method:response.request().method(),resource_type:response.request().resourceType(),status:response.status(),page_url_at_headers:page.url(),body_bytes:null,body_sha256:null,error:null};
+    browserEvidence.response_captures.push(record);
+    try {
+      const bytes=await response.body(),headers=await response.allHeaders();
+      record.body_bytes=bytes.length;record.body_sha256=createHash('sha256').update(bytes).digest('hex');record.page_url_after_body=page.url();
+      return {response,bytes,headers};
+    } catch(error) {record.error=String(error);record.page_url_after_body=page.url();throw error;}
+  });
+}
+function assertNoNavigation(page,before,label) {
+  assert.equal(page.url(),before.url,label+' must preserve the current document URL');
+  assert.equal(browserEvidence.main_frame_navigations.length,before.navigations,label+' must not navigate or reload the document');
+}
 async function preview(page,click,expected=200) {
-  const pending=page.waitForResponse(r=>r.url().endsWith('/directory-tree/preview')&&r.request().method()==='POST');
-  await click();const response=await pending;assert.equal(response.status(),expected,await response.text());
-  if(expected!==200)return response.json();
-  const bytes=await response.body();verified(bytes,await response.allHeaders());const value=JSON.parse(bytes);
+  const before={url:page.url(),navigations:browserEvidence.main_frame_navigations.length};
+  const pending=captureResponse(page,r=>r.url().endsWith('/directory-tree/preview')&&r.request().method()==='POST','directory-preview');
+  const [{response,bytes,headers}]=await Promise.all([pending,Promise.resolve().then(click)]);
+  assert.equal(response.status(),expected,bytes.toString('utf8'));
+  assertNoNavigation(page,before,'Directory preview');
+  if(expected!==200)return JSON.parse(bytes);
+  verified(bytes,headers);const value=JSON.parse(bytes);
   await page.waitForFunction(label=>document.getElementById('current-label').textContent===label&&!document.getElementById('open-tree').disabled,value.current.label);
   assert.equal(value.website_requests,0);await assertRenderedPage(page,value);return value;
 }
@@ -87,18 +109,20 @@ async function descend(page,current,find) {
   return preview(page,()=>page.locator('#directory-children article').filter({has:page.locator('.address',{hasText:node.address})}).locator('h3 button').click());
 }
 async function download(page) {
-  const pending=page.waitForResponse(r=>r.url().endsWith('/directory-tree/csv')&&r.request().method()==='POST'),saving=page.waitForEvent('download');
-  await page.click('#export-csv');const response=await pending;assert.equal(response.status(),200,await response.text());
-  const bytes=await response.body();verified(bytes,await response.allHeaders());
-  const file=await saving;assert.equal(file.suggestedFilename(),'directory-tree.csv');assert.deepEqual(fs.readFileSync(await file.path()),bytes);
+  const before={url:page.url(),navigations:browserEvidence.main_frame_navigations.length};
+  const pending=captureResponse(page,r=>r.url().endsWith('/directory-tree/csv')&&r.request().method()==='POST','directory-csv'),saving=page.waitForEvent('download');
+  const [{response,bytes,headers},file]=await Promise.all([pending,saving,page.click('#export-csv')]);
+  assert.equal(response.status(),200,bytes.toString('utf8'));verified(bytes,headers);assertNoNavigation(page,before,'Directory CSV');
+  assert.equal(file.suggestedFilename(),'directory-tree.csv');assert.deepEqual(fs.readFileSync(await file.path()),bytes);
   await page.waitForFunction(()=>document.getElementById('directory-status').textContent.includes('Prüfsumme bestätigt'));
   return {bytes,rows:csvRows(bytes.toString('utf8')),request:response.request().postDataJSON()};
 }
 async function importReport(page,report,name) {
   await page.goto(app);await page.locator('#connection-state.connected').waitFor();
-  const pending=page.waitForResponse(r=>r.url()===app+'/api/crawls/import'&&r.request().method()==='POST');
-  await page.setInputFiles('#import-file',{name,mimeType:'application/json',buffer:Buffer.from(JSON.stringify(report))});
-  const response=await pending;assert.equal(response.status(),200,await response.text());return (await response.json()).id;
+  const before={url:page.url(),navigations:browserEvidence.main_frame_navigations.length};
+  const pending=captureResponse(page,r=>r.url()===app+'/api/crawls/import'&&r.request().method()==='POST','project-import');
+  const [{response,bytes}]=await Promise.all([pending,page.setInputFiles('#import-file',{name,mimeType:'application/json',buffer:Buffer.from(JSON.stringify(report))})]);
+  assert.equal(response.status(),200,bytes.toString('utf8'));assertNoNavigation(page,before,'Project import');return JSON.parse(bytes).id;
 }
 (async()=>{
   await new Promise(resolve=>fixture.listen(0,'127.0.0.1',resolve));
@@ -112,6 +136,8 @@ async function importReport(page,report,name) {
   const executablePath=process.env.SPIDER_CHROME||process.env.OPEN_SEO_BROWSER_PATH||await(await import('../../renderer/server.mjs')).findBrowserExecutable();
   const browser=await chromium.launch({headless:true,executablePath}),page=await browser.newPage({viewport:{width:1440,height:900}});
   page.on('pageerror',error=>errors.push(error.message));
+  page.on('framenavigated',frame=>{if(frame===page.mainFrame())browserEvidence.main_frame_navigations.push({url:frame.url(),at:new Date().toISOString()});});
+  page.on('requestfailed',request=>browserEvidence.request_failures.push({url:request.url(),method:request.method(),resource_type:request.resourceType(),navigation:request.isNavigationRequest(),failure:request.failure()?.errorText||null,page_url:page.url()}));
   let emptyId,sparseId;
   try {
     const root=await open(page,started.id);
@@ -179,10 +205,10 @@ async function importReport(page,report,name) {
     assert.equal(await (await fetch(app+`/api/crawls/${started.id}/project.json`)).text(),savedBytes);
     assert.equal(count(),capturedHits,'Directory views/import/export must not refetch any website');assert.equal(hits.get('/docs/')||0,0,'Synthetic directory address must never be fetched');assert.deepEqual(errors,[]);
     checks.push('Missing saved job is a native HTTP404 rather than an empty tree; all analysis/navigation/import/export preserve original saved report bytes and make zero website requests');
-    fs.writeFileSync(artifactPath('directory-tree-live.json'),JSON.stringify({result:'PASS',crawl_id:started.id,empty_import_id:emptyId,sparse_import_id:sparseId,checks,website_requests_during_crawl:capturedHits,website_refetches:count()-capturedHits,errors,scope:'Actual redesigned browser/native crawler/saved report/profile/tree navigation/CSV. Unknown and known-empty edge fixtures are honestly declared imports. Cross-view and missing-job guards are actual browser fetches to native API. No vendor semantic parity or cold-process persistence claim.'},null,2)+'\n');
+    fs.writeFileSync(artifactPath('directory-tree-live.json'),JSON.stringify({result:'PASS',crawl_id:started.id,empty_import_id:emptyId,sparse_import_id:sparseId,checks,website_requests_during_crawl:capturedHits,website_refetches:count()-capturedHits,errors,browser_evidence:browserEvidence,scope:'Actual redesigned browser/native crawler/saved report/profile/tree navigation/CSV. Unknown and known-empty edge fixtures are honestly declared imports. Cross-view and missing-job guards are actual browser fetches to native API. No vendor semantic parity or cold-process persistence claim.'},null,2)+'\n');
     console.log(`${checks.length} actual native directory-tree workflows passed`);
   } catch(error) {
     await page.screenshot({path:artifactPath('directory-tree-failure.png'),fullPage:true});
-    fs.writeFileSync(artifactPath('directory-tree-failure.json'),JSON.stringify({error:error.stack,checks,crawl_id:started.id,layout:await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1).slice(0,20).map(e=>({tag:e.tagName,id:e.id,width:e.getBoundingClientRect().width,text:e.textContent.slice(0,100)}))}))},null,2)+'\n');throw error;
+    fs.writeFileSync(artifactPath('directory-tree-failure.json'),JSON.stringify({error:error.stack,checks,crawl_id:started.id,page_url:page.url(),browser_evidence:browserEvidence,layout:await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1).slice(0,20).map(e=>({tag:e.tagName,id:e.id,width:e.getBoundingClientRect().width,text:e.textContent.slice(0,100)}))}))},null,2)+'\n');throw error;
   } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{fixture.closeAllConnections();await new Promise(resolve=>fixture.close(resolve));});

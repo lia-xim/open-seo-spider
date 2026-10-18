@@ -257,6 +257,8 @@ jobs:
       - run: node --test web/verification/robots-input-state.test.cjs
       - run: node --test web/verification/list-import-state.test.mjs
       - run: cargo build --locked -p open-seo-spider
+      - name: Opt-in Rust browser fixtures on an owned renderer
+        run: node scripts/renderer-rust-e2e.mjs
       - run: npm ci --ignore-scripts
         working-directory: scripts
       - name: Redesigned UI fixture and native end-to-end workflows

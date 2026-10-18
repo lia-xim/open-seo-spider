@@ -37,6 +37,7 @@ const suites = [
   ['saved-ngrams', 'ui-ngrams-live.cjs', 'live'],
   ['saved-segments', 'ui-segments-live.cjs', 'live'],
   ['resource-sources', 'ui-resource-sources-live.cjs', 'live'],
+  ['custom-search', 'ui-custom-search-live.cjs', 'live'],
   ['saved-comparison', 'ui-saved-comparison-live.cjs', 'owned-native'],
   ['comparison-bundles', 'ui-saved-comparison-bundle-live.cjs', 'owned-native'],
 ];

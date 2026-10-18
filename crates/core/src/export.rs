@@ -601,6 +601,226 @@ pub fn export_custom_extractions_csv(report: &CrawlReport) -> anyhow::Result<Str
     crate::reporting_csv(raw_report, String::from_utf8(writer.into_inner()?)?)
 }
 
+/// One row per saved custom-search rule/source observation. Exact zero remains
+/// zero, an unknown count remains empty, and bounded match JSON retains its
+/// offset units, excerpts and truncation flags without rerunning any search.
+/// The complete CSV, including reporting columns, must fit64 MiB. Imported
+/// page declarations must fit the engine's4 MiB ceiling; overflow is an error.
+pub fn export_custom_search_csv(report: &CrawlReport) -> anyhow::Result<String> {
+    export_custom_search_csv_bounded(
+        report,
+        64 * 1024 * 1024,
+        crate::CUSTOM_SEARCH_MAX_OUTPUT_BYTES,
+    )
+}
+
+#[derive(Debug)]
+struct SearchCsvBuffer {
+    bytes: Vec<u8>,
+    limit: usize,
+}
+impl SearchCsvBuffer {
+    fn new(limit: usize) -> Self {
+        Self {
+            bytes: Vec::with_capacity(limit.min(8192)),
+            limit,
+        }
+    }
+}
+impl std::io::Write for SearchCsvBuffer {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        let required = self
+            .bytes
+            .len()
+            .checked_add(bytes.len())
+            .filter(|length| *length <= self.limit)
+            .ok_or_else(|| std::io::Error::other("custom-search CSV byte budget exceeded"))?;
+        if required > self.bytes.capacity() {
+            let capacity = self
+                .bytes
+                .capacity()
+                .max(8192)
+                .saturating_mul(2)
+                .min(self.limit)
+                .max(required);
+            self.bytes
+                .try_reserve_exact(capacity - self.bytes.len())
+                .map_err(std::io::Error::other)?;
+        }
+        self.bytes.extend_from_slice(bytes);
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
+struct SearchJsonCounter {
+    bytes: usize,
+    limit: usize,
+}
+impl std::io::Write for SearchJsonCounter {
+    fn write(&mut self, bytes: &[u8]) -> std::io::Result<usize> {
+        self.bytes = self
+            .bytes
+            .checked_add(bytes.len())
+            .filter(|length| *length <= self.limit)
+            .ok_or_else(|| {
+                std::io::Error::other("custom-search CSV saved page evidence exceeds byte budget")
+            })?;
+        Ok(bytes.len())
+    }
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
+fn search_csv_json(value: &impl serde::Serialize, limit: usize) -> anyhow::Result<String> {
+    let mut buffer = SearchCsvBuffer::new(limit);
+    serde_json::to_writer(&mut buffer, value)?;
+    Ok(String::from_utf8(buffer.bytes)?)
+}
+fn search_csv_record(
+    writer: &mut csv::Writer<SearchCsvBuffer>,
+    mut row: Vec<String>,
+    visibility: Option<&[String; 6]>,
+) -> anyhow::Result<()> {
+    if let Some(values) = visibility {
+        row.extend(values.iter().cloned());
+    }
+    writer.write_record(row)?;
+    Ok(())
+}
+fn export_custom_search_csv_bounded(
+    report: &CrawlReport,
+    csv_limit: usize,
+    page_json_limit: usize,
+) -> anyhow::Result<String> {
+    let visibility = crate::reporting_visibility(&report.config, &report.pages, &report.issues);
+    let values = visibility.as_ref().map(|counts| {
+        [
+            counts.captured_pages,
+            counts.visible_pages,
+            counts.hidden_pages,
+            counts.captured_issues,
+            counts.visible_issues,
+            counts.hidden_issues,
+        ]
+        .map(|number| number.to_string())
+    });
+    let mut writer = csv::Writer::from_writer(SearchCsvBuffer::new(csv_limit));
+    let mut headers = vec![
+        "URL",
+        "Document URL",
+        "Rule Name",
+        "Method",
+        "Pattern SHA256",
+        "Configuration SHA256",
+        "Source",
+        "Status",
+        "Count",
+        "Matches Observed",
+        "Evidence Complete",
+        "Saved Match Evidence",
+        "Matches JSON",
+        "Input UTF8 Bytes",
+        "Searched UTF8 Bytes",
+        "Input SHA256",
+        "Observed Generation",
+        "Source Revision",
+        "Engine",
+        "Reasons JSON",
+    ];
+    if visibility.is_some() {
+        headers.extend([
+            "Captured Pages",
+            "Visible Pages",
+            "Hidden Pages",
+            "Captured Issues",
+            "Visible Issues",
+            "Hidden Issues",
+        ]);
+    }
+    writer.write_record(headers)?;
+    for page in report
+        .pages
+        .iter()
+        .filter(|page| crate::directive_page_visible(&report.config, page))
+    {
+        anyhow::ensure!(
+            page.url.len() <= csv_limit,
+            "custom-search CSV URL exceeds byte budget"
+        );
+        let observations = page.custom_search.as_deref().unwrap_or_default();
+        // Count serialized bytes without building a second Value/string tree.
+        // Imported declarations need the same hard page ceiling as native data.
+        serde_json::to_writer(
+            &mut SearchJsonCounter {
+                bytes: 0,
+                limit: page_json_limit,
+            },
+            observations,
+        )?;
+        if observations.is_empty() {
+            // Historical absence and no saved result do not establish that a
+            // configured rule was evaluated or that there were zero matches.
+            let mut row = vec![String::new(); 20];
+            row[0] = csv_text(&page.url);
+            row[7] = "unavailable".into();
+            row[19] = "[\"missing_saved_observation\"]".into();
+            search_csv_record(&mut writer, row, values.as_ref())?;
+        }
+        for observation in observations {
+            search_csv_record(
+                &mut writer,
+                vec![
+                    csv_text(&page.url),
+                    csv_text(observation.document_url.as_deref().unwrap_or_default()),
+                    csv_text(&observation.rule_name),
+                    match observation.method {
+                        crate::CustomSearchMethod::Literal => "literal",
+                        crate::CustomSearchMethod::Regex => "regex",
+                    }
+                    .into(),
+                    csv_text(&observation.pattern_sha256),
+                    csv_text(&observation.config_sha256),
+                    match observation.source {
+                        crate::CustomSearchSource::RawHtml => "raw_html",
+                        crate::CustomSearchSource::RenderedHtml => "rendered_html",
+                        crate::CustomSearchSource::RawSelectedText => "raw_selected_text",
+                        crate::CustomSearchSource::RenderedSelectedText => "rendered_selected_text",
+                    }
+                    .into(),
+                    match observation.status {
+                        crate::CustomSearchStatus::Complete => "complete",
+                        crate::CustomSearchStatus::Incomplete => "incomplete",
+                        crate::CustomSearchStatus::Unavailable => "unavailable",
+                    }
+                    .into(),
+                    observation.count.map(|n| n.to_string()).unwrap_or_default(),
+                    observation.matches_observed.to_string(),
+                    observation.evidence_complete.to_string(),
+                    observation.matches.len().to_string(),
+                    search_csv_json(&observation.matches, page_json_limit)?,
+                    observation
+                        .input_utf8_bytes
+                        .map(|n| n.to_string())
+                        .unwrap_or_default(),
+                    observation.searched_utf8_bytes.to_string(),
+                    csv_text(observation.input_sha256.as_deref().unwrap_or_default()),
+                    observation
+                        .observed_generation
+                        .map(|n| n.to_string())
+                        .unwrap_or_default(),
+                    csv_text(observation.source_revision.as_deref().unwrap_or_default()),
+                    csv_text(&observation.engine),
+                    search_csv_json(&observation.reasons, page_json_limit)?,
+                ],
+                values.as_ref(),
+            )?;
+        }
+    }
+    Ok(String::from_utf8(writer.into_inner()?.bytes)?)
+}
+
 /// One row per executed script. JSON preserves the difference between a missing
 /// result, null, a string and structured data, including embedded CSV delimiters.
 pub fn export_custom_javascript_csv(report: &CrawlReport) -> anyhow::Result<String> {
@@ -939,6 +1159,177 @@ mod tests {
             .map(|record| record.unwrap().iter().map(str::to_owned).collect())
             .collect();
         (headers, rows)
+    }
+
+    #[test]
+    fn custom_search_csv_keeps_exact_zero_unknown_lower_bounds_and_bounded_unicode_evidence() {
+        use crate::{CustomSearchConfig, CustomSearchInput, CustomSearchSource};
+        let config: CustomSearchConfig = serde_json::from_value(json!({
+            "version":1,"rules":[
+                {"name":"=RULE(\"雪\")","method":"literal","pattern":"雪🙂","sources":["raw_html","rendered_html"]},
+                {"name":"Known zero","method":"regex","pattern":"missing","sources":["raw_html"]}
+            ],"limits":{"max_saved_matches":1,"max_excerpt_bytes":9}
+        })).unwrap();
+        let compiled = config.compile().unwrap();
+        let mut observations = compiled.observe(
+            CustomSearchSource::RawHtml,
+            CustomSearchInput {
+                text: Some("雪🙂, \"quoted\"\n雪🙂"),
+                complete: true,
+                document_url: Some("https://example.test/raw"),
+                observed_generation: Some(9),
+                source_revision: Some("owned-raw-revision"),
+                reason: None,
+            },
+        );
+        observations.extend(compiled.observe(
+            CustomSearchSource::RenderedHtml,
+            CustomSearchInput {
+                reason: Some("owned_renderer_unavailable"),
+                ..Default::default()
+            },
+        ));
+        let expected_matches = serde_json::to_value(&observations[0].matches).unwrap();
+        assert_eq!(observations[0].count, Some(2));
+        assert!(!observations[0].evidence_complete);
+        let mut source = report(vec![
+            PageRecord {
+                url: "https://example.test/observed".into(),
+                custom_search: Some(observations),
+                ..Default::default()
+            },
+            PageRecord {
+                url: "https://example.test/legacy".into(),
+                ..Default::default()
+            },
+            PageRecord {
+                url: "https://example.test/empty-results".into(),
+                custom_search: Some(vec![]),
+                ..Default::default()
+            },
+            PageRecord {
+                url: "https://example.test/partial".into(),
+                custom_search: Some(compiled.observe(
+                    CustomSearchSource::RawHtml,
+                    CustomSearchInput {
+                        text: Some("雪🙂 雪🙂"),
+                        complete: false,
+                        reason: Some("owned_partial_source"),
+                        ..Default::default()
+                    },
+                )),
+                ..Default::default()
+            },
+        ]);
+        source.config.custom_search = Some(config);
+        let (headers, rows) = read_csv(&export_custom_search_csv(&source).unwrap());
+        let column = |name: &str| headers.iter().position(|header| header == name).unwrap();
+        assert_eq!(rows.len(), 7);
+        assert_eq!(rows[0][column("Rule Name")], "'=RULE(\"雪\")");
+        assert_eq!(rows[0][column("Source")], "raw_html");
+        assert_eq!(rows[0][column("Count")], "2");
+        assert_eq!(rows[0][column("Matches Observed")], "2");
+        assert_eq!(rows[0][column("Evidence Complete")], "false");
+        assert_eq!(rows[0][column("Saved Match Evidence")], "1");
+        assert_eq!(
+            serde_json::from_str::<serde_json::Value>(&rows[0][column("Matches JSON")]).unwrap(),
+            expected_matches
+        );
+        assert_eq!(rows[0][column("Observed Generation")], "9");
+        assert_eq!(rows[0][column("Source Revision")], "owned-raw-revision");
+        assert_eq!(rows[0][column("Configuration SHA256")].len(), 64);
+        assert_eq!(rows[1][column("Count")], "0");
+        assert_eq!(rows[1][column("Matches JSON")], "[]");
+        assert_eq!(rows[1][column("Evidence Complete")], "true");
+        assert_eq!(rows[2][column("Status")], "unavailable");
+        assert_eq!(rows[2][column("Count")], "");
+        assert_eq!(rows[2][column("Input UTF8 Bytes")], "");
+        assert_eq!(rows[2][column("Searched UTF8 Bytes")], "0");
+        assert!(rows[2][column("Reasons JSON")].contains("owned_renderer_unavailable"));
+        for row in &rows[3..5] {
+            assert_eq!(row[column("Status")], "unavailable");
+            assert_eq!(row[column("Count")], "");
+            assert_eq!(row[column("Matches Observed")], "");
+            assert_eq!(row[column("Matches JSON")], "");
+            assert!(row[column("Reasons JSON")].contains("missing_saved_observation"));
+        }
+        assert_eq!(rows[5][column("Status")], "incomplete");
+        assert_eq!(rows[5][column("Count")], "");
+        assert_eq!(rows[5][column("Matches Observed")], "2");
+        assert!(rows[5][column("Reasons JSON")].contains("owned_partial_source"));
+        assert_eq!(rows[6][column("Count")], "");
+        assert_eq!(rows[6][column("Matches Observed")], "0");
+    }
+
+    #[test]
+    fn custom_search_csv_refuses_encoded_page_and_complete_output_overflow_without_truncation() {
+        let config: crate::CustomSearchConfig = serde_json::from_value(json!({"version":1,"rules":[{"name":"Quotes","method":"literal","pattern":"\"","sources":["raw_html"]}]})).unwrap();
+        let observations = config.compile().unwrap().observe(
+            crate::CustomSearchSource::RawHtml,
+            crate::CustomSearchInput {
+                text: Some("\"雪🙂\""),
+                complete: true,
+                ..Default::default()
+            },
+        );
+        let page_bytes = serde_json::to_vec(&observations).unwrap().len();
+        let source = report(vec![PageRecord {
+            url: "https://example.test/".into(),
+            custom_search: Some(observations),
+            ..Default::default()
+        }]);
+        let expected = export_custom_search_csv(&source).unwrap();
+        assert_eq!(
+            export_custom_search_csv_bounded(&source, expected.len(), page_bytes).unwrap(),
+            expected
+        );
+        assert!(
+            export_custom_search_csv_bounded(&source, expected.len() - 1, page_bytes)
+                .unwrap_err()
+                .to_string()
+                .contains("custom-search CSV")
+        );
+        assert!(
+            export_custom_search_csv_bounded(&source, expected.len(), page_bytes - 1)
+                .unwrap_err()
+                .to_string()
+                .contains("saved page evidence")
+        );
+        let repeated = report(vec![source.pages[0].clone(); 100]);
+        assert!(
+            export_custom_search_csv_bounded(&repeated, expected.len() * 2, page_bytes).is_err(),
+            "A complete export must refuse its limit, never return a successful prefix of rows"
+        );
+
+        let mut imported = source.clone();
+        imported.pages[0].custom_search.as_mut().unwrap()[0].reasons = vec!["\0".repeat(1024)];
+        assert!(
+            export_custom_search_csv_bounded(&imported, 32 * 1024, 2048)
+                .unwrap_err()
+                .to_string()
+                .contains("saved page evidence"),
+            "The page ceiling measures escaped JSON bytes before building evidence strings"
+        );
+
+        let mut profiled = source.clone();
+        let mut hidden = profiled.pages[0].clone();
+        hidden.url = "https://example.test/hidden".into();
+        hidden.meta_robots = vec!["noindex".into()];
+        profiled.pages.push(hidden);
+        profiled.config.directive_reporting = Some(crate::DirectiveReportingConfig {
+            respect_noindex: true,
+            ..Default::default()
+        });
+        let complete = export_custom_search_csv(&profiled).unwrap();
+        assert_eq!(
+            complete,
+            crate::reporting_csv(&profiled, expected).unwrap(),
+            "The bounded writer retains the standard complete reporting columns"
+        );
+        assert!(
+            export_custom_search_csv_bounded(&profiled, complete.len() - 1, page_bytes).is_err(),
+            "Reporting metadata is encoded within the same final output ceiling"
+        );
     }
 
     #[test]

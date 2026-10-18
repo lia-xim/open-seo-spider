@@ -285,6 +285,7 @@ fn context_from_crawler(crawler: &Crawler) -> FetchContext {
         quotas: None,
         store: crawler.store.clone(),
         capture: crawler.capture.clone(),
+        custom_search: crawler.custom_search.clone(),
         generation: None,
         config: crawler.config.clone(),
         seeds: crawler.seeds.clone(),

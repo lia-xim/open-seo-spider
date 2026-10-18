@@ -22,6 +22,7 @@
       javascript_rendering: false, renderer_endpoint: 'http://127.0.0.1:8790/render',
       renderer_wait_ms: 500, renderer_accessibility: false, renderer_screenshot: false,
       renderer_collect_cookies: false, custom_javascript_json: '[]',
+      custom_search_enabled:false, custom_search_json:'{"version":1,"rules":[{"name":"Beispiel","method":"literal","pattern":"Suchbegriff","sources":["raw_html"]}]}',
       include_patterns_text: '', exclude_patterns_text: '', custom_extractions_json: '[]', audit_thresholds_json: '{}', pdf_analysis_json: '{}', validate_fragments: false, link_position_rules_json: '[]', crawl_policy_enabled: false, crawl_policy_json: '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"],"subdomains":false,"exact_paths":[]}]}}', live_policy_limits_json: '{}', content_capture_enabled:false, content_capture_json:'{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}',resource_discovery_enabled:false,resource_discovery_json:'{}',resource_discovery_limits_json:'{}',tls_enabled:false,tls_respect_hsts:false,tls_certificates_json:'[]',cdn_classification_enabled:false,cdn_origins_text:'',cdn_directory_reporting_enabled:false,cdn_directory_rules_text:'',respect_noindex:false,respect_canonical:false,respect_next_prev:false
     }
   };
@@ -58,6 +59,7 @@
     linkmetrics: ['LINK ARCHITECTURE', 'Linkmetriken', 'Eigene PageRank-artige Berechnung auf dem beobachteten Linkgraph. Kein Suchmaschinen- oder Vendor-Score.'],
     structured: ['ONPAGE ANALYSE', 'Strukturierte Daten', 'JSON-LD-Blöcke und beobachtete Typen. Schema.org- und Google-Rich-Result-Validierung werden nicht ausgeführt.'],
     extractions: ['CUSTOM DATA', 'Eigene Extraktionen', 'Benannte Auswertungen aus dem tatsächlich analysierten HTML oder DOM.'],
+    'custom-search': ['CUSTOM DATA', 'Eigene Suche', 'Gespeicherte Literal- und Regex-Suche je Regel und Quelle. Exakte Anzahl, beobachtete Untergrenze und begrenzte Beispiele bleiben getrennt; fehlende Aufzeichnungen sind unbekannt.'],
     javascript: ['CUSTOM DATA', 'JavaScript-Auswertungen', 'Eigene Scripts im isolierten Seitenkontext nach der Render-Wartezeit. Werte und Fehler bleiben getrennt.'],
     cookies: ['BROWSER ANALYSE', 'Cookies', 'Cookie-Eigenschaften aus einzelnen isolierten Seitenaufrufen. Aufnahme muss aktiviert werden; Werte werden ausgelassen.'],
     pagination: ['TECHNISCHE ANALYSE', 'Pagination & AMP', 'Deklarierte next-, prev- und amphtml-Ziele aus HTML und HTTP-Link-Headern.']
@@ -89,6 +91,11 @@
   const domPath = row => row.dom_location?.path ?? (row.dom_location?.path_truncated ? '[Pfadbegrenzung]' : 'Nicht erfasst');
   const completeDOM = page => Boolean(page?.dom_metadata?.complete && page.final_status === 200 && !page.error && !page.truncated && !page.blocked_by_robots && !page.renderer_error && (page.dom_metadata.source !== 'rendered_html' || page.rendered_status === 200));
   const fragmentStatus = value => ({ matched_id: 'ID gefunden', matched_name: 'Ankername gefunden', top: 'Dokumentanfang', missing: 'Ziel fehlt', unknown: 'Unbekannt / nicht prüfbar', unsupported: 'Nicht unterstützt' }[value] || 'Nicht erfasst');
+  const searchSource = value => ({raw_html:'Rohes HTML',rendered_html:'Gerendertes HTML',raw_selected_text:'Ausgewählter Roh-Text',rendered_selected_text:'Ausgewählter DOM-Text'}[value] || value || 'Nicht erfasst');
+  const searchStatus = value => ({complete:'Vollständig',incomplete:'Unvollständig',unavailable:'Nicht verfügbar'}[value] || 'Nicht erfasst / unbekannt');
+  function customSearchRows() {
+    return state.pages.flatMap(page => array(page.custom_search).map(entry => ({...entry,url:page.url,_page:page,_search:entry})));
+  }
   const mediaType = page => String(page.content_type || '').split(';', 1)[0].trim().toLowerCase();
   const isPDF = page => Boolean(page.pdf) || mediaType(page) === 'application/pdf';
   const isImageFile = page => Boolean(page.image_metadata) || mediaType(page).startsWith('image/');
@@ -387,6 +394,7 @@
       const payload = { ...state.settings, ...advanced, mode, seed_url: mode === 'sitemap' ? '' : urls[0] || '', urls: mode === 'sitemap' ? [] : urls, seed_urls: mode === 'sitemap' ? [] : urls, sitemap_urls: mode === 'sitemap' ? urls : sitemapUrls, input_imports: inputImports, crawl_links: mode !== 'list', include_subdomains: state.settings.follow_subdomains, request_timeout_secs: state.settings.timeout_seconds, max_body_bytes: state.settings.max_body_mb * 1024 * 1024 };
       for (const key of ['tls_enabled','tls_respect_hsts','tls_certificates_json','respect_noindex','respect_canonical','respect_next_prev','cdn_directory_reporting_enabled','cdn_directory_rules_text','cdn_classification_enabled','cdn_origins_text','crawl_policy_enabled', 'crawl_policy_json', 'live_policy_limits_json', 'content_capture_enabled', 'content_capture_json','resource_discovery_enabled','resource_discovery_json','resource_discovery_limits_json']) delete payload[key];
       for (const key of [...crawlQuotaSettingKeys, ...crawlAdmissionSettingKeys, ...sitemapArchiveSettingKeys, 'sitemap_source_processing_enabled', ...sitemapSourceFields.map(field => field.setting), 'sitemap_membership_limits_enabled', ...sitemapMembershipFields.map(field => field.setting)]) delete payload[key];
+      delete payload.custom_search_enabled; delete payload.custom_search_json;
       payload.renderer = state.settings.javascript_rendering ? { endpoint: state.settings.renderer_endpoint, wait_ms: state.settings.renderer_wait_ms, accessibility: state.settings.renderer_accessibility, screenshot: state.settings.renderer_screenshot, collect_cookies: state.settings.renderer_collect_cookies, custom_javascript: parseCustomJavascript(state.settings.custom_javascript_json) } : null;
       const result = await request('/api/crawls', { method: 'POST', body: JSON.stringify(payload) });
       const crawl = result.crawl || result;
@@ -724,6 +732,7 @@
       case 'linkmetrics': return array(state.analysis?.graph?.nodes).map((node) => ({ ...node, _page: state.pageMap.get(node.url) }));
       case 'structured': return array(state.analysis?.structured_data).map((entry) => ({ ...entry, types_text: Object.entries(entry.types || {}).map(([type, count]) => `${type} (${count})`).join(' | '), _page: state.pageMap.get(entry.url) }));
       case 'extractions': return internals().flatMap((page) => page.custom_extractions.map((entry) => ({ ...entry, url: page.url, name: entry.name || entry.selector, values: array(entry.values), _page: page })));
+      case 'custom-search': return customSearchRows();
       case 'javascript': return internals().flatMap(page => page.custom_javascript_results.map(entry => ({ ...entry, url: page.url, value_json: entry.error ? '' : JSON.stringify(entry.value), _page: page })));
       case 'cookies': return internals().flatMap(page => page.browser_cookies.map(entry => ({ ...entry, url: page.url, _page: page })));
       case 'titles': { if (state.cache.titles) return state.cache.titles; const duplicates = duplicateValues('titles'); state.cache.titles = htmlPages().map((page) => ({ ...page, title_text: primary(page.titles), title_length: Array.from(primary(page.titles)).length, duplicates: duplicates.get(primary(page.titles).trim()) || 0 })); return state.cache.titles; }
@@ -743,6 +752,7 @@
 
   function columns() {
     switch (state.section) {
+      case 'custom-search': return [urlColumn,textColumn('rule_name','Suchregel'),textColumn('method','Methode'),textColumn('source','Quelle',row=>searchSource(row.source)),textColumn('status','Suchzustand',row=>searchStatus(row.status)),numberColumn('count','Exakte Gesamtanzahl',row=>row.status==='complete'?row.count:null),numberColumn('matches_observed','Beobachtete Untergrenze'),numberColumn('saved_matches','Gespeicherte Beispiele',row=>array(row.matches).length),textColumn('evidence_complete','Beispiele vollständig',row=>row.evidence_complete===true?'Ja':row.evidence_complete===false?'Nein':'Unbekannt'),textColumn('reasons','Gründe',row=>array(row.reasons).join(' | '))];
       case 'inputs': return [numberColumn('list_index', 'Liste'), textColumn('input_sha256', 'Quellhash'), numberColumn('source_index', 'Quellindex'), numberColumn('source_row', 'Quellzeile'), numberColumn('source_line', 'Physische Zeile'), textColumn('sheet', 'Worksheet'), textColumn('cell', 'Zelle'), textColumn('raw_value', 'Originalwert', row => row.raw_value == null ? 'Nicht erfasst' : row.raw_value === '' ? '[leer]' : row.raw_value), textColumn('normalized_url', 'Normalisierte URL'), textColumn('fragment', 'Fragment'), textColumn('candidate_kind', 'Kandidat', row => row.candidate_kind === 'page_url' ? 'Seiten-URL' : row.candidate_kind === 'sitemap_document' ? 'Sitemap-Dokument' : 'Nicht erfasst'), textColumn('error', 'Importfehler')];
       case 'external': return [urlColumn, { key: 'status', label: 'HTTP geprüft', value: (row) => row.status, render: (row) => statusBadge(row.status) }, textColumn('text', 'Linktext'), numberColumn('source_count', 'Verlinkende Seiten'), textColumn('nofollow', 'Nofollow', (row) => row.nofollow ? 'Ja' : 'Nein')];
       case 'status': return [urlColumn, { key: 'initial_status', label: 'HTTP initial', value: (row) => row.status, render: (row) => statusBadge(row.status) }, statusColumn, textColumn('final_url', 'Finale URL'), numberColumn('redirects', 'Redirects', (row) => row.redirect_chain.length), { key: 'response_ms', label: 'Antwortzeit', value: (row) => row.response_ms, render: (row) => duration(row.response_ms) }, indexColumn, textColumn('error', 'Abruffehler')];
@@ -776,6 +786,7 @@
   function filterOptions() {
     const base = [['all', 'Alle Ergebnisse']];
     switch (state.section) {
+      case 'custom-search': return [...base,['complete','Vollständige Suche'],['incomplete','Unvollständige Suche'],['unavailable','Quelle nicht verfügbar'],['matched','Beobachtete Treffer'],['zero','Bestätigt keine Treffer'],['evidence-limited','Begrenzte Beispiele']];
       case 'inputs': return [...base, ['invalid', 'Ungültige Zeilen'], ['page_url', 'Seiten-URLs'], ['sitemap_document', 'Sitemap-Dokumente']];
       case 'fragments': return [...base, ['matched', 'ID / Name / Dokumentanfang gefunden'], ['missing', 'Ziel fehlt'], ['unknown', 'Unbekannt / nicht prüfbar'], ['unsupported', 'Nicht unterstützt']];
       case 'headingorder': return [...base, ['unavailable', 'Nicht erfasst'], ['partial', 'Unvollständiger Prüfbefund'], ['raw', 'HTML-Antwort'], ['rendered', 'Gerenderter DOM'], ...[1, 2, 3, 4, 5, 6].map(level => [`h${level}`, `H${level}`])];
@@ -807,6 +818,7 @@
   function matchesFilter(row) {
     const filter = state.filter;
     if (filter === 'all') return true;
+    if (state.section === 'custom-search') return filter === 'matched' ? row.matches_observed > 0 : filter === 'zero' ? row.status === 'complete' && row.count === 0 : filter === 'evidence-limited' ? row.evidence_complete === false : row.status === filter;
     if (state.section === 'inputs') return filter === 'invalid' ? row.error != null : row.candidate_kind === filter;
     if (state.section === 'fragments') return filter === 'matched' ? ['matched_id', 'matched_name', 'top'].includes(row.status) : row.status === filter;
     if (state.section === 'linkdom') return filter === 'unavailable' ? row._unavailable : filter === 'fragment' ? row.fragment != null : filter.startsWith('position:') ? row.position === filter.slice(9) : row.kind === filter;
@@ -883,7 +895,7 @@
     const isSelected = row => state.section === 'inputs' ? state.selectedInput && row.list_index === state.selectedInput.list_index && row.occurrence_index === state.selectedInput.occurrence_index : state.section === 'responses' ? state.selectedResponse && state.selectedResponse.requested_url === row.requested_url && state.selectedResponse.response_index === row.response_index : state.selected && (row._page?.url || row.url) === state.selected.url;
     const emptyNote = state.section === 'responses' ? state.responsesError || (state.responses == null ? 'Diese Beobachtungen werden nach Abschluss oder Stopp des Crawls geladen. Nicht erfasste Antworten bleiben unbekannt.' : 'Es wurden keine nativen HTTP-Antworten erfasst, beispielsweise bei DNS-Fehlern oder Robots-Sperren.') : state.section === 'fragments' ? state.fragmentsError || (!state.fragments ? 'Fragmentbeobachtungen werden nach Abschluss oder Stopp geladen.' : !state.fragments.enabled ? 'Fragmentprüfung ist für diesen Crawl deaktiviert. Aktiviere sie in den Einstellungen für einen neuen Crawl.' : 'Keine Fragmentreferenzen im erfassten Inventar. Crawl- und Capture-Grenzen gelten weiterhin.') : null;
     const table = $('results-table');
-    const inputEmptyNote = state.section === 'inputs' ? array(state.crawl?.config?.input_imports).length ? 'Die gespeicherten Importergebnisse enthalten keine Eingabezeilen.' : 'Eingabeherkunft nicht erfasst. Bei älteren Projekten bleibt sie unbekannt; dies ist kein Nachweis einer leeren Eingabe.' : null;
+    const inputEmptyNote = state.section === 'custom-search' ? state.crawl?.config?.custom_search ? 'Keine gespeicherten Suchbeobachtungen für diese Seiten. Die fehlende Aufzeichnung bleibt unbekannt, ohne bestätigte Null-Treffer.' : 'Eigene Suche war nicht aktiviert oder ist historisch nicht erfasst. Regeln in den Einstellungen für einen neuen Crawl aktivieren; keine nachträglichen Null-Treffer abgeleitet.' : state.section === 'inputs' ? array(state.crawl?.config?.input_imports).length ? 'Die gespeicherten Importergebnisse enthalten keine Eingabezeilen.' : 'Eingabeherkunft nicht erfasst. Bei älteren Projekten bleibt sie unbekannt; dies ist kein Nachweis einer leeren Eingabe.' : null;
     table.querySelector('thead').innerHTML = `<tr>${currentColumns.map((column) => `<th scope="col" aria-sort="${state.sort === column.key ? state.direction > 0 ? 'ascending' : 'descending' : 'none'}"><button type="button" data-sort="${escape(column.key)}">${escape(column.label)}<span aria-hidden="true">${state.sort === column.key ? state.direction > 0 ? '↑' : '↓' : '↕'}</span></button></th>`).join('')}</tr>`;
     table.querySelector('tbody').innerHTML = visible.length ? visible.map((row, index) => `<tr class="click-row${isSelected(row) ? ' selected' : ''}" data-row="${index}" tabindex="0" aria-label="Details zu ${escape(row.url)} öffnen">${currentColumns.map((column, columnIndex) => `<td>${cell(column, row, columnIndex)}</td>`).join('')}</tr>`).join('') : `<tr><td class="empty-cell" colspan="${currentColumns.length}"><strong>${state.search || state.filter !== 'all' ? 'Keine passenden Ergebnisse' : state.crawl ? 'Noch keine Daten in diesem Bereich' : 'Starte einen Crawl, um Ergebnisse zu sehen'}</strong>${escape(state.search || state.filter !== 'all' ? 'Ändere den Filter oder den Suchbegriff.' : inputEmptyNote || emptyNote || (['linkmetrics', 'structured'].includes(state.section) ? state.analysisError || 'Diese Auswertung wird nach Abschluss oder Stopp des Crawls berechnet.' : state.section === 'images' ? 'Bildreferenzen erscheinen nach der Auswertung von HTML-Seiten.' : state.section === 'external' ? 'Externe Links erscheinen, sobald sie im HTML entdeckt werden.' : 'Nur tatsächlich erfasste Daten werden angezeigt.'))}</td></tr>`;
     table.querySelectorAll('[data-recrawl-url]').forEach(input => {
@@ -905,6 +917,7 @@
         if (state.section === 'fragments' && !row._page) { message('Kein gespeicherter Dokumentdatensatz zur Quell-URL verfügbar.', true); return; }
         const page = row._page || state.pageMap.get(row.url) || row;
         selectPage(page);
+        if (state.section === 'custom-search') { state.inspectorTab = 'custom-search'; renderInspector(); }
         if (domSections.includes(state.section) || ['linkdom', 'fragments'].includes(state.section)) { state.inspectorTab = 'dom'; renderInspector(); }
       };
       rowElement.addEventListener('click', open);
@@ -958,9 +971,9 @@
     $('export-csv').disabled = policySection() ? !policyVisibleRows().length || Boolean(state.policyToken || state.policyError) : (state.section === 'inputs' ? !getRows().length : !state.pages.length && !state.issues.length) || state.section === 'responses' && state.responses == null || state.section === 'fragments' && (!state.fragments || !state.fragments.enabled);
     $('export-csv').title = policySection() ? 'Nur gefilterte Vorkommen der aktuell geladenen Ledger-Seite exportieren' : 'Alle aktuell gefilterten Ergebnisse dieses Bereichs exportieren';
     if (state.section==='resource-discovery' || sitemapSection() || findingsSection()) $('export-csv').disabled=true;
-    $('export-resources').hidden = !['inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
+    $('export-resources').hidden = !['custom-search', 'inputs', 'pdf', 'imagefiles', 'responses', 'fragments', 'linkdom', ...domSections].includes(state.section);
     $('export-resources').disabled = !state.crawl || Boolean(actionBusy() || active());
-    $('export-resources').textContent = state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
+    $('export-resources').textContent = state.section === 'custom-search' ? '↓ Alle gespeicherten Suchbefunde CSV' : state.section === 'inputs' ? '↓ Alle Eingabezeilen CSV' : domSections.includes(state.section) ? '↓ Alle DOM-Beobachtungen CSV' : state.section === 'pdf' ? '↓ PDF-Details CSV' : state.section === 'responses' ? '↓ Alle Antworten CSV' : state.section === 'fragments' ? '↓ Alle Fragmentziele CSV' : state.section === 'linkdom' ? '↓ Alle Linkvorkommen CSV' : '↓ Bilddateien CSV';
     if (state.section === 'overview') renderOverview();
     else if (state.section === 'graph') renderGraph();
     else if (policySection()) renderPolicyLedger();
@@ -1033,6 +1046,7 @@
     $('inspector-url').textContent = page.url;
     document.querySelectorAll('[data-tab]').forEach((button) => button.setAttribute('aria-selected', String(button.dataset.tab === state.inspectorTab)));
     const element = $('inspector-content');
+    if (state.inspectorTab === 'custom-search') { renderCustomSearchInspector(page, element); return; }
     if (state.inspectorTab === 'details') {
       const fields = [
         ...(observationAge(page.url) ? [['Alter des Befunds', observationAge(page.url)]] : []),
@@ -1223,6 +1237,30 @@
 
   function render() { renderMetrics(); renderSection(); }
 
+  function renderCustomSearchInspector(page, element) {
+    const results = array(page.custom_search);
+    element.replaceChildren();
+    const note = document.createElement('p'); note.className = 'detail-empty';
+    note.textContent = results.length ? 'Gespeicherte Suchbefunde je Quelle. Bytepositionen beziehen sich auf die jeweilige UTF-8-Quelle, nicht auf Quellzeilen. Unvollständige Suche: Gesamtzahl unbekannt. Exakte Gesamtzahl und begrenzte Beispiele werden unabhängig ausgewiesen.' : 'Keine Suchaufzeichnung: deaktiviert, historisch unbekannt oder nicht erfasst. Dies ist kein bestätigtes Null-Ergebnis.';
+    element.append(note);
+    for (const result of results) {
+      const card = document.createElement('article'); card.className = 'custom-search-result';
+      card.dataset.searchRule = result.rule_name; card.dataset.searchSource = result.source;
+      const title = document.createElement('h3'); title.textContent = `${result.rule_name} · ${searchSource(result.source)}`;
+      const fields = [['Zustand',searchStatus(result.status)],['Exakte Gesamtanzahl',result.status==='complete'&&result.count!=null?result.count:'Unbekannt'],['Beobachtete Untergrenze',result.matches_observed],['Gespeicherte Beispiele',array(result.matches).length],['Beispiele vollständig',result.evidence_complete===true?'Ja':result.evidence_complete===false?'Nein':'Unbekannt'],['Methode',result.method],['Muster SHA-256',result.pattern_sha256],['Konfiguration SHA-256',result.config_sha256],['Eingabe-UTF-8-Bytes',result.input_utf8_bytes],['Durchsuchte UTF-8-Bytes',result.searched_utf8_bytes],['Eingabe SHA-256',result.input_sha256],['Dokument-URL',result.document_url],['Beobachtete Generation',result.observed_generation],['Quellrevision',result.source_revision],['Gründe',array(result.reasons).join(' | ')||'Keine gemeldet']];
+      const dl = document.createElement('dl'); dl.className = 'details-grid';
+      for (const [label,value] of fields) { const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=label;dd.textContent=String(value??'Nicht erfasst');dl.append(dt,dd); }
+      card.append(title,dl);
+      const evidence = document.createElement('details'),summary=document.createElement('summary');summary.textContent='Gespeicherte Treffer und Textausschnitte';evidence.append(summary);
+      evidence.addEventListener('toggle',()=>{if(!evidence.open||evidence.dataset.loaded)return;evidence.dataset.loaded='true';const pre=document.createElement('pre');pre.className='custom-search-evidence';pre.textContent=JSON.stringify(array(result.matches).slice(0,200),null,2);evidence.append(pre);if(array(result.matches).length>200){const hint=document.createElement('p');hint.textContent='Oberfläche zeigt die ersten 200 gespeicherten Beispiele. Vollständige gespeicherte Daten stehen im JSON-/CSV-Export.';evidence.append(hint);}});
+      card.append(evidence); element.append(card);
+    }
+    if (results.length) {
+      const details=document.createElement('details'),summary=document.createElement('summary');details.id='custom-search-json';summary.textContent='Exakte gespeicherte Suchdaten als JSON';details.append(summary);
+      details.addEventListener('toggle',()=>{if(details.open&&!details.querySelector('pre')){const pre=document.createElement('pre');pre.textContent=JSON.stringify(results,null,2);details.append(pre);}});element.append(details);
+    }
+  }
+
   function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -1265,9 +1303,19 @@
 
   async function serverDownload(endpoint, filename) {
     if (!state.crawl) return;
+    const owner={id:state.crawl.id,generation:state.generation};
     try {
-      const response = await fetch(`/api/crawls/${encodeURIComponent(state.crawl.id)}/${endpoint}`);
+      const response = await fetch(`/api/crawls/${encodeURIComponent(owner.id)}/${endpoint}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      if(endpoint==='custom-search.csv'){
+        const length=response.headers.get('content-length'),digest=response.headers.get('x-content-sha256');
+        if(!/^(0|[1-9][0-9]*)$/.test(length??'')||!Number.isSafeInteger(Number(length))||Number(length)>67108864||!/^[a-f0-9]{64}$/.test(digest??'')||response.headers.get('cache-control')!=='no-store'||response.headers.get('content-type')?.split(';',1)[0].trim()!=='text/csv')throw new Error('Suchbefund-CSV ohne bestätigte Länge, Prüfsumme oder Ausgabeformat.');
+        const file=await readSitemapBundleStream(response,67108864,Number(length)),bytes=new Uint8Array(await file.blob.arrayBuffer());
+        const actual=[...new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))].map(byte=>byte.toString(16).padStart(2,'0')).join('');
+        if(actual!==digest)throw new Error('Suchbefund-CSV: SHA-256 stimmt nicht überein.');
+        if(owner.id!==state.crawl?.id||owner.generation!==state.generation)return;
+        downloadBlob(new Blob([bytes],{type:'text/csv;charset=utf-8'}),filename);message('Gespeicherte Suchbefunde CSV · Länge und SHA-256 bestätigt.');return;
+      }
       downloadBlob(await response.blob(), filename);
     } catch (error) { message(`Export fehlgeschlagen: ${error.message}`, true); }
   }
@@ -1315,6 +1363,7 @@
     event.preventDefault();
     const form = $('settings-form');
     const advancedText = { ...readTlsSettings(form), ...readDirectiveReportingSettings(form), ...readCdnDirectoryReportingSettings(form), ...readCdnClassificationSettings(form), ...readCrawlQuotaSettings(form), ...readCrawlAdmissionSettings(form), ...readSitemapSourceProcessingSettings(form), ...readSitemapSourceArchiveSettings(form), include_patterns_text: form.elements.include_patterns_text.value, exclude_patterns_text: form.elements.exclude_patterns_text.value, custom_extractions_json: form.elements.custom_extractions_json.value, custom_javascript_json: form.elements.custom_javascript_json.value, audit_thresholds_json: form.elements.audit_thresholds_json.value, pdf_analysis_json: form.elements.pdf_analysis_json.value, link_position_rules_json: form.elements.link_position_rules_json.value, validate_fragments: form.elements.validate_fragments.checked, crawl_policy_enabled: form.elements.crawl_policy_enabled.checked, crawl_policy_json: form.elements.crawl_policy_json.value, live_policy_limits_json: form.elements.live_policy_limits_json.value, follow_subdomains: form.elements.follow_subdomains.checked, check_external: form.elements.check_external.checked, javascript_rendering: form.elements.javascript_rendering.checked, content_capture_enabled:form.elements.content_capture_enabled.checked, content_capture_json:form.elements.content_capture_json.value,resource_discovery_enabled:form.elements.resource_discovery_enabled.checked,resource_discovery_json:form.elements.resource_discovery_json.value,resource_discovery_limits_json:form.elements.resource_discovery_limits_json.value };
+    Object.assign(advancedText,{custom_search_enabled:form.elements.custom_search_enabled.checked,custom_search_json:form.elements.custom_search_json.value});
     try { parseAdvanced(advancedText); validateRendererSettings({ javascript_rendering: form.elements.javascript_rendering.checked, renderer_endpoint: form.elements.renderer_endpoint.value.trim(), renderer_wait_ms: Number(form.elements.renderer_wait_ms.value), timeout_seconds: Number(form.elements.timeout_seconds.value) }); }
     catch (error) {
       if (form.elements.tls_enabled.checked) $('tls-settings').open = true;
@@ -1349,6 +1398,7 @@
         Object.assign(state.settings, { crawl_policy_enabled: saved.crawl_policy_enabled === true, crawl_policy_json: String(saved.crawl_policy_json || '{"scope":{"roots":[{"origin":"https://example.test","folders":["/"]}]}}'), live_policy_limits_json: String(saved.live_policy_limits_json || '{}') });
         Object.assign(state.settings, { content_capture_enabled:saved.content_capture_enabled === true, content_capture_json:String(saved.content_capture_json || '{"sources":["raw_http_html"],"include_selectors":["body"],"exclude_selectors":["script","style","template","noscript","nav","footer"]}') });
         Object.assign(state.settings,{resource_discovery_enabled:saved.resource_discovery_enabled===true,resource_discovery_json:String(saved.resource_discovery_json || '{}'),resource_discovery_limits_json:String(saved.resource_discovery_limits_json || '{}')});
+        Object.assign(state.settings,{custom_search_enabled:saved.custom_search_enabled===true,custom_search_json:String(saved.custom_search_json||'{"version":1,"rules":[{"name":"Beispiel","method":"literal","pattern":"Suchbegriff","sources":["raw_html"]}]}')});
         Object.assign(state.settings,restoreTlsSettings(saved));
         Object.assign(state.settings,restoreCdnClassificationSettings(saved));
         Object.assign(state.settings,restoreCdnDirectoryReportingSettings(saved));
@@ -1565,6 +1615,14 @@
     $('sitemap-source-bodies-refresh').addEventListener('click',()=>loadSourceBodies());$('sitemap-source-bodies-next').addEventListener('click',()=>{if(sourceBodies.result?.cursor)loadSourceBodies(sourceBodies.result.cursor,'next');});$('sitemap-source-bodies-prev').addEventListener('click',()=>{if(sourceBodies.back.length)loadSourceBodies(sourceBodies.back.at(-1),'prev');});
   }
 
+  function parseCustomSearch(settings) {
+    if (settings.custom_search_enabled !== true) return {};
+    let profile; try { profile=JSON.parse(settings.custom_search_json||'{}'); } catch { throw new Error('Eigene Suche: Gültiges JSON ist erforderlich.'); }
+    if(!profile||typeof profile!=='object'||Array.isArray(profile)||profile.version!==1||!Array.isArray(profile.rules)||!profile.rules.length)throw new Error('Eigene Suche: version 1 und mindestens eine Regel sind erforderlich.');
+    for(const rule of profile.rules){if(!rule||typeof rule!=='object'||Array.isArray(rule)||typeof rule.name!=='string'||!rule.name.trim()||!['literal','regex'].includes(rule.method)||typeof rule.pattern!=='string'||rule.method==='literal'&&!rule.pattern||!Array.isArray(rule.sources)||!rule.sources.length||rule.sources.some(source=>!['raw_html','rendered_html','raw_selected_text','rendered_selected_text'].includes(source)))throw new Error('Eigene Suche: Jede Regel benötigt name, method, pattern und ausdrücklich gewählte sources.');}
+    return {custom_search:profile};
+  }
+
   function parseAdvanced(settings) {
     parseCustomJavascript(settings.custom_javascript_json);
     let definitions;
@@ -1604,7 +1662,7 @@
       return { name, selector, attribute: definition.attribute == null ? null : definition.attribute.trim(), method, output, max_results, regex_group, regex_flags, namespaces };
     });
     const lines = (value) => [...new Set(String(value || '').split(/\r?\n/).map((line) => line.trim()).filter(Boolean))];
-    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlQuotas(settings), ...parseCrawlAdmissionLimits(settings), ...parseTlsSettings(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings), ...parseDirectiveReporting(settings) };
+    return { custom_extractions, audit_thresholds: parseAuditThresholds(settings.audit_thresholds_json), pdf_analysis: parsePdfAnalysis(settings.pdf_analysis_json), link_position_rules: parsePositionRules(settings.link_position_rules_json), validate_fragments: settings.validate_fragments === true, include_patterns: lines(settings.include_patterns_text), exclude_patterns: lines(settings.exclude_patterns_text), ...parseCustomSearch(settings), ...parseNativePolicy(settings), ...parseContentCapture(settings),...parseResourceDiscovery(settings), ...parseSitemapSourceProcessing(settings), ...parseSitemapMembershipLimits(settings), ...parseSitemapSourceArchive(settings), ...parseCrawlQuotas(settings), ...parseCrawlAdmissionLimits(settings), ...parseTlsSettings(settings), ...parseCdnClassification(settings), ...parseCdnDirectoryReporting(settings), ...parseDirectiveReporting(settings) };
   }
 
   function policyObject(value, allowed, label) {
@@ -3420,7 +3478,7 @@
     $('settings-form').elements.sitemap_source_processing_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
     $('settings-form').elements.sitemap_membership_limits_enabled.addEventListener('change', syncSitemapSourceProcessingSettings);
     $('export-csv').addEventListener('click', exportCSV);
-    $('export-resources').addEventListener('click', () => serverDownload(domSections.includes(state.section) ? 'dom.csv' : ({ inputs: 'inputs.csv', pdf: 'pdf.csv', responses: 'responses.csv', fragments: 'fragments.csv', linkdom: 'links.csv', imagefiles: 'images.csv' })[state.section], `open-seo-spider-${state.crawl.id}-${state.section}.csv`));
+    $('export-resources').addEventListener('click', () => serverDownload(domSections.includes(state.section) ? 'dom.csv' : ({ 'custom-search':'custom-search.csv',inputs: 'inputs.csv', pdf: 'pdf.csv', responses: 'responses.csv', fragments: 'fragments.csv', linkdom: 'links.csv', imagefiles: 'images.csv' })[state.section], `open-seo-spider-${state.crawl.id}-${state.section}.csv`));
     $('import-project').addEventListener('click', () => $('import-file').click());
     $('import-file').addEventListener('change', (event) => importProject(event.target.files[0]));
     $('export-sitemap').addEventListener('click', () => serverDownload('sitemap.xml', `open-seo-spider-${state.crawl.id}-sitemap.xml`));
@@ -3436,7 +3494,9 @@
     $('advanced-config').append($('sitemap-source-processing-settings-template').content.cloneNode(true));
     $('advanced-config').append($('policy-settings-template').content.cloneNode(true));
     $('advanced-config').append($('content-settings-template').content.cloneNode(true));
+    $('advanced-config').append($('custom-search-settings-template').content.cloneNode(true));
     $('advanced-config').append($('resource-discovery-settings-template').content.cloneNode(true));
+    const searchTab=document.createElement('button');searchTab.type='button';searchTab.dataset.tab='custom-search';searchTab.setAttribute('role','tab');searchTab.setAttribute('aria-selected','false');searchTab.textContent='Eigene Suche';$('inspector-tabs').append(searchTab);
     restoreSettings();
     bindEvents();
     selectSection('overview');

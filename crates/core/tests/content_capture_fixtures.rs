@@ -1223,3 +1223,274 @@ async fn live_policy_source_ledger_capture_page_and_frontier_share_one_commit() 
     assert!(reader.inspection().unwrap().checkpoint_valid);
     assert_eq!(fixture.count("/child"), 1);
 }
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+
+fn search_profile(sources: &[&str]) -> CustomSearchConfig {
+    serde_json::from_value(serde_json::json!({
+        "version":1,
+        "rules":[{"name":"owned-needle","method":"literal","pattern":"needle","sources":sources}]
+    }))
+    .unwrap()
+}
+
+#[tokio::test]
+async fn custom_search_persists_separate_raw_rendered_and_selected_source_evidence() {
+    let raw =
+        "<html lang='en'><body><nav>needle</nav><main>needle café needle</main></body></html>";
+    let rendered =
+        "<html lang='en'><body><nav>needle needle needle</nav><main>needle</main></body></html>";
+    let site = Fixture::new(move |_| Response::html(raw)).await;
+    let worker = Fixture::new(move |request| {
+        rendered_response(
+            request,
+            rendered,
+            Some(200),
+            Some("text/html;charset=utf-8"),
+            Some("2026-10-18T10:00:00Z"),
+        )
+    })
+    .await;
+    let temp = tempfile::tempdir().unwrap();
+    let mut cfg = config(&site, &["/owned"]);
+    both(&mut cfg, &worker);
+    cfg.content_capture.as_mut().unwrap().include_selectors = vec!["main".into()];
+    cfg.custom_search = Some(search_profile(&[
+        "raw_html",
+        "rendered_html",
+        "raw_selected_text",
+        "rendered_selected_text",
+    ]));
+    let path = temp.path().join("custom-search.sqlite");
+    let report = Crawler::new(cfg)
+        .unwrap()
+        .with_store(&path)
+        .unwrap()
+        .run_controlled(None, CrawlControl::new())
+        .await
+        .unwrap()
+        .report;
+    let page = &report.pages[0];
+    let rows = page.custom_search.as_ref().unwrap();
+    assert_eq!(rows.len(), 4);
+    for (source, count, input) in [
+        (CustomSearchSource::RawHtml, 3, raw),
+        (CustomSearchSource::RenderedHtml, 4, rendered),
+        (CustomSearchSource::RawSelectedText, 2, "needle café needle"),
+        (CustomSearchSource::RenderedSelectedText, 1, "needle"),
+    ] {
+        let row = rows.iter().find(|row| row.source == source).unwrap();
+        assert_eq!(
+            row.status,
+            CustomSearchStatus::Complete,
+            "{source:?}: {:?}",
+            row.reasons
+        );
+        assert_eq!(row.count, Some(count));
+        assert_eq!(row.matches_observed, count);
+        assert_eq!(
+            row.input_sha256,
+            Some(format!("{:x}", Sha256::digest(input.as_bytes())))
+        );
+        assert_eq!(row.input_utf8_bytes, Some(input.len() as u64));
+        assert!(row.observed_generation.is_some());
+        assert_eq!(row.source_revision.as_ref().unwrap().len(), 64);
+        for matched in &row.matches {
+            assert_eq!(
+                &input[matched.start_byte as usize..matched.end_byte as usize],
+                "needle"
+            );
+        }
+    }
+    assert_ne!(rows[0].source_revision, rows[1].source_revision);
+    let raw_selected = rows
+        .iter()
+        .find(|row| row.source == CustomSearchSource::RawSelectedText)
+        .unwrap();
+    let capture = page
+        .content_captures
+        .as_ref()
+        .unwrap()
+        .iter()
+        .find(|row| row.source_kind == ContentCaptureSourceKind::RawHttpHtml)
+        .unwrap();
+    assert_eq!(
+        raw_selected.source_revision.as_ref(),
+        Some(&capture.source_revision)
+    );
+    let stored = CrawlStore::open_read_only(&path)
+        .unwrap()
+        .load_report()
+        .unwrap()
+        .unwrap();
+    assert_eq!(
+        serde_json::to_value(&stored.pages[0].custom_search).unwrap(),
+        serde_json::to_value(rows).unwrap()
+    );
+}
+
+#[tokio::test]
+async fn custom_search_distinguishes_complete_zero_missing_capture_truncation_and_lossy_html() {
+    let site = Fixture::new(|request| match request.path.as_str() {
+        "/empty" => Response::html("<html><body>no matches</body></html>"),
+        "/plain" => Response::html("needle").mime("text/plain"),
+        "/range" => Response::html("<html><body>needle</body></html>").status(206),
+        "/lossy" => Response::html(b"<html><body>needle\xff</body></html>"),
+        _ => Response::html(format!("<html><body>needle {}", "x".repeat(256))),
+    })
+    .await;
+    let mut cfg = config(&site, &["/empty", "/plain", "/lossy", "/partial", "/range"]);
+    cfg.content_capture = None;
+    cfg.max_body_bytes = 80;
+    cfg.custom_search = Some(search_profile(&[
+        "raw_html",
+        "rendered_html",
+        "raw_selected_text",
+    ]));
+    let report = Crawler::new(cfg)
+        .unwrap()
+        .run(None, Arc::new(AtomicBool::new(false)))
+        .await
+        .unwrap();
+    for page in &report.pages {
+        let rows = page.custom_search.as_ref().unwrap();
+        assert_eq!(rows.len(), 3);
+        for source in [
+            CustomSearchSource::RenderedHtml,
+            CustomSearchSource::RawSelectedText,
+        ] {
+            let row = rows.iter().find(|row| row.source == source).unwrap();
+            assert_eq!(row.status, CustomSearchStatus::Unavailable);
+            assert_eq!(row.count, None);
+        }
+        let raw = rows
+            .iter()
+            .find(|row| row.source == CustomSearchSource::RawHtml)
+            .unwrap();
+        if page.url.ends_with("/empty") {
+            assert_eq!(raw.status, CustomSearchStatus::Complete);
+            assert_eq!(raw.count, Some(0));
+        } else if page.url.ends_with("/plain") {
+            assert_eq!(raw.status, CustomSearchStatus::Unavailable);
+            assert_eq!(raw.count, None);
+        } else {
+            assert_eq!(
+                raw.status,
+                CustomSearchStatus::Incomplete,
+                "{}: {:?}",
+                page.url,
+                raw.reasons
+            );
+            assert_eq!(raw.count, None);
+            assert_eq!(raw.matches_observed, 1);
+        }
+    }
+}
+
+#[tokio::test]
+async fn custom_search_selected_refresh_and_cold_sqlite_reopen_preserve_parent_evidence() {
+    let epoch = Arc::new(AtomicUsize::new(0));
+    let shared = epoch.clone();
+    let site = Fixture::new(move |request| {
+        let text = if request.path == "/a" && shared.load(Ordering::SeqCst) > 0 {
+            "needle needle"
+        } else {
+            "needle"
+        };
+        Response::html(format!("<html><body><main>{text}</main></body></html>"))
+    })
+    .await;
+    let temp = tempfile::tempdir().unwrap();
+    let mut cfg = config(&site, &["/a", "/b"]);
+    cfg.custom_search = Some(search_profile(&["raw_html", "raw_selected_text"]));
+    let parent_path = temp.path().join("search-parent.sqlite");
+    let parent_report = Crawler::new(cfg)
+        .unwrap()
+        .with_store(&parent_path)
+        .unwrap()
+        .run_controlled(None, CrawlControl::new())
+        .await
+        .unwrap()
+        .report;
+    let exact_parent = serde_json::to_vec(&parent_report).unwrap();
+    let prepared =
+        prepare_selected_recrawl(parent(), &exact_parent, &[site.url("/a")], None).unwrap();
+    epoch.store(1, Ordering::SeqCst);
+    let child_path = temp.path().join("search-child.sqlite");
+    let child_report = Crawler::from_saved_config(prepared.config.clone())
+        .unwrap()
+        .with_store(&child_path)
+        .unwrap()
+        .with_selected_recrawl(prepared)
+        .unwrap()
+        .run_controlled(None, CrawlControl::new())
+        .await
+        .unwrap()
+        .report;
+    for before in &parent_report.pages {
+        let after = child_report
+            .pages
+            .iter()
+            .find(|page| page.url == before.url)
+            .unwrap();
+        if before.url.ends_with("/b") {
+            assert_eq!(
+                serde_json::to_value(&before.custom_search).unwrap(),
+                serde_json::to_value(&after.custom_search).unwrap()
+            );
+        } else {
+            assert!(
+                after
+                    .custom_search
+                    .as_ref()
+                    .unwrap()
+                    .iter()
+                    .all(|row| row.count == Some(2))
+            );
+            assert_ne!(
+                before.custom_search.as_ref().unwrap()[0].source_revision,
+                after.custom_search.as_ref().unwrap()[0].source_revision
+            );
+        }
+    }
+    assert_eq!(
+        CrawlStore::open_read_only(&parent_path)
+            .unwrap()
+            .load_report()
+            .unwrap()
+            .map(|report| serde_json::to_vec(&report).unwrap())
+            .unwrap(),
+        exact_parent
+    );
+    drop(site);
+    let recovered = CrawlStore::open_read_only(&child_path)
+        .unwrap()
+        .load_report()
+        .unwrap()
+        .unwrap();
+    assert_eq!(
+        serde_json::to_value(&recovered.pages).unwrap(),
+        serde_json::to_value(&child_report.pages).unwrap()
+    );
+}
+
+#[tokio::test]
+async fn custom_search_invalid_regex_preflight_makes_no_website_request_and_disabled_fields_stay_absent()
+ {
+    let site = Fixture::new(|_| Response::html("needle")).await;
+    let mut cfg = config(&site, &["/"]);
+    cfg.custom_search = Some(serde_json::from_value(serde_json::json!({"version":1,"rules":[{"name":"invalid","method":"regex","pattern":"(?=unsupported)","sources":["raw_html"]}]})).unwrap());
+    assert!(Crawler::new(cfg).is_err());
+    assert_eq!(site.count("/"), 0);
+    assert!(
+        serde_json::to_value(CrawlConfig::default())
+            .unwrap()
+            .get("custom_search")
+            .is_none()
+    );
+    assert!(
+        serde_json::to_value(PageRecord::default())
+            .unwrap()
+            .get("custom_search")
+            .is_none()
+    );
+}

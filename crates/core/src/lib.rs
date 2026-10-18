@@ -22,6 +22,9 @@ pub use crawl_quotas::*;
 mod crawl_policy;
 mod crawler;
 mod css_discovery;
+mod custom_search;
+pub use custom_search::*;
+pub(crate) mod custom_search_binding;
 mod directive_reporting;
 pub use directive_reporting::{
     DirectiveReportingConfig, ReportingVisibility, directive_hidden_issue_urls,
@@ -39,6 +42,7 @@ pub use cdn_classification::{
     CDN_CLASSIFICATION_ENGINE, CdnClassificationConfig, CdnClassificationObservation,
 };
 pub use segments::{ReportingIdentity, ReportingMode};
+mod heap_deserialize;
 mod html_head;
 pub use html_head::{
     HTML_HEAD_ENGINE, HTML_HEAD_PROFILE, HtmlHeadObservation, HtmlHeadSpan, HtmlHeadStatus,
@@ -134,9 +138,9 @@ pub use directory_tree::*;
 pub use dom_facts::audit_dom_metadata;
 pub use export::{
     compare_crawls, csv_text, export_browser_cookies_csv, export_custom_extractions_csv,
-    export_custom_javascript_csv, export_dom_observations_csv, export_fragments_csv,
-    export_image_resources_csv, export_input_occurrences_csv, export_issues_csv, export_links_csv,
-    export_pages_csv, export_pdf_csv, export_sitemap_xml,
+    export_custom_javascript_csv, export_custom_search_csv, export_dom_observations_csv,
+    export_fragments_csv, export_image_resources_csv, export_input_occurrences_csv,
+    export_issues_csv, export_links_csv, export_pages_csv, export_pdf_csv, export_sitemap_xml,
 };
 pub use extract::{extract_custom, extract_html};
 pub use extraction_engine::extract_configured;

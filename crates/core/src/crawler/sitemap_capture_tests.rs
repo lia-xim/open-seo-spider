@@ -257,6 +257,7 @@ fn context(crawler: &Crawler, generation: u64) -> FetchContext {
         quotas: None,
         store: crawler.store.clone(),
         capture: crawler.capture.clone(),
+        custom_search: crawler.custom_search.clone(),
         generation: Some(generation),
         config: crawler.config.clone(),
         seeds: crawler.seeds.clone(),

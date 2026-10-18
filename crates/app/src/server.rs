@@ -14,12 +14,12 @@ use open_seo_spider_core::{
     RecrawlSourceKind, RobotsSimulationInput, RunPlan, SelectedRecrawlOperation,
     SelectedRecrawlParent, SerpInputRow, analyze_content, compare_crawls,
     export_browser_cookies_csv, export_custom_extractions_csv, export_custom_javascript_csv,
-    export_dom_observations_csv, export_fragments_csv, export_image_resources_csv,
-    export_input_occurrences_csv, export_issues_csv, export_links_csv, export_pages_csv,
-    export_pdf_csv, export_response_observations_csv, export_robots_simulation_csv,
-    export_serp_csv, export_sitemap_xml, import_serp_csv, import_url_list, inspect_xlsx_list,
-    prepare_selected_recrawl, preview_crawl_policy, preview_serp, reported_fragments,
-    reported_responses, simulate_robots,
+    export_custom_search_csv, export_dom_observations_csv, export_fragments_csv,
+    export_image_resources_csv, export_input_occurrences_csv, export_issues_csv, export_links_csv,
+    export_pages_csv, export_pdf_csv, export_response_observations_csv,
+    export_robots_simulation_csv, export_serp_csv, export_sitemap_xml, import_serp_csv,
+    import_url_list, inspect_xlsx_list, prepare_selected_recrawl, preview_crawl_policy,
+    preview_serp, reported_fragments, reported_responses, simulate_robots,
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -490,6 +490,7 @@ async fn serve_with_mcp_files_ready_source(
             get(export_javascript_csv),
         )
         .route("/api/crawls/{id}/cookies.csv", get(export_cookie_csv))
+        .route("/api/crawls/{id}/custom-search.csv", get(export_search_csv))
         .route("/api/crawls/{id}/pdf.csv", get(export_pdf))
         .route("/api/crawls/{id}/images.csv", get(export_images))
         .route(
@@ -899,6 +900,36 @@ async fn local_origin(request: Request, next: Next) -> Response {
     next.run(request).await
 }
 
+pub(crate) fn custom_search_config_schema() -> Value {
+    json!({
+        "type":["object","null"],"additionalProperties":false,
+        "required":["version","rules"],
+        "description":"Opt-in bounded literal or Rust-regex search in explicitly selected captured HTML/text sources. Missing sources and incomplete searches have unknown exact counts. Match evidence can be truncated independently of exact counts. Does not grant website, resource, renderer or credential permissions.",
+        "properties":{
+            "version":{"type":"integer","const":1},
+            "rules":{"type":"array","minItems":1,"maxItems":32,"items":{
+                "type":"object","additionalProperties":false,"required":["name","method","pattern","sources"],
+                "properties":{
+                    "name":{"type":"string","minLength":1,"maxLength":128,"description":"Unique nonblank rule name, at most128 UTF8 bytes without controls."},
+                    "method":{"type":"string","enum":["literal","regex"]},
+                    "pattern":{"type":"string","maxLength":8192,"description":"At most8192 UTF8 bytes; literal patterns must be nonempty. Empty regexes use bounded zero-width matches."},
+                    "regex_flags":{"type":"string","pattern":"^[imsxU]{0,5}$","maxLength":5,"default":"","description":"Distinct Rust regex flags i,m,s,x,U only. Literal search requires empty flags."},
+                    "sources":{"type":"array","minItems":1,"maxItems":4,"uniqueItems":true,"items":{"type":"string","enum":["raw_html","rendered_html","raw_selected_text","rendered_selected_text"]}}
+                },
+                "allOf":[{"if":{"properties":{"method":{"const":"literal"}}},"then":{"properties":{"pattern":{"minLength":1},"regex_flags":{"const":""}}}}]
+            }},
+            "limits":{"type":"object","additionalProperties":false,"description":"Explicit operation and evidence budgets; byte limits are measured as UTF8. Rust validation enforces all bounds before crawl IO.","properties":{
+                "max_input_bytes":{"type":"integer","minimum":1,"maximum":8388608,"default":1048576},
+                "max_matches_scanned":{"type":"integer","minimum":1,"maximum":1000000,"default":100000},
+                "max_regex_scan_work_bytes":{"type":"integer","minimum":1,"maximum":17179869184u64,"default":1073741824u64,"description":"Conservative sum of remaining full-context input bytes before each regex search, including the EOF probe. A work proxy, not a CPU deadline; exhaustion leaves the exact count unknown."},
+                "max_saved_matches":{"type":"integer","minimum":0,"maximum":256,"default":100},
+                "max_excerpt_bytes":{"type":"integer","minimum":1,"maximum":4096,"default":256},
+                "max_output_json_bytes":{"type":"integer","minimum":65536,"maximum":4194304,"default":1048576}
+            }}
+        }
+    })
+}
+
 async fn capabilities() -> Json<Value> {
     Json(json!({
         "product":"Open SEO Spider",
@@ -926,6 +957,7 @@ async fn capabilities() -> Json<Value> {
         "saved_content_analysis":{"endpoint":"/api/crawls/{id}/content/analyze","engine":crate::content_cohort::SAVED_CONTENT_ENGINE,"website_requests":0,"explicit_cohort":true,"max_documents":128,"site_wide_coverage":false},
         "saved_comparison":{"endpoint":"/api/compare/saved","engine":open_seo_spider_core::SAVED_COMPARISON_ENGINE,"website_requests":0,"exact_requested_identity":true,"explicit_mapping":true,"unknown_facts_preserved":true,"full_original_report_bundle":false,"sql_attested":false,"full_reference_parity":false},
         "native_content_capture":{"opt_in":true,"sources":["raw_http_html","rendered_dom_html"],"body_retention":false,"source_binding":"persisted_consistency","full_reference_parity":false},
+        "custom_search":{"opt_in":true,"config_field":"custom_search","engine":open_seo_spider_core::CUSTOM_SEARCH_ENGINE,"version":1,"methods":["literal","regex"],"sources":["raw_html","rendered_html","raw_selected_text","rendered_selected_text"],"regex_engine":"rust_regex","offset_unit":"utf8_bytes","exact_count_when":"complete","missing_source":"unavailable_count_null","bounded_match_evidence":true,"max_csv_bytes":67108864,"max_saved_page_json_bytes":4194304,"export":"/api/crawls/{id}/custom-search.csv","configuration_schema":custom_search_config_schema(),"full_reference_parity":false},
         "cdn_directory_reporting":{"opt_in":true,"engine":open_seo_spider_core::CDN_DIRECTORY_REPORTING_ENGINE,"normalization":open_seo_spider_core::CDN_DIRECTORY_NORMALIZATION,"version":1,"max_rules":32,"max_rule_utf8_bytes":2048,"literal_directory_prefix":true,"cross_http_https":true,"one_www_alias":true,"ascii_dns_only":true,"explicit_default_ports_supported":false,"declared_reporting_only":true,"grants_network_or_credentials":false,"full_reference_parity":false},
         "cdn_classification":{"opt_in":true,"engine":open_seo_spider_core::CDN_CLASSIFICATION_ENGINE,"version":1,"exact_http_origins":true,"max_origins":32,"declared_reporting_only":true,"grants_network_or_credentials":false,"full_reference_parity":false},
         "native_resource_discovery":{"opt_in":true,"engine":open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,"semantic_contracts":[open_seo_spider_core::RESOURCE_DISCOVERY_ENGINE,open_seo_spider_core::RESOURCE_CONTRACT_ENGINE],"contract_selection":"explicit_optional_config","qualified_directives":["nofollow","ugc","sponsored"],"qualified_link_scope":"target_internal_external_including_document_nofollow","durable_original_reference_roles":true,"durable_sqlite_ledger":true,"paged_occurrences":true,"paged_transport_metadata":true,"streamed_snapshot_exports":true,"entity_body_retention":false,"renderer_supported":false,"full_reference_parity":false},
@@ -941,7 +973,7 @@ async fn capabilities() -> Json<Value> {
             "redacted_cookie_observations":true,"screenshots":true,"accessibility_axe":true,
             "endpoint":"http://127.0.0.1:8790/render","enabled_by_default":false},
         "mcp":{"stdio":true,"streamable_http":"/mcp"},
-        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","fragments_csv","dom_csv","inputs_csv","sitemap_xml","sitemap_bundle_zip","project_json"],
+        "exports":["pages_csv","issues_csv","links_csv","extractions_csv","custom_search_csv","javascript_csv","cookies_csv","pdf_csv","image_resources_csv","responses_csv","fragments_csv","dom_csv","inputs_csv","sitemap_xml","sitemap_bundle_zip","project_json"],
         "unimplemented":["additional_api_integrations","spelling_grammar","pdf_ocr_and_rendering","shared_authenticated_browser_sessions","embedding_semantic_search","scheduling","full_structured_data_validation"],
         "parity":"in progress; see docs/parity/granular-acceptance.json"
     }))
@@ -1006,6 +1038,9 @@ mod cdn_classification_tests;
 #[cfg(test)]
 #[path = "server/cdn_directory_reporting_tests.rs"]
 mod cdn_directory_reporting_tests;
+#[cfg(test)]
+#[path = "server/custom_search_tests.rs"]
+mod custom_search_tests;
 
 fn config_from_input(mut value: Value) -> anyhow::Result<CrawlConfig> {
     let object = value
@@ -2039,6 +2074,43 @@ async fn export_cookie_csv(
         "text/csv; charset=utf-8",
         "cookies.csv",
     ))
+}
+async fn export_search_csv(
+    State(state): State<AppState>,
+    Path(id): Path<Uuid>,
+) -> ApiResult<Response> {
+    let report = require_report(&state, id).await?;
+    let body = state
+        .lifecycle
+        .blocking
+        .run_blocking(move || export_custom_search_csv(&report))
+        .await
+        .map_err(|error| api_error(StatusCode::SERVICE_UNAVAILABLE, error))?
+        .map_err(|error| {
+            let status = if error
+                .chain()
+                .any(|cause| cause.to_string().contains("custom-search CSV"))
+            {
+                StatusCode::PAYLOAD_TOO_LARGE
+            } else {
+                StatusCode::INTERNAL_SERVER_ERROR
+            };
+            api_error(status, error)
+        })?;
+    let digest = open_seo_spider_core::api_enrichment::api_sha(body.as_bytes());
+    let length = body.len();
+    let mut response = download(body, "text/csv; charset=utf-8", "custom-search.csv");
+    response
+        .headers_mut()
+        .insert("x-content-sha256", digest.parse().expect("hex digest"));
+    response
+        .headers_mut()
+        .insert(header::CONTENT_LENGTH, length.into());
+    response.headers_mut().insert(
+        header::CACHE_CONTROL,
+        "no-store".parse().expect("fixed header"),
+    );
+    Ok(response)
 }
 async fn export_visible_report(
     State(state): State<AppState>,

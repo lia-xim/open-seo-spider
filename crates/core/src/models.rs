@@ -85,6 +85,9 @@ pub struct CrawlConfig {
     pub resource_discovery: Option<crate::ResourceDiscoveryConfig>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub resource_discovery_limits: Option<crate::ResourceDiscoveryLimits>,
+    /// Keep optional additions at the tail for legacy positional JSON records.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub custom_search: Option<crate::CustomSearchConfig>,
 }
 
 // Keep the new opt-in object strict in every Serde format; outer null remains absence.
@@ -162,6 +165,7 @@ impl Default for CrawlConfig {
             custom_headers: BTreeMap::new(),
             renderer: None,
             custom_extractions: Vec::new(),
+            custom_search: None,
             audit_thresholds: AuditThresholds::default(),
             pdf_analysis: PdfAnalysisConfig::default(),
             validate_fragments: false,
@@ -1060,6 +1064,9 @@ pub struct PageRecord {
     pub resource_permission: Option<crate::ResourceTaskPermission>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub resource_response: Option<crate::ResourceResponseFacts>,
+    /// Missing on legacy documents; appended to preserve positional field order.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub custom_search: Option<Vec<crate::CustomSearchResult>>,
 }
 
 impl PageRecord {
@@ -1132,9 +1139,11 @@ pub struct CrawlSummary {
     pub status_counts: BTreeMap<String, usize>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct CrawlReport {
+    #[serde(deserialize_with = "crate::heap_deserialize::value")]
     pub config: CrawlConfig,
+    #[serde(deserialize_with = "crate::heap_deserialize::pages")]
     pub pages: Vec<PageRecord>,
     pub issues: Vec<AuditIssue>,
     pub summary: CrawlSummary,

@@ -27,6 +27,8 @@ robotstxt = "0.3"
 rusqlite = { version = "0.39", features = ["bundled"] }
 scraper = "0.27"
 serde = { version = "1", features = ["derive"] }
+# Generate small in-place visitors for recovery of wide saved records.
+serde_derive = { version = "1", features = ["deserialize_in_place"] }
 serde_json = "1"
 sha2 = "0.10"
 sxd-document = "0.3.2"

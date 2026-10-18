@@ -4,39 +4,28 @@
 
 Die Liste hält alle 144 gruppierten Fähigkeiten fest. Ein Haken bedeutet, dass das **eigene gespeicherte Abnahmekriterium** mit Beweisen erfüllt ist. Er bedeutet keine vollständige Gleichheit mit Screaming Frog. Diese Referenzparität bleibt für alle Einträge **NOT_PROVEN**.
 
-Aktueller Katalogstand: **36 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **39 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
+Aktueller Katalogstand: **37 eigene Abnahmen erfüllt**, **69 teilweise geprüft**, **38 offen**. Die Zahlen sind keine Aussage über den Anteil aller Herstellerfunktionen.
 
 Die [416 benannten Filter und 32 Ablaufverträge](parity/granular-acceptance.json) bilden ein zusätzliches Register. Ihre positiven Fälle, Kontrollfälle, Parameter und Grenzfälle müssen jeweils geprüft werden. Ein implementierter Kern, ein leerer Export oder übereinstimmende CSV-Zellen ersetzen diese Einzelabnahme nicht.
 
 ## Aktuelle Arbeit und nächste Schritte
 
-- [ ] **Spezialwerkzeuge mit echten Browser-Abläufen und vollständigen Exporten absichern** — LOCAL_31_SUITES_PASS_PUBLIC_CI_FIX_PENDING. Alle31 registrierten UI-Suiten bestehen gemeinsam lokal: neun API-Fixtures und22 native Abläufe. Sechs neue Suiten decken Migration/Linkfehler, Verzeichnisbaum, Segmente, N-Gramme, Ressourcenquellen und die API-Freigabe-/Fehlerpfade ab. Die sichtbaren Zeilen und vollständigen Exporte werden gegen native Ergebnisse geprüft. Eine konkrete API-Fehleranzeige ist korrigiert. Öffentliche CI von db5948a besteht Renderer und Docker sowie Linux-Rust/Clippy, scheitert danach an einer widersprüchlichen Legacy-Sitemap-Fixture; Windows wurde abgebrochen. Die Fixture-Korrektur besteht lokal11 Szenarien samt zwei neuen Ablehnungsfällen; eine frische öffentliche Abnahme bleibt offen.
-  - [x] Ein gemeinsamer31-Suiten-Lauf mit regulärem App-Abschluss0, unveränderten getrackten Quellen und identischer getesteter Binärdatei bestanden.
-  - [x] 105 Verzeichniskinder,105 Segmentzeilen, über100 N-Grammzeilen,107 Linkfundstellen,109 Migrationszeilen und106 Ressourcen-Fundstellen über die tatsächlichen UI-Seiten und vollständigen Exporte geprüft.
-  - [x] Unabhängige Reviews schärfen sichtbare DOM-Zeilen, genaue Segmentzuordnung, CSV-Vollständigkeit, echte Filteranfragen und Unknown-Zustände; fünf Kontrollen bestätigen die abschließenden Runner-Gates.
-  - [x] API-Anreicherung zeigt echte Backend-Fehlermeldungen aus String- und Objektantworten; Vorschau, Freigabe, Invalidierung und fehlende Zugangsdaten ohne Google-Übermittlung geprüft.
-  - [x] Sitemap-Legacy-Fixture entfernt beide modernen abhängigen Felder; verwaiste Messungen und verwaistes Inventar müssen separat400 ohne Kinddateien und Website-Anfragen ergeben. Tatsächlicher lokaler11-Szenarien-/11-SQLite-Aufgabenlauf mit vollständigem HTTP-Drain besteht.
-  - [x] Strikte saubere Commit-Prüfungen auf3f3e8ea für Sitemap-Ledger, Membership und Assessment tatsächlich bestanden; alle Roh- und Hashnachweise bleiben lokal erhalten.
-  - [ ] Frische öffentliche Linux-/Windows-CI prüfen; die strikten lokalen Commit-Prüfungen für Ledger, Membership und Assessment bestehen auf3f3e8ea, ersetzen aber keinen vollständig grünen GitHub-Lauf.
-  - [ ] Positive API-Anreicherung über den bestehenden test-only Transport-Injektionspunkt durch echten Browser/Router/Store prüfen; tatsächliche Google-Metriken separat autorisiert abnehmen.
-  - [ ] Kalte native Wiederöffnung der neuen Spezialwerkzeuge, weitere Regel-/Operator-Kombinationen, archivübergreifende Fehler und weitere Browser ergänzen.
-  - [ ] Als nächsten echten Funktionsausbau rendering.custom_search für Roh-HTML, DOM-HTML und ausdrücklich ausgewählte Texte implementieren; sichere Muster-/Ergebnisgrenzen, getrennte Herkunft und Unknown-Zustände erhalten.
-  - [ ] Vollständigen144-Fähigkeiten-Katalog weiter abarbeiten;36/69/39 bleiben unverändert und Herstellerparität NOT_PROVEN.
-  - Verträge: [e2e-testing.md](e2e-testing.md), [README.md](verification/specialist-e2e-20261018/README.md), [custom-search-plan.md](custom-search-plan.md).
-  - Gate-Stand: local_UI_E2E: PASS_31_9_FIXTURE_22_NATIVE; public_CI_db5948a: RENDERER_DOCKER_PASS_LINUX_RUST_CLIPPY_PASS_LEDGER_FIXTURE_FAIL_WINDOWS_CANCELLED; ledger_fix: PASS_DIRECT_LOCAL_11_SCENARIOS_11_SQLITE_TWO_ORPHAN_CONTROLS; strict_clean_commit_ledger: PASS_3F3E8EA_11_SCENARIOS_11_SQLITE_TWO_ORPHAN_CONTROLS; public_CI_new_commit: NOT_PROVEN; manufacturer_parity: NOT_PROVEN; installation: UNCHANGED_SOURCE16.
-
-- [ ] **Claudes Redesign technisch absichern und wichtige UI-Pfade Ende zu Ende prüfen** — LOCAL_25_SUITES_PASS_SPECIALIST_PATHS_OPEN. Auf Claudes Redesign53bb730 bestehen lokal alle25 registrierten Browser-Suiten in einem Lauf: neun mit API-Fixtures und16 mit nativen Abläufen. Neue Nachweise decken18 Werkzeug-Navigationsrunden und gespeicherte Sprachprüfung ab. Windows-Debugstart und320px-Überlauf der gefüllten Sprachprüfung sind korrigiert. Die vollständige Feature-Abdeckung und weitere Spezialwerkzeug-E2Es bleiben offen.
-  - [x] Gemeinsamer isolierter Lauf aller25 Suiten mit eigenem App-Speicher und dynamischem Renderer-Port bestanden; regulärer App-Abschluss0, unveränderte Binärdatei und getrackte Quellen.
-  - [x] Neue Sprachprüfungs-E2E: explizite Freigabe, tatsächliche lokale Protokollanfragen, Dictionary-/Profil-Neuladen, historischer CSV-Export und Dienstfehler; keine Website-Neuabrufe, keine Aussage über echte LanguageTool-Sprachqualität.
-  - [x] Windows-Debugstart mit8MiB-Stackreserve und gefüllte Sprachprüfung bei320px geprüft; Claudes Gestaltung beibehalten.
-  - [x] Runtime-Ausgaben aus20 älteren Tests von getrackten Fixtures getrennt; gemeinsame CI führt weiterhin sämtliche bisherigen UI-Suiten plus zwei neue aus.
-  - [x] Formatprüfung, strenges All-Targets/All-Features-Clippy,40 UI-VM-Gruppen,32 Zustandsregressionen und zwei gezielte Rust-Regressionen bestanden.
-  - [ ] Funktionale Browser/API/Speicher/Export-E2Es für Migration, Verzeichnisbaum, gespeicherte Segmente, N-Gramme, Broken Sources und Provider-Anreicherung ergänzen; Navigation allein reicht nicht.
-  - [ ] Öffentliche CI auf dem neuen Commit und Linux-Ausführung prüfen; bisheriger öffentlicher Lauf38973477912 scheiterte an Clippy und veränderten getrackten Testausgaben.
-  - [ ] Kalte Neustarts und Seitennavigation der übrigen Spezialwerkzeuge, echte LanguageTool-Sprachqualität, autorisierte externe Provider und weitere Browser separat prüfen.
-  - [ ] Vollständigen144-Fähigkeiten-Katalog weiter abarbeiten;36/69/39 bleiben unverändert, Herstellerparität bleibt NOT_PROVEN.
-  - Verträge: [e2e-testing.md](e2e-testing.md), [README.md](verification/redesign-e2e-20261018/README.md).
-  - Gate-Stand: local_UI_E2E: PASS_25_SUITES_9_FIXTURE_16_NATIVE; strict_clippy: PASS_RUST_1_95_ALL_TARGETS_ALL_FEATURES; public_CI: NOT_PROVEN_NEW_COMMIT_PENDING; specialist_functional_E2E: OPEN; manufacturer_parity: NOT_PROVEN; installation: UNCHANGED_SOURCE16.
+- [ ] **Eigene Suche und Spezialwerkzeuge mit nativen Browser-Abläufen absichern** — LOCAL_1750_RUST_32_UI_PASS_PUBLIC_CI_PENDING. Die eigene Literal-/Regex-Suche ist für vier getrennte Roh-/DOM-/Textquellen implementiert und mit echten Browser-, API-, Speicher-, Export- und Neustartabläufen abgenommen. Alle 32 UI-Suiten bestehen gemeinsam lokal: neun API-Fixtures und 23 native Abläufe. Zusätzlich bestehen 1.746 reguläre Rust-Tests und vier separat ausgeführte Chromium-Tests sowie strenges Clippy. Die drei Fehler des öffentlichen Laufs ee4eb6a (Windows-Stack, inkonsistente Recrawl-Fixture, verspätetes Lesen einer Browserantwort) sind korrigiert und lokal geprüft. Die neue öffentliche CI bleibt offen.
+  - [x] Gemeinsamer Lauf aller 32 UI-Suiten mit regulärem App-Abschluss 0, unveränderten getrackten Quellen und identischer getesteter Binärdatei bestanden.
+  - [x] Eigene Suche: vier getrennte Quellen, genaue Unicode-Bytepositionen, Literal-/Regex-Zählungen, explizite Unknown-Zustände, begrenzte Arbeit und Belege; ungültige Regeln vor Website-Anfragen abgelehnt.
+  - [x] Zehn echte Suchabläufe einschließlich externer URLs, Noindex-Anzeigefilter, sicherem verzögertem Inspector, sieben vollständigen Browser-Downloads, Import und zwei kalten nativen Prozessen bestanden; keine Analyse-Neuabrufe.
+  - [x] 1.746 reguläre Rust-Tests und vier separat ausgeführte echte Chromium-Tests bestehen; Clippy für alle Targets/Features mit verbotenen Warnungen bestanden. 40 UI-VM-Gruppen und 32 Zustandsregressionen sind separat geprüft.
+  - [x] Originaler 512-KiB-Stacktest für gespeicherte Roh-/DOM-/Recrawl-Daten besteht unoptimiert. Heap-Einlesen erhält Standardwerte, unbekannte Felder, URL-first-Arrays und Ablehnungen bei Duplikaten, falschen Typen, fehlenden Pflichtfeldern und nachgestellten Daten.
+  - [x] Native Such-CSV bleibt auf 64 MiB begrenzt; übergroße importierte Belege ergeben 413 ohne erfolgreichen Teil-Download. Anzeigen und CSV verwenden dieselben profil-sichtbaren internen und externen Seiten.
+  - [x] Verzeichnis-Test liest Vorschauantworten sofort einmal; Such-Downloads werden anhand der tatsächlichen Datei und einer unabhängigen nativen HTTP-Antwort geprüft.
+  - [x] Moderne Recrawl-Fixture erhält ihre tatsächliche Discovery-Konfiguration; zwölf native Szenarien und ein widersprüchlicher Inventar-Kontrollfall bestehen ohne Aufweichen der Produktionsprüfung.
+  - [x] Die zuvor abgenommenen Spezialwerkzeug-Szenarien mit über 100 Zeilen, vollständigen Exporten und zwei Sitemap-Orphan-Kontrollen bestehen weiterhin im gemeinsamen Lauf. Historische strikte Sitemap-Prüfungen auf 3f3e8ea bleiben gesonderte ältere Belege.
+  - [ ] Frische öffentliche Linux-/Windows-/Renderer-/Container-CI des neuen Commits beobachten und konkrete Folgefehler beheben; lokales Grün ersetzt keine öffentliche Abnahme.
+  - [ ] Positive API-Anreicherung mit test-only Provider-Transport durch Browser, Router, Polling, Speicherung und Wiederöffnung prüfen; echte Google-Metriken separat autorisiert abnehmen.
+  - [ ] Kalte Wiederöffnung weiterer Spezialwerkzeuge, zusätzliche Regel-/Operator-Kombinationen, fehlerhafte Archive, konkurrierende Änderungen und weitere Browser ergänzen.
+  - [ ] Vollständigen 144-Fähigkeiten-Katalog weiter abarbeiten: 37 eigene Abnahmen, 69 teilweise geprüft, 38 offen. Das zusätzliche Register mit 416 Filtern und 32 Ablaufverträgen bleibt eigenständig; Herstellerparität NOT_PROVEN.
+  - Verträge: [e2e-testing.md](e2e-testing.md), [custom-search-plan.md](custom-search-plan.md), [README.md](verification/custom-search-20261018/README.md).
+  - Gate-Stand: local_UI_E2E: PASS_32_9_FIXTURE_23_NATIVE; workspace_Rust: PASS_1746_ZERO_FAILURE_FOUR_EXPLICIT_RENDERER_IGNORES; explicit_Rust_Chromium: PASS_FOUR_ACTUAL_OWNED_RENDERER; strict_clippy: PASS_ALL_TARGETS_ALL_FEATURES; custom_search: PASS_TEN_NATIVE_BROWSER_WORKFLOWS; selected_recrawl_fixture: PASS_TWELVE_NATIVE_SCENARIOS_WITH_MODERN_COVERAGE_REFUSAL; public_CI_ee4eb6a: CONTAINER_PASS_WINDOWS_STACK_FAIL_LINUX_FIXTURE_FAIL_RENDERER_BODY_READ_FAIL; public_CI_new_commit: PENDING_AFTER_PUSH; manufacturer_parity: NOT_PROVEN; installation: UNCHANGED_SOURCE16.
 
 - [x] **Source15 mit dauerhaften Crawl-Limits vollständig abnehmen** — COMPLETED. Source15 Retry2 ist nach1535/0/0-Tests, vier frischen Rendererprüfungen, Release-Build und fünf tatsächlichen Nativrollen samt unabhängigen Rohdaten-Audits lokal installiert. Frische Ready-/Leerlaufprüfung, genaue Dienstbeendigung, drei exklusive Datenkopien und vollständige Berichtsvergleiche über alle acht gespeicherten Crawls bestehen. Dateibytes, Streams, ACLs, Attribute, Erstellzeiten und stabile Metadaten sind exakt; nur15 qualifizierte SHM-Schreibzeitdeltas bleiben. App8787 und Renderer8790 laufen mit bestätigten neuen Identitäten. Private Datenbelege bleiben lokal. Herstellerparität bleibt NOT_PROVEN.
   - [x] Historischer Erststand526bd13 geprüft; aktueller Retry2-Produktstand0bb0724 umfasst weiterhin429 exakt gebundene Quelldateien.
@@ -3095,7 +3084,7 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
 ### Browser-Rendering und eigene Extraktion
 
-14 Einträge: 4 eigene Abnahmen erfüllt, 4 teilweise geprüft, 6 offen.
+14 Einträge: 5 eigene Abnahmen erfüllt, 4 teilweise geprüft, 5 offen.
 
 #### Teilweise vorhanden – Restarbeiten
 
@@ -3314,31 +3303,6 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 
   </details>
 
-- [ ] **Eigene Text- und Quellcodesuchen** — Offen; `rendering.custom_search`, P3.
-
-  Orientierung: Rohes HTML, DOM und ausgewählten Text mit Fundanzahlen und Match-Herkunft durchsuchen.
-
-  Beweisregister: keine zugeordnete ausgeführte Prüfung.
-
-  <details>
-  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
-
-  ```json
-  {
-    "id": "rendering.custom_search",
-    "reference_name": "Literal and regex search",
-    "status": "planned",
-    "acceptance_test": "Search source, rendered content and selected text with occurrence counts and match evidence.",
-    "remaining_acceptance": [
-      "Search source, rendered content and selected text with occurrence counts and match evidence."
-    ],
-    "implementation_evidence": [],
-    "parity_status": "NOT_PROVEN"
-  }
-  ```
-
-  </details>
-
 - [ ] **Klick-, Hover- und Scroll-Aktionen** — Offen; `rendering.interact`, P3.
 
   Orientierung: Autorisierte Aktionen in erklärter Reihenfolge ausführen und resultierende Links prüfen.
@@ -3497,6 +3461,36 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
           "resource-offline-batch"
         ],
         "proves": "CSS and supported XPath 1.0 return text, attributes, serialized outer/inner HTML, multi-value results and typed scalar/function values; Rust regex keeps captures. Actual raw/rendered nested markup is escaped in the UI and survives dedicated CSV and project JSON. XPath id/lang/extension functions and PCRE-only syntax are rejected upfront; the supported repaired-HTML/XPath 1.0/Rust regex contract is bounded and is not arbitrary XML or full vendor-language equivalence."
+      }
+    ],
+    "parity_status": "NOT_PROVEN"
+  }
+  ```
+
+  </details>
+
+- [x] **Eigene Text- und Quellcodesuchen** — Eigene Abnahme erfüllt; `rendering.custom_search`, P3.
+
+  Orientierung: Rohes HTML, DOM und ausgewählten Text mit Fundanzahlen und Match-Herkunft durchsuchen.
+
+  Beweisregister: [custom-search-redesign-local-20261018](verification/custom-search-20261018/README.md) (LOCAL_1750_RUST_32_UI_STRICT_CLIPPY_PASS_PUBLIC_CI_PENDING).
+
+  <details>
+  <summary>Exakte Abnahme, offene Kriterien und Belege</summary>
+
+  ```json
+  {
+    "id": "rendering.custom_search",
+    "reference_name": "Literal and regex search",
+    "status": "implemented",
+    "acceptance_test": "Search source, rendered content and selected text with occurrence counts and match evidence.",
+    "remaining_acceptance": [],
+    "implementation_evidence": [
+      {
+        "verification_run_ids": [
+          "custom-search-redesign-local-20261018"
+        ],
+        "proves": "Opt-in literal and Rust-regex search on four explicitly selected raw/rendered HTML and captured-text sources. Exact counts require complete sources and exhausted scans; incomplete/unavailable remains unknown. UTF-8 offsets, bounded evidence, configuration/input/scan/regex-work/page-JSON/CSV budgets, raw/DOM separation, saved browser settings and inspector, full native CSV/JSON, import, genuine external pages, saved noindex reporting and two-process cold restart pass owned native fixtures. This fulfills the own grouped search criterion; vendor regex equivalence and full reference parity remain NOT_PROVEN."
       }
     ],
     "parity_status": "NOT_PROVEN"
@@ -5635,9 +5629,22 @@ Die Orientierungssätze sind eine deutsche Arbeitshilfe. Die eingeklappten Quell
 ## Frühere Arbeitsstände
 
 <details>
-<summary>36 historische Zwischenstände mit ihren damaligen Ergebnissen und offenen Schritten</summary>
+<summary>37 historische Zwischenstände mit ihren damaligen Ergebnissen und offenen Schritten</summary>
 
 Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Restarbeiten stehen oben und in den jeweiligen Feature-Kriterien.
+
+- [ ] **Claudes Redesign technisch absichern und wichtige UI-Pfade Ende zu Ende prüfen** — LOCAL_25_SUITES_PASS_SPECIALIST_PATHS_OPEN. Auf Claudes Redesign53bb730 bestehen lokal alle25 registrierten Browser-Suiten in einem Lauf: neun mit API-Fixtures und16 mit nativen Abläufen. Neue Nachweise decken18 Werkzeug-Navigationsrunden und gespeicherte Sprachprüfung ab. Windows-Debugstart und320px-Überlauf der gefüllten Sprachprüfung sind korrigiert. Die vollständige Feature-Abdeckung und weitere Spezialwerkzeug-E2Es bleiben offen.
+  - [x] Gemeinsamer isolierter Lauf aller25 Suiten mit eigenem App-Speicher und dynamischem Renderer-Port bestanden; regulärer App-Abschluss0, unveränderte Binärdatei und getrackte Quellen.
+  - [x] Neue Sprachprüfungs-E2E: explizite Freigabe, tatsächliche lokale Protokollanfragen, Dictionary-/Profil-Neuladen, historischer CSV-Export und Dienstfehler; keine Website-Neuabrufe, keine Aussage über echte LanguageTool-Sprachqualität.
+  - [x] Windows-Debugstart mit8MiB-Stackreserve und gefüllte Sprachprüfung bei320px geprüft; Claudes Gestaltung beibehalten.
+  - [x] Runtime-Ausgaben aus20 älteren Tests von getrackten Fixtures getrennt; gemeinsame CI führt weiterhin sämtliche bisherigen UI-Suiten plus zwei neue aus.
+  - [x] Formatprüfung, strenges All-Targets/All-Features-Clippy,40 UI-VM-Gruppen,32 Zustandsregressionen und zwei gezielte Rust-Regressionen bestanden.
+  - [ ] Funktionale Browser/API/Speicher/Export-E2Es für Migration, Verzeichnisbaum, gespeicherte Segmente, N-Gramme, Broken Sources und Provider-Anreicherung ergänzen; Navigation allein reicht nicht.
+  - [ ] Öffentliche CI auf dem neuen Commit und Linux-Ausführung prüfen; bisheriger öffentlicher Lauf38973477912 scheiterte an Clippy und veränderten getrackten Testausgaben.
+  - [ ] Kalte Neustarts und Seitennavigation der übrigen Spezialwerkzeuge, echte LanguageTool-Sprachqualität, autorisierte externe Provider und weitere Browser separat prüfen.
+  - [ ] Vollständigen144-Fähigkeiten-Katalog weiter abarbeiten;36/69/39 bleiben unverändert, Herstellerparität bleibt NOT_PROVEN.
+  - Verträge: [e2e-testing.md](e2e-testing.md), [README.md](verification/redesign-e2e-20261018/README.md).
+  - Gate-Stand: local_UI_E2E: PASS_25_SUITES_9_FIXTURE_16_NATIVE; strict_clippy: PASS_RUST_1_95_ALL_TARGETS_ALL_FEATURES; public_CI: NOT_PROVEN_NEW_COMMIT_PENDING; specialist_functional_E2E: OPEN; manufacturer_parity: NOT_PROVEN; installation: UNCHANGED_SOURCE16.
 
 - [ ] **Export-Abschlüsse und schmale Einstellungsdialoge korrigieren** — ACTUAL1384_SUITE_BUILD_ELEVEN_NATIVE_AND_GENERATOR_PASS_LOCALLY_INSTALLED. Source11 ist lokal installiert und läuft mit Renderer und allen acht gespeicherten Crawls. Die vollständige1384-Test-Suite, optimierter Windows-Build, elf praktische Prüfbereiche und sechs zusätzliche Sitemap-Generator-Gruppen bestehen. Alle Nutzerdatenbytes und stabilen Metadaten blieben erhalten; ausschließlich Änderungszeiten der fünf exakt inventarisierten SQLite-SHM-Dateien durften sich ändern.
   - [x] Fünf bestehende Dateien aus zwei unabhängig geprüften Vorschlägen integriert; 364 weitere Quellinputs, Cargo-Konfiguration und Lockdatei unverändert.
@@ -6134,4 +6141,4 @@ Diese unveränderten Einträge dokumentieren den damaligen Stand. Aktuelle Resta
 
 Offline-Auswertung mit geändertem CSS-Inhaltsbereich braucht gespeichertes HTML beziehungsweise DOM. Ein bereits ausgewählter Text mit HTML-Hash reicht zur erneuten Auswahl nicht aus. Dieser zusätzliche Workflow bleibt offen, solange keine vollständigen Quellartefakte und entsprechende Offline-Prüfung existieren.
 
-Reproduktionsbindung: SHA-256 des verwendeten Katalogs `9905d28b64b9d7173404fde8eaf65ba77cf595b55c679a5cf24aa6c30eeb8f7e`. Letzter im Katalog erfasster Beweisstand: `2026-10-16T21:49:50.686Z`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.
+Reproduktionsbindung: SHA-256 des verwendeten Katalogs `d15a50687672304b97dc99c4040faf08aa981c2788f3726793d11037b6a2285a`. Letzter im Katalog erfasster Beweisstand: `2026-10-18T10:46:53.536759+00:00`. Laufende neue Arbeit aktualisiert frühere Beweise nicht.

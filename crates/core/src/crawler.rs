@@ -49,6 +49,7 @@ pub struct Crawler {
     policy: Option<Arc<crate::CompiledCrawlPolicy>>,
     policy_limits: crate::LiveCrawlPolicyLimits,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
+    custom_search: Option<Arc<crate::CompiledCustomSearchConfig>>,
     cdn_classification: Option<Arc<crate::cdn_classification::CompiledCdnClassification>>,
     cdn_directory_reporting:
         Option<Arc<crate::cdn_directory_reporting::CompiledCdnDirectoryReporting>>,
@@ -57,6 +58,10 @@ pub struct Crawler {
 }
 
 impl Crawler {
+    pub(crate) fn compiled_custom_search(&self) -> Option<&crate::CompiledCustomSearchConfig> {
+        self.custom_search.as_deref()
+    }
+
     /// Construct a new crawl from declarations that have not yet been merged.
     pub fn new(config: CrawlConfig) -> anyhow::Result<Self> {
         Self::new_with_input_capture(config, true)
@@ -129,6 +134,12 @@ impl Crawler {
             .content_capture
             .as_ref()
             .map(crate::ContentCaptureConfig::compile)
+            .transpose()?
+            .map(Arc::new);
+        let custom_search = config
+            .custom_search
+            .as_ref()
+            .map(crate::CustomSearchConfig::compile)
             .transpose()?
             .map(Arc::new);
         let policy_limits = config.live_policy_limits.clone().unwrap_or_default();
@@ -275,6 +286,7 @@ impl Crawler {
             policy,
             policy_limits,
             capture,
+            custom_search,
             cdn_classification,
             cdn_directory_reporting,
             #[cfg(test)]
@@ -656,6 +668,7 @@ impl Crawler {
                 .map(Arc::new),
             store: self.store.clone(),
             capture: self.capture.clone(),
+            custom_search: self.custom_search.clone(),
             cdn_classification: self.cdn_classification.clone(),
             cdn_directory_reporting: self.cdn_directory_reporting.clone(),
             generation,
@@ -1726,6 +1739,7 @@ impl Crawler {
                 .map(Arc::new),
             store: self.store.clone(),
             capture: self.capture.clone(),
+            custom_search: self.custom_search.clone(),
             cdn_classification: self.cdn_classification.clone(),
             cdn_directory_reporting: self.cdn_directory_reporting.clone(),
             generation,
@@ -3152,6 +3166,7 @@ struct FetchContext {
     quotas: Option<Arc<crate::crawl_quotas::CompiledCrawlQuotas>>,
     store: Option<Arc<CrawlStore>>,
     capture: Option<Arc<crate::CompiledContentCaptureConfig>>,
+    custom_search: Option<Arc<crate::CompiledCustomSearchConfig>>,
     cdn_classification: Option<Arc<crate::cdn_classification::CompiledCdnClassification>>,
     cdn_directory_reporting:
         Option<Arc<crate::cdn_directory_reporting::CompiledCdnDirectoryReporting>>,
@@ -3276,6 +3291,9 @@ impl FetchContext {
         let (mut page, payload) = self
             .fetch(entry, FetchPurpose::PageDocument, quota.as_mut())
             .await;
+        if let Some(search) = &self.custom_search {
+            crate::custom_search_binding::selected_text(&mut page, search);
+        }
         if let Some(session) = &mut quota {
             if let Some(error) = &session.failure {
                 anyhow::bail!("Durable quota admission failed: {error}");
@@ -3339,6 +3357,9 @@ impl FetchContext {
             indexability_agent: self.config.indexability_agent.clone(),
             ..Default::default()
         };
+        if let Some(search) = &self.custom_search {
+            crate::custom_search_binding::initialize(&mut page, search, self.generation);
+        }
         // Purpose comes only from private document/protocol wrappers. A supplied
         // policy role cannot select a different transport privilege.
         if entry
@@ -4088,6 +4109,34 @@ impl FetchContext {
             );
             page.html_head_observation =
                 Some(crate::html_head::observe(&page, text, decode_status));
+            if let Some(search) = &self.custom_search {
+                let document_url = page.final_url.clone();
+                let revision = crate::custom_search_binding::html_revision(
+                    &page,
+                    crate::CustomSearchSource::RawHtml,
+                    text,
+                    &document_url,
+                    self.generation,
+                );
+                let complete = matches!(page.final_status, Some(status) if status >= 200 && !matches!(status, 204 | 205 | 206 | 304))
+                    && page.error.is_none()
+                    && !page.truncated
+                    && !page.blocked_by_robots
+                    && decode_status == crate::ContentCaptureDecodeStatus::Exact;
+                crate::custom_search_binding::observe(
+                    &mut page,
+                    search,
+                    crate::CustomSearchSource::RawHtml,
+                    crate::CustomSearchInput {
+                        text: Some(text),
+                        complete,
+                        reason: (!complete).then_some("native_html_incomplete_or_decode_uncertain"),
+                        document_url: Some(&document_url),
+                        observed_generation: self.generation,
+                        source_revision: Some(&revision),
+                    },
+                );
+            }
         }
         if page.is_html()
             && page.final_status == Some(200)
@@ -4100,6 +4149,7 @@ impl FetchContext {
                 &self.config,
                 &self.seeds,
                 self.capture.as_deref(),
+                self.custom_search.as_deref(),
                 self.generation,
             )
             .await;
@@ -4242,6 +4292,7 @@ mod tests {
             quotas: Some(compiled.clone()),
             store: Some(store.clone()),
             capture: None,
+            custom_search: None,
             cdn_classification: None,
             cdn_directory_reporting: None,
             generation: Some(generation),

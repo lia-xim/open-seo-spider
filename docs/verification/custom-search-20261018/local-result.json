@@ -1,0 +1,469 @@
+{
+  "kind": "custom_search_and_redesign_local_acceptance",
+  "result": "PASS_LOCAL_PUBLIC_CI_PENDING",
+  "recorded_at": "2026-10-18T10:46:07.992605+00:00",
+  "base_commit": "ee4eb6a515b34ae71cce283410bcef119decabb1",
+  "binary_sha256": "c8aaa15a96698c045ce65440d9bb278730e998a2e8f2d431985aa5cbb34f28c9",
+  "rust": {
+    "ordinary_workspace_passed": 1746,
+    "failed": 0,
+    "ordinary_ignored": 4,
+    "explicit_owned_renderer_passed": 4,
+    "executed_pass_total": 1750
+  },
+  "strict_clippy": "PASS_ALL_TARGETS_ALL_FEATURES_WARNINGS_DENIED",
+  "ui": {
+    "kind": "redesign_UI_E2E",
+    "results": [
+      {
+        "name": "dashboard",
+        "script": "ui-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 8284
+      },
+      {
+        "name": "pause-controls",
+        "script": "ui-crawl-control-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 7404
+      },
+      {
+        "name": "recrawl-controls",
+        "script": "ui-selected-recrawl-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 7311
+      },
+      {
+        "name": "policy-controls",
+        "script": "ui-policy-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 12871
+      },
+      {
+        "name": "content-controls",
+        "script": "ui-content-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 38552
+      },
+      {
+        "name": "resource-controls",
+        "script": "ui-resource-discovery-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 18368
+      },
+      {
+        "name": "resource-ledger",
+        "script": "ui-resource-ledger-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 10527
+      },
+      {
+        "name": "resource-contract",
+        "script": "ui-resource-contract-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 11248
+      },
+      {
+        "name": "comparison-controls",
+        "script": "ui-saved-comparison-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 4695
+      },
+      {
+        "name": "tool-navigation",
+        "script": "ui-tools-navigation-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 4181
+      },
+      {
+        "name": "rendered-crawl",
+        "script": "ui-renderer-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 6575
+      },
+      {
+        "name": "dom-capture",
+        "script": "ui-dom-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 14056
+      },
+      {
+        "name": "resources",
+        "script": "ui-resource-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 7846
+      },
+      {
+        "name": "robots",
+        "script": "ui-robots-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 2100
+      },
+      {
+        "name": "serp",
+        "script": "ui-serp-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 1566
+      },
+      {
+        "name": "list-import",
+        "script": "ui-list-import-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 4955
+      },
+      {
+        "name": "pause-resume",
+        "script": "ui-crawl-control-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 16439
+      },
+      {
+        "name": "selected-recrawl",
+        "script": "ui-selected-recrawl-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 8741
+      },
+      {
+        "name": "policy",
+        "script": "ui-policy-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 5074
+      },
+      {
+        "name": "content",
+        "script": "ui-content-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 9347
+      },
+      {
+        "name": "resource-discovery",
+        "script": "ui-resource-discovery-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 8828
+      },
+      {
+        "name": "resource-persistence",
+        "script": "ui-resource-contract-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 7094
+      },
+      {
+        "name": "saved-spelling",
+        "script": "ui-spelling-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 2897
+      },
+      {
+        "name": "link-workflows",
+        "script": "ui-link-workflows-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 3930
+      },
+      {
+        "name": "api-enrichment",
+        "script": "ui-enrichment-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 1571
+      },
+      {
+        "name": "directory-tree",
+        "script": "ui-directory-tree-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 4580
+      },
+      {
+        "name": "saved-ngrams",
+        "script": "ui-ngrams-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 4335
+      },
+      {
+        "name": "saved-segments",
+        "script": "ui-segments-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 4288
+      },
+      {
+        "name": "resource-sources",
+        "script": "ui-resource-sources-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 10174
+      },
+      {
+        "name": "custom-search",
+        "script": "ui-custom-search-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 21355
+      },
+      {
+        "name": "saved-comparison",
+        "script": "ui-saved-comparison-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 4063
+      },
+      {
+        "name": "comparison-bundles",
+        "script": "ui-saved-comparison-bundle-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "duration_ms": 5107
+      }
+    ],
+    "app_origin": "http://127.0.0.1:61043",
+    "shutdown": {
+      "code": 0,
+      "signal": null
+    },
+    "binary": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+    "binary_sha256": "c8aaa15a96698c045ce65440d9bb278730e998a2e8f2d431985aa5cbb34f28c9",
+    "binary_unchanged": true,
+    "tracked_sources_unchanged": true,
+    "changed": [],
+    "complete": true,
+    "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+  },
+  "custom_search": {
+    "result": "PASS",
+    "checks": [
+      "default-disabled native configuration stores no custom-search results; redesigned empty UI and actual native CSV keep missing/historical search unknown with blank count rather than zero",
+      "browser settings defer Rust regex semantics; native invalid-regex preflight rejects HTTP400 before any website request or new job and preserves prior report",
+      "settings survive browser reload; actual Chrome raw/rendered HTML and selected-text counts3/4/2/3 prove excluded navigation and separate capture hashes, saved-example limit1 preserves exact totals, and lazy evidence stays safe text",
+      "saved project JSON and actual native full-search CSV download preserve captured results, while the UI zero filter selects only confirmed complete zero",
+      "actual browser project import preserves the complete saved custom-search configuration and observations; declared imported native CSV stays byte-identical with zero website requests",
+      "genuinely checked external page remains visible beside internal search rows; active noindex profile hides exactly its captured page from UI/full CSV while raw JSON preserves all three native observations",
+      "populated desktop/320px controls remain reachable; unavailable renderer/selected-text sources never fall back to raw HTML or become a successful zero",
+      "real native scan/input budgets preserve unknown totals; truncated literal zero never enters confirmed-zero, and anchored regex refuses partial context without fabricated evidence",
+      "explicit JSON regex work budget reaches native engine and retains an incomplete unknown total with zero invented matches",
+      "two owned native processes share one fresh store: actual crawl results survive natural shutdown and cold reopen byte-for-byte, then redesigned browser results and verified CSV work without website refetch"
+    ],
+    "crawl_ids": {
+      "disabled": "3e1f5b82-d14f-419b-bc24-7aed035f0cda",
+      "enabled": "0419d31f-6172-4aa0-853c-eccc16748e71",
+      "declared_import": "fc15a638-5169-463d-b4a7-1557b9ee3ee0",
+      "external_and_reporting": "f6cf6a2b-2b2d-4e0e-b6a5-6a8f6c122bf1",
+      "unavailable": "ca45a894-77fc-4f8c-b4c0-0e3387f20000",
+      "scan_limited": "0672a812-e004-4883-871f-6e2a1c05e4f4",
+      "input_limited": "3b0d88ab-40b5-4b49-9a96-fcf8a9f47060",
+      "regex_work_limited": "a88f8213-a671-44f9-a6f4-ae9fe4b02aaf",
+      "cold_reopened": "88f55779-2e07-4de9-8f4d-2eade47bd352"
+    },
+    "cold_proof": {
+      "crawl_id": "88f55779-2e07-4de9-8f4d-2eade47bd352",
+      "first_origin": "http://127.0.0.1:65422",
+      "reopened_origin": "http://127.0.0.1:58722",
+      "binary_sha256": "c8aaa15a96698c045ce65440d9bb278730e998a2e8f2d431985aa5cbb34f28c9",
+      "first_shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "reopened_shutdown": {
+        "code": 0,
+        "signal": null
+      }
+    },
+    "website_requests": {
+      "/robots.txt": 1,
+      "/dynamic": 8,
+      "/favicon.ico": 1,
+      "/visibility-root": 1,
+      "/hidden": 1,
+      "external:/external": 1
+    },
+    "analysis_refetches": 0,
+    "attachment_checks": [
+      {
+        "url": "http://127.0.0.1:62243/api/crawls/3e1f5b82-d14f-419b-bc24-7aed035f0cda/custom-search.csv",
+        "download_bytes": 359,
+        "native_sha256": "0ec53a8225488a04f0cd2ced311e7201a083978eed0a83490ca94178060307be",
+        "verification": "Actual browser file independently matched exact same owned native GET URL; no CDP attachment body assumed."
+      },
+      {
+        "url": "http://127.0.0.1:62243/api/crawls/0419d31f-6172-4aa0-853c-eccc16748e71/project.json",
+        "download_bytes": 36678,
+        "native_sha256": "88ff472c7bc9b39e22e8aa861d4e0f19de3482a387450a616d381cbe1075b120",
+        "verification": "Actual browser file independently matched exact same owned native GET URL; no CDP attachment body assumed."
+      },
+      {
+        "url": "http://127.0.0.1:62243/api/crawls/0419d31f-6172-4aa0-853c-eccc16748e71/custom-search.csv",
+        "download_bytes": 5919,
+        "native_sha256": "2116bba086781145e586e741cdb316667a8457f180ba111e72ae46012508d601",
+        "verification": "Actual browser file independently matched exact same owned native GET URL; no CDP attachment body assumed."
+      },
+      {
+        "url": "http://127.0.0.1:62243/api/crawls/fc15a638-5169-463d-b4a7-1557b9ee3ee0/custom-search.csv",
+        "download_bytes": 5919,
+        "native_sha256": "2116bba086781145e586e741cdb316667a8457f180ba111e72ae46012508d601",
+        "verification": "Actual browser file independently matched exact same owned native GET URL; no CDP attachment body assumed."
+      },
+      {
+        "url": "http://127.0.0.1:62243/api/crawls/f6cf6a2b-2b2d-4e0e-b6a5-6a8f6c122bf1/custom-search.csv",
+        "download_bytes": 1729,
+        "native_sha256": "bc394808ede44f6310ae62e94dfa41bdb86283425529787b644a987de7da4585",
+        "verification": "Actual browser file independently matched exact same owned native GET URL; no CDP attachment body assumed."
+      },
+      {
+        "url": "http://127.0.0.1:62243/api/crawls/f6cf6a2b-2b2d-4e0e-b6a5-6a8f6c122bf1/project.json",
+        "download_bytes": 30079,
+        "native_sha256": "94b66df2ebc720eaf6f4ad5d557536e6881682a0c95d57a27e9b5c2c5ab16150",
+        "verification": "Actual browser file independently matched exact same owned native GET URL; no CDP attachment body assumed."
+      },
+      {
+        "url": "http://127.0.0.1:58722/api/crawls/88f55779-2e07-4de9-8f4d-2eade47bd352/custom-search.csv",
+        "download_bytes": 946,
+        "native_sha256": "0365ecec4b86c9ad51f532108ee6674afd8e92b234b26d05fb1941b0123c1c03",
+        "verification": "Actual browser file independently matched exact same owned native GET URL; no CDP attachment body assumed."
+      }
+    ],
+    "errors": [],
+    "scope": "Actual redesigned browser settings/native Rust preflight/crawler/owned Chrome renderer/saved JSON/native full CSV and rendered result cells. Own native cold restart verifies an additional real raw-source crawl in a fresh isolated store. Only owned synthetic pages. No reference regex/vendor parity, crash recovery or remote-process claim."
+  },
+  "selected_recrawl": {
+    "tested_at": "2026-10-18T10:32:43.243Z",
+    "result": "PASS",
+    "platform": "win32",
+    "checks": [
+      "Missing/invalid/unsafe selection and unknown request fields fail before child creation or any HTTP, preserving exact parent bytes",
+      "A modern report with a changed discovery configuration but unchanged bound sitemap coverage is refused before derived files or HTTP; the valid source keeps its authentic discovery inventory",
+      "Derived selection budget ignores inherited page count/limit, coalesces duplicate occurrences, excludes pending stale rows and rebuilds duplicate findings over retained plus fresh observations without seed/sitemap/link expansion",
+      "Explicit selected-attempt resume preserves config and parent while replacing stale success with committed 404; wrong budget kind causes no archive/state/network changes",
+      "A chosen recorded 404 becomes a new captured 200 after the fixture changes, while all four unrelated saved rows and exact failed parent snapshot remain unchanged",
+      "A selected external result never becomes a credential seed or traversal root, including a derived child used as the next source",
+      "Refreshing requested redirect A retains distinct requested B exactly, even while A captures a newer final B document",
+      "Selected pause drains the admitted target, rejects deriving an active source and recovers/resumes selected-only SQLite state without report/manifest or refetching committed selection",
+      "Crash retains immutable plan/base and inherited rows, excludes uncommitted selected old success, and explicit resume retries only pending selected identity with honest at-least-once attempt metadata",
+      "Native CLI writes new JSON/CSV/durable selected store, retains exact source and refuses parent overwrite (including an alternate hardlink), existing report/store, colliding destinations or missing target before requests",
+      "Altered inherited SQLite payload is not exposed as a validated resumable selection, and rejected recovery makes zero requests",
+      "Native API and CLI page CSVs preserve original columns and expose exact requested-URL freshness, mixed-age coverage, immutable parent hash and captured timestamp"
+    ],
+    "parent_snapshot_sha256": "8e9cb3ae4628d59f8b707953c77c948cb9e79df30f06a56dd704356611decdd8",
+    "limits": "Owned native/API/CLI fixtures. Browser recrawl, provider freshness, full reference parity, exactly-once remote requests and power-loss durability require separate evidence."
+  },
+  "raw_local_evidence": [
+    {
+      "path": "artifacts/ui-e2e-1792319734621-34128/proof.json",
+      "bytes": 7143,
+      "sha256": "378a269262e490346f6e72147391f70561018b7f2ca7ff3cfce87f53d99a4ad3"
+    },
+    {
+      "path": "artifacts/custom-search-live-1792319667234/custom-search-live.json",
+      "bytes": 6023,
+      "sha256": "1a6c4de6053e3e0d61db5dce8c4edb4627b44315722ca50b4928f2798a01153d"
+    },
+    {
+      "path": "artifacts/custom-search-workspace-20261018.log",
+      "bytes": 201531,
+      "sha256": "02491b270b89ba4431c808df7c0d80270f62bc91e9c98d9943ebc9a350a43d2c"
+    },
+    {
+      "path": "artifacts/custom-search-renderer-rust-20261018.log",
+      "bytes": 4498,
+      "sha256": "8666fd3902c563f522f94554e6cc987d1092f9f7eec4040ac96b0072316375af"
+    },
+    {
+      "path": "artifacts/custom-search-clippy-20261018.log",
+      "bytes": 540,
+      "sha256": "f8b0f89f74379f9bcc967d3d3d96892b43c31c46f9471341161ddead9e8fe431"
+    }
+  ],
+  "boundaries": [
+    "Local Windows debug executable and owned fixtures only; public CI for the upcoming commit remains pending.",
+    "9 browser API-fixture suites and23 native suites are distinguished in the unified proof.",
+    "Declared project imports are preserved observations, not origin attestation.",
+    "Installed Source16 application/store was not used or modified. Full reference parity remains NOT_PROVEN."
+  ]
+}

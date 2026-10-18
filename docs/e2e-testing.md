@@ -13,6 +13,7 @@ and optionally set `OPEN_SEO_BROWSER_PATH` to its executable.
 ```sh
 cargo build --locked -p open-seo-spider
 node scripts/ui-e2e.mjs
+node scripts/renderer-rust-e2e.mjs
 ```
 
 `SPIDER_BINARY` selects an explicitly built app. The runner never installs or
@@ -34,6 +35,12 @@ node scripts/ui-e2e.mjs --only tool-navigation,saved-spelling
 
 The default run includes every registered suite. `--only` does not constitute a
 complete E2E pass. The runner stops at the first failure and retains its logs.
+
+The second command executes the four Rust fixtures explicitly ignored by the
+ordinary workspace run because they need Chromium. It owns a dynamic renderer
+port and closes the worker afterward; no installed renderer is required. CI's
+renderer job runs the same command. Report ordinary ignored tests and these
+explicit executions separately.
 
 ## Coverage and boundaries
 
@@ -59,6 +66,7 @@ complete E2E pass. The runner stops at the first failure and retains its logs.
 | N-gram totals, occurrences, word cloud and text/metadata channels | saved-ngrams | Browser → native corpus; exact rendered rows, complete CSV, missing sources and real stale-generation refusal |
 | Resource/CSS failure occurrences and unavailable history | resource-sources | Browser → native SQLite ledger; 106 occurrences, 100+6 paging, snapshot-bound CSV and page JSON |
 | API enrichment preview, acknowledgement, invalidation and error messages | api-enrichment | Browser → ordinary native API; no successful provider calls or persisted remote metrics claimed |
+| Custom literal/regex search, separate raw/rendered/selected sources, exact counts, unknowns and limits | custom-search | Browser → Rust → actual Chromium → owned website; saved inspector, complete CSV/JSON, import and owned cold native restart |
 
 The existing native sitemap membership/assessment, API, CLI, MCP and renderer
 integration suites remain separate CI gates. Extracted-function VM tests are
@@ -66,7 +74,7 @@ also separate; they must not be described as browser E2E tests.
 
 ## Remaining important-path work
 
-The 31 registered suites provide bounded functional cases for the specialist
+The 32 registered suites provide bounded functional cases for the specialist
 tools above; a passing case is not complete feature acceptance. Cold native
 restart across the remaining tools, all rule/operator combinations, broader
 malformed imported archives and concurrent mutations need further coverage.
