@@ -9,6 +9,7 @@ const {spawn} = require('node:child_process');
 const {DatabaseSync} = require('node:sqlite');
 const {createHash, randomUUID} = require('node:crypto');
 const {chromium} = require('../../renderer/node_modules/playwright-core');
+const profileCapture = require('./profile-response-capture.cjs');
 const root = path.resolve(__dirname, '../..');
 assert(process.env.SPIDER_BINARY, 'Explicit reviewed normal SPIDER_BINARY required; no build or installed-app discovery');
 assert(process.env.SPIDER_BINARY_SHA256, 'Explicit normal binary SHA required');
@@ -27,7 +28,8 @@ const key = 'open-seo-spider-config-profile-draft-v1', positiveStore = path.join
 const header = 'X-Owned-Catalog', secret = 'owned-volatile-catalog-' + randomUUID(), nonce = randomUUID();
 const checks = [], owners = [], requests = [], negatives = [], downloads = [], sqlProofs = [], held = [], errors = [], external = [], captureHits = [], offlineHits = [], witnesses = [];
 const bodies = new WeakMap();
-const pins = [__filename, path.join(__dirname, 'artifact-path.cjs'), binary, chrome].map(file => ({file, sha256: hash(fs.readFileSync(file))}));
+const inspectedResponses = [];
+const pins = [__filename, path.join(__dirname, 'artifact-path.cjs'), binary, chrome, path.join(__dirname, 'profile-response-capture.cjs')].map(file => ({file, sha256: hash(fs.readFileSync(file))}));
 let app, browser, site, siteOrigin, offline = false, failure, proof;
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 function check(text) { checks.push(text); console.log('PASS ' + text); }
@@ -47,6 +49,9 @@ function lossless(text) { return JSON.parse(text, (_key, value, context) => type
 function sameJSON(a, b, label) { assert.deepEqual(lossless(a), lossless(b), label); }
 function noSecret(text, label) { assert(!text.includes(secret), label + ': volatile header value leaked'); }
 function dbFile(directory) { return path.join(directory, 'configuration-profiles', 'catalog.sqlite'); }
+// Node's bundled SQLite needs an extended Windows filename for long owned
+// fixture outputs. The native application's store adapter is tested separately.
+function sqlitePath(file) { return process.platform === 'win32' ? path.toNamespacedPath(file) : file; }
 function files(directory) {
   const found = []; if (!fs.existsSync(directory)) return found;
   const visit = (dir, prefix) => { for (const name of fs.readdirSync(dir).sort()) { const file = path.join(dir, name), stat = fs.lstatSync(file); assert(!stat.isSymbolicLink()); if (stat.isDirectory()) visit(file, prefix + name + '/'); else found.push({path: prefix + name, bytes: stat.size, sha256: hash(fs.readFileSync(file))}); } };
@@ -83,6 +88,10 @@ async function native(route, body, status = 200, method = body === undefined ? '
 }
 async function api(route, body, status, method) { const result = await native(route, body, status, method); return {...result, value: JSON.parse(result.bytes)}; }
 async function effects() { return {files: files(app.directory), jobs: (await api('/api/crawls')).value, capture: captureHits.length, offline: offlineHits.length}; }
+function usesBrowserClone(route, method) {
+  return (method === 'POST' && route === '/api/config-profiles/inspect') ||
+    (method === 'GET' && (route === CATALOG || /^\/api\/config-profile-catalog\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(route)));
+}
 function observe(page) {
   const owner = app;
   page.on('pageerror', error => errors.push(error.message));
@@ -93,6 +102,7 @@ function observe(page) {
     if (!response.url().startsWith(owner.origin + '/api/')) return;
     const p = new URL(response.url()).pathname;
     if (p === '/api/config-profiles/export') return; // Attachment bodies use actual file + unconditional pure native oracle.
+    if (usesBrowserClone(p, response.request().method())) return;
     if (p.startsWith(CATALOG) || p.startsWith('/api/config-profiles/') || p === '/api/crawls/from-profile') bodies.set(response, response.body().then(bytes => ({bytes}), error => ({error})));
   });
 }
@@ -103,18 +113,32 @@ async function makeContext() {
   return context;
 }
 async function makePage(context) {
-  const page = await context.newPage(); observe(page); await page.goto(app.origin); await page.locator('#connection-state.connected').waitFor();
+  const page = await context.newPage(); observe(page); await profileCapture.install(page); await page.goto(app.origin); await page.locator('#connection-state.connected').waitFor();
   if (await page.evaluate(name => localStorage.getItem(name) !== null, key)) await page.locator('#config-profile-active').waitFor({state: 'visible'});
   return page;
 }
-async function browserJSON(pending) {
-  const response = await pending, captured = bodies.get(response); assert(captured, 'Immediate once-only mutation/JSON response capture required');
+async function browserJSON(page, pending, marker) {
+  const response = await pending;
+  if (usesBrowserClone(new URL(response.url()).pathname, response.request().method())) {
+    const observed = {method: response.request().method(), url: response.url(), status: response.status(), request_sha256: hash(Buffer.from(response.request().postData() || ''))};
+    try {
+      assert(marker, 'An awaited pre-action browser marker is required for pure profile/catalog reads');
+      const result = await profileCapture.capture(page, response, marker);
+      inspectedResponses.push({...observed, ...result.evidence, bytes: result.bytes.length, sha256: hash(result.bytes), result: 'PASS'});
+      return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
+    } catch (error) {
+      inspectedResponses.push({...observed, marker, result: 'FAIL', error: error.message});
+      throw error;
+    }
+  }
+  const captured = bodies.get(response); assert(captured, 'Immediate once-only mutation/JSON response capture required');
   const result = await captured; if (result.error) throw result.error;
   return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
 }
-function waitJSON(page, route, method = 'POST') { return browserJSON(page.waitForResponse(response => response.url() === app.origin + route && response.request().method() === method)); }
+function waitJSON(page, route, method = 'POST', marker) { return browserJSON(page, page.waitForResponse(response => response.url() === app.origin + route && response.request().method() === method), marker); }
 async function clickJSON(page, selector, route, method = 'POST', expected = 200) {
-  const pending = waitJSON(page, route, method); await page.click(selector); const result = await pending;
+  const marker = usesBrowserClone(route, method) ? await profileCapture.mark(page) : undefined;
+  const pending = waitJSON(page, route, method, marker); await page.click(selector); const result = await pending;
   assert.equal(result.response.status(), expected, 'Browser ' + method + ' ' + route + ': ' + result.bytes.toString().slice(0, 500));
   noSecret(result.bytes.toString(), 'native browser response'); return result;
 }
@@ -178,7 +202,7 @@ async function mutationUnchanged(page, action, label) {
 }
 function sqlSnapshot(label, directory = app.directory) {
   const file = dbFile(directory); assert(fs.statSync(file).isFile()); const before = hash(fs.readFileSync(file));
-  const database = new DatabaseSync(file, {readOnly: true}); let rows, applicationId, version;
+  const database = new DatabaseSync(sqlitePath(file), {readOnly: true}); let rows, applicationId, version;
   try {
     applicationId = database.prepare('PRAGMA application_id').get().application_id; version = database.prepare('PRAGMA user_version').get().user_version;
     assert.equal(applicationId, 0x4f535043); assert.equal(version, 1); assert.equal(database.prepare('PRAGMA integrity_check').get().integrity_check, 'ok');
@@ -229,11 +253,11 @@ async function negativeCatalogControls(profileText) {
     fs.mkdirSync(path.dirname(file), {recursive: true});
     if (variant === 'empty-corrupt') fs.writeFileSync(file, Buffer.alloc(0));
     else {
-      const db = new DatabaseSync(file);
+      const db = new DatabaseSync(sqlitePath(file));
       try { db.exec('PRAGMA application_id=1330860099; PRAGMA user_version=2; CREATE TABLE unsupported_control(value TEXT);'); } finally { db.close(); }
     }
     const installedHash = hash(fs.readFileSync(file)), owner = await launch('negative-' + variant, directory);
-    if (pins.length === 4) await assetBinding();
+    if (!pins.some(pin => pin.file === path.join(root, 'web', 'index.html'))) await assetBinding();
     const context = await makeContext(), page = await makePage(context);
     await prepared(page, profileText); await save(page); await openSettings(page);
     const before = await working(page), stored = await storage(page), effect = await effects();
@@ -417,7 +441,7 @@ async function run() {
     for (const owner of owners) if (!owner.close) { owner.forced = true; owner.child.kill(); try { await deadline(owner.closed, 10000, 'forced owned cleanup close'); } catch (error) { owner.child.stdin.destroy(); owner.child.stdout.destroy(); owner.child.stderr.destroy(); owner.child.unref(); failure ||= error; } }
     if (site?.listening) { site.closeAllConnections(); try { await deadline(new Promise(resolve => site.close(resolve)), 10000, 'owned site close'); } catch (error) { failure ||= error; } }
     for (const owner of owners) fs.writeFileSync(artifactPath('native-' + owner.phase + '.log'), owner.log);
-    fs.writeFileSync(artifactPath('ui-config-profile-catalog-live.json'), JSON.stringify({result: failure ? 'FAIL' : 'PASS', duration_ms: Date.now() - started, binary, binary_sha256: binaryHash, browser: chrome, browser_sha256: chromeHash, output, pins, ...proof, checks, requests, negatives, downloads, sql_proofs: sqlProofs, held_actual_responses: held,
+    fs.writeFileSync(artifactPath('ui-config-profile-catalog-live.json'), JSON.stringify({result: failure ? 'FAIL' : 'PASS', duration_ms: Date.now() - started, binary, binary_sha256: binaryHash, browser: chrome, browser_sha256: chromeHash, output, pins, ...proof, checks, requests, inspected_responses: inspectedResponses, negatives, downloads, sql_proofs: sqlProofs, held_actual_responses: held,
       native: owners.map(owner => ({phase: owner.phase, directory: owner.directory, pid: owner.child.pid, origin: owner.origin, close: owner.close, natural_stdin_eof: owner.natural_eof, forced: owner.forced})), website_capture_hits: captureHits, offline_product_hits: offlineHits, offline_positive_controls: witnesses, browser_errors: errors, external_requests: external, scope: 'Bounded native named-profile catalog CRUD, CAS, exact profile bytes, explicit activation and warm-capture/cold-reapply. Not128-entry/64MiB/256MiB boundary acceptance, crash durability, cross-platform matrix or full vendor parity.', ...(failure ? {error: failure.stack} : {})}, null, 2) + '\n');
   }
   if (failure) throw failure; console.log(checks.length + ' actual config-profile catalog groups passed.');

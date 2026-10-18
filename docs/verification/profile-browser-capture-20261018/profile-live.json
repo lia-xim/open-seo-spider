@@ -1,0 +1,3070 @@
+{
+  "result": "PASS",
+  "duration_ms": 9432,
+  "binary": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+  "binary_sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59",
+  "output": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4",
+  "driver": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-config-profiles-live.cjs",
+  "driver_sha256": "3e3db8e992f81631befbfd0d81fbcb59f1b811924e753c96bae43cdfa5385efd",
+  "response_capture_helper_sha256": "87221bd30f633d2e0cbc8cb270b1c5f285790980e11941adfd266a6a292b4104",
+  "chrome": "E:/CodexWork/open-seo-spider-01a12ac3-20261013/browser-runtime/chrome-155.0.8059.80-36a30716-source12-v1/chrome.exe",
+  "chrome_sha256": "36a30716f0994b377f1ce6b47cfe35399b9719e31d597fe0ea0d8f3b62aed532",
+  "job_id": "d67c31b5-5378-460a-9c7a-009db4f7e9ad",
+  "replacement_job_id": "de2726ef-e021-491d-92c3-016b8bc73936",
+  "replacement_project_sha256": "a9b945c56a2fe53b5111e826ed79582c5a77a393cea3c65dba1075b2f982b7dc",
+  "replacement_project_bytes": 14114,
+  "explicit_replacement": {
+    "natural_header_reentry_save_preserved_target": true,
+    "target_fills": 1,
+    "run_input_patches": [
+      {
+        "path": [
+          "seed_urls"
+        ],
+        "value_json": "[\"http://127.0.0.1:56989/replacement\"]"
+      },
+      {
+        "path": [
+          "sitemap_urls"
+        ],
+        "value_json": "[]"
+      },
+      {
+        "path": [
+          "input_imports"
+        ],
+        "value_json": "[]"
+      },
+      {
+        "path": [
+          "explicit_sitemap_inputs"
+        ],
+        "remove": true
+      }
+    ],
+    "original_job_unchanged": true,
+    "both_jobs_cold_bytes_equal": true
+  },
+  "effective_config_sha256": "12b145c12b0d2a757148c3633deab8aa4c5bf24c0cb892b90b0f4f20b55ac8ea",
+  "saved_project_sha256": "d596d15fa151f86544c34a23d6fe3938b851031d515696d57368d64a0db5ef4f",
+  "saved_project_bytes": 24864,
+  "cold_profile_sha256": "945261305c899577e1f2dab3eb3f0e08cff5d1021655b03e210094fb13a4887c",
+  "served_assets": [
+    {
+      "file": "web/index.html",
+      "route": "/",
+      "sha256": "24415cf3d4cdbe4e2f0dcefe190b4d01b503793cf72f1a9d88f7b41bb027429f"
+    },
+    {
+      "file": "web/app.js",
+      "route": "/app.js",
+      "sha256": "ce1071bd30a0d236d4d3b96aca8285b4abfbc54d62c3e2dd28ea8d448bdf48e4"
+    },
+    {
+      "file": "web/styles.css",
+      "route": "/styles.css",
+      "sha256": "04bf13af36e94c69cefbbf2a8effc5a925443d48a9050903632b430bb2007e5a"
+    },
+    {
+      "file": "web/config-profiles.js",
+      "route": "/config-profiles.js",
+      "sha256": "add70b14f6f0f6bc2e7e2b565f675fad06bc613d2aca56975e3ab1ff01212796"
+    }
+  ],
+  "browser_storage_scope": "same-origin retained browser context; sanitized profile only",
+  "native_scope": "two normal native processes, one owned fresh store; no provider or renderer calls",
+  "geometry": {
+    "viewport": 320,
+    "document": 320,
+    "dialog": 288,
+    "controls": [
+      {
+        "selector": "#config-profile-import",
+        "x": 33,
+        "y": 324.6875,
+        "width": 254,
+        "height": 28
+      },
+      {
+        "selector": "#config-profile-inspect",
+        "x": 33,
+        "y": 436.0625,
+        "width": 90.21875,
+        "height": 28
+      },
+      {
+        "selector": "#config-profile-export",
+        "x": 33,
+        "y": 435.6875,
+        "width": 254,
+        "height": 28
+      }
+    ]
+  },
+  "checks": [
+    "Actual picker import, native sanitizer, full profile export and dialog save preserve65/301/native-only fields, exact non-MiB bytes and disabled profiles without effects",
+    "Three corrupt or unsupported stored wrappers persist visibly and block button/programmatic Start without effects; import alone cannot clear the guard, explicit valid Save recovers",
+    "Opening Settings aborts a real pending startup restore without permitting legacy Start; explicit current-profile Save recovers and old native reply cannot poison active profile or storage",
+    "Malformed, duplicate, unknown, positional, credential/path/private-key, regex/selector and UTF8 files leave draft/storage/jobs/files/network unchanged",
+    "Untouched native u64 9007199254740993 survives unrelated control edit, Save, page reload and exact real profile attachment without JS rounding",
+    "Renderer-only native response byte limit survives disabled flags and roundtrip; no worker/provider is contacted",
+    "Actual picker arrayBuffer and actual native-response delay controls reject superseded work without replacing current draft or unlocking stale state",
+    "Explicit complete case-sensitive volatile header bindings start one genuine multi-seed crawl; every native option/provenance persists and traversal/discovery remain false",
+    "Natural replacement target → missing-header refusal → reentry and Save retains the target, creates a new one-page job with only run-input patches, preserves native options and original job bytes",
+    "Same owned origin/store cold native process returns byte-identical report and sanitized profile; browser-local options persist, secret values do not,320px works and both EOF0 closes retain410 witness"
+  ],
+  "negatives": [
+    {
+      "name": "malformed-stored-json",
+      "source": "actual_owned_browser_storage_reload",
+      "damaged_storage_sha256": "ea3c4423405aaaca18961e9ddffce8da69fe2a02b9c686241d9b3c38c5e8add2",
+      "button_blocked": true,
+      "programmatic_start_blocked": true,
+      "storage_unchanged_until_explicit_save": true,
+      "valid_import_alone_does_not_clear_guard": true,
+      "explicit_valid_save_recovers": true
+    },
+    {
+      "name": "stored-profile-text-wrong-type",
+      "source": "actual_owned_browser_storage_reload",
+      "damaged_storage_sha256": "464ae78e4b41746d697b4b1fd7d89bf171decad18a214efd139be7cc074a13fd",
+      "button_blocked": true,
+      "programmatic_start_blocked": true,
+      "storage_unchanged_until_explicit_save": true,
+      "valid_import_alone_does_not_clear_guard": true,
+      "explicit_valid_save_recovers": true
+    },
+    {
+      "name": "unsupported-stored-wrapper-version",
+      "source": "actual_owned_browser_storage_reload",
+      "damaged_storage_sha256": "19c77b9e49938f581fc75cc43b398a93dcaa5ea5b48387b03b07973458ff90a7",
+      "button_blocked": true,
+      "programmatic_start_blocked": true,
+      "storage_unchanged_until_explicit_save": true,
+      "valid_import_alone_does_not_clear_guard": true,
+      "explicit_valid_save_recovers": true
+    },
+    {
+      "name": "valid-stored-profile-restore-pending-then-settings-open",
+      "source": "actual_browser_reload_held_native_response",
+      "button_blocked": true,
+      "programmatic_start_blocked": true,
+      "original_storage_unchanged_until_explicit_save": true,
+      "valid_import_alone_does_not_clear_guard": true,
+      "explicit_valid_save_recovers": true,
+      "late_old_reply_cannot_poison_new_active": true
+    },
+    {
+      "name": "malformed",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96"
+    },
+    {
+      "name": "duplicate-version",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "6a2db70aed5138d94d11f785842ba380d388deae8268bbbc52a6a9d255453e8c"
+    },
+    {
+      "name": "nested-duplicate",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "a189dcf04009c5b4a3b8e11bc7b1620cb4ad5cf033d3a05331e2620ff4429134"
+    },
+    {
+      "name": "unknown-envelope",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "9b98fb6b9164f7d15b7f881bbb4c4f5059885f2cc1c51b4a2b8ddbedb7f80322"
+    },
+    {
+      "name": "unknown-native",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "b7335490ffc05eb0361d01dfe9b435d1dae1c2fbaef16ad9b89f24ea476eedaf"
+    },
+    {
+      "name": "version",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "aa573491108b0a2ac2fddeabb1c73874c80589300d23956207be4cd1b03b606d"
+    },
+    {
+      "name": "top-array",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "name": "struct-array",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "2f17be452fe7b88a45e787cea9f78b1069e6c4b18a655500c1bdb196558e5643"
+    },
+    {
+      "name": "config-array",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "1a678369562f026a39b7cdeef4d42995d87b39e0c88f728caaeb93362177d49a"
+    },
+    {
+      "name": "unsafe-key",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "ac0b6d4b1eab4b179faa44745de5740e879220182b21e25e6cb5d22b5c1fea46"
+    },
+    {
+      "name": "credential-url",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "ac56bd8d7e46b42aad166b7457fb0ef9c1a50bf2fafcc8b985af48168385ef7f"
+    },
+    {
+      "name": "filesystem-path",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "e713461d63fbdf1557f82c315815d3eae04bdbf2777c96adffb889092f8732e2"
+    },
+    {
+      "name": "certificate-path",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "b1096cc015effdcaa17e22f32ef95fbdfeb9ab844c2296f5ce5a84102da9bc40"
+    },
+    {
+      "name": "private-key",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "67f26623fbe06a527325d04112ae0902f8d58e41857cad0f27a0ce4aada04aad"
+    },
+    {
+      "name": "invalid-regex",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "8018d18416ea34a72440d18149b881a92863b54ed8ae804d23a15d12627e9245"
+    },
+    {
+      "name": "invalid-selector",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "a8485a2853032cedfe06f85f68a0c3c150e5bee32818146609a23867e6975429"
+    },
+    {
+      "name": "duplicate-required",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "f2429febad6571fb8fcda53a7d52760dc6987a2354d7a610cf35ad8c31ca5457"
+    },
+    {
+      "name": "tagged-txt-unknown-extra",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "4082c45d4224f3743877950260963d6ef2921050bbb2fd01ff822fdbb6d1bb67",
+      "guard": "internally_tagged_unit",
+      "valid_base_status": 200,
+      "valid_base_sha256": "06716928c6e402946891db84c98029ef9e12498c85d0975af9a483c8d094067c"
+    },
+    {
+      "name": "tagged-xml-unknown-extra",
+      "source": "actual_file_picker_native_parser",
+      "status": 400,
+      "input_sha256": "1757d740fa67cf8e833dffe5c9291d4ab5263acdbcf8d3f8941b0516cdb51036",
+      "guard": "internally_tagged_unit",
+      "valid_base_status": 200,
+      "valid_base_sha256": "11223087458f758d24d933179b5850214ee55681f102ff16b064c2ae2d638846"
+    },
+    {
+      "name": "invalid-utf8-file-and-native-wire",
+      "source": "actual_file_picker_and_invalid_native_bytes",
+      "native_status": 400
+    },
+    {
+      "name": "non-json-content-type",
+      "source": "actual_native_request",
+      "native_status": 415
+    },
+    {
+      "name": "missing-partial-and-undeclared-runtime-bindings",
+      "source": "actual_native_start_requests_before_effects",
+      "statuses": [
+        400,
+        400,
+        400
+      ]
+    }
+  ],
+  "downloads": [
+    {
+      "label": "full-native-before-crawl",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4\\full-native-before-crawl.json",
+      "bytes": 3020,
+      "sha256": "0b77ed6b4d432c8762e559391ef1adf7cf059adfa3b34ebf0ae69ba03375bc77",
+      "method": "POST",
+      "native_path": "/api/config-profiles/export",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "suggested_filename": "open-seo-spider-config-profile-v1.json"
+    },
+    {
+      "label": "exact-u64-after-edit-save-reload",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4\\exact-u64-after-edit-save-reload.json",
+      "bytes": 3052,
+      "sha256": "7d41ec45cb7b5045ec3b4fa69df76b4ea5681d9a09247f63e8c485e1398318c5",
+      "method": "POST",
+      "native_path": "/api/config-profiles/export",
+      "request_sha256": "2dee59a5e09a61bae918dacf5a0b84d54f51ac535fb5291672a03d3daf090909",
+      "suggested_filename": "open-seo-spider-config-profile-v1.json"
+    },
+    {
+      "label": "renderer-native-only-roundtrip",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4\\renderer-native-only-roundtrip.json",
+      "bytes": 3106,
+      "sha256": "f2e0c6c9509e37a94c9b38aaf28e320ba2f7ae723ca206113a729454e9ba2b79",
+      "method": "POST",
+      "native_path": "/api/config-profiles/export",
+      "request_sha256": "9a5ee019b84e41a49e66a982a6a48a53bbe469881cc196c8246238f937ad97ce",
+      "suggested_filename": "open-seo-spider-config-profile-v1.json"
+    },
+    {
+      "label": "selected-saved-sanitized-profile",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4\\selected-saved-sanitized-profile.json",
+      "bytes": 2953,
+      "sha256": "945261305c899577e1f2dab3eb3f0e08cff5d1021655b03e210094fb13a4887c",
+      "method": "POST",
+      "native_path": "/api/config-profiles/export",
+      "request_sha256": "b616bfd8ba04f0af3ea1f1ecbd41783b0ba320751b355abcc6647182be484bd3",
+      "suggested_filename": "open-seo-spider-config-profile-v1.json"
+    },
+    {
+      "label": "cold-selected-sanitized-profile",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4\\cold-selected-sanitized-profile.json",
+      "bytes": 2953,
+      "sha256": "945261305c899577e1f2dab3eb3f0e08cff5d1021655b03e210094fb13a4887c",
+      "method": "POST",
+      "native_path": "/api/config-profiles/export",
+      "request_sha256": "b616bfd8ba04f0af3ea1f1ecbd41783b0ba320751b355abcc6647182be484bd3",
+      "suggested_filename": "open-seo-spider-config-profile-v1.json"
+    },
+    {
+      "label": "cold-selected-320",
+      "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4\\cold-selected-320.json",
+      "bytes": 2953,
+      "sha256": "945261305c899577e1f2dab3eb3f0e08cff5d1021655b03e210094fb13a4887c",
+      "method": "POST",
+      "native_path": "/api/config-profiles/export",
+      "request_sha256": "b616bfd8ba04f0af3ea1f1ecbd41783b0ba320751b355abcc6647182be484bd3",
+      "suggested_filename": "open-seo-spider-config-profile-v1.json"
+    }
+  ],
+  "requests": [
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "bytes": 110175,
+      "sha256": "24415cf3d4cdbe4e2f0dcefe190b4d01b503793cf72f1a9d88f7b41bb027429f"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/app.js",
+      "status": 200,
+      "bytes": 510362,
+      "sha256": "ce1071bd30a0d236d4d3b96aca8285b4abfbc54d62c3e2dd28ea8d448bdf48e4"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/styles.css",
+      "status": 200,
+      "bytes": 58102,
+      "sha256": "04bf13af36e94c69cefbbf2a8effc5a925443d48a9050903632b430bb2007e5a"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/config-profiles.js",
+      "status": 200,
+      "bytes": 25112,
+      "sha256": "add70b14f6f0f6bc2e7e2b565f675fad06bc613d2aca56975e3ab1ff01212796"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/config-profiles/default",
+      "status": 200,
+      "bytes": 3964,
+      "sha256": "93b4bf2507d73fecf0f7420cbd5b8f06b861837a7337bd74fd5ce09521ba7956"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/lists/import",
+      "status": 200,
+      "bytes": 1678,
+      "sha256": "56896902b71cd1061e46a834d1929a918ed28f59268d59f7b45c5a10bc631706"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/from-config",
+      "status": 200,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "status": 200,
+      "bytes": 3020,
+      "sha256": "0b77ed6b4d432c8762e559391ef1adf7cf059adfa3b34ebf0ae69ba03375bc77"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "6306f59c32013c4699653b8749e7702e11f9c3ba004fc65ea5eb2a9c80a48361"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "23395b356345b39111c86398d3d3b22cbfdfb72c7ce41300b400c214ebed4360"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/lists/import",
+      "status": 200,
+      "bytes": 1305,
+      "sha256": "081b2d1962da7a31c24d4568613325213dfbd79bb3882d189c88395c1f8f752a"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "status": 200,
+      "bytes": 9842,
+      "sha256": "2791da0d7b660a94f8c2ccd1bc7ab6c11d4a6f140c19f5a87e657f6ad0ab5872"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "status": 200,
+      "bytes": 8537,
+      "sha256": "9bfbb2c613ff8da88d13b795a1858d97ccda22e00c9304f398fb44653e9e2f78"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "bf6ff2d7d0d6a9c3f1f8ae8b5f52bd36dce46f3d30686ac6982e71a64cd63463"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "eb1e87200786155b874808b9ccbdf444d4cf29b716ae2832e6a01d4a97a2326c"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "072a3d438dff9da80ec89a7c450fdac032f2b3ff9e36e2c614afad7d3bfa3f35"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "f809693d5677e7a4ac16d74f9b20a1ff21e396c731ae4b601f95af8e1fc8a4c5"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "7b0d15cb07f90916b3195b8b812dc8cdc1afd2a7f52e285001296efcc3d8e8bb"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "04ad5b603bc2c9eaa5df94f21850f3d69ca1854e6a18145c68983e7869bab66b"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "6d106d3ebaa9c7601d6027878c7fdbaa28ca1db67d467903014af8e332d067e3"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "234cdfd73db578d9e87ab5db1c168e2d570746fb2be3e660f388f31b05d7b1ef"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "533d6fe3a22e9938aa1a85a9add7076490ee831b0b9387675c55fb220eabbb97"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "bba5dea10120f369c9501ad3b729ef3b3cc6f92f8e591ca908f3cae9924f7b1a"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b443e2317559bb05fa1924e709ba65c2cfa4b7a1b485f60e8abc2ab8c16a6e0"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "bcc75d864603fd4fc55ed6e0efb9c8f85b2e46b36c65bc19106e85f4af57f3c1"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "e06b79c7bc3bc22ec480960d562e974168ca788fcb05516c3028c34bb47cf11b"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "f8075d68cfbddf4bf5de17d8e48c906cfbc066add9c9723a58a5b7b8aae2fe36"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "7e9e18dbc1d307deefc9cb06e3a56ecb069953265eec7cfcbb97f624e4afd550"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "cd8f5a714e7c681e624a4310f962850be3fdfe49dcea99ba70a3a4b66ee049fd"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "e20f4f2558d0d37aae0b3d342d33a32c378827672514414de447d5c2ab3894f7"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "e961a27de2fa73404ae29954dcdd815d88fd6e83336b7320194b6a7b210b1615"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "d556160baae193d70b6edc1575b2d1352cfa42d73c25947e8ab44997da262513"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native-wire-rejection",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "content_type": "application/json",
+      "status": 400,
+      "bytes": 58,
+      "sha256": "093739b8f349d7eab8f1f87c774e57dea66c4978f22c0f90d65bd644ac64484c"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native-wire-rejection",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "content_type": "text/plain",
+      "status": 415,
+      "bytes": 67,
+      "sha256": "b6b4349920f42dee7a00ace28995fd0310cdb7c901febd4a47be8a5d1993938d"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "198d07f428472a63a0866e15177be83c62112d4d9bafc7c044f48bda18092b90"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "5f63f3ce5653659065a23c369f1319a60233b89227f3ce39594115f17a28ee4f"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "fa5fdb0620267da65e1a092b515e09b6848ee583a83cb6d0faee223490a58b88"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "request_sha256": "2dee59a5e09a61bae918dacf5a0b84d54f51ac535fb5291672a03d3daf090909"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "status": 200,
+      "bytes": 3052,
+      "sha256": "7d41ec45cb7b5045ec3b4fa69df76b4ea5681d9a09247f63e8c485e1398318c5"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "f21b72717e9f3ab08a85830670a273a75b73393ee407314adabcd2448796a3ef"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "9a5ee019b84e41a49e66a982a6a48a53bbe469881cc196c8246238f937ad97ce"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "request_sha256": "9a5ee019b84e41a49e66a982a6a48a53bbe469881cc196c8246238f937ad97ce"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "status": 200,
+      "bytes": 3106,
+      "sha256": "f2e0c6c9509e37a94c9b38aaf28e320ba2f7ae723ca206113a729454e9ba2b79"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "bd2000e291f4d213bec3bd2a6da27645503b9be9d6c87f0d596dcb3bb8000a01"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "71179a63c6c84fa3bc41fa167c1890040a443ffd4654279e7934e04c7a319f70"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "1a0d775fbe1c48c25928801108d4e0ddd3abfbd733ce2161ab788f63217ae7b4"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/crawls/from-profile",
+      "status": 400,
+      "bytes": 62,
+      "sha256": "9c5a3f185c02755df07a8816602edd836332ceb2953abddb9274c0da5baceae1"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/crawls/from-profile",
+      "status": 400,
+      "bytes": 62,
+      "sha256": "9c5a3f185c02755df07a8816602edd836332ceb2953abddb9274c0da5baceae1"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/crawls/from-profile",
+      "status": 400,
+      "bytes": 51,
+      "sha256": "53fc56968f58c4b90aa212e17908cfaa04eceac9bf6f3b71a6b3079813144cb6"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 13,
+      "sha256": "053460069898e509e45254db90c415ba37a3c9a706d90f6a5dcd7ab2f0e2fec9"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/crawls/from-profile",
+      "request_sha256": "64024536cb4cff9471b19b40dd8d633725118a9246c58e1ee884a2a39b83618b"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/issues",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad",
+      "status": 200,
+      "bytes": 3533,
+      "sha256": "3f96a248fac49b8a3a015371ea7a656a8a37f1e499c20ba56bed42ca87a03761"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/pages",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad",
+      "status": 200,
+      "bytes": 3533,
+      "sha256": "c1bb7b26c579046d77d3bc6fed88da33ab6638c2f2a2cdb0a6da4e8229e4bc23"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad",
+      "status": 200,
+      "bytes": 5621,
+      "sha256": "08e9eb92146459216e6fe87b7a6a49573746e8056114c69503f8a1fc3e540c95"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/project.json",
+      "status": 200,
+      "bytes": 24864,
+      "sha256": "d596d15fa151f86544c34a23d6fe3938b851031d515696d57368d64a0db5ef4f"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/issues",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/pages",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/analysis",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/responses",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/fragments",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/lists/import",
+      "status": 200,
+      "bytes": 1182,
+      "sha256": "1161c1a91c673a1ac79fddc86eea7f676ec662988db3714ae210af30aabc9030"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 5634,
+      "sha256": "022c9b46b75c61e1e112c28f397ef020e9ecb036b44144ccebd0e0566146afc8"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls",
+      "status": 200,
+      "bytes": 5634,
+      "sha256": "022c9b46b75c61e1e112c28f397ef020e9ecb036b44144ccebd0e0566146afc8"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/crawls/from-profile",
+      "request_sha256": "d950048965ae44a21e1cb596e1a8805b9d58ca15f25b5bca89e86ef3b085efb0"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/de2726ef-e021-491d-92c3-016b8bc73936",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/de2726ef-e021-491d-92c3-016b8bc73936/issues",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/de2726ef-e021-491d-92c3-016b8bc73936",
+      "status": 200,
+      "bytes": 3030,
+      "sha256": "7698d8559d595b8e9fffd123293f8c170164b8faad42d3bf5c1cda70c5f2ef12"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/de2726ef-e021-491d-92c3-016b8bc73936/pages",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/de2726ef-e021-491d-92c3-016b8bc73936",
+      "status": 200,
+      "bytes": 3030,
+      "sha256": "7698d8559d595b8e9fffd123293f8c170164b8faad42d3bf5c1cda70c5f2ef12"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/de2726ef-e021-491d-92c3-016b8bc73936",
+      "status": 200,
+      "bytes": 5117,
+      "sha256": "e79e41843fe5bf4df21d81790028a8333bcd601b0376a5356fdc739eb421c7e0"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/de2726ef-e021-491d-92c3-016b8bc73936/project.json",
+      "status": 200,
+      "bytes": 14114,
+      "sha256": "a9b945c56a2fe53b5111e826ed79582c5a77a393cea3c65dba1075b2f982b7dc"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/project.json",
+      "status": 200,
+      "bytes": 24864,
+      "sha256": "d596d15fa151f86544c34a23d6fe3938b851031d515696d57368d64a0db5ef4f"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/issues",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/pages",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/analysis",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/config-profile",
+      "status": 200,
+      "bytes": 9762,
+      "sha256": "267e4c6ec73db5f5fb31f90701fd727333dcb4daffbde32656e07fc1eacc1d88"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/responses",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/fragments",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/config-profile",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "request_sha256": "b616bfd8ba04f0af3ea1f1ecbd41783b0ba320751b355abcc6647182be484bd3"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "status": 200,
+      "bytes": 2953,
+      "sha256": "945261305c899577e1f2dab3eb3f0e08cff5d1021655b03e210094fb13a4887c"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b616bfd8ba04f0af3ea1f1ecbd41783b0ba320751b355abcc6647182be484bd3"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/inspect",
+      "request_sha256": "b12049a8151e6780be275e1c3f2a3a3819ea26384d1e7a5b140497ecdfdfdca2"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/issues",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/pages",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/analysis",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/responses",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/project.json",
+      "status": 200,
+      "bytes": 24864,
+      "sha256": "d596d15fa151f86544c34a23d6fe3938b851031d515696d57368d64a0db5ef4f"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/fragments",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "direct-native",
+      "method": "GET",
+      "path": "/api/crawls/de2726ef-e021-491d-92c3-016b8bc73936/project.json",
+      "status": 200,
+      "bytes": 14114,
+      "sha256": "a9b945c56a2fe53b5111e826ed79582c5a77a393cea3c65dba1075b2f982b7dc"
+    },
+    {
+      "source": "browser",
+      "method": "GET",
+      "path": "/api/crawls/d67c31b5-5378-460a-9c7a-009db4f7e9ad/config-profile",
+      "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "request_sha256": "b616bfd8ba04f0af3ea1f1ecbd41783b0ba320751b355abcc6647182be484bd3"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "status": 200,
+      "bytes": 2953,
+      "sha256": "945261305c899577e1f2dab3eb3f0e08cff5d1021655b03e210094fb13a4887c"
+    },
+    {
+      "source": "browser",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "request_sha256": "b616bfd8ba04f0af3ea1f1ecbd41783b0ba320751b355abcc6647182be484bd3"
+    },
+    {
+      "source": "direct-native",
+      "method": "POST",
+      "path": "/api/config-profiles/export",
+      "status": 200,
+      "bytes": 2953,
+      "sha256": "945261305c899577e1f2dab3eb3f0e08cff5d1021655b03e210094fb13a4887c"
+    }
+  ],
+  "inspected_responses": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "33b40574-b8fa-48a1-94b3-81db4f4967d2",
+      "after_sequence": 0,
+      "sequence": 1,
+      "request_bytes": 3325,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "8f5090e815c6165366ff50e974be14bf33262acbce93f0be26fb6de3d4212b8a",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "33b40574-b8fa-48a1-94b3-81db4f4967d2",
+      "after_sequence": 1,
+      "sequence": 2,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "8f5090e815c6165366ff50e974be14bf33262acbce93f0be26fb6de3d4212b8a",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "d6bc4343-8593-4236-b9d9-a64cb49e0907",
+      "after_sequence": 0,
+      "sequence": 1,
+      "request_bytes": 3325,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "198bbe3c92b26b6b32b401920f7e9e3e53e7aaa60ecb3e92d3608c50fa8dbfa8",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "d6bc4343-8593-4236-b9d9-a64cb49e0907",
+      "after_sequence": 1,
+      "sequence": 2,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "198bbe3c92b26b6b32b401920f7e9e3e53e7aaa60ecb3e92d3608c50fa8dbfa8",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "d057da08-3333-4833-8773-b49770199337",
+      "after_sequence": 0,
+      "sequence": 1,
+      "request_bytes": 3325,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "1c9862a455ff019e28cce63c857b8eed6427dc8329829400059d271c386e39f6",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "d057da08-3333-4833-8773-b49770199337",
+      "after_sequence": 1,
+      "sequence": 2,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "1c9862a455ff019e28cce63c857b8eed6427dc8329829400059d271c386e39f6",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "532138e8-40b8-4238-9fea-795e4788e428",
+      "after_sequence": 0,
+      "sequence": 1,
+      "request_bytes": 3325,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "1c9862a455ff019e28cce63c857b8eed6427dc8329829400059d271c386e39f6",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "532138e8-40b8-4238-9fea-795e4788e428",
+      "after_sequence": 1,
+      "sequence": 2,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "1c9862a455ff019e28cce63c857b8eed6427dc8329829400059d271c386e39f6",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "859efa40-334b-4b3f-8562-48853de92c30",
+      "after_sequence": 0,
+      "sequence": 1,
+      "request_bytes": 3325,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "1c9862a455ff019e28cce63c857b8eed6427dc8329829400059d271c386e39f6",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "859efa40-334b-4b3f-8562-48853de92c30",
+      "after_sequence": 1,
+      "sequence": 2,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "1fa422d53622fbaea6626384b3f19165d2d0ceb8a50bceb0f9f98970d7ae87b0",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "6306f59c32013c4699653b8749e7702e11f9c3ba004fc65ea5eb2a9c80a48361",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 1,
+      "sequence": 2,
+      "request_bytes": 3355,
+      "response_sha256": "b01cf48eac2bec06da5a2121e0053085b98426937b70dbdb1e6ac4217ad1f472",
+      "response_bytes": 10002,
+      "headers_sha256": "caf61213db7981c342621ab5d451156d98069f39508920029a73dfd7f0047fc0",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 10002,
+      "sha256": "b01cf48eac2bec06da5a2121e0053085b98426937b70dbdb1e6ac4217ad1f472",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "23395b356345b39111c86398d3d3b22cbfdfb72c7ce41300b400c214ebed4360",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 2,
+      "sequence": 3,
+      "request_bytes": 3368,
+      "response_sha256": "b01cf48eac2bec06da5a2121e0053085b98426937b70dbdb1e6ac4217ad1f472",
+      "response_bytes": 10002,
+      "headers_sha256": "caf61213db7981c342621ab5d451156d98069f39508920029a73dfd7f0047fc0",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 10002,
+      "sha256": "b01cf48eac2bec06da5a2121e0053085b98426937b70dbdb1e6ac4217ad1f472",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 3,
+      "sequence": 4,
+      "request_bytes": 3325,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "1fa422d53622fbaea6626384b3f19165d2d0ceb8a50bceb0f9f98970d7ae87b0",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 4,
+      "sequence": 5,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "1fa422d53622fbaea6626384b3f19165d2d0ceb8a50bceb0f9f98970d7ae87b0",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "bf6ff2d7d0d6a9c3f1f8ae8b5f52bd36dce46f3d30686ac6982e71a64cd63463",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 5,
+      "sequence": 6,
+      "request_bytes": 20,
+      "response_sha256": "bd1da3aab2ef32c512c5877d52f23d0fb9417c533bccbb5927fd99fd7c2864f7",
+      "response_bytes": 58,
+      "headers_sha256": "e08a14643e104bc3deefb1d4b6cb19aa80b232cacc0d14a6657ce01dfa25cc20",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 58,
+      "sha256": "bd1da3aab2ef32c512c5877d52f23d0fb9417c533bccbb5927fd99fd7c2864f7",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "eb1e87200786155b874808b9ccbdf444d4cf29b716ae2832e6a01d4a97a2326c",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 6,
+      "sequence": 7,
+      "request_bytes": 86,
+      "response_sha256": "af75a15e899aeb1d000a9b3a12b2e19dd7118a7b2932135dceacc409c5a5aaf5",
+      "response_bytes": 69,
+      "headers_sha256": "53352f6c92b220b8d81623d0b9173af809745cbfd25fd52b42721d9b2da44349",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 69,
+      "sha256": "af75a15e899aeb1d000a9b3a12b2e19dd7118a7b2932135dceacc409c5a5aaf5",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "072a3d438dff9da80ec89a7c450fdac032f2b3ff9e36e2c614afad7d3bfa3f35",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 7,
+      "sequence": 8,
+      "request_bytes": 109,
+      "response_sha256": "e22728acb1a51f8696e3b9f0e5b2e640c0c02c086adec540fc5f780e59557b5a",
+      "response_bytes": 69,
+      "headers_sha256": "53352f6c92b220b8d81623d0b9173af809745cbfd25fd52b42721d9b2da44349",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 69,
+      "sha256": "e22728acb1a51f8696e3b9f0e5b2e640c0c02c086adec540fc5f780e59557b5a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "f809693d5677e7a4ac16d74f9b20a1ff21e396c731ae4b601f95af8e1fc8a4c5",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 8,
+      "sequence": 9,
+      "request_bytes": 3345,
+      "response_sha256": "8320786c9ba8eab98add5a9fdf8fa3e777e70e5476025c1a952da95392d939dd",
+      "response_bytes": 95,
+      "headers_sha256": "a437783954d66476cb116f4bae6b94f7b2cd3e4cc4131c6208bd69d3eccca677",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 95,
+      "sha256": "8320786c9ba8eab98add5a9fdf8fa3e777e70e5476025c1a952da95392d939dd",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "7b0d15cb07f90916b3195b8b812dc8cdc1afd2a7f52e285001296efcc3d8e8bb",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 9,
+      "sequence": 10,
+      "request_bytes": 3322,
+      "response_sha256": "41d54281812b8a83d7ce40154e8a31b625fa5d9c67f8fded7e3b3bd7633aa65d",
+      "response_bytes": 42,
+      "headers_sha256": "73856daaafa4b944a7cd3ffc0b00aaebba0283ddedcf6e1a49f45e932601864d",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 42,
+      "sha256": "41d54281812b8a83d7ce40154e8a31b625fa5d9c67f8fded7e3b3bd7633aa65d",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "04ad5b603bc2c9eaa5df94f21850f3d69ca1854e6a18145c68983e7869bab66b",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 10,
+      "sequence": 11,
+      "request_bytes": 3325,
+      "response_sha256": "a546f0cfde33c820b5d3eb64ba7b9c2b3032415b555c0cb27ccd2c641a500cd8",
+      "response_bytes": 53,
+      "headers_sha256": "6aa29f357c3ca473a5fe4fd72bafd64808a54d2b4e1e8f52ddf58873efb7edcd",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 53,
+      "sha256": "a546f0cfde33c820b5d3eb64ba7b9c2b3032415b555c0cb27ccd2c641a500cd8",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "6d106d3ebaa9c7601d6027878c7fdbaa28ca1db67d467903014af8e332d067e3",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 11,
+      "sequence": 12,
+      "request_bytes": 21,
+      "response_sha256": "d5bd8afd61bbc484cf843cf29bf0a2b3efe9d5141eafc0704d942b079bd7def6",
+      "response_bytes": 57,
+      "headers_sha256": "a1b8c91c7327b07cbafb35798e71b20f50815deb3393f2cd57b967b6b6d88452",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 57,
+      "sha256": "d5bd8afd61bbc484cf843cf29bf0a2b3efe9d5141eafc0704d942b079bd7def6",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "234cdfd73db578d9e87ab5db1c168e2d570746fb2be3e660f388f31b05d7b1ef",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 12,
+      "sequence": 13,
+      "request_bytes": 3286,
+      "response_sha256": "d5bd8afd61bbc484cf843cf29bf0a2b3efe9d5141eafc0704d942b079bd7def6",
+      "response_bytes": 57,
+      "headers_sha256": "a1b8c91c7327b07cbafb35798e71b20f50815deb3393f2cd57b967b6b6d88452",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 57,
+      "sha256": "d5bd8afd61bbc484cf843cf29bf0a2b3efe9d5141eafc0704d942b079bd7def6",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "533d6fe3a22e9938aa1a85a9add7076490ee831b0b9387675c55fb220eabbb97",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 13,
+      "sequence": 14,
+      "request_bytes": 72,
+      "response_sha256": "3c42bf2504b6ffac8a978bdc43c823b30342c1a80482fb81ca8ee1b239a18e0c",
+      "response_bytes": 48,
+      "headers_sha256": "e72d975832821c9fe17f906f876012db62ce1c8a41edd562b8f9789c2c036b2e",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 48,
+      "sha256": "3c42bf2504b6ffac8a978bdc43c823b30342c1a80482fb81ca8ee1b239a18e0c",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "bba5dea10120f369c9501ad3b729ef3b3cc6f92f8e591ca908f3cae9924f7b1a",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 14,
+      "sequence": 15,
+      "request_bytes": 88,
+      "response_sha256": "41d54281812b8a83d7ce40154e8a31b625fa5d9c67f8fded7e3b3bd7633aa65d",
+      "response_bytes": 42,
+      "headers_sha256": "73856daaafa4b944a7cd3ffc0b00aaebba0283ddedcf6e1a49f45e932601864d",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 42,
+      "sha256": "41d54281812b8a83d7ce40154e8a31b625fa5d9c67f8fded7e3b3bd7633aa65d",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "0b443e2317559bb05fa1924e709ba65c2cfa4b7a1b485f60e8abc2ab8c16a6e0",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 15,
+      "sequence": 16,
+      "request_bytes": 3271,
+      "response_sha256": "f2d90eefb3f2fe3b9338a45feb7df9ca4c7e3b5b44c50cafc2668d58b0254ecd",
+      "response_bytes": 66,
+      "headers_sha256": "70256996d69e3b6829e415414c65e78914d2883b9f5f5b5bfb1313c340f392ca",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 66,
+      "sha256": "f2d90eefb3f2fe3b9338a45feb7df9ca4c7e3b5b44c50cafc2668d58b0254ecd",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "bcc75d864603fd4fc55ed6e0efb9c8f85b2e46b36c65bc19106e85f4af57f3c1",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 16,
+      "sequence": 17,
+      "request_bytes": 3524,
+      "response_sha256": "41d54281812b8a83d7ce40154e8a31b625fa5d9c67f8fded7e3b3bd7633aa65d",
+      "response_bytes": 42,
+      "headers_sha256": "73856daaafa4b944a7cd3ffc0b00aaebba0283ddedcf6e1a49f45e932601864d",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 42,
+      "sha256": "41d54281812b8a83d7ce40154e8a31b625fa5d9c67f8fded7e3b3bd7633aa65d",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "e06b79c7bc3bc22ec480960d562e974168ca788fcb05516c3028c34bb47cf11b",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 17,
+      "sequence": 18,
+      "request_bytes": 3473,
+      "response_sha256": "bf71d455d61512f691d9d70b2b304e06d1bdb4cd2f53a9a3303e28d6136d723a",
+      "response_bytes": 111,
+      "headers_sha256": "06d2dc4d42e89953a14386d8c9b305bd087cdbbe4ab59537d5b2b33970647546",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 111,
+      "sha256": "bf71d455d61512f691d9d70b2b304e06d1bdb4cd2f53a9a3303e28d6136d723a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "f8075d68cfbddf4bf5de17d8e48c906cfbc066add9c9723a58a5b7b8aae2fe36",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 18,
+      "sequence": 19,
+      "request_bytes": 3390,
+      "response_sha256": "35b4115a0d1a345ffc6301d782a96959af2bd5af08b298edbd04a39b9a008a63",
+      "response_bytes": 62,
+      "headers_sha256": "2257360cbadd537908d5c7f6af1dca321e0009cfdb930f767b723ab058d550d3",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 62,
+      "sha256": "35b4115a0d1a345ffc6301d782a96959af2bd5af08b298edbd04a39b9a008a63",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "7e9e18dbc1d307deefc9cb06e3a56ecb069953265eec7cfcbb97f624e4afd550",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 19,
+      "sequence": 20,
+      "request_bytes": 3293,
+      "response_sha256": "576c6a822dba28eabda3235c0939ad6a07648cfcf6e2b87478cbb6009ba3b54f",
+      "response_bytes": 93,
+      "headers_sha256": "a45ac83f1dd2c51744783f718e91e3fb1ccc8b63860fb98b1f91aeb504e7cb17",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 93,
+      "sha256": "576c6a822dba28eabda3235c0939ad6a07648cfcf6e2b87478cbb6009ba3b54f",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "cd8f5a714e7c681e624a4310f962850be3fdfe49dcea99ba70a3a4b66ee049fd",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 20,
+      "sequence": 21,
+      "request_bytes": 3372,
+      "response_sha256": "3ef4b0839b5d7fa19eb8ce90f0cb9525f8f9b51445b72af295406f4337b01d8e",
+      "response_bytes": 64,
+      "headers_sha256": "b472dd948a67e48d344bdd2a5dda18bf16c016c8c2f68e2437241970035c01f7",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 64,
+      "sha256": "3ef4b0839b5d7fa19eb8ce90f0cb9525f8f9b51445b72af295406f4337b01d8e",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "e20f4f2558d0d37aae0b3d342d33a32c378827672514414de447d5c2ab3894f7",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 21,
+      "sequence": 22,
+      "request_bytes": 3311,
+      "response_sha256": "5a3ecd3fe84c55b5294514b73376e20d72daa9cc5201234719d3b96cacc84c6e",
+      "response_bytes": 56,
+      "headers_sha256": "d37c15804e0b63617771659ac9bc54534900ca7fc2f0031ac99d543dd724501a",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 56,
+      "sha256": "5a3ecd3fe84c55b5294514b73376e20d72daa9cc5201234719d3b96cacc84c6e",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "e961a27de2fa73404ae29954dcdd815d88fd6e83336b7320194b6a7b210b1615",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 22,
+      "sequence": 23,
+      "request_bytes": 3322,
+      "response_sha256": "4a191bb612407bc4b654a55b6ad8717507eb54bee56b02dfa381b29a3cbb54f8",
+      "response_bytes": 60,
+      "headers_sha256": "317b236db193f23a665127a34d8571c26b10a1127beed7ab2f897ba284255db0",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 60,
+      "sha256": "4a191bb612407bc4b654a55b6ad8717507eb54bee56b02dfa381b29a3cbb54f8",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 400,
+      "request_sha256": "d556160baae193d70b6edc1575b2d1352cfa42d73c25947e8ab44997da262513",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 23,
+      "sequence": 24,
+      "request_bytes": 2887,
+      "response_sha256": "4a191bb612407bc4b654a55b6ad8717507eb54bee56b02dfa381b29a3cbb54f8",
+      "response_bytes": 60,
+      "headers_sha256": "317b236db193f23a665127a34d8571c26b10a1127beed7ab2f897ba284255db0",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 60,
+      "sha256": "4a191bb612407bc4b654a55b6ad8717507eb54bee56b02dfa381b29a3cbb54f8",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 24,
+      "sequence": 25,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "07ba4270addcea6e4177817ec3dbe35331c6864483b8297f7eed61e198fcb9c6",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "198d07f428472a63a0866e15177be83c62112d4d9bafc7c044f48bda18092b90",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 25,
+      "sequence": 26,
+      "request_bytes": 3340,
+      "response_sha256": "f6e497fb6429dd28743868265d7ffc99d0dc93fae18333b9352e07213143f9fd",
+      "response_bytes": 9957,
+      "headers_sha256": "ac234a946668422cbbcddbb126343de15f41f03876214f6c8f612f98c54e4b98",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9957,
+      "sha256": "f6e497fb6429dd28743868265d7ffc99d0dc93fae18333b9352e07213143f9fd",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "5f63f3ce5653659065a23c369f1319a60233b89227f3ce39594115f17a28ee4f",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "43cfcf5f-47dd-4dd4-98f7-f8cd28e7dbc1",
+      "after_sequence": 26,
+      "sequence": 27,
+      "request_bytes": 3433,
+      "response_sha256": "9ba4d0693a0a6631e27444699dc6133fdc781f5b122ba9df97b616f7e30e8c0b",
+      "response_bytes": 10008,
+      "headers_sha256": "2c236b2517bb97990bcce6d45b3bbcee48444d9db3d45b6c2c958703afff8793",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 10008,
+      "sha256": "9ba4d0693a0a6631e27444699dc6133fdc781f5b122ba9df97b616f7e30e8c0b",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "f21b72717e9f3ab08a85830670a273a75b73393ee407314adabcd2448796a3ef",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "67bd3bc3-3784-4c74-8998-dc5789ad914b",
+      "after_sequence": 1,
+      "sequence": 2,
+      "request_bytes": 3417,
+      "response_sha256": "72e0d44a9defff07b49575faa9116786b2d636e809a8c98b67191659f328e0d2",
+      "response_bytes": 10291,
+      "headers_sha256": "2dfcccc73aca90c02154b7ef91ab98b468082592bf9a8448e6cc08755ef724dd",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 10291,
+      "sha256": "72e0d44a9defff07b49575faa9116786b2d636e809a8c98b67191659f328e0d2",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "9a5ee019b84e41a49e66a982a6a48a53bbe469881cc196c8246238f937ad97ce",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "67bd3bc3-3784-4c74-8998-dc5789ad914b",
+      "after_sequence": 2,
+      "sequence": 3,
+      "request_bytes": 3430,
+      "response_sha256": "72e0d44a9defff07b49575faa9116786b2d636e809a8c98b67191659f328e0d2",
+      "response_bytes": 10291,
+      "headers_sha256": "71a5c4bb460d3dcd809c283cfe2c60efc6bc725d41fbd37d4a6a663e1e1ede75",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 10291,
+      "sha256": "72e0d44a9defff07b49575faa9116786b2d636e809a8c98b67191659f328e0d2",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "bd2000e291f4d213bec3bd2a6da27645503b9be9d6c87f0d596dcb3bb8000a01",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "67bd3bc3-3784-4c74-8998-dc5789ad914b",
+      "after_sequence": 3,
+      "sequence": 4,
+      "request_bytes": 3290,
+      "response_sha256": "399c5154a34da1a704a54287235f7539eedd4247b181999fa842a2edda5bd251",
+      "response_bytes": 9848,
+      "headers_sha256": "9df6ee1c0489a176bda2edd6ff15e40a43eb7595c39517bfed4bcb68652712cf",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9848,
+      "sha256": "399c5154a34da1a704a54287235f7539eedd4247b181999fa842a2edda5bd251",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "1a0d775fbe1c48c25928801108d4e0ddd3abfbd733ce2161ab788f63217ae7b4",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "67bd3bc3-3784-4c74-8998-dc5789ad914b",
+      "after_sequence": 5,
+      "sequence": 6,
+      "request_bytes": 3303,
+      "response_sha256": "399c5154a34da1a704a54287235f7539eedd4247b181999fa842a2edda5bd251",
+      "response_bytes": 9848,
+      "headers_sha256": "9df6ee1c0489a176bda2edd6ff15e40a43eb7595c39517bfed4bcb68652712cf",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9848,
+      "sha256": "399c5154a34da1a704a54287235f7539eedd4247b181999fa842a2edda5bd251",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "b1276791759ca12614c3c2a231cdca4aea9beba093a2ab59618971d5c261017e",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "67bd3bc3-3784-4c74-8998-dc5789ad914b",
+      "after_sequence": 6,
+      "sequence": 7,
+      "request_bytes": 3325,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "60ba0f5bff72b7e16e4a293a68f66bfa98a8489549a10072b8cb3bae369c88ad",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "67bd3bc3-3784-4c74-8998-dc5789ad914b",
+      "after_sequence": 7,
+      "sequence": 8,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "60ba0f5bff72b7e16e4a293a68f66bfa98a8489549a10072b8cb3bae369c88ad",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "67bd3bc3-3784-4c74-8998-dc5789ad914b",
+      "after_sequence": 8,
+      "sequence": 9,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "216ea7449301df7c13c0158f91d675de5e23caa66250d7c6736fef342765343d",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "0b8b7debaea4fe7e08cb3a1c4f420d0ab91eb606437895936acf1833082693ac",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "c17ad90c-1f91-47d7-b718-22eefe6cf96d",
+      "after_sequence": 1,
+      "sequence": 2,
+      "request_bytes": 3338,
+      "response_sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "response_bytes": 9912,
+      "headers_sha256": "216ea7449301df7c13c0158f91d675de5e23caa66250d7c6736fef342765343d",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "result": "PASS"
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:56990/api/config-profiles/inspect",
+      "status": 200,
+      "request_sha256": "b616bfd8ba04f0af3ea1f1ecbd41783b0ba320751b355abcc6647182be484bd3",
+      "engine": "open-seo-spider/test-profile-response-capture-v1",
+      "source": "actual_browser_fetch_response_clone",
+      "epoch": "c17ad90c-1f91-47d7-b718-22eefe6cf96d",
+      "after_sequence": 2,
+      "sequence": 3,
+      "request_bytes": 3263,
+      "response_sha256": "267e4c6ec73db5f5fb31f90701fd727333dcb4daffbde32656e07fc1eacc1d88",
+      "response_bytes": 9762,
+      "headers_sha256": "d7e7b0e95adae5a520f408442f4fb49db84513b6b1b3fc827008e558f4395ed9",
+      "fixture_limits": {
+        "maxResponseBytes": 2097152,
+        "maxAggregateBytes": 16777216,
+        "maxRecords": 64,
+        "maxRequestBytes": 2097152,
+        "transferChunkBytes": 32768,
+        "maxReadMs": 10000
+      },
+      "http_replay": false,
+      "buffer_released": true,
+      "bytes": 9762,
+      "sha256": "267e4c6ec73db5f5fb31f90701fd727333dcb4daffbde32656e07fc1eacc1d88",
+      "result": "PASS"
+    }
+  ],
+  "held_responses": [
+    {
+      "kind": "actual_startup_restore_delayed_before_settings_open",
+      "status": 200,
+      "bytes": 9912,
+      "sha256": "c8d059fa0b13fe7923b7e30ade99b8b721548a8452fa36ef45217b2fb211e67a",
+      "cancelled": false,
+      "current_profile_sha256": "bf0d11971f45f594e5b6df611cc909e3840492715b576dc90efca66406508477",
+      "legacy_start_blocked": true,
+      "old_reply_cannot_replace_active_or_storage": true
+    },
+    {
+      "kind": "real_native_inspect_delay_only",
+      "superseded": true,
+      "cancelled": false,
+      "status": 200,
+      "bytes": 9827,
+      "sha256": "1d039bd37bcf4071f4f94db60b3591fef32f36250b162cb94125ad3ccb31a53b",
+      "latest_profile_sha256": "8c8a65b48ba4cf71a9c75313523e3a48ff6de0a3a3b129c934e7c3ce5ad792b2"
+    },
+    {
+      "kind": "real_native_inspect_delay_only",
+      "superseded": false,
+      "cancelled": false,
+      "status": 200,
+      "bytes": 9848,
+      "sha256": "399c5154a34da1a704a54287235f7539eedd4247b181999fa842a2edda5bd251",
+      "latest_profile_sha256": "8c8a65b48ba4cf71a9c75313523e3a48ff6de0a3a3b129c934e7c3ce5ad792b2"
+    }
+  ],
+  "native": [
+    {
+      "phase": "warm",
+      "pid": 32728,
+      "origin": "http://127.0.0.1:56990",
+      "args": [
+        "serve",
+        "--listen",
+        "127.0.0.1:0",
+        "--data-dir",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4\\native-store",
+        "--shutdown-on-stdin-eof"
+      ],
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "natural_stdin_eof": true
+    },
+    {
+      "phase": "cold",
+      "pid": 33908,
+      "origin": "http://127.0.0.1:56990",
+      "args": [
+        "serve",
+        "--listen",
+        "127.0.0.1:56990",
+        "--data-dir",
+        "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r4-20261018\\configuration-profiles\\config-profiles-1792355517930-4b0b8ae4\\native-store",
+        "--shutdown-on-stdin-eof"
+      ],
+      "close": {
+        "code": 0,
+        "signal": null
+      },
+      "forced": false,
+      "natural_stdin_eof": true
+    }
+  ],
+  "website_capture_hits": [
+    {
+      "method": "GET",
+      "path": "/a",
+      "explicit_header_bound": true
+    },
+    {
+      "method": "GET",
+      "path": "/b",
+      "explicit_header_bound": true
+    },
+    {
+      "method": "GET",
+      "path": "/replacement",
+      "explicit_header_bound": true
+    }
+  ],
+  "offline_product_hits": [],
+  "offline_positive_controls": 2,
+  "browser_errors": [],
+  "external_requests": []
+}

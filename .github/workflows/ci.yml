@@ -312,6 +312,9 @@ jobs:
       - run: node --test web/verification/accessibility-state.test.cjs
       - run: node --test web/verification/dashboard-segments-state.test.cjs
       - run: node --test web/verification/config-profiles-state.test.cjs
+      - run: node --test web/verification/profile-response-capture.test.cjs
+      - name: Actual browser profile response capture controls
+        run: node --test web/verification/profile-response-capture-browser.test.cjs
       - run: node --test web/verification/config-profile-catalog-state.test.cjs
       - run: node --test web/verification/screenshot-state.test.cjs
       - run: cargo build --locked -p open-seo-spider

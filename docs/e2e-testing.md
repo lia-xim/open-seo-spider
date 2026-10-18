@@ -4,6 +4,10 @@ The supported story is: open the redesigned interface, configure a crawl, fetch
 owned pages through the Rust backend, inspect the saved result, and export or
 reopen that result. Tests must follow the real boundary they claim to cover.
 
+## Current profile response-capture acceptance
+
+The [verification-only follow-up](verification/profile-browser-capture-20261018/README.md) records **180 state/helper tests**, **12 actual Chromium tests** and **three affected native suites in one complete invocation** (10 profile,4 catalog and3 screenshot groups). Actual browser clone bytes are bound to the exact request/document; no HTTP replay or fallback is used. Original fetch Promise/Response identity, pure-read allowlists, opaque-document transitions, clone-only budgets/timeouts and Windows Node-SQLite fixture paths are covered. Existing mutation response capture and all product assertions/deadlines remain. Three prior local failures are retained. Fresh exact public CI is pending; the following full41 result is historical, not a fresh full41 result on the new harness.
+
 ## Current screenshot and complete regression acceptance
 
 The [current screenshot receipt](verification/rendered-screenshots-20261018/README.md) records **1,831 ordinary Rust tests**, five deliberate opt-in ignores, strict Clippy, four explicit Chromium cases, **160 state tests**,40 semantic UI groups and **all41 registered UI suites in one complete invocation**. The selected-viewport workflow includes actual320 ×240/1440 ×900 pixel checks, five byte-identical PNG downloads, guarded lazy preview and a two-process offline cold reopen. The full144-capability/416-filter/32-workflow ledger remains intact; manufacturer parity is `NOT_PROVEN`.

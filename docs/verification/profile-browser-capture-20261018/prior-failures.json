@@ -1,0 +1,29 @@
+{
+  "encoding": "UTF-8 text; literal CRLF/LF preserved within JSON strings",
+  "parts": [
+    {
+      "label": "actual-native-profile-regression",
+      "result": "FAIL_RETAINED",
+      "source_log": "artifacts/profile-capture-r1-20261018-actual-native-profile-regression.log",
+      "bytes": 1178,
+      "sha256": "49d08d1b5713dcd73a9bbe753f4db4ba4b0dc9aa99e59f8687dc0e298c00cec2",
+      "text": "FAIL configuration-profiles (owned-native)\nEvidence: E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r1-20261018\nnode:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nError: configuration-profiles: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\r\n+ actual - expected\r\n\r\n+ [\r\n+   'crypto.randomUUID is not a function',\r\n+   'crypto.randomUUID is not a function'\r\n+ ]\r\n- []\r\n\r\n    at run (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-config-profiles-live.cjs:575:82)\r\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\r\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-config-profiles-live.cjs:582:17 {\r\n  generatedMessage: true,\r\n  code: 'ERR_ASSERTION',\r\n  actual: [Array],\r\n  expected: [],\r\n  operator: 'deepStrictEqual',\r\n  diff: 'simple'\r\n}\r\n\r\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:121:53\r\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\r\n\r\nNode.js v24.15.0\r\n"
+    },
+    {
+      "label": "actual-native-profile-regression",
+      "result": "FAIL_RETAINED",
+      "source_log": "artifacts/profile-capture-r2-20261018-actual-native-profile-regression.log",
+      "bytes": 1100,
+      "sha256": "6586daf46cc4fec631ed741181be3fc4c2b3f90b94384ef53a1c083301c3336c",
+      "text": "PASS configuration-profiles (owned-native)\nFAIL configuration-profile-catalog (owned-native)\nEvidence: E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r2-20261018\nnode:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nError: configuration-profile-catalog: Error: unable to open database file\r\n    at negativeCatalogControls (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-config-profile-catalog-live.cjs:233:16)\r\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\r\n    at async run (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-config-profile-catalog-live.cjs:319:3)\r\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-config-profile-catalog-live.cjs:413:17\r\n\r\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:121:53\r\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\r\n\r\nNode.js v24.15.0\r\n"
+    },
+    {
+      "label": "actual-native-long-output-regression",
+      "result": "FAIL_RETAINED",
+      "source_log": "artifacts/profile-capture-r3-20261018-actual-native-long-output-regression.log",
+      "bytes": 931,
+      "sha256": "56ff30d03ce6dfc8b8f234cb1e6ece2d44c950dccd868c256202af63cd2c41ed",
+      "text": "PASS configuration-profiles (owned-native)\nFAIL configuration-profile-catalog (owned-native)\nEvidence: E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\profile-capture-native-r3-20261018\nnode:internal/modules/run_main:107\r\n    triggerUncaughtException(\r\n    ^\r\n\r\nError: configuration-profile-catalog: response.body: Protocol error (Network.getResponseBody): No data found for resource with given identifier\r\nResponse body is not available for a response that was navigated away from. Read response.body() before triggering any navigation.\r\n    at _Page.<anonymous> (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-config-profile-catalog-live.cjs:99:139)\r\n\r\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:121:53\r\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\r\n\r\nNode.js v24.15.0\r\n"
+    }
+  ]
+}

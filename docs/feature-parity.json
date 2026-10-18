@@ -6795,6 +6795,25 @@
       "command": "1831 Rust/0 failed/5 opt-in ignores; strictClippy;4 explicit Chromium;160 state tests;40 semantic groups; all41 UI suites in one terminal invocation; focused actual screenshot3 groups5 downloads2 natural EOF0",
       "scope": "Selected viewport and original saved PNG download through actual settings/renderer/native/browser/cold boundaries; independent exact bytes, pixel and context verification.",
       "limits": "Selected viewport PNG is viewport-only; full-page captures, device-scale-factor/device emulation, other image formats, all browsers and arbitrary imported pixel-decoder correctness are not claimed. Native PNG checks structure/CRC/dimensions and streams typed report identity under the cached job read lock; not fresh SQLite attestation. Independent fixture PNG pixels were actually decoded and checked. Two shared preparation slots and64MiB logical PNG output cap do not establish global CPU/RSS/transport-memory bounds. All144 capabilities,416 filters and32 workflow contracts remain tracked; complete manufacturer parity and general production credentials/installation are separate gates."
+    },
+    {
+      "id": "profile-browser-capture-20261018",
+      "date": "2026-10-18",
+      "result": "PASS_LOCAL_ACTUAL_BROWSER_CAPTURE_AND_THREE_FOCUSED_UI_SUITES",
+      "artifact": "docs/verification/profile-browser-capture-20261018/README.md",
+      "evidence": "docs/verification/profile-browser-capture-20261018/local-result.json",
+      "source_gates": "docs/verification/profile-browser-capture-20261018/source-gates.json",
+      "evidence_bytes": 6668,
+      "evidence_sha256": "caec72bdff84a61aa64517e07bdbdbf5680cc3b47d66b97cb874172311be3da7",
+      "source_gates_sha256": "4895b5190e4944a75f14e0e1c16e5e4215e3e67a8cf8a43eb4291bf31ec60eee",
+      "source_debug_sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59",
+      "frozen_acceptance_input_count": 582,
+      "frozen_acceptance_manifest_sha256": "15fb9f1fdd27f9cb573b71461d477f8cf882e39ddfbd028a2bfbf293c41e5bff",
+      "ui_suite_count": 3,
+      "ui_one_complete_invocation": true,
+      "command": "180 state/helper tests;12 actual Chromium tests;3 native UI suites in one terminal invocation; normal unchanged build",
+      "scope": "Verification-only actual browser Response.clone capture for pure inspect and catalog GET paths. Original fetch Promise/Response and actual once-only mutation response checks retained.",
+      "limits": "New full41 local suite and full Rust suite not rerun in this test-only slice; b7 historical complete41/1831 proof stays separate. New exact public CI pending, installed pilot unchanged; maximum browser sizes, general stability, all browsers and manufacturer parity NOT_PROVEN."
     }
   ],
   "reference_workflows": [
@@ -7052,34 +7071,43 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-18T19:59:05.164Z",
+  "last_verified_at": "2026-10-18T20:34:00.484Z",
   "current_work": [
     {
       "id": "profile-browser-response-capture-ci-20261018",
       "priority": -13,
-      "title_de": "Tatsächliche Profil-Antwortbytes im Browser ohne CDP-Rennen nachweisen",
-      "status": "CI_FAILURE_DIAGNOSED_CAPTURE_CHANGE_PENDING",
-      "summary_de": "Öffentliche513-Renderer-CI besteht Density, scheitert später beim Import exact-u64.json. Rekonstruierter Request-SHA stimmt mit dem letzten Browserrequest überein; Fehler liegt vor Speichern/Reload. Chromium-Ursache und Produktdefekt sind noch nicht belegt. Der lokale Screenshot-Stand und seine vollständige Windows-Abnahme sind separat.",
+      "title_de": "Profil-Antwortbytes direkt im Browser erfassen",
+      "status": "LOCAL_ACTUAL_BROWSER_CAPTURE_AND_THREE_NATIVE_SUITES_PASS_PUBLIC_CI_PENDING",
+      "summary_de": "Reine Profilprüfung und Katalog-GETs erfassen echte Response.clone-Bytes mit exakter Request-/Dokument-Zuordnung. Originales Fetch-Promise und Response bleiben erhalten; kein Request-Replay. Zustandstests, echte Chromium-Kontrollen und alle drei betroffenen nativen UI-Suiten bestehen auf unveränderten eingefrorenen Quellen. Drei frühere lokale Fehler bleiben erhalten; frische öffentliche Gesamtabnahme ist separat offen.",
       "completed_acceptance_de": [
         "Abgeschlossenen Rendererjob117760088992 aus Run39156291901 und rohe Artefakte erhalten. Vier Profil-Prüfgruppen bestehen; danach schlägt das Lesen tatsächlicher Browserantwortbytes fehl.",
-        "Exakten u64-Import über Request-SHAf994d5f7… zugeordnet. Die generische Meldung über eine Navigation ist kein Beweis für tatsächliche Navigation."
+        "Exakten u64-Import über Request-SHAf994d5f7… zugeordnet. Die generische Meldung über eine Navigation ist kein Beweis für tatsächliche Navigation.",
+        "Echte Browserbytes für POST inspect und GET Katalogliste/UUID sind an Method/volle URL/rohen Request-SHA, Dokument-Epoch, Sequenz, Status und Header gebunden; mehrdeutige/veraltete Zuordnung verweigert.",
+        "180 Zustand-/Helper-Tests und 12 gemeldete echte Chromium-Tests bestehen;15 tatsächliche Transportanfragen ohne CDP-Body-/Text-/JSON-Aufruf oder zusätzliche HTTP-Anfrage. Clone-Limit/Timeout lassen die Originalantwort weiter unverändert konsumieren.",
+        "Alle drei betroffenen UI-Suiten bestehen in einem gemeinsamen Aufruf mit langen Windows-Ausgabepfaden:10 Profil-,4 Katalog- und3 Screenshot-Gruppen;45 geprüfte Inspect-Antworten,11 unabhängige SQL-Snapshots,8 natürliche Native-EOF0 und zusätzlicher natürlicher Koordinator-Abschluss.",
+        "Alle bisherigen u64-/UI-/Speicher-/Header-/Kaltstart-/Negativ-/320px-Assertions und Deadlines bleiben erhalten. Nur Node-SQLite-Testpfade erhalten auf Windows das Namensraumpräfix; die nativen Datenpfade bleiben gleich.",
+        "R1-about:blank-Fehler, R2-Node-SQLite-Pfadfehler und R3-Katalog-CDP-Body-Fehler bleiben als FAIL dokumentiert; diese Erfolge ersetzen keine frühere Niederlage."
       ],
       "pending_acceptance_de": [
-        "Preview-Antwortbytes im echten Browser über Response.clone erfassen, exakt dem Request zuordnen und ursprüngliche Response/Funktionslogik erhalten.",
-        "Alle bisherigen Pflichtprüfungen echter Bytes, UI und Speicherung beibehalten; keine Mutation wiederholen, keine Fallback-Oracles oder erhöhten Timeouts.",
-        "Gezielte lokale Profil-Abnahme und neue exakte öffentliche Gesamtabnahme durchführen; erst danach CI-Lücke schließen."
+        "Neue öffentliche CI des exakten veröffentlichten Commits einschließlich aller41 UI-Suiten terminal prüfen; vorher die öffentliche CI-Lücke nicht als geschlossen markieren.",
+        "Cross-Browser-/beliebige Last-/maximale Profil- und Kataloggrößen sowie vollständige Herstellerparität sind mit diesem begrenzten Testhelfer-Schnitt nicht nachgewiesen."
       ],
       "documentation": [
         "docs/e2e-testing.md",
         "docs/FEATURE_TODO.md",
-        "docs/verification/rendered-screenshots-20261018/README.md"
+        "docs/verification/profile-browser-capture-20261018/README.md",
+        "docs/verification/profile-browser-capture-20261018/local-result.json",
+        "docs/verification/profile-browser-capture-20261018/source-gates.json"
       ],
       "gates": {
-        "parent_public_renderer": "FAIL_EXACT_U64_BROWSER_RESPONSE_BODY",
-        "root_cause": "NOT_PROVEN",
-        "current_screenshot_local": "PASS_COMPLETE_SCOPED_ACCEPTANCE",
-        "capture_fix": "NOT_IMPLEMENTED",
-        "new_public_CI": "NOT_RUN"
+        "parent_public_renderer": "FAIL_EXACT_U64_BROWSER_RESPONSE_BODY_RETAINED",
+        "root_cause": "CHROMIUM_CDP_CAUSE_NOT_PROVEN",
+        "capture_fix": "PASS_EXACT_ACTUAL_BROWSER_CLONE_NO_HTTP_REPLAY",
+        "state_helper": "PASS180",
+        "actual_chromium": "PASS12_REPORTED_TESTS15_HTTP_ZERO_CDP_BODY_CALLS",
+        "native_regression": "PASS3_SUITES_ONE_INVOCATION_LONG_WINDOWS_OUTPUT17_GROUPS8_NATURAL_EOF0",
+        "previous_local_failures": "R1_R2_R3_RETAINED_FAIL",
+        "new_public_CI": "PENDING_AFTER_PUBLISH"
       },
       "reference_parity": "NOT_PROVEN",
       "public_ci_url": "https://github.com/lia-xim/open-seo-spider/actions/runs/39156291901/job/117760088992"

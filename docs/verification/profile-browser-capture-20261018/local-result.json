@@ -1,0 +1,166 @@
+{
+  "kind": "profile_browser_capture_scoped_acceptance",
+  "result": "PASS_LOCAL_SCOPED_ACCEPTANCE",
+  "recorded_at": "2026-10-18T20:34:00.483Z",
+  "parent_commit": "b7d2e75d9a288cff67bba35c76e8192a863d0223",
+  "binary_sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59",
+  "manifest_sha256": "15fb9f1fdd27f9cb573b71461d477f8cf882e39ddfbd028a2bfbf293c41e5bff",
+  "frozen_input_count": 582,
+  "state_and_helper_tests": 180,
+  "actual_browser_tests": 12,
+  "actual_browser_subcontrols": 11,
+  "actual_transport_http_requests": 15,
+  "actual_transport_http_document_requests": 6,
+  "cdp_body_text_json_calls_in_controls": 0,
+  "aggregate": {
+    "kind": "redesign_UI_E2E",
+    "results": [
+      {
+        "name": "configuration-profiles",
+        "script": "ui-config-profiles-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9839
+      },
+      {
+        "name": "configuration-profile-catalog",
+        "script": "ui-config-profile-catalog-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9932
+      },
+      {
+        "name": "screenshot-viewport",
+        "script": "ui-screenshot-viewport-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14686
+      }
+    ],
+    "app_origin": "http://127.0.0.1:53397",
+    "shutdown": {
+      "code": 0,
+      "signal": null
+    },
+    "binary": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+    "binary_sha256": "c780fa04c09a7f8a20e1ba5f61368fb0df2d729b85785fbcb34dbe95cae0ed59",
+    "binary_unchanged": true,
+    "tracked_sources_unchanged": true,
+    "changed": [],
+    "complete": true,
+    "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+  },
+  "suites": [
+    {
+      "name": "configuration-profiles",
+      "evidence": {
+        "path": "artifacts/profile-capture-native-r4-20261018/configuration-profiles/config-profiles-1792355517930-4b0b8ae4/ui-config-profiles-live.json",
+        "bytes": 110631,
+        "sha256": "499f425fe795846a3b0ad73b4d294905b760a2d2ea7bfa322b4a37ea92f6b2ab"
+      },
+      "groups": 10,
+      "natural_native_eof0": 2,
+      "downloads": 6,
+      "offline_product_requests": 0,
+      "offline_positive_controls": 2,
+      "browser_errors": [],
+      "actual_clone_responses": 45
+    },
+    {
+      "name": "configuration-profile-catalog",
+      "evidence": {
+        "path": "artifacts/profile-capture-native-r4-20261018/configuration-profile-catalog/config-profile-catalog-1792355527751-bd4f317c/ui-config-profile-catalog-live.json",
+        "bytes": 83064,
+        "sha256": "adb5e9dbfd8e4cb16d24b4d6a4d1fa99a8088839ae633ddb4dda055e599d1b63"
+      },
+      "groups": 4,
+      "natural_native_eof0": 4,
+      "downloads": 5,
+      "offline_product_requests": 0,
+      "offline_positive_controls": 2,
+      "browser_errors": [],
+      "actual_clone_responses": 24,
+      "independent_sql_snapshots": 11
+    },
+    {
+      "name": "screenshot-viewport",
+      "evidence": {
+        "path": "artifacts/profile-capture-native-r4-20261018/screenshot-viewport/screenshot-viewport-1792355537656-097f67e3/ui-screenshot-viewport-live.json",
+        "bytes": 17804,
+        "sha256": "b341bec60e6fb1f15718f7eb579f069cf8ae2ced786f0d60d4418ca79d6da840"
+      },
+      "groups": 3,
+      "natural_native_eof0": 2,
+      "downloads": 5,
+      "offline_product_requests": 0,
+      "offline_positive_controls": 2,
+      "browser_errors": [],
+      "browser_download_events": 5,
+      "count_semantics": "Actual saved PNG files; browser-event metadata counted separately"
+    }
+  ],
+  "inspect_capture": {
+    "count": 45,
+    "all_exact_request_bound": true,
+    "no_http_replay": true,
+    "all_captured_buffers_released": true,
+    "negative_controls": 26
+  },
+  "catalog_reads": {
+    "count": 12,
+    "request_bytes": 0,
+    "request_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "mutations": "Original immediate once-only CDP response capture; no mutation replay or retry."
+  },
+  "strategy": {
+    "allowlist": [
+      "same-origin POST /api/config-profiles/inspect with actual raw string request body",
+      "same-origin GET /api/config-profile-catalog or UUID item with absent request body"
+    ],
+    "original_fetch_promise_and_response_preserved": true,
+    "association": "Document epoch, pre-action sequence, exact method/full URL/raw request SHA, status and normalized headers; duplicate or stale records refuse.",
+    "capture": "Bounded actual Response.clone stream; no CDP fallback or HTTP replay. Clone-only deadline/cancellation, buffer release, and opaque non-HTTP-document guard.",
+    "fixture_limits": {
+      "maxResponseBytes": 2097152,
+      "maxAggregateBytes": 16777216,
+      "maxRecords": 64,
+      "maxRequestBytes": 2097152,
+      "transferChunkBytes": 32768,
+      "maxReadMs": 10000
+    }
+  },
+  "readiness": {
+    "local_scoped_acceptance": true,
+    "new_exact_public_ci": "PENDING_AFTER_PUBLISH",
+    "new_local_full41": "NOT_RUN",
+    "prior_full41": "PASS_ON_b7d2e75_HISTORICAL_SOURCE_AND_HARNESS",
+    "installed_application_updated": false,
+    "manufacturer_parity": "NOT_PROVEN"
+  },
+  "prior_failures": [
+    {
+      "label": "actual-native-profile-regression",
+      "log_sha256": "49d08d1b5713dcd73a9bbe753f4db4ba4b0dc9aa99e59f8687dc0e298c00cec2",
+      "reason": "New observer initialized on about:blank and emitted two pageerrors. All pageerror assertions were retained; this gate remains FAIL."
+    },
+    {
+      "label": "actual-native-profile-regression",
+      "log_sha256": "6586daf46cc4fec631ed741181be3fc4c2b3f90b94384ef53a1c083301c3336c",
+      "reason": "Unchanged Node SQLite fixture could not open a 252-character ordinary Windows filename. Long-path control and actual namespaced fixture correction are separate from native product path claims."
+    },
+    {
+      "label": "actual-native-long-output-regression",
+      "log_sha256": "56ff30d03ce6dfc8b8f234cb1e6ece2d44c950dccd868c256202af63cd2c41ed",
+      "reason": "After the Node fixture path correction, cold catalog item GET failed actual CDP body reading. The clone allowlist was extended only to pure catalog GETs; mutations retain their one original response."
+    }
+  ]
+}

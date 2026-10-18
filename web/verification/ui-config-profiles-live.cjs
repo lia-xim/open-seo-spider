@@ -20,9 +20,10 @@ assert(!fs.existsSync(output), 'A fresh owned evidence directory is required');
 fs.mkdirSync(output, {recursive: true});
 process.env.SPIDER_TEST_ARTIFACT_DIR = output;
 const artifactPath = require('./artifact-path.cjs');
+const profileCapture = require('./profile-response-capture.cjs');
 const store = path.join(output, 'native-store');
 const storageKey = 'open-seo-spider-config-profile-draft-v1';
-const pins = [__filename, path.join(__dirname, 'artifact-path.cjs')].map(file => ({file, sha256: hash(fs.readFileSync(file))}));
+const pins = [__filename, path.join(__dirname, 'artifact-path.cjs'), path.join(__dirname, 'profile-response-capture.cjs')].map(file => ({file, sha256: hash(fs.readFileSync(file))}));
 const servedAssets = [];
 const checks = [], owners = [], downloads = [], requests = [], negatives = [], errors = [], external = [], heldResponses = [];
 const initialHits = [], offlineHits = [], witnessHits = [], nonce = randomUUID();
@@ -30,6 +31,7 @@ const secretValues = ['owned-volatile-one-' + randomUUID(), 'owned-volatile-two-
 const headerNames = ['X-Owned-Config', 'x-owned-config'];
 let app, siteOrigin, browser, context, page, site, offline = false, failure, jobId;
 const responseBodies = new WeakMap();
+const inspectedResponses = [];
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 function check(label) { checks.push(label); console.log('PASS ' + label); }
 function deadline(promise, ms, label) {
@@ -142,21 +144,36 @@ function captureBrowserResponses() {
     const url = new URL(response.url());
     if (url.origin !== app.origin) return;
     if (url.pathname === '/api/config-profiles/export') return; // Chrome download bodies are not a reliable CDP oracle.
+    if (url.pathname === '/api/config-profiles/inspect') return; // Exact bytes come from the original fetch Response.clone in this browser document.
     if (url.pathname.startsWith('/api/config-profiles/') || url.pathname === '/api/crawls/from-profile' || /^\/api\/crawls\/[^/]+\/config-profile$/.test(url.pathname)) {
       // Capture once immediately on the event, including mutations. Never reread/replay a start.
       responseBodies.set(response, response.body().then(bytes => ({bytes}), error => ({error})));
     }
   });
 }
-async function browserJSON(pending) {
-  const response = await pending, captured = responseBodies.get(response); assert(captured, 'Immediate once-buffer capture missing');
+async function browserJSON(pending, marker) {
+  const response = await pending;
+  if (new URL(response.url()).pathname === '/api/config-profiles/inspect') {
+    const observed = {method: response.request().method(), url: response.url(), status: response.status(), request_sha256: hash(Buffer.from(response.request().postData() || ''))};
+    try {
+      assert(marker, 'An awaited pre-action browser marker is required for native profile inspection');
+      const result = await profileCapture.capture(page, response, marker);
+      inspectedResponses.push({...observed, ...result.evidence, bytes: result.bytes.length, sha256: hash(result.bytes), result: 'PASS'});
+      return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
+    } catch (error) {
+      inspectedResponses.push({...observed, marker, result: 'FAIL', error: error.message});
+      throw error;
+    }
+  }
+  const captured = responseBodies.get(response); assert(captured, 'Immediate once-buffer capture missing');
   const result = await captured; if (result.error) throw result.error;
   return {response, bytes: result.bytes, value: JSON.parse(result.bytes)};
 }
-function waitJSON(route, method = 'POST') { return browserJSON(page.waitForResponse(response => response.url() === app.origin + route && response.request().method() === method)); }
+function waitJSON(route, method = 'POST', marker) { return browserJSON(page.waitForResponse(response => response.url() === app.origin + route && response.request().method() === method), marker); }
 async function inspectEditor(text) {
   await page.fill('#config-profile-json', text);
-  const pending = waitJSON('/api/config-profiles/inspect'); await page.click('#config-profile-inspect');
+  const marker = await profileCapture.mark(page);
+  const pending = waitJSON('/api/config-profiles/inspect', 'POST', marker); await page.click('#config-profile-inspect');
   const result = await pending; assert.equal(result.response.status(), 200); await installed(result.value); return result.value;
 }
 async function installed(value) {
@@ -166,7 +183,8 @@ async function installed(value) {
   sameConfig(await page.inputValue('#config-profile-json'), value.profile_json, 'Imported declared profile');
 }
 async function upload(name, bytes, expected = 200) {
-  const pending = waitJSON('/api/config-profiles/inspect');
+  const marker = await profileCapture.mark(page);
+  const pending = waitJSON('/api/config-profiles/inspect', 'POST', marker);
   const chooser = page.waitForEvent('filechooser'); await page.click('#config-profile-import');
   await (await chooser).setFiles({name, mimeType: 'application/json', buffer: Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes)});
   const result = await pending; assert.equal(result.response.status(), expected, 'Owned file fixture ' + name + ': ' + nativeFixtureError(result.value));
@@ -175,7 +193,8 @@ async function upload(name, bytes, expected = 200) {
   return result;
 }
 async function save() {
-  const pending = waitJSON('/api/config-profiles/inspect'); await page.click('#settings-form button[type=submit]');
+  const marker = await profileCapture.mark(page);
+  const pending = waitJSON('/api/config-profiles/inspect', 'POST', marker); await page.click('#settings-form button[type=submit]');
   const result = await pending; assert.equal(result.response.status(), 200);
   await page.waitForFunction(() => !document.getElementById('settings-dialog').open);
   const stored = (await storage())[storageKey]; assert(stored); noSecrets(stored, 'profile localStorage'); return {result: result.value, stored};
@@ -375,7 +394,8 @@ async function staleNative(validA, validB) {
     await page.fill('#config-profile-json', validA); await page.click('#config-profile-inspect');
     await until(() => gates.get(validA).held, 'held real native A response');
     await page.fill('#config-profile-json', validB);
-    const pending = browserJSON(page.waitForResponse(response => response.url() === pattern && response.request().method() === 'POST' && response.request().postDataJSON().profile_text === validB));
+    const marker = await profileCapture.mark(page);
+    const pending = browserJSON(page.waitForResponse(response => response.url() === pattern && response.request().method() === 'POST' && response.request().postDataJSON().profile_text === validB), marker);
     await page.click('#config-profile-inspect'); await until(() => gates.get(validB).held, 'held real native B response');
     assert(await page.isDisabled('#config-profile-export')); assert(await page.isDisabled('#settings-form button[type=submit]'));
     gates.get(validA).release(); await until(() => gates.get(validA).settled, 'release superseded A while B remains pending');
@@ -401,6 +421,7 @@ async function run() {
   const executablePath = process.env.SPIDER_CHROME || process.env.OPEN_SEO_BROWSER_PATH || await (await import('../../renderer/server.mjs')).findBrowserExecutable();
   const chromeHash = hash(fs.readFileSync(executablePath)); browser = await chromium.launch({headless: true, executablePath});
   context = await browser.newContext({acceptDownloads: true, viewport: {width: 1440, height: 1000}}); page = await context.newPage(); captureBrowserResponses();
+  await profileCapture.install(page);
   for (const [file, route] of [['index.html', '/'], ['app.js', '/app.js'], ['styles.css', '/styles.css'], ['config-profiles.js', '/config-profiles.js']]) {
     const source = path.join(root, 'web', file), sourceHash = hash(fs.readFileSync(source));
     const served = await raw(route); assert.equal(hash(served.bytes), sourceHash, 'Actual native embedded asset must match the frozen frontend source');
@@ -564,7 +585,7 @@ async function run() {
     for (const owner of owners) if (!owner.close) { owner.forced = true; owner.child.kill(); try { await deadline(owner.closed, 10000, 'failed owned process close'); } catch (error) { owner.child.stdin.destroy(); owner.child.stdout.destroy(); owner.child.stderr.destroy(); owner.child.unref(); failure ||= error; } }
     if (site?.listening) { site.closeAllConnections(); try { await deadline(new Promise(resolve => site.close(resolve)), 10000, 'owned website close'); } catch (error) { failure ||= error; } }
     for (const owner of owners) fs.writeFileSync(artifactPath('native-' + owner.phase + '.log'), owner.log);
-    const receipt = {result: failure ? 'FAIL' : 'PASS', duration_ms: Date.now() - started, binary, binary_sha256: binaryHash, output, driver: __filename, driver_sha256: pins[0].sha256, ...proof, checks, negatives, downloads, requests, held_responses: heldResponses, native: owners.map(o => ({phase: o.phase, pid: o.child.pid, origin: o.origin, args: o.args, close: o.close, forced: o.forced, natural_stdin_eof: o.natural_stdin_eof})), website_capture_hits: initialHits, offline_product_hits: offlineHits, offline_positive_controls: witnessHits.length, browser_errors: errors, external_requests: external, ...(failure ? {error: failure.stack} : {})};
+    const receipt = {result: failure ? 'FAIL' : 'PASS', duration_ms: Date.now() - started, binary, binary_sha256: binaryHash, output, driver: __filename, driver_sha256: pins[0].sha256, response_capture_helper_sha256: pins[2].sha256, ...proof, checks, negatives, downloads, requests, inspected_responses: inspectedResponses, held_responses: heldResponses, native: owners.map(o => ({phase: o.phase, pid: o.child.pid, origin: o.origin, args: o.args, close: o.close, forced: o.forced, natural_stdin_eof: o.natural_stdin_eof})), website_capture_hits: initialHits, offline_product_hits: offlineHits, offline_positive_controls: witnessHits.length, browser_errors: errors, external_requests: external, ...(failure ? {error: failure.stack} : {})};
     fs.writeFileSync(artifactPath('ui-config-profiles-live.json'), JSON.stringify(receipt, null, 2) + '\n');
   }
   if (failure) throw failure;
