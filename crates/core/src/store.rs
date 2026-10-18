@@ -11,10 +11,16 @@ use std::{path::Path, sync::Mutex};
 
 #[path = "store/crawl_quota_adapter.rs"]
 mod crawl_quota_adapter;
+#[cfg(test)]
+#[path = "store/open_tests.rs"]
+mod open_tests;
 #[path = "store/sitemap_raw_read.rs"]
 mod sitemap_raw_read;
 #[path = "store/tls_state.rs"]
 mod tls_state;
+#[cfg(windows)]
+#[path = "store/windows_path.rs"]
+mod windows_path;
 pub use sitemap_raw_read::{
     SITEMAP_RAW_READ_ENGINE, SitemapRawReadContext, SitemapRawReadRequest, SitemapRawReadWindow,
     SitemapRawRowKind,
@@ -104,14 +110,36 @@ pub struct CrawlStore {
     source_archive_writer: Mutex<()>,
 }
 
-impl CrawlStore {
-    pub fn open(path: impl AsRef<Path>) -> anyhow::Result<Self> {
-        let path = path.as_ref();
-        if let Some(parent) = path.parent().filter(|p| !p.as_os_str().is_empty()) {
-            std::fs::create_dir_all(parent)?;
-        }
-        let connection = Connection::open(path)?;
-        connection.execute_batch("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;
+fn open_connection(path: &Path, flags: OpenFlags) -> anyhow::Result<Connection> {
+    #[cfg(windows)]
+    {
+        windows_path::open(path, flags)
+    }
+    #[cfg(not(windows))]
+    {
+        Ok(Connection::open_with_flags(path, flags)?)
+    }
+}
+
+// App job errors currently use Display rather than anyhow's full chain. Keep
+// both the failed stage and SQLite's cause/code in that first displayed message,
+// while retaining the original typed error for callers inspecting the chain.
+fn opening_stage_error(stage: &str, error: impl Into<anyhow::Error>) -> anyhow::Error {
+    let error = error.into();
+    let code = error
+        .downcast_ref::<rusqlite::Error>()
+        .and_then(|error| match error {
+            rusqlite::Error::SqliteFailure(code, _) => {
+                Some(format!(" (SQLite {:?}/{})", code.code, code.extended_code))
+            }
+            _ => None,
+        })
+        .unwrap_or_default();
+    let message = format!("Crawl storage {stage}: {error:#}{code}");
+    error.context(message)
+}
+
+const INITIALIZE_WAL_AND_CORE_SCHEMA: &str = "PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;
             CREATE TABLE IF NOT EXISTS metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS frontier(url TEXT PRIMARY KEY, depth INTEGER NOT NULL, discovered_from TEXT, done INTEGER NOT NULL DEFAULT 0);
             CREATE TABLE IF NOT EXISTS pages(url TEXT PRIMARY KEY, data TEXT NOT NULL);
@@ -120,13 +148,33 @@ impl CrawlStore {
             CREATE INDEX IF NOT EXISTS discovery_frontier_pending ON discovery_frontier(done);
             CREATE TABLE IF NOT EXISTS recrawl_base(id INTEGER PRIMARY KEY CHECK(id=1),snapshot BLOB NOT NULL);
             CREATE TABLE IF NOT EXISTS recrawl_pages(url TEXT PRIMARY KEY,ordinal INTEGER NOT NULL,payload_sha256 TEXT NOT NULL,inherited INTEGER NOT NULL);
-            CREATE TABLE IF NOT EXISTS recrawl_targets(url TEXT PRIMARY KEY,admitted_attempts INTEGER NOT NULL DEFAULT 0,last_admitted_generation INTEGER,committed_generation INTEGER,committed_payload_sha256 TEXT);")?;
-        connection.execute_batch(crate::policy_ledger::SCHEMA)?;
-        connection.execute_batch(crate::resource_ledger::SCHEMA)?;
-        connection.execute_batch(crate::sitemap_ledger::SCHEMA)?;
+            CREATE TABLE IF NOT EXISTS recrawl_targets(url TEXT PRIMARY KEY,admitted_attempts INTEGER NOT NULL DEFAULT 0,last_admitted_generation INTEGER,committed_generation INTEGER,committed_payload_sha256 TEXT);";
+
+impl CrawlStore {
+    pub fn open(path: impl AsRef<Path>) -> anyhow::Result<Self> {
+        let path = path.as_ref();
+        if let Some(parent) = path.parent().filter(|p| !p.as_os_str().is_empty()) {
+            std::fs::create_dir_all(parent)
+                .map_err(|error| opening_stage_error("create parent directory", error))?;
+        }
+        let connection = open_connection(path, OpenFlags::default())
+            .map_err(|error| opening_stage_error("open writable SQLite connection", error))?;
+        connection
+            .execute_batch(INITIALIZE_WAL_AND_CORE_SCHEMA)
+            .map_err(|error| opening_stage_error("initialize SQLite WAL and core schema", error))?;
+        connection
+            .execute_batch(crate::policy_ledger::SCHEMA)
+            .map_err(|error| opening_stage_error("initialize policy ledger schema", error))?;
+        connection
+            .execute_batch(crate::resource_ledger::SCHEMA)
+            .map_err(|error| opening_stage_error("initialize resource ledger schema", error))?;
+        connection
+            .execute_batch(crate::sitemap_ledger::SCHEMA)
+            .map_err(|error| opening_stage_error("initialize sitemap ledger schema", error))?;
         // This validates pre-existing marker/table consistency before any DDL;
         // CREATE must not conceal a dropped initialized empty sidecar table.
-        crate::sitemap_source_store::initialize_writable_schema(&connection)?;
+        crate::sitemap_source_store::initialize_writable_schema(&connection)
+            .map_err(|error| opening_stage_error("initialize sitemap source schema", error))?;
         Ok(Self {
             connection: Mutex::new(connection),
             source_archive_path: crate::sitemap_source_archive::files::archive_path(path)?,
@@ -139,8 +187,11 @@ impl CrawlStore {
     /// changing journal configuration. Suitable for cold-process recovery.
     pub fn open_read_only(path: impl AsRef<Path>) -> anyhow::Result<Self> {
         let path = path.as_ref();
-        let connection = Connection::open_with_flags(path, OpenFlags::SQLITE_OPEN_READ_ONLY)?;
-        connection.busy_timeout(std::time::Duration::from_secs(5))?;
+        let connection = open_connection(path, OpenFlags::SQLITE_OPEN_READ_ONLY)
+            .map_err(|error| opening_stage_error("open read-only SQLite connection", error))?;
+        connection
+            .busy_timeout(std::time::Duration::from_secs(5))
+            .map_err(|error| opening_stage_error("configure read-only SQLite timeout", error))?;
         Ok(Self {
             connection: Mutex::new(connection),
             source_archive_path: crate::sitemap_source_archive::files::archive_path(path)?,

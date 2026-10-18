@@ -207,3 +207,32 @@ then strengthened and passed again separately on the same executable. See
 [the phase-bound receipt](verification/accessibility-cold-browser-20261018/README.md).
 These local gates do not establish public CI, release/installation or full
 manufacturer parity.
+
+## Requested Windows store paths
+
+`scripts/windows-store-paths-e2e.cjs` is a separate Windows native/browser gate.
+It requires an explicitly pinned normal executable (`SPIDER_BINARY` and
+`SPIDER_BINARY_SHA256`), an installed matching Chromium
+(`OPEN_SEO_BROWSER_PATH`) and a fresh explicit `SPIDER_WINDOWS_PATH_OUTPUT`.
+Choose that output short enough to construct the 214 UTF-16 baseline; the
+driver refuses unsuitable locations instead of relocating test stores.
+
+Five actual captures use SQLite paths of 214, 255, 300 and 1,150 UTF-16 units,
+plus a 650-unit Unicode path independently exceeding 1,040 UTF-8 bytes. Each
+case captures two pages and a sitemap, validates every native CSV column and
+complete JSON, downloads the original archived XML and actual browser exports,
+then closes and reopens the same store in a second native process. The owned
+website returns HTTP410 before the first close through both closes, with
+nonce-protected witness probes and zero permitted product refetches.
+
+Standalone read-only CLI controls compare complete saved rows through ordinary,
+verbatim, relative/mixed/dot and owned directory-junction spellings. Trailing
+dot/space aliases are tested separately at the short baseline. Missing and
+invalid read-only inputs must fail without creating outputs, database siblings
+or archive directories. Original file bytes and identities are checked.
+
+The junction control covers SQLite/raw rows only. Original archive traversal
+continues to reject symlinks/junctions; this gate makes no UNC-share, ambiguous
+long-alias, system-setting, crash-durability or full manufacturer-parity claim.
+The Windows matrix runs this gate and uploads its raw evidence. Local execution
+results and source/build binding are recorded separately from public CI.

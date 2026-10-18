@@ -4019,8 +4019,11 @@
       "parity_evidence": [],
       "group": "storage",
       "remaining_acceptance": [
-        "Add dedicated config import/export with credential/path validation and unchanged setting assertions.",
-        "Next scoped configuration workflow: export a typed crawl profile, import into a fresh draft, validate absent credentials/files and unsafe or invalid paths before job creation, then prove every unchanged option through actual UI/API/saved config and reopen. Never include secrets in exported profiles."
+        "Add a versioned strict typed profile format with duplicate-key/unknown-field/size/version checks and seed-free native semantic validation before effects; keep existing crawl API aliases compatible.",
+        "Add actual settings-dialog export/import and full selected-crawl configuration loading; preserve native-only fields, absent values and exact non-MiB byte limits instead of rebuilding/clamping a smaller UI form.",
+        "Keep arbitrary header secrets out of exports by explicitly refusing unsafe profiles or representing unresolved requirements. Current CrawlConfig has no provider-credential or filesystem-path registry; reject unsupported declarations without contacting providers or reading declared files.",
+        "Prove configure -> actual download -> fresh-draft import -> explicit owned crawl -> complete persisted typed config -> actual cold native reopen. Compare every unchanged option through browser/API/store.",
+        "Prove malformed/oversized/unknown/duplicate JSON, invalid headers/regex/selectors, credential URLs/private keys, unsupported paths and incompatible renderers fail without changing prior draft/local-storage bytes, creating jobs/files/requests or accepting late responses. Existing TLS VM staging is not file-picker E2E."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -4045,7 +4048,7 @@
       "group": "storage",
       "remaining_acceptance": [
         "Copy/open an archive in a second directory and validate all declared portable artifacts plus manifest/schema version.",
-        "Prove supported Windows long data/artifact paths with a fresh deep owned directory, explicit process/store lifecycle and complete archive reopen. Repeated-metadata attemptR1 encountered a long-path failure; no product fix, arbitrary path-length support or successful long-path acceptance is claimed. Keep this separate from ordinary short-path JSON portability."
+        "The former repeated-metadata R1 long-path failure now has a bounded product correction and actual five-case Windows acceptance with original archives, read-only aliases and cold reopening: docs/verification/windows-store-paths-20261018/README.md. Live UNC shares, ambiguous long legacy aliases, further namespaces and full archive portability remain unproven; portable storage remains partial."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -6981,6 +6984,71 @@
   "last_verified_at": "2026-10-18T12:19:19.632Z",
   "current_work": [
     {
+      "id": "configuration-profile-browser-e2e-20261018",
+      "priority": -8,
+      "title_de": "Vollständige Konfigurationsprofile im Redesign importieren und exportieren",
+      "status": "NEXT_IMPLEMENTATION_ACCEPTANCE_PREPARED",
+      "summary_de": "storage.config bleibt partial. Quellprüfung zeigt:kein dedizierter Profil-Import/Export; der bisherige UI-Neuaufbau bewahrt native-only Einstellungen nicht vollständig. Als nächster Baustein werden strikte versionierte Profile,unveränderte vollständige Drafts,explizite Header-Geheimnisregeln und tatsächliche Browser/Native/Kaltstart-Positiv-/Negativfälle umgesetzt.",
+      "completed_acceptance_de": [
+        "Bisherige Beweisgrenzen quellenbezogen abgeglichen:Echter CLI--config/Listimport bewahrt ausgewählte Optionen; Header/Selector/Regex- und Teilprofile haben native Tests. TLS-Dateistaging sind VM-Stubs; dedizierter Browser-Profilablauf fehlt."
+      ],
+      "pending_acceptance_de": [
+        "Add a versioned strict typed profile format with duplicate-key/unknown-field/size/version checks and seed-free native semantic validation before effects; keep existing crawl API aliases compatible.",
+        "Add actual settings-dialog export/import and full selected-crawl configuration loading; preserve native-only fields, absent values and exact non-MiB byte limits instead of rebuilding/clamping a smaller UI form.",
+        "Keep arbitrary header secrets out of exports by explicitly refusing unsafe profiles or representing unresolved requirements. Current CrawlConfig has no provider-credential or filesystem-path registry; reject unsupported declarations without contacting providers or reading declared files.",
+        "Prove configure -> actual download -> fresh-draft import -> explicit owned crawl -> complete persisted typed config -> actual cold native reopen. Compare every unchanged option through browser/API/store.",
+        "Prove malformed/oversized/unknown/duplicate JSON, invalid headers/regex/selectors, credential URLs/private keys, unsupported paths and incompatible renderers fail without changing prior draft/local-storage bytes, creating jobs/files/requests or accepting late responses. Existing TLS VM staging is not file-picker E2E."
+      ],
+      "documentation": [
+        "docs/e2e-testing.md",
+        "docs/FEATURE_TODO.md"
+      ],
+      "gates": {
+        "implementation": "NOT_STARTED",
+        "browser_native_cold": "NOT_RUN",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
+      "id": "windows-long-store-paths-20261018",
+      "priority": -7,
+      "title_de": "Tiefe Windows-Datenverzeichnisse mit SQLite und Originalarchiv prüfen",
+      "status": "LOCAL_WINDOWS_PATHS_COMPLETE_NATIVE5_UI37_RUST1780_NEW_PUBLIC_CI_PENDING",
+      "summary_de": "Reguläre Windows-Datenbankpfade funktionieren jetzt verbindungslokal mit expliziter Langpfadsyntax und SQLite-win32-longpath. Fünf echte Browser/Native-Fälle bis 1.150 UTF16 sowie Unicode mit 650 UTF16/1.270 UTF8 bestehen mit Originalarchiven, 42 Readonly-CLI-Aufrufen und zehn natürlichen Prozessenden. Öffnungsflags, ursprüngliche Archivautorität und Legacy-Aliase bleiben erhalten; der normale Build 0a2f40e ist quellengebunden. 1.780 Rust-Tests und 37 aktuelle UI-Abläufe bestehen. Netzwerk-/Namespace-Sonderfälle und vollständige Herstellerparität bleiben offen.",
+      "completed_acceptance_de": [
+        "Echte Baseline b37/25fc mit Erfolg bei 214 Zeichen und Fehlern bei 255/300 Zeichen vor HTTP beibehalten. Separate direkte Legacy-Kontrollen beobachten bei 255 die erfolgreiche Verbindung und den fehlgeschlagenen WAL/Core-Schemabatch, bei 300 bereits den Öffnungsfehler; 0 Byte allein wurde nicht als Stufenbeweis benutzt.",
+        "Gemeinsamer Windows-Verbindungsadapter für Schreiben/Readonly implementiert und unabhängig geprüft; Originalflags, Speicher-/URI-/Gerätenamen, Legacy-Aliase, explizite Verbatimpfade und ursprüngliche Archivautorität erhalten. SQLite-Fehler behalten Stufe/Code/Ursache im sichtbaren Text. Kein globaler VFS-/OS-Schalter und keine Verlagerung.",
+        "Acht neue tatsächliche native Tests bestehen: WAL/SHM, 255/300/1.200 Zeichen, Unicode, explizite Verbatimpfade, Dateizuordnung, unveränderte Readonly-Dateien, fehlende Eltern ohne Neuanlage, URI/Speicher-Semantik und typisierte Stufenfehler. Erster Test-Typfehler und anschließend gefundener UNC-Präfixfehler korrigiert; Fehlläufe aufbewahrt.",
+        "Fünf echte kleine Sitemap-Crawls auf exakt 214/255/300/1.150 UTF16 und Unicode mit 650 UTF16/1.270 UTF8 bestehen vollständig: Zehn Native-Prozesse schließen natürlich mit EOF0, 42 CLI-Prozesse schließen (32 Erfolge/10 erwartete Verweigerungen), 20 Browser- und 20 Archivdownloads stimmen, alle 420 CSV-Datenzellen und kalten Checkpoints bleiben unverändert. Zehn positive HTTP410-Zeugen, kein Produkt-Neuabruf.",
+        "1.780 gewöhnliche Rust-Tests bestehen ohne Fehler (5 absichtliche Ignores), ebenso alle 4 expliziten Chromium-Fixtures, tatsächliche lokale Enrichment-Erfolge mit eigenem cfg(test)-Host und zwei Prozessen, Formatierung, striktes Clippy und normaler Build. 37 ausgewählte UI-Suiten bestehen in einem Lauf; der große Wiederholungsmetadaten-Test ist ausdrücklich nur vorheriger Quellstand.",
+        "493 Quell-/Treiberdateien vor Build und zur Laufzeit gebunden; nach Kompilierung ausschließlich autorisierte Testtreiber-Änderungen, Produktquellen unverändert. Separater Windows-CI-Browserpfad-Gate mit Rohbeleg-Upload hinzugefügt. Installierte Source16 und Nutzerdaten unverändert."
+      ],
+      "pending_acceptance_de": [
+        "Frische öffentliche CI für den neuen exakten Commit ausführen und deren terminales Ergebnis separat prüfen. Vorherige 25fc-CI ist ein anderer Quellstand; lokale Erfolge belegen keinen öffentlichen Gesamtstatus.",
+        "Live-Netzwerk-UNC, mehrdeutige lange Win32-Aliase, weitere Namespaces und vollständige Archiv-/Junction-Portabilität gesondert prüfen. Junction-Kontrolle belegt nur DB/Raw-Zeilen; Archiv-NoFollow bleibt bestehen. Node-Datei-ID für Legacy-Namen mit abschließendem Punkt/Leerzeichen wurde nicht behauptet.",
+        "Keine universelle 32k-/RSS-/CPU-/Crash-Dauerhaftigkeits- oder Herstellerparitätsaussage. Alle 144 Fähigkeiten/416 Filter/32 Referenzabläufe bleiben im Gesamtgoal; nächster eigener Baustein ist vollständiger Konfigurations-Import/Export mit realem Browser/Native/Kaltstart-Nachweis."
+      ],
+      "documentation": [
+        "docs/verification/windows-store-paths-20261018/README.md",
+        "docs/verification/windows-store-paths-20261018/local-result.json",
+        "docs/verification/windows-store-paths-20261018/source-gates.json",
+        "docs/e2e-testing.md"
+      ],
+      "gates": {
+        "baseline": "PASS_ACTUAL_B37_214_SUCCESS_255_300_FAILURES_AND_INSTRUMENTED_LEGACY_STAGES",
+        "implementation": "PASS_SHARED_WINDOWS_ADAPTER_ORIGINAL_FLAGS_AND_ARCHIVE",
+        "focused_native": "PASS8_ACTUAL",
+        "full_archive_cold_E2E": "PASS5_CASES10_NATIVE_EOF0_42_CLI20_BROWSER20_ARCHIVE_ZERO_REFETCH",
+        "broad_source_gates": "PASS1780_RUST_IGNORE5_CHROME4_CLIPPY_BUILD_PROVIDER_UI37",
+        "source_binding": "PASS493_INPUTS_COMPILED_PRODUCT_UNCHANGED_AUTHORIZED_TEST_ONLY_DRIVER_DELTA",
+        "new_public_CI": "PENDING_NEW_EXACT_COMMIT",
+        "installed_application": "UNCHANGED_SOURCE16",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "large-segment-issue-views-20261018",
       "title_de": "Große Segmentbefunde ohne vorzeitige Gesamtkopie verarbeiten",
       "status": "LOCAL_R4_COMPLETE_PASS_38_SEPARATE_UI_CASES_FRESH_PUBLIC_CI_PENDING",
@@ -7007,7 +7075,7 @@
       ],
       "pending_acceptance_de": [
         "Frische öffentliche Gesamt-CI für den neuen exakten Commit vollständig abnehmen. Der historische83c-Run ist terminal fehlgeschlagen: Windows-,Ubuntu- und Container-Jobs erfolgreich; Renderer37er-UI-Schritt erfolgreich, späterer Sitemap-Harness fehlgeschlagen. Die eng reparierten Sitemap-Treiber bestehen lokal11/13 Gruppen, öffentliche Wiederholung bleibt offen.",
-        "Windows-Langpfad für tiefe Daten-/Artefaktverzeichnisse gesondert in storage.portable abnehmen; R1 ist kein behobener Produktfehler. Ursache des isolierten Node-Fast-Abbruchs0xC0000409 bleibt unbekannt.",
+        "Der frühere R1-Langpfadfehler hat nun eine begrenzte Produktkorrektur mit eigener Windows-Abnahme (fünf echte Pfadfälle, Originalarchive und Kaltstarts); der ursprüngliche R1-Fehlversuch bleibt erhalten. Weitere storage.portable-Sonderfälle bleiben offen. Ursache des isolierten Node-Fast-Abbruchs 0xC0000409 bleibt unbekannt.",
         "Weitere Segmentoperatoren/Kombinationen, andere Corpora und Spezialinventare sowie Konkurrenz-,Archiv- und Browserfälle prüfen. Dieser synthetische vollständige Korpus belegt keine universellen RSS-/CPU-/Laufzeitgarantien, Server-Regelpersistenz oder Crash-Recovery.",
         "Als nächste eigene Bausteine Konfigurations-Import/Export mit Credential-/Pfadprüfung, kombinierte Zahlen-/Textfilter mit gespeicherten Spalten und reproduzierbare Screenshot-/Viewport-Artefakte bearbeiten; die jeweiligen Feature-Kriterien bleiben offen.",
         "Autorisierte echte Produktionsanbieter-Metriken, erfolgreiche Enrichment-CLI und weitere Anbieter separat prüfen. Alle144 Fähigkeiten/416 Filter/32 Referenzabläufe sowie vollständige Herstellerparität bleiben NOT_PROVEN; installierte Source16 unverändert."
@@ -9817,6 +9885,8 @@
     }
   ],
   "active_work_ids": [
+    "configuration-profile-browser-e2e-20261018",
+    "windows-long-store-paths-20261018",
     "large-segment-issue-views-20261018",
     "dashboard-segments-bounded-20261018",
     "accessibility-and-cold-specialists-20261018",

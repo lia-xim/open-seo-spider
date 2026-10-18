@@ -43,6 +43,36 @@ jobs:
       - run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
       - run: node scripts/check-ui-fixtures.mjs
       - run: cargo build --locked -p open-seo-spider
+      - name: Install the locked Windows browser test dependencies
+        if: runner.os == 'Windows'
+        run: npm ci --ignore-scripts
+        working-directory: renderer
+      - name: Install the matching Windows Chromium
+        if: runner.os == 'Windows'
+        run: node node_modules/playwright-core/cli.js install chromium
+        working-directory: renderer
+      - name: Select Windows Chromium and pin the native path-test binary
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          node --input-type=module -e 'import {chromium} from "./renderer/node_modules/playwright-core/index.mjs"; import {appendFileSync} from "node:fs"; appendFileSync(process.env.GITHUB_ENV, `OPEN_SEO_BROWSER_PATH=${chromium.executablePath()}\n`);'
+          if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}
+          $pathTestBinary=Join-Path (Get-Location) 'target/debug/open-seo-spider.exe'
+          "SPIDER_BINARY_SHA256=$((Get-FileHash -LiteralPath $pathTestBinary -Algorithm SHA256).Hash.ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+      - name: Windows requested long stores, original archives and cold browser reads
+        if: runner.os == 'Windows'
+        run: node scripts/windows-store-paths-e2e.cjs
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider.exe
+          SPIDER_WINDOWS_PATH_OUTPUT: ${{ runner.temp }}/windows-store-paths
+      - name: Save Windows path-test evidence
+        if: always() && runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-store-paths-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/windows-store-paths/**
       - name: Sitemap transport ownership and final-witness controls
         run: node --test scripts/sitemap-transport-oracles.test.mjs
       - name: Stored sitemap proof validator negative controls
