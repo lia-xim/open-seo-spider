@@ -1,0 +1,244 @@
+{
+  "kind": "api_enrichment_controlled_provider_native_browser_acceptance",
+  "result": "PASS_LOCAL_AGGREGATE_PUBLIC_CI_PENDING",
+  "recorded_at": "2026-10-18T11:31:49.576437+00:00",
+  "base_commit": "01ba979f911f193ea74351abac2540da1f23587c",
+  "test_binary_sha256": "5c907bf2eb21c1b582f3aa9180692ec40f265421bf970a1bc8629690ffdb31e4",
+  "production_binary_acceptance": "PASS_NORMAL_BUILD_32_UI_AND_NATIVE_BUNDLE; CONTROLLED_PROVIDER_SUCCESS_USES_SEPARATE_TEST_EXECUTABLE",
+  "fixture_transport": {
+    "kind": "immutable_cfg_test_owned_loopback_HTTP",
+    "production_start_guards": "REUSED",
+    "full_native_router_service_parser_storage": "REUSED",
+    "production_Google_endpoint": "UNCHANGED",
+    "inherited_PageSpeed_key": "REMOVED",
+    "browser_API_success_mocks": false,
+    "seeded_jobs_or_reports": false,
+    "user_ports_8787_8790_and_store": "UNTOUCHED"
+  },
+  "VM_state_regressions": {
+    "passed": 8,
+    "failed": 0,
+    "command": "node --test web/verification/api-enrichment-state.test.cjs",
+    "scope": "Actual frontend script, deferred shape-faithful replies; no browser/provider/native persistence claim"
+  },
+  "browser": {
+    "command": "node scripts/run-enrichment-browser-checks.mjs",
+    "workflow_groups_passed": 5,
+    "checks": [
+      "Browser acknowledgement starts real native service; owned HTTP provider produces exact 100+8 DOM rows, zero and missing metrics, duplicates, rejected input, retry and failures",
+      "Explicit fresh acknowledgement creates a new refresh job and new provider calls; old generation, rows, full CSV and all four saved files stay byte-identical",
+      "Native stale snapshot and cross-job continuation are rejected for results and full export",
+      "Actual held provider request is cancelled and disconnected; unattempted tail remains cancelled with unknown metrics and zero attempts",
+      "New browser and actual cold native process reopen exact saved configuration, generation, 100+8 rows and byte-identical full CSV without provider resume or stale acknowledgement"
+    ],
+    "unique_provider_urls_per_full_job": 105,
+    "supplied_rows_per_full_job": 108,
+    "pages": [
+      100,
+      8
+    ],
+    "row_membership": "105 unique + exact duplicate + fragment-normalized duplicate + rejected input",
+    "exact_DOM_cells_each_page": true,
+    "populated_widths": [
+      1440,
+      320
+    ],
+    "page_errors": [],
+    "complete_CSV_downloads_verified": 5,
+    "CSV_oracle": "Actual browser file versus independent exact native URL/request response; length, SHA256, no-store and every ordered cell",
+    "exports": [
+      {
+        "label": "original",
+        "id": "44947774-b5fe-42b1-a5a6-fa28974733e3",
+        "bytes": 18724,
+        "sha256": "166ca7c3a60d4e6ac5b48f7679955e42114b523bb7ac56819276881009865e83"
+      },
+      {
+        "label": "refresh",
+        "id": "fbad6f41-4722-44c9-aa90-3f187d253dd7",
+        "bytes": 18739,
+        "sha256": "ec21e96ceb1aa0aa61ff1e27ef1917c7ed40d8862e748831da698ef766820572"
+      },
+      {
+        "label": "original-after-refresh",
+        "id": "44947774-b5fe-42b1-a5a6-fa28974733e3",
+        "bytes": 18724,
+        "sha256": "166ca7c3a60d4e6ac5b48f7679955e42114b523bb7ac56819276881009865e83"
+      },
+      {
+        "label": "cancelled",
+        "id": "cb5cdc2d-e06a-412b-b6ba-27bc5efd19ff",
+        "bytes": 394,
+        "sha256": "ca60e05e184f0b8973f9e5ac889b8bd3160ebf824bfc6025d8375a6921bd404b"
+      },
+      {
+        "label": "cold-original",
+        "id": "44947774-b5fe-42b1-a5a6-fa28974733e3",
+        "bytes": 18724,
+        "sha256": "166ca7c3a60d4e6ac5b48f7679955e42114b523bb7ac56819276881009865e83"
+      }
+    ]
+  },
+  "provider": {
+    "actual_HTTP_attempts": 213,
+    "initial_job_attempts": 106,
+    "explicit_refresh_attempts": 106,
+    "held_cancellation_attempts": 1,
+    "website_requests": 0,
+    "provider_contract_violations": [],
+    "cold_repeat_attempts": 0,
+    "actual_request_aborts": 1
+  },
+  "refresh": {
+    "new_preview_and_acknowledgement": true,
+    "new_job": true,
+    "metrics_revision_changed": true,
+    "old_rows_generation_CSV_unchanged": true,
+    "old_saved_file_bytes_unchanged": [
+      "input.bin",
+      "plan.json",
+      "report.json",
+      "completion.json"
+    ],
+    "new_preview_and_acknowledgement_scope": "Observed tested path after reopening the saved original job; not universal per-start freshness enforcement",
+    "tested_flow": [
+      "reopen(original)",
+      "acknowledgement unchecked",
+      "new preview",
+      "acknowledgement checked again",
+      "start creates a new job"
+    ],
+    "start_contract": "Every POST requires acknowledge_remote_fetch:true. Current UI retains preview and acknowledgement after start; input invalidation clears preview. No freshness-token contract is claimed."
+  },
+  "cold_reopen": {
+    "actual_native_processes": 2,
+    "stdin_EOF_shutdowns": [
+      {
+        "code": 0,
+        "signal": null
+      },
+      {
+        "code": 0,
+        "signal": null
+      }
+    ],
+    "same_test_binary": true,
+    "same_owned_store": true,
+    "new_browser_context": true,
+    "exact_configuration_generation_rows_CSV": true,
+    "acknowledgement_unchecked": true,
+    "automatic_provider_resume": false
+  },
+  "final_focused_artifact_directory": "artifacts/enrichment-gates-1792322715916/provider",
+  "source_and_artifact_binding": "source-gates.json",
+  "broader_gates": {
+    "ordinary_workspace_Rust": {
+      "result": "PASS",
+      "passed": 1749,
+      "failed": 0,
+      "ignored": 5,
+      "ignored_scope": "Four opt-in Chromium fixtures plus the coordinator-only native test host",
+      "test_threads": 2,
+      "artifact": "artifacts/enrichment-workspace-20261018.log"
+    },
+    "explicit_Rust_Chromium": {
+      "result": "PASS",
+      "executed": [
+        "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+        "live_browser_worker_executes_javascript_for_core_crawl",
+        "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+        "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"
+      ],
+      "count": 4,
+      "ordinary_ignored_run_separate": true
+    },
+    "local_UI_32_suites": {
+      "result": "PASS",
+      "fixture_suites": 9,
+      "native_suites": 23,
+      "runner_kinds": {
+        "fixture": 9,
+        "live": 21,
+        "owned-native": 2
+      },
+      "total": 32,
+      "native_app_shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "binary_sha256": "10596b1c74e35410eeaa0b1b3539fbb869b41341ff92408c9899b0a77a63628f",
+      "tracked_sources_unchanged": true,
+      "binary_unchanged": true,
+      "artifact": "artifacts/enrichment-gates-1792322715916/ui/proof.json"
+    },
+    "strict_clippy": {
+      "result": "PASS_ALL_TARGETS_ALL_FEATURES_WARNINGS_DENIED"
+    },
+    "normal_build": {
+      "result": "PASS",
+      "binary_sha256": "10596b1c74e35410eeaa0b1b3539fbb869b41341ff92408c9899b0a77a63628f"
+    },
+    "test_transport_isolation": {
+      "result": "PASS",
+      "normal_binary_sha256": "10596b1c74e35410eeaa0b1b3539fbb869b41341ff92408c9899b0a77a63628f",
+      "test_binary_sha256": "5c907bf2eb21c1b582f3aa9180692ec40f265421bf970a1bc8629690ffdb31e4",
+      "normal_binary_has_test_selector": false,
+      "test_binary_positive_control": true,
+      "source_and_driver_hashes_match": true
+    },
+    "bundle_oracles": {
+      "result": "PASS",
+      "pure_controls": 28,
+      "native_groups": 11,
+      "official_SDK_checks": 12,
+      "binary_sha256": "10596b1c74e35410eeaa0b1b3539fbb869b41341ff92408c9899b0a77a63628f"
+    },
+    "format": {
+      "result": "PASS_REPORTED_BY_ROOT",
+      "artifact": "artifacts/enrichment-fmt-20261018.log"
+    },
+    "pipeline": {
+      "result": "PASS",
+      "gate_count": 7,
+      "artifact": "artifacts/enrichment-gates-1792322715916/gates.json"
+    }
+  },
+  "public_CI": {
+    "commit": "01ba979f911f193ea74351abac2540da1f23587c",
+    "run_id": 39120704481,
+    "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/39120704481",
+    "result": "FAIL_LAST_PUBLIC_RUN_FOLLOWUP_PENDING",
+    "failures": [
+      "Windows: two timeout failures",
+      "Linux: obsolete 26-entry inventory expectation",
+      "Directory: debugger response body unavailable despite immediate capture; actual native artifact and DOM were correct"
+    ],
+    "repairs": "LOCAL_FULL_GATES_PASS_FRESH_PUBLIC_CI_PENDING",
+    "followup_public_run": "PENDING_AFTER_PUSH",
+    "Windows_concurrency_mitigation": "CI test concurrency budget aligned; both previously failing tests pass locally in1749-test run. Exact cause of historical five-second drain timeout NOT_PROVEN."
+  },
+  "remaining": [
+    "Fresh public Linux/Windows/renderer/container CI; local Windows concurrency mitigation is not proof of the exact historical timeout cause",
+    "Authorized successful real Google provider measurements and independent production observations",
+    "Successful enrich-urls CLI JSON/CSV using the real accepted job path",
+    "Production-transport refresh/cancellation observations, separate from the controlled HTTP fixture",
+    "Other documented providers, CrUX and local Lighthouse separation",
+    "Process-cold native saved crawl/source reopen for segments and n-grams; browser-local segment rules need separate same-origin localStorage restoration proof, not claimed server persistence",
+    "Accessibility UI journeys retaining incomplete observations and needs-review states",
+    "Additional specialist operator/archive/concurrency/browser cases and full reference-product parity"
+  ],
+  "feature_status": "partial",
+  "status_counts": {
+    "implemented": 37,
+    "partial": 69,
+    "planned": 38,
+    "total": 144
+  },
+  "manufacturer_parity": "NOT_PROVEN",
+  "production_binary_sha256": "10596b1c74e35410eeaa0b1b3539fbb869b41341ff92408c9899b0a77a63628f",
+  "prior_focused_proof": {
+    "artifact_directory": "artifacts/enrichment-success-1792321591568",
+    "test_binary_sha256": "49163b14f410fbfd373435a48cd03e5a82ff3831bfc73a34a8a8dcc447327375",
+    "superseded_for_final_source_binding": true
+  }
+}

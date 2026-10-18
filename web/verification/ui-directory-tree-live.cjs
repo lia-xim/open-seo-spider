@@ -69,15 +69,38 @@ async function assertRenderedPage(page,value) {
   assert.equal(await page.isDisabled('#previous-page'),value.offset===0);
   assert.equal(await page.isDisabled('#next-page'),value.next_offset===null);
 }
-function captureResponse(page,predicate,label) {
-  // Start CDP body retrieval at the response event, before Playwright waits for
-  // a click's post-action work. Retain one buffer for diagnostics, parsing and
-  // integrity checks; a successful status must not eagerly call text() again.
+function captureResponse(page,predicate,label,readOnly=false) {
   return page.waitForResponse(predicate).then(async response=>{
-    const record={label,url:response.url(),method:response.request().method(),resource_type:response.request().resourceType(),status:response.status(),page_url_at_headers:page.url(),body_bytes:null,body_sha256:null,error:null};
+    const record={label,url:response.url(),method:response.request().method(),resource_type:response.request().resourceType(),status:response.status(),page_url_at_headers:page.url(),body_source:readOnly?'independent_read_only_native_post':'actual_browser_response',body_bytes:null,body_sha256:null,error:null};
     browserEvidence.response_captures.push(record);
     try {
-      const bytes=await response.body(),headers=await response.allHeaders();
+      let bytes,headers;
+      if(readOnly) {
+        headers=await response.allHeaders();
+        // Chromium can discard CDP bodies even when fetch consumed the body and
+        // rendered the complete view, without any document navigation. Always
+        // obtain the oracle independently for these two pure saved-report reads;
+        // this is not a retry or a fallback, and mutations must never use it.
+        const request=response.request(),url=new URL(request.url()),body=request.postDataBuffer();
+        assert.equal(url.origin,new URL(app).origin);
+        assert.match(url.pathname,/^\/api\/crawls\/[a-f0-9-]+\/directory-tree\/(preview|csv)$/i);
+        assert.equal(request.method(),'POST');assert(body,'Expected the exact browser POST body');
+        const oracle=await fetch(request.url(),{method:'POST',headers:{'content-type':request.headers()['content-type']},body,cache:'no-store',redirect:'error'});
+        bytes=Buffer.from(await oracle.arrayBuffer());
+        const oracleHeaders=Object.fromEntries(oracle.headers);
+        record.request_body_sha256=createHash('sha256').update(body).digest('hex');
+        record.oracle_status=oracle.status;
+        record.browser_headers=Object.fromEntries(['content-type','content-length','x-content-sha256','cache-control'].map(name=>[name,headers[name]??null]));
+        record.oracle_headers=Object.fromEntries(['content-type','content-length','x-content-sha256','cache-control'].map(name=>[name,oracleHeaders[name]??null]));
+        assert.equal(response.status(),oracle.status,bytes.toString('utf8'));
+        assert.deepEqual(record.browser_headers,record.oracle_headers,'Browser response metadata must match the independent native read');
+        if(oracle.status===200) {verified(bytes,oracleHeaders);verified(bytes,headers);}
+      } else {
+        // A project import is a mutation: consume its original browser response
+        // immediately and never replay the request to obtain another body.
+        bytes=await response.body();
+        headers=await response.allHeaders();
+      }
       record.body_bytes=bytes.length;record.body_sha256=createHash('sha256').update(bytes).digest('hex');record.page_url_after_body=page.url();
       return {response,bytes,headers};
     } catch(error) {record.error=String(error);record.page_url_after_body=page.url();throw error;}
@@ -89,7 +112,7 @@ function assertNoNavigation(page,before,label) {
 }
 async function preview(page,click,expected=200) {
   const before={url:page.url(),navigations:browserEvidence.main_frame_navigations.length};
-  const pending=captureResponse(page,r=>r.url().endsWith('/directory-tree/preview')&&r.request().method()==='POST','directory-preview');
+  const pending=captureResponse(page,r=>r.url().endsWith('/directory-tree/preview')&&r.request().method()==='POST','directory-preview',true);
   const [{response,bytes,headers}]=await Promise.all([pending,Promise.resolve().then(click)]);
   assert.equal(response.status(),expected,bytes.toString('utf8'));
   assertNoNavigation(page,before,'Directory preview');
@@ -110,7 +133,7 @@ async function descend(page,current,find) {
 }
 async function download(page) {
   const before={url:page.url(),navigations:browserEvidence.main_frame_navigations.length};
-  const pending=captureResponse(page,r=>r.url().endsWith('/directory-tree/csv')&&r.request().method()==='POST','directory-csv'),saving=page.waitForEvent('download');
+  const pending=captureResponse(page,r=>r.url().endsWith('/directory-tree/csv')&&r.request().method()==='POST','directory-csv',true),saving=page.waitForEvent('download');
   const [{response,bytes,headers},file]=await Promise.all([pending,saving,page.click('#export-csv')]);
   assert.equal(response.status(),200,bytes.toString('utf8'));verified(bytes,headers);assertNoNavigation(page,before,'Directory CSV');
   assert.equal(file.suggestedFilename(),'directory-tree.csv');assert.deepEqual(fs.readFileSync(await file.path()),bytes);
@@ -205,7 +228,7 @@ async function importReport(page,report,name) {
     assert.equal(await (await fetch(app+`/api/crawls/${started.id}/project.json`)).text(),savedBytes);
     assert.equal(count(),capturedHits,'Directory views/import/export must not refetch any website');assert.equal(hits.get('/docs/')||0,0,'Synthetic directory address must never be fetched');assert.deepEqual(errors,[]);
     checks.push('Missing saved job is a native HTTP404 rather than an empty tree; all analysis/navigation/import/export preserve original saved report bytes and make zero website requests');
-    fs.writeFileSync(artifactPath('directory-tree-live.json'),JSON.stringify({result:'PASS',crawl_id:started.id,empty_import_id:emptyId,sparse_import_id:sparseId,checks,website_requests_during_crawl:capturedHits,website_refetches:count()-capturedHits,errors,browser_evidence:browserEvidence,scope:'Actual redesigned browser/native crawler/saved report/profile/tree navigation/CSV. Unknown and known-empty edge fixtures are honestly declared imports. Cross-view and missing-job guards are actual browser fetches to native API. No vendor semantic parity or cold-process persistence claim.'},null,2)+'\n');
+    fs.writeFileSync(artifactPath('directory-tree-live.json'),JSON.stringify({result:'PASS',crawl_id:started.id,empty_import_id:emptyId,sparse_import_id:sparseId,checks,website_requests_during_crawl:capturedHits,website_refetches:count()-capturedHits,errors,browser_evidence:browserEvidence,scope:'Actual redesigned browser/native crawler/saved report/profile/tree navigation/CSV. Each pure preview/CSV uses an unconditional independent native POST with the exact observed browser URL/body as its oracle; actual browser status/integrity headers and every rendered card or downloaded byte must match. Mutating imports use only the original browser response. Unknown and known-empty edge fixtures are honestly declared imports. Cross-view and missing-job guards are actual browser fetches to native API. No vendor semantic parity or cold-process persistence claim.'},null,2)+'\n');
     console.log(`${checks.length} actual native directory-tree workflows passed`);
   } catch(error) {
     await page.screenshot({path:artifactPath('directory-tree-failure.png'),fullPage:true});

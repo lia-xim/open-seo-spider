@@ -32,7 +32,14 @@ jobs:
         with:
           node-version: '24'
       - run: cargo fmt --all --check
-      - run: cargo test --workspace --locked
+      # Each native fixture may own several runtimes and fsync-heavy stores.
+      # Bound simultaneous Windows fixtures; retain every test and its deadlines.
+      - name: Rust workspace tests within the Windows fixture resource budget
+        if: runner.os == 'Windows'
+        run: cargo test --workspace --locked -- --test-threads=2
+      - name: Rust workspace tests
+        if: runner.os != 'Windows'
+        run: cargo test --workspace --locked
       - run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
       - run: node scripts/check-ui-fixtures.mjs
       - run: cargo build --locked -p open-seo-spider
@@ -256,9 +263,22 @@ jobs:
       - run: node --test web/verification/serp-state-race.test.cjs
       - run: node --test web/verification/robots-input-state.test.cjs
       - run: node --test web/verification/list-import-state.test.mjs
+      - run: node --test web/verification/api-enrichment-state.test.cjs
       - run: cargo build --locked -p open-seo-spider
       - name: Opt-in Rust browser fixtures on an owned renderer
         run: node scripts/renderer-rust-e2e.mjs
+      - name: API enrichment browser, local provider and cold native restart
+        run: node scripts/run-enrichment-browser-checks.mjs
+        env:
+          SPIDER_ENRICHMENT_ARTIFACT_DIR: ${{ runner.temp }}/enrichment-browser-e2e
+      - name: Save API enrichment native browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enrichment-browser-e2e-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/enrichment-browser-e2e/**
       - run: npm ci --ignore-scripts
         working-directory: scripts
       - name: Redesigned UI fixture and native end-to-end workflows

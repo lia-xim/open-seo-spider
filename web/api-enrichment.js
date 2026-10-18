@@ -13,10 +13,14 @@
   globalThis.ApiOnlyUIHelpers = helpers;
   if (typeof document === 'undefined') return;
   const $ = id => document.getElementById(id);
-  let busy = false, revision = 0, configRevision = 0, saved = null, preview = null, selected = null, snapshot = null, after = null, poll = null;
+  let busy = false, busyOwner = null, revision = 0, configRevision = 0, statusRevision = 0, saved = null, preview = null, selected = null, snapshot = null, after = null, poll = null, jobStatus = null, cancelling = null;
   const configure = ['input', 'format', 'strategy', 'profile'];
   function error(value) { $('error').textContent = value ? String(value.message || value) : ''; }
-  function sync() { for (const id of configure) $(id).disabled = busy; $('preview').disabled = busy; $('start').disabled = busy || !preview || !$('ack').checked; $('next').disabled = busy || !after; $('export').disabled = busy || !snapshot; $('reopen').disabled = busy; $('cancel').disabled = !selected; }
+  function sync() { for (const id of configure) $(id).disabled = busy; $('preview').disabled = busy; $('start').disabled = busy || !preview || !$('ack').checked; $('next').disabled = busy || !after; $('export').disabled = busy || !snapshot; $('reopen').disabled = busy; $('cancel').disabled = !selected || jobStatus !== 'running' || cancelling?.id === selected; }
+  function acquire() { const owner = {}; busyOwner = owner; busy = true; sync(); return owner; }
+  function release(owner) { if (busyOwner === owner) { busyOwner = null; busy = false; sync(); } }
+  function current(id, rev) { return selected === id && revision === rev; }
+  function unavailable(e) { snapshot = after = null; error(e); $('status').textContent = 'Gespeicherter Berichtsstand nicht verfügbar. Auftrag erneut öffnen; bereits angezeigte Zeilen sind historisch.'; }
   function invalidate() { configRevision++; preview = null; $('summary').textContent = 'Eingabe geändert. Bitte neue Vorschau erstellen.'; sync(); }
   configure.forEach(id => $(id).addEventListener('input', invalidate)); $('ack').addEventListener('change', sync);
   async function request(route, body, binary = false) {
@@ -31,14 +35,89 @@
     return data;
   }
   function row(input, observation) { const tr = document.createElement('tr'); for (const value of [input.source_row, input.raw_value, observation?.outcome || 'input_rejected', observation?.api_http_status ?? '—', observation?.metrics?.performance_score ?? '—', observation?.metrics?.largest_contentful_paint_ms ?? '—']) { const td = document.createElement('td'); td.textContent = String(value); tr.append(td); } return tr; }
-  async function page(next) { if (busy || !selected) return; busy = true; const rev = revision, id = selected; sync(); error(); try { const result = await request(`/api/enrichments/${id}/results`, readRequest(next ? snapshot : null, next ? after : null)); if (rev !== revision || id !== selected) return; snapshot = result.snapshot; after = result.after; if (!next) $('rows').replaceChildren(); for (const r of result.rows) $('rows').append(row(r.input, r.provider_observation)); $('status').textContent = `${result.status}: ${result.total} Eingabezeilen, ${result.provider_request_attempts} Provider-Aufrufversuche, 0 Website-Abrufe durch unsere App.`; } catch (e) { error(e); } finally { busy = false; sync(); } }
-  async function status(id, rev) { if (selected !== id || rev !== revision) return; try { const result = await request(`/api/enrichments/${id}`); if (selected !== id || rev !== revision) return; $('status').textContent = result.status; if (['running', 'cancelling'].includes(result.status)) poll = setTimeout(() => status(id, rev), 500); else if (['complete', 'partial', 'cancelled'].includes(result.status)) { if (busy) poll = setTimeout(() => status(id, rev), 100); else await page(false); } else error(Error('Für diesen Auftrag liegt kein vollständig gespeicherter Bericht vor.')); } catch (e) { error(e); } }
-  $('configuration').addEventListener('submit', async event => { event.preventDefault(); if (busy) return; busy = true; sync(); error(); const rev = configRevision; try { const input = savedRequest(saved, $('input').value, $('format').value, $('strategy').value, $('profile').value), result = await request('/api/enrichments/preview', input); if (rev !== configRevision) return; preview = {input, fingerprint: result.fingerprint}; $('summary').textContent = `${result.supplied_rows} Eingabezeilen, ${result.unique_provider_urls} verschiedene Provider-URLs. Unsere App crawlt diese URLs nicht; Google kann sie abrufen. Der Profilzugang wird beim Start geprüft.`; } catch (e) { error(e); } finally { busy = false; sync(); } });
-  $('start').addEventListener('click', async () => { if (busy || !preview || !$('ack').checked) return; busy = true; sync(); error(); try { const result = await request('/api/enrichments', {...preview.input, acknowledge_remote_fetch: true}); revision++; clearTimeout(poll); selected = result.id; $('job').value = selected; snapshot = after = null; $('rows').replaceChildren(); try { localStorage.setItem('api-enrichment-job-v1', selected); } catch (_) {} busy = false; sync(); await status(selected, revision); } catch (e) { error(e); } finally { busy = false; sync(); } });
-  $('cancel').addEventListener('click', async () => { if (!selected) return; try { await request(`/api/enrichments/${selected}/cancel`, {}); $('status').textContent = 'Abbruch angefordert; auf Abschluss wird gewartet.'; } catch (e) { error(e); } });
-  $('reopen').addEventListener('click', async () => { if (busy) return; const id = $('job').value.trim(); if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(id)) { error(Error('Bitte eine gültige Auftrags-ID eingeben.')); return; } revision++; configRevision++; const rev = revision; clearTimeout(poll); selected = id; saved = null; snapshot = after = preview = null; $('input').value = ''; $('summary').textContent = 'Gespeicherte Konfiguration wird geladen.'; $('rows').replaceChildren(); busy = true; sync(); error(); try { const config = await request(`/api/enrichments/${id}/configuration`); if (selected !== id || rev !== revision) return; saved = config; $('input').value = config.input_utf8; $('format').value = config.import.format.kind; $('strategy').value = config.options.strategy; $('profile').value = config.options.credential_profile; $('ack').checked = false; $('summary').textContent = 'Gespeicherte Eingabe, Importauswahl und Optionen geladen. Es wird kein Provider erneut aufgerufen.'; } catch (e) { error(e); } finally { busy = false; sync(); } await status(id, rev); });
+  async function page(next) {
+    if (busy || !selected) return;
+    const owner = acquire(), rev = revision, id = selected; error();
+    try {
+      const result = await request(`/api/enrichments/${id}/results`, readRequest(next ? snapshot : null, next ? after : null));
+      if (!current(id, rev)) return;
+      snapshot = result.snapshot; after = result.after; jobStatus = result.status;
+      if (!next) $('rows').replaceChildren();
+      for (const r of result.rows) $('rows').append(row(r.input, r.provider_observation));
+      $('status').textContent = `${result.status}: ${result.total} Eingabezeilen, ${result.provider_request_attempts} Provider-Aufrufversuche, 0 Website-Abrufe durch unsere App.`;
+    } catch (e) { if (current(id, rev)) unavailable(e); } finally { release(owner); }
+  }
+  async function status(id, rev) {
+    if (!current(id, rev)) return;
+    const attempt = ++statusRevision;
+    try {
+      const result = await request(`/api/enrichments/${id}`);
+      if (!current(id, rev) || attempt !== statusRevision) return;
+      jobStatus = result.status; $('status').textContent = result.status; sync();
+      if (['running', 'cancelling'].includes(result.status)) poll = setTimeout(() => status(id, rev), 500);
+      else if (['complete', 'partial', 'cancelled'].includes(result.status)) {
+        if (busy) poll = setTimeout(() => status(id, rev), 100); else await page(false);
+      } else unavailable(Error('Für diesen Auftrag liegt kein vollständig gespeicherter Bericht vor.'));
+    } catch (e) { if (current(id, rev) && attempt === statusRevision) error(e); }
+  }
+  $('configuration').addEventListener('submit', async event => {
+    event.preventDefault(); if (busy) return;
+    const owner = acquire(), rev = configRevision; error();
+    try {
+      const input = savedRequest(saved, $('input').value, $('format').value, $('strategy').value, $('profile').value), result = await request('/api/enrichments/preview', input);
+      if (rev !== configRevision) return;
+      preview = {input, fingerprint: result.fingerprint};
+      $('summary').textContent = `${result.supplied_rows} Eingabezeilen, ${result.unique_provider_urls} verschiedene Provider-URLs. Unsere App crawlt diese URLs nicht; Google kann sie abrufen. Der Profilzugang wird beim Start geprüft.`;
+    } catch (e) { if (rev === configRevision) error(e); } finally { release(owner); }
+  });
+  $('start').addEventListener('click', async () => {
+    if (busy || !preview || !$('ack').checked) return;
+    const owner = acquire(); error();
+    try {
+      const result = await request('/api/enrichments', {...preview.input, acknowledge_remote_fetch: true});
+      revision++; clearTimeout(poll); selected = result.id; jobStatus = result.status; $('job').value = selected;
+      snapshot = after = null; $('rows').replaceChildren();
+      try { localStorage.setItem('api-enrichment-job-v1', selected); } catch (_) {}
+      const id = selected, rev = revision; release(owner); await status(id, rev);
+    } catch (e) { if (busyOwner === owner) error(e); } finally { release(owner); }
+  });
+  $('cancel').addEventListener('click', async () => {
+    if (!selected || jobStatus !== 'running' || cancelling?.id === selected) return;
+    const id = selected, rev = revision, pending = {id}; cancelling = pending; sync();
+    try {
+      const result = await request(`/api/enrichments/${id}/cancel`, {});
+      if (!current(id, rev)) return;
+      jobStatus = result.status; $('status').textContent = result.status;
+      clearTimeout(poll); await status(id, rev);
+    } catch (e) { if (current(id, rev)) error(e); }
+    finally { if (cancelling === pending) { cancelling = null; sync(); } }
+  });
+  $('reopen').addEventListener('click', async () => {
+    if (busy) return; const id = $('job').value.trim();
+    if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(id)) { error(Error('Bitte eine gültige Auftrags-ID eingeben.')); return; }
+    revision++; configRevision++; const rev = revision; clearTimeout(poll); selected = id; jobStatus = null;
+    saved = null; snapshot = after = preview = null; $('ack').checked = false; $('input').value = '';
+    $('summary').textContent = 'Gespeicherte Konfiguration wird geladen.'; $('rows').replaceChildren();
+    const owner = acquire(); error();
+    try {
+      const config = await request(`/api/enrichments/${id}/configuration`); if (!current(id, rev)) return;
+      saved = config; $('input').value = config.input_utf8; $('format').value = config.import.format.kind;
+      $('strategy').value = config.options.strategy; $('profile').value = config.options.credential_profile;
+      $('summary').textContent = 'Gespeicherte Eingabe, Importauswahl und Optionen geladen. Es wird kein Provider erneut aufgerufen.';
+    } catch (e) { if (current(id, rev)) error(e); } finally { release(owner); }
+    await status(id, rev);
+  });
   $('next').addEventListener('click', () => page(true));
-  $('export').addEventListener('click', async () => { if (busy || !selected || !snapshot) return; busy = true; sync(); error(); const id = selected, rev = revision; let url; try { const data = await request(`/api/enrichments/${id}/csv`, readRequest(snapshot, null), true); if (selected !== id || rev !== revision) return; url = URL.createObjectURL(new Blob([data], {type: 'text/csv;charset=utf-8'})); const a = document.createElement('a'); a.href = url; a.download = `api-enrichment-${id}.csv`; a.click(); } catch (e) { error(e); } finally { if (url) setTimeout(() => URL.revokeObjectURL(url), 1000); busy = false; sync(); } });
+  $('export').addEventListener('click', async () => {
+    if (busy || !selected || !snapshot) return;
+    const owner = acquire(), id = selected, rev = revision; error(); let url;
+    try {
+      const data = await request(`/api/enrichments/${id}/csv`, readRequest(snapshot, null), true); if (!current(id, rev)) return;
+      url = URL.createObjectURL(new Blob([data], {type: 'text/csv;charset=utf-8'}));
+      const a = document.createElement('a'); a.href = url; a.download = `api-enrichment-${id}.csv`; a.click();
+    } catch (e) { if (current(id, rev)) unavailable(e); }
+    finally { if (url) setTimeout(() => URL.revokeObjectURL(url), 1000); release(owner); }
+  });
   try { $('job').value = localStorage.getItem('api-enrichment-job-v1') || ''; } catch (_) {}
   window.addEventListener('pagehide', () => clearTimeout(poll)); sync();
 }());

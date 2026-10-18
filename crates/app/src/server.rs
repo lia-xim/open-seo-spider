@@ -32,6 +32,8 @@ mod content;
 mod crawl_quotas;
 mod directory_tree;
 mod enrichment;
+#[cfg(test)]
+mod enrichment_browser_fixture;
 mod lifecycle;
 mod migration;
 mod ngram_corpus;
@@ -193,6 +195,31 @@ async fn serve_with_mcp_files_ready_source(
     ready: Option<tokio::sync::oneshot::Sender<std::net::SocketAddr>>,
     source: lifecycle::ShutdownSource,
 ) -> anyhow::Result<()> {
+    serve_with_mcp_files_ready_source_inner(
+        listen,
+        data_dir,
+        mcp_files_dir,
+        ready,
+        source,
+        ServerContext::default(),
+    )
+    .await
+}
+
+#[derive(Default)]
+struct ServerContext {
+    #[cfg(test)]
+    enrichment_transport: Option<crate::enrichment_app::TestTransport>,
+}
+
+async fn serve_with_mcp_files_ready_source_inner(
+    listen: &str,
+    data_dir: PathBuf,
+    mcp_files_dir: Option<PathBuf>,
+    ready: Option<tokio::sync::oneshot::Sender<std::net::SocketAddr>>,
+    source: lifecycle::ShutdownSource,
+    context: ServerContext,
+) -> anyhow::Result<()> {
     // Validate and retain the directory capability before either listening or
     // creating the application data directory. Port zero is replaced in place.
     let mut mcp = crate::mcp::Bridge::new_with_file_tools("http://127.0.0.1:0", mcp_files_dir)?;
@@ -211,11 +238,30 @@ async fn serve_with_mcp_files_ready_source(
     tokio::fs::create_dir_all(&data_dir).await?;
     let lifecycle = lifecycle::Lifecycle::default();
     mcp.set_task_owner(lifecycle.blocking.clone());
-    lifecycle.install_enrichments(crate::enrichment_app::Service::open(
-        data_dir.join("api-enrichments"),
-        lifecycle.admission.clone(),
-        address.ip().is_loopback(),
-    )?)?;
+    #[cfg(test)]
+    let enrichments = match context.enrichment_transport {
+        Some(transport) => crate::enrichment_app::Service::open_with_test_transport(
+            data_dir.join("api-enrichments"),
+            lifecycle.admission.clone(),
+            address.ip().is_loopback(),
+            transport,
+        )?,
+        None => crate::enrichment_app::Service::open(
+            data_dir.join("api-enrichments"),
+            lifecycle.admission.clone(),
+            address.ip().is_loopback(),
+        )?,
+    };
+    #[cfg(not(test))]
+    let enrichments = {
+        let _ = context;
+        crate::enrichment_app::Service::open(
+            data_dir.join("api-enrichments"),
+            lifecycle.admission.clone(),
+            address.ip().is_loopback(),
+        )?
+    };
+    lifecycle.install_enrichments(enrichments)?;
     let state = AppState {
         mcp,
         jobs: Arc::new(RwLock::new(HashMap::new())),

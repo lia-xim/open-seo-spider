@@ -61,6 +61,100 @@ pub(crate) async fn fixture(root: PathBuf, input: &str) -> (Service, Uuid, Mock)
 }
 
 #[tokio::test]
+async fn injected_provider_start_keeps_loopback_input_and_admission_guards_before_transport() {
+    let dir = tempfile::tempdir().unwrap();
+    let input = "https://fixture.invalid/owned";
+    let request = request(input);
+    let mock = Mock::default();
+    let disabled_root = dir.path().join("not-loopback");
+    let disabled = Service::open_with_test_transport(
+        disabled_root.clone(),
+        TaskAdmission::default(),
+        false,
+        TestTransport::new(mock.clone()),
+    )
+    .unwrap();
+    let error = disabled
+        .start(prepare(&request).unwrap(), input.as_bytes().to_vec())
+        .await
+        .unwrap_err();
+    assert!(error.to_string().contains("loopback local API listener"));
+    assert!(!disabled_root.exists());
+    assert_eq!(disabled.stats()["admitted"], 0);
+    assert_eq!(mock.calls.load(Ordering::SeqCst), 0);
+    disabled.drain().await.unwrap();
+
+    let guarded_root = dir.path().join("guarded");
+    let admission = TaskAdmission::default();
+    let guarded = Service::open_with_test_transport(
+        guarded_root.clone(),
+        admission.clone(),
+        true,
+        TestTransport::new(mock.clone()),
+    )
+    .unwrap();
+    let error = guarded
+        .start(
+            prepare(&request).unwrap(),
+            b"https://changed.invalid/".to_vec(),
+        )
+        .await
+        .unwrap_err();
+    assert!(error.to_string().contains("original input bytes differ"));
+    assert!(!guarded_root.exists());
+    admission.close();
+    let error = guarded
+        .start(prepare(&request).unwrap(), input.as_bytes().to_vec())
+        .await
+        .unwrap_err();
+    assert!(error.to_string().contains("admission is closed"));
+    assert!(!guarded_root.exists());
+    assert_eq!(guarded.stats()["admitted"], 0);
+    assert_eq!(mock.calls.load(Ordering::SeqCst), 0);
+    guarded.drain().await.unwrap();
+}
+
+#[tokio::test]
+async fn injected_provider_is_selected_by_real_start_and_saves_same_completed_report() {
+    let dir = tempfile::tempdir().unwrap();
+    let input = "https://fixture.invalid/owned\nhttps://fixture.invalid/owned\ninvalid";
+    let request = request(input);
+    let mock = Mock::default();
+    let service = Service::open_with_test_transport(
+        dir.path().join("enrichments"),
+        TaskAdmission::default(),
+        true,
+        TestTransport::new(mock.clone()),
+    )
+    .unwrap();
+    let started = service
+        .start(prepare(&request).unwrap(), input.as_bytes().to_vec())
+        .await
+        .unwrap();
+    let id = serde_json::from_value(started["id"].clone()).unwrap();
+    settled(&service, id).await;
+    let (report, snapshot) = service.report(id).unwrap();
+    assert_eq!(mock.calls.load(Ordering::SeqCst), 1);
+    assert_eq!(report.outcome, "complete");
+    assert_eq!(report.application_website_requests, 0);
+    assert_eq!(report.plan.input.rows.len(), 3);
+    assert_eq!(report.observations.len(), 1);
+    assert_eq!(report.observations[0].outcome, ApiOutcome::Success);
+    assert_eq!(
+        report.observations[0]
+            .metrics
+            .as_ref()
+            .unwrap()
+            .performance_score,
+        Some(0.5)
+    );
+    assert_eq!(service.status(id).unwrap()["snapshot"], snapshot);
+    service.drain().await.unwrap();
+    assert_eq!(service.stats()["joined"], 1);
+    assert_eq!(service.stats()["retained"], 0);
+}
+
+#[tokio::test]
 async fn api_enrichment_snapshot_pages_preserve_all_occurrences_filters_and_cold_no_provider_resume()
  {
     let dir = tempfile::tempdir().unwrap();

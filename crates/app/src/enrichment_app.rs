@@ -83,6 +83,30 @@ pub(crate) struct Service {
     owner: TaskOwner,
     admission: TaskAdmission,
     network_enabled: bool,
+    #[cfg(test)]
+    test_transport: Option<TestTransport>,
+}
+/// Test executables may replace only the provider boundary. There is no runtime
+/// selector, endpoint override, or mutable transport on the normal application.
+#[cfg(test)]
+#[derive(Clone)]
+pub(crate) struct TestTransport(Arc<dyn PageSpeedTransport>);
+#[cfg(test)]
+impl TestTransport {
+    pub(crate) fn new<T: PageSpeedTransport + 'static>(transport: T) -> Self {
+        Self(Arc::new(transport))
+    }
+}
+#[cfg(test)]
+impl PageSpeedTransport for TestTransport {
+    fn execute<'a>(
+        &'a self,
+        request: api::PageSpeedRequest<'a>,
+        cancel: ApiCancellation,
+    ) -> futures::future::BoxFuture<'a, std::result::Result<api::PageSpeedReply, api::ApiFailureCode>>
+    {
+        self.0.execute(request, cancel)
+    }
 }
 fn locked<T>(m: &Mutex<T>) -> std::sync::MutexGuard<'_, T> {
     m.lock().unwrap_or_else(std::sync::PoisonError::into_inner)
@@ -194,7 +218,20 @@ impl Service {
             owner: TaskOwner::with_admission("api_enrichment_operations", admission.clone()),
             admission,
             network_enabled,
+            #[cfg(test)]
+            test_transport: None,
         })
+    }
+    #[cfg(test)]
+    pub(crate) fn open_with_test_transport(
+        root: PathBuf,
+        admission: TaskAdmission,
+        network_enabled: bool,
+        transport: TestTransport,
+    ) -> Result<Self> {
+        let mut service = Self::open(root, admission, network_enabled)?;
+        service.test_transport = Some(transport);
+        Ok(service)
     }
     pub(crate) fn close(&self) {
         self.admission.close();
@@ -224,6 +261,12 @@ impl Service {
             "API-only jobs require an explicitly loopback local API listener"
         );
         let key = credential(&plan.options)?;
+        #[cfg(test)]
+        if let Some(transport) = &self.test_transport {
+            return self
+                .start_transport(plan, input, transport.clone(), key)
+                .await;
+        }
         self.start_transport(plan, input, PageSpeedHttp::new()?, key)
             .await
     }

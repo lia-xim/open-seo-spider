@@ -27,6 +27,25 @@ The application child does not inherit `OPEN_SEO_PAGESPEED_API_KEY`. The API
 enrichment suite exercises preview and refusal paths without sending targets
 to Google; it does not establish successful provider measurements.
 
+The separate positive enrichment check builds a **test executable**, then owns
+its full native router, a local HTTP provider, a website-request trap and two
+native processes using the same fresh store:
+
+```sh
+node --test web/verification/api-enrichment-state.test.cjs
+node scripts/run-enrichment-browser-checks.mjs
+```
+
+It compiles the app test target through Cargo's JSON artifact output and binds
+the exact executable, Rust/manifests/web/assets inputs and test drivers by SHA-256.
+The immutable `cfg(test)` transport sends actual HTTP to the owned provider
+after the ordinary start guards. The normal production provider URL and
+credential handling are unchanged. No job or saved result is seeded. The child
+processes cannot inherit a PageSpeed key; only isolated loopback ports are used.
+`SPIDER_ENRICHMENT_ARTIFACT_DIR` may select a **new** artifact directory; reuse is
+refused. Default output is `artifacts/enrichment-success-*`. This command runs
+separately from the 32-suite UI runner and is not an additional registered suite.
+
 For a focused investigation:
 
 ```sh
@@ -66,6 +85,7 @@ explicit executions separately.
 | N-gram totals, occurrences, word cloud and text/metadata channels | saved-ngrams | Browser → native corpus; exact rendered rows, complete CSV, missing sources and real stale-generation refusal |
 | Resource/CSS failure occurrences and unavailable history | resource-sources | Browser → native SQLite ledger; 106 occurrences, 100+6 paging, snapshot-bound CSV and page JSON |
 | API enrichment preview, acknowledgement, invalidation and error messages | api-enrichment | Browser → ordinary native API; no successful provider calls or persisted remote metrics claimed |
+| API enrichment start/poll, exact metrics and unknowns, 100+8 rows, refresh, cancellation, full export and cold reopen | separate enrichment coordinator | Browser → full native test router/service → owned HTTP provider → saved data; production Google transport and successful enrichment CLI remain unproven |
 | Custom literal/regex search, separate raw/rendered/selected sources, exact counts, unknowns and limits | custom-search | Browser → Rust → actual Chromium → owned website; saved inspector, complete CSV/JSON, import and owned cold native restart |
 
 The existing native sitemap membership/assessment, API, CLI, MCP and renderer
@@ -78,11 +98,43 @@ The 32 registered suites provide bounded functional cases for the specialist
 tools above; a passing case is not complete feature acceptance. Cold native
 restart across the remaining tools, all rule/operator combinations, broader
 malformed imported archives and concurrent mutations need further coverage.
-API enrichment still needs start/poll/persist/reopen success with a synthetic
-provider boundary, followed by a separately authorized real-provider check.
+The controlled positive API-enrichment path is now proved by the
+[2026-10-18 receipt](verification/api-enrichment-browser-20261018/README.md):
+105 unique URLs and 108 supplied rows, exact first-100/tail-8 DOM contents,
+five full CSV downloads, refresh as a new job preserving the original four
+saved files and CSV, an aborted held provider request, and process-cold reopening
+with no repeat provider or website requests. The refresh case specifically
+reopens the saved job before a new preview and renewed acknowledgement; it does
+not prove universal freshness enforcement on every start. Eight deferred-response regressions
+separately cover UI ownership, stale callbacks and invalid snapshot controls.
+These VM checks are not browser/native-provider evidence. Authorized production
+Google metrics, successful `enrich-urls` CLI, other providers and broader tool
+acceptance remain open.
 Real LanguageTool language quality, other external providers, future features
 and broad cross-browser parity remain separate requirements in
 `FEATURE_TODO.md`.
 
 Generated logs/screenshots/results are deliberately not committed over the
 historical fixtures. GitHub Actions uploads the new run's evidence separately.
+
+The final local gates for the enrichment slice pass: 1,749 ordinary Rust
+tests with zero failures/five deliberate ignores, four separately executed
+Chromium fixtures, all 32 UI suites (nine fixture/23 native; natural app exit 0),
+strict Clippy and the normal build. The 28 pure bundle controls, 11 native bundle
+groups and 12 official SDK checks pass on the normal executable. See the
+enrichment receipt for exact source and executable bindings. Process-cold native
+crawl/source reopen for segments/n-grams, separate same-origin restoration of
+browser-local segment rules, and accessibility journeys preserving incomplete
+and needs-review states still need their own acceptance. Server rule persistence
+is not claimed.
+
+The latest public run on `01ba979` is
+[39120704481](https://github.com/lia-xim/open-seo-spider/actions/runs/39120704481).
+It remains a historical FAIL: two Windows timeouts, an obsolete Linux inventory
+expectation and an unavailable directory debugger response body despite
+immediate capture. The directory test now uses an unconditional independent
+native POST artifact oracle together with browser metadata and exact DOM checks.
+Both previously failing Windows tests pass locally and CI concurrency was
+aligned, but the exact historical five-second drain-timeout cause remains
+NOT_PROVEN. The next public CI run is pending; local green does not prove that
+public Windows is fixed.

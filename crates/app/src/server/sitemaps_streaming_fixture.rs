@@ -344,7 +344,13 @@ impl Drop for Http {
 }
 pub(super) fn client() -> reqwest::Client {
     reqwest::Client::builder()
-        .timeout(Duration::from_secs(30))
+        .no_proxy()
+        .connect_timeout(Duration::from_secs(5))
+        // These real >8 MiB exports perform two verified passes. A whole-request
+        // stopwatch also charged active CSV progress under parallel Windows CI
+        // load. Keep the same 30s inactivity guard, resetting after each read;
+        // the producer's independent preparation/stream deadlines still apply.
+        .read_timeout(Duration::from_secs(30))
         .build()
         .unwrap()
 }

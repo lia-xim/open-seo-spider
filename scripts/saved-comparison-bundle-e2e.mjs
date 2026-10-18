@@ -7,6 +7,7 @@ import path from 'node:path';
 import os from 'node:os';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
+import {assertDefaultMcpInventory} from './mcp-inventory-contract.mjs';
 import {verifyBinarySha, assertFinalWitnessState} from './saved-comparison-mapping-oracles.mjs';
 import {sha, parseLossless, at, scalar, compactJson, replaceToken, assertLosslessEqual, unsafeIntegerLexemes, assertOriginalBundle, assertDefaultEnvelope, assertComparableResponse, assertBundleCsv} from './saved-comparison-bundle-oracles.mjs';
 
@@ -17,6 +18,7 @@ const binarySha = sha(await readFile(binary)), sourceSha = sha(await readFile(so
 const oracleSha = sha(await readFile(fileURLToPath(new URL('./saved-comparison-bundle-oracles.mjs', import.meta.url))));
 const testsSha = sha(await readFile(fileURLToPath(new URL('./saved-comparison-bundle-oracles.test.mjs', import.meta.url))));
 const lifecycleOracleSha = sha(await readFile(fileURLToPath(new URL('./saved-comparison-mapping-oracles.mjs', import.meta.url))));
+const inventoryContractSha = sha(await readFile(fileURLToPath(new URL('./mcp-inventory-contract.mjs', import.meta.url))));
 const controlsPath = path.resolve(process.env.SPIDER_BUNDLE_CONTROL_PROOF || path.join(root, 'docs/verification/saved-comparison-original-bundle-oracle-controls.json'));
 const controlsBytes = await readFile(controlsPath), controls = JSON.parse(controlsBytes.toString('utf8'));
 assert.equal(controls.result, 'PASS'); assert.equal(controls.pure_tests, 28);
@@ -147,7 +149,7 @@ async function sdk(kind, before, after, config, expected, phase) {
   if (transport.stderr) transport.stderr.on('data', chunk => { stderrTail = (stderrTail + chunk).slice(-16000); });
   try {
     alive(); await client.connect(transport); const inventory = (await client.listTools()).tools;
-    assert.equal(inventory.length, 26); const tool = inventory.find(value => value.name === 'spider_compare_saved');
+    assertDefaultMcpInventory(inventory); const tool = inventory.find(value => value.name === 'spider_compare_saved');
     assert.equal(tool.inputSchema.properties.include_original_reports.type, 'boolean'); assert.equal(tool.annotations.readOnlyHint, true); assert.equal(tool.annotations.openWorldHint, false);
     const saved = await client.callTool({name: 'spider_compare_saved', arguments: body(before, after, config)});
     assert.equal(saved.isError, false); const text = mcpText(saved);
@@ -281,7 +283,7 @@ try {
     await sdk(kind, imported, imported, {}, importedBundle, 'websites_live_declared_import_u64_depth123');
   }
   assert.equal(hits(), baselineHits); await unchangedReports(inventory); assert.deepEqual(await readFile(jsonPath), cliBytes); assert.deepEqual(await readFile(csvPath), csvBytes);
-  checks.push('Both official SDK transports expose optional boolean on 26 tools, including the existing read-only comparison tool; MCP text retains all original values/exact u64 tokens, default omission and structured errors, while safe structured descriptors match API');
+  checks.push('Both official SDK transports match the exact default 32-tool name contract and expose the optional boolean on the read-only comparison tool; MCP text retains all original values/exact u64 tokens, default omission and structured errors, while safe structured descriptors match API');
   for (const owned of fixtures) {
     await closeServer(owned.server); const witness = {origin: owned.origin, attempts: [], server: undefined};
     witness.server = http.createServer((req, res) => { witness.attempts.push({method: req.method, path: req.url}); res.writeHead(410); res.end('Original website offline'); }); witnesses.push(witness); assert.equal(await listen(witness.server, Number(new URL(owned.origin).port)), owned.origin);
@@ -302,7 +304,7 @@ try {
   acceptedProof = {
     result: 'PASS', tested_at: new Date().toISOString(), engine: 'open-seo-spider/original-report-bundle-v1', checks,
     binary_sha256: binarySha, harness_sha256: sourceSha, oracle_helper_sha256: oracleSha,
-    oracle_tests_sha256: testsSha, lifecycle_oracle_sha256: lifecycleOracleSha, pure_control_proof_sha256: sha(controlsBytes), pure_control_count: controls.pure_tests,
+    oracle_tests_sha256: testsSha, lifecycle_oracle_sha256: lifecycleOracleSha, inventory_contract_sha256: inventoryContractSha, pure_control_proof_sha256: sha(controlsBytes), pure_control_count: controls.pure_tests,
     sdk_version: sdkPackage.version, sdk_checks: sdkChecks, csv_oracle: csvProof,
     initial_native_original_bindings: initial.bindings, mapped_original_bindings: mapped.bindings,
     complete_native_source_reports: [before, after].map(job => ({id: job.id, generation: job.generation, exported_json_sha256: sha(job.bytes), typed_compact_report_sha256: sha(job.compactBytes), typed_compact_report_bytes: job.compactBytes.length, unsafe_integer_lexemes: unsafeIntegerLexemes(job.document.root)})),
