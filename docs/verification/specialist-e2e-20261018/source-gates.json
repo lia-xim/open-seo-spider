@@ -1,0 +1,71 @@
+{
+  "result": "PASS",
+  "source_commit": "3f3e8ea2e0ee003dfddb3fb9abd3570240068685",
+  "source_manifest_files": 458,
+  "results": [
+    {
+      "mode": "ledger",
+      "exit_code": 0,
+      "signal": null,
+      "result": "PASS",
+      "elapsed_ms": 5299,
+      "binary_sha256": "2db9f7a641dc2c77d54a566401a59d281c6ddcbcbf30813de2fd099139027184",
+      "harness_sha256": "cf4d255160086bb90610faafdeb90cacca65978c746abd08171a1ff1ac648a2d",
+      "source_manifest_sha256": "6a9fb4dc8671eff9c781d0dd4433853848252284895f500ea233796b472a1522",
+      "proof_sha256": "98b236a990b3a73972cb52b60d95a14c4b2f9d720bd833275f9a94e71ef5df62",
+      "stdout_sha256": "e1623ce8def7d77b6089a58864bfac387ac1825d3543862ba5e3a83d30ac61c3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "qualification": "Inspect raw companions and final drain; exit code alone is not acceptance.",
+      "local_evidence_directory": "sitemap-ledger-1792317177659-34196"
+    },
+    {
+      "mode": "membership",
+      "exit_code": 0,
+      "signal": null,
+      "result": "PASS_NATIVE_SITEMAP_API_SDK_BROWSER",
+      "elapsed_ms": 9350,
+      "binary_sha256": "2db9f7a641dc2c77d54a566401a59d281c6ddcbcbf30813de2fd099139027184",
+      "harness_sha256": "aaf775854afa0bc2cda9ce2cf59f17b0ab47947e8340fe4efae493a4d644d7e6",
+      "source_manifest_sha256": "6a9fb4dc8671eff9c781d0dd4433853848252284895f500ea233796b472a1522",
+      "proof_sha256": "424e9672628a981ca3d0af6d920d084e4cd4b95054a57197957efb7ec100a480",
+      "stdout_sha256": "d87c64943ac9f392b2913b63580e421eb4a25c2fdf6ea0657f903187cec7f975",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "qualification": "Inspect raw companions and final drain; exit code alone is not acceptance.",
+      "local_evidence_directory": "sitemap-membership-1792317183294-34104"
+    },
+    {
+      "mode": "assessment",
+      "exit_code": 0,
+      "signal": null,
+      "result": "PASS_NATIVE_SITEMAP_ASSESSMENTS_API_SDK_BROWSER",
+      "elapsed_ms": 9898,
+      "binary_sha256": "2db9f7a641dc2c77d54a566401a59d281c6ddcbcbf30813de2fd099139027184",
+      "harness_sha256": "a528e29cd0490f904070100e4bc7f3f89e0b256e0c8cc80182b4d592e661fb23",
+      "source_manifest_sha256": "6a9fb4dc8671eff9c781d0dd4433853848252284895f500ea233796b472a1522",
+      "proof_sha256": "5c90a1df34e7633a153530e240e8909c00cbd7b67013c46cb0087fe4c50a202d",
+      "stdout_sha256": "12adb37d4e7e96886fb71f4938ebda306df235000a4725b6be4f6a0d65d901b6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "qualification": "Inspect raw companions and final drain; exit code alone is not acceptance.",
+      "local_evidence_directory": "sitemap-assessment-1792317192995-13880"
+    }
+  ],
+  "ledger": {
+    "scenarios": 11,
+    "sqlite_jobs": 11,
+    "all_owned_apps_closed": true,
+    "final_target_http_witness": "DRAINED",
+    "witness_complete": true,
+    "failures": [],
+    "orphan_controls": [
+      {
+        "id": "orphan-measurements-before-child-creation",
+        "website_requests": 0
+      },
+      {
+        "id": "orphan-inventory-before-child-creation",
+        "website_requests": 0
+      }
+    ]
+  },
+  "qualification": "Actual clean tracked-source native wrappers on Windows. Prebuilt binary is hash-bound; wrapper source fences are not independent compiler provenance. Subsequent documentation-only commits leave these tested product/source inputs unchanged. Linux/public CI remains separate."
+}

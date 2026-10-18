@@ -51,6 +51,13 @@ witnesses and final drained HTTP counts. This direct run precedes the clean
 commit gate; its caller-declared base SHA does not attest source-to-binary
 provenance. A fresh strict wrapper and public CI are separate checks.
 
+The subsequent [clean-source receipts](source-gates.json) record passing ledger,
+membership and assessment wrappers on `3f3e8ea`. They confirm unchanged tracked
+inputs, the same binary digest and both zero-request orphan controls. The
+later commit only records documentation; it does not change those tested
+product inputs. These receipts are not an independent compiler receipt or a
+public Linux/Windows CI pass.
+
 The [coverage matrix](../../e2e-testing.md) and feature ledger retain the remaining
 work: cold native reopen of the new tools, more operators/archives/concurrency,
 successful provider integration and full feature acceptance. No catalog feature
