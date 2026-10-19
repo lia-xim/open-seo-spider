@@ -835,3 +835,9 @@ crates/app/src/mcp/wiring_tests.rs whitespace=blank-at-eol,blank-at-eof,space-be
 
 # Preserve exact bytes of the source-bound validator fixture.
 scripts/fixtures/validator-only-binary.bin -text whitespace=cr-at-eol
+# Preserve original native CSV and retained verification log bytes.
+/docs/verification/table-query-expressions-20261019-r4/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/screenshot-response-harness-20261019-r5/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/table-query-readiness-20261019-r6/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+# Keep the already accepted native driver's original terminal blank line.
+/web/verification/ui-table-expressions-live.cjs whitespace=-blank-at-eof

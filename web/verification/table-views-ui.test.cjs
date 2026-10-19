@@ -18,10 +18,10 @@ function fixture({entries=[],rawCatalog=entries.length?raw(entries):null,locks='
   const calls=[],pending=[];
   const storage={getItem(key){calls.push(['get',key]);return data.has(key)?data.get(key):null;},setItem(key,value){calls.push(['set',key,value]);data.set(key,value);},removeItem(key){calls.push(['remove',key]);data.delete(key);}};
   const lockAPI=locks===null?null:{request(name,options,action){calls.push(['lock',name,options]);if(locks==='held')return new Promise((resolve,reject)=>pending.push(()=>{try{resolve(action({name,mode:'exclusive'}));}catch(error){reject(error);}}));return Promise.resolve(action(locks==='busy'?null:{name,mode:'exclusive'}));}};
-  const model={owner:{projectId:'crawl-a',section:'titles',generation:1,segment:null},revision:0,contract:{...initialContract},query:clone(initialQuery),snapshots:0,applies:0,notifications:0};
+  const model={owner:{projectId:'crawl-a',section:'titles',generation:1,segment:null},revision:0,available:true,contract:{...initialContract},query:clone(initialQuery),snapshots:0,applies:0,notifications:0};
   const adapter=storageModule.create({library,storage,locks:lockAPI});
   let controller;
-  const hooks={library,store:adapter,uuid:()=>[A,B,C].find(id=>!controller.status().entries.some(row=>row.id===id)),owner:()=>({...model.owner}),queryRevision:()=>model.revision,contract:()=>model.contract,
+  const hooks={library,store:adapter,available:()=>model.available,uuid:()=>[A,B,C].find(id=>!controller.status().entries.some(row=>row.id===id)),owner:()=>({...model.owner}),queryRevision:()=>model.revision,contract:()=>model.contract,
     snapshot:()=>{model.snapshots++;return{ok:true,value:clone(model.query)};},
     apply:(prepared,guard)=>{model.applies++;if(apply)return apply(prepared,guard,model,controller);if(!guard())return{ok:false,error:{code:'stale_apply',message:'Stale apply'}};const {section,query_semantics,...query}=prepared;model.query=clone(query);model.revision++;controller.invalidate();return{ok:true,value:prepared};},notify:()=>{model.notifications++;}};
   controller=createController(hooks);
@@ -147,6 +147,19 @@ test('pending reset observes immediate query revision and releases only its own 
 });
 test('unavailable read cannot arm recovery using previously observed bytes',async()=>{
   const f=fixture({entries:[entry()]});f.read();f.storage.getItem=()=>{throw Error('Storage denied');};refused(f.controller.refresh(),'storage_unavailable');assert.equal(f.controller.status().catalogValid,false);assert.equal(f.controller.status().resetAvailable,false);refused(f.controller.requestReset(),'unobserved_catalog');assert.deepEqual(f.writes(),[]);
+});
+test('inactive query mode refuses all catalog mutations and Apply before snapshots or native commits',async()=>{
+  const f=fixture({entries:[entry()]});f.read();f.controller.select(A);f.model.available=false;
+  f.controller.synchronize();f.controller.select(A);f.controller.name('Inactive');const before=f.bytes(),query=clone(f.model.query);
+  for(const method of['create','replace','rename','apply','requestDelete','requestReset'])refused(await f.controller[method](),'inactive_query_mode');
+  assert.equal(f.model.snapshots,0);assert.equal(f.model.applies,0);assert.equal(f.bytes(),before);assert.deepEqual(f.model.query,query);assert.deepEqual(f.writes(),[]);
+});
+test('query mode participates in the pending lock guard even without a query revision callback',async t=>{
+  for(const action of['rename','reset'])await t.test(action,async()=>{
+    const f=fixture({entries:[entry()],locks:'held'});f.read();f.controller.select(A);f.controller.name('Stale mode');
+    if(action==='reset')f.controller.requestReset();const promise=action==='reset'?f.controller.confirmReset():f.controller.rename();
+    assert.equal(f.pending.length,1);const before=f.bytes();f.model.available=false;f.pending[0]();refused(await promise,'stale_operation');assert.equal(f.bytes(),before);assert.deepEqual(f.writes(),[]);assert.equal(f.controller.status().busy,false);
+  });
 });
 
 // The explorer UI boundary is exercised without a browser: a minimal control

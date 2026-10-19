@@ -34,11 +34,12 @@
   let screenshotController = null, screenshotView = null;
   let tableExplorer = null;
   let tableRenderSequence = 0;
-  let tableViews = null, tableQueryRevision = 0, tableSearchTimer = null;
+  let tableViews = null, tableExpressionViews = null, tableQueryRevision = 0, tableSearchTimer = null;
   function tableQueryEdited() {
     tableQueryRevision++;
     clearTimeout(tableSearchTimer);tableSearchTimer=null;
     tableViews?.invalidate();
+    tableExpressionViews?.invalidate();
   }
   const legacySettingsDefaults = {...state.settings};
   let dashboardSegments = null;
@@ -1031,20 +1032,23 @@
   function tableIdentity(row) {
     return JSON.stringify([row.requested_url??row._page?.url??row.url??row.normalized_url??'',row.url??'',row.list_index??null,row.occurrence_index??null,row.source_index??null,row.response_index??null,row.dom_location?.index??null,row.rule_name??null,row.source??null,row._segmentOrdinal??row._page?._segmentOrdinal??null]);
   }
-  function tableViewContract() {
-    return {section:state.section,query_semantics:window.TableViewLibrary.QUERY_SEMANTICS,columns:tableSchema(),sectionFilters:filterOptions().map(option=>option[0])};
+  function tableViewContract(version=1) {
+    return {section:state.section,query_semantics:version===2?window.TableViewLibrary.EXPRESSION_QUERY_SEMANTICS:window.TableViewLibrary.QUERY_SEMANTICS,columns:tableSchema(),sectionFilters:filterOptions().map(option=>option[0])};
   }
-  function tableViewSnapshot() {
+  function tableViewSnapshot(version=1) {
     if(!state.crawl?.id||!tableExplorer)return {ok:false,error:{code:'no_crawl',message:'Zuerst einen Crawl und eine Ergebnistabelle auswählen.'}};
+    if(tableExplorer.queryVersion()!==version)return {ok:false,error:{code:'inactive_query_mode',message:'Zuerst den passenden Filtermodus auswählen.'}};
     const draft=tableExplorer.draft();if(!draft.ok)return draft;
-    return {ok:true,value:{sectionFilter:state.filter,search:state.search,rules:draft.value.rules,sort:{key:state.sort,direction:state.direction},visibleKeys:draft.value.visibleKeys}};
+    return {ok:true,value:{sectionFilter:state.filter,search:state.search,...(version===2?{expression:draft.value.expression}:{rules:draft.value.rules}),sort:{key:state.sort,direction:state.direction},visibleKeys:draft.value.visibleKeys}};
   }
-  function applyTableView(prepared,guard) {
+  function applyTableView(prepared,guard,version=1) {
     const stale=()=>({ok:false,error:{code:'stale_view',message:'Crawl, Suche oder Ansicht wurden inzwischen geändert. Die Ansicht erneut ausdrücklich anwenden.'}});
     if(typeof guard!=='function'||!guard()||!state.crawl?.id||!tableExplorer)return stale();
-    const contract=tableViewContract();
+    if(tableExplorer.queryVersion()!==version)return stale();
+    const contract=tableViewContract(version);
     if(prepared?.section!==contract.section||prepared?.query_semantics!==contract.query_semantics)return {ok:false,error:{code:'incompatible_view',message:'Die Ansicht passt nicht zur aktuellen Tabellenbedeutung.'}};
-    const checked=window.TableViewLibrary.create(window.TableExplorer).prepareView(contract,{sectionFilter:prepared.sectionFilter,search:prepared.search,rules:prepared.rules,sort:prepared.sort,visibleKeys:prepared.visibleKeys});
+    const library=version===2?window.TableViewLibrary.createExpression(window.TableExplorer):window.TableViewLibrary.create(window.TableExplorer);
+    const checked=library.prepareView(contract,{sectionFilter:prepared.sectionFilter,search:prepared.search,...(version===2?{expression:prepared.expression}:{rules:prepared.rules}),sort:prepared.sort,visibleKeys:prepared.visibleKeys});
     if(!checked.ok)return checked;if(!guard())return stale();
     // No await or externally visible partial render occurs between validation and commit.
     const installed=tableExplorer.installPrepared(checked.value);if(!installed.ok)return installed;
@@ -1055,7 +1059,11 @@
   }
   function bindNamedTableViews() {
     if(!window.TableViewsUI||!window.TableViewLibrary||!window.TableViewStorage||!tableExplorer){$('table-view-error').hidden=false;$('table-view-error').textContent='Benannte Tabellenansichten sind nicht geladen.';return;}
-    tableViews=window.TableViewsUI.create({owner:tableOwner,queryRevision:()=>tableQueryRevision,contract:tableViewContract,snapshot:tableViewSnapshot,apply:applyTableView});
+    const common={owner:tableOwner,queryRevision:()=>tableQueryRevision};
+    tableViews=window.TableViewsUI.create({...common,available:()=>tableExplorer.queryVersion()===1,contract:()=>tableViewContract(1),snapshot:()=>tableViewSnapshot(1),apply:(prepared,guard)=>applyTableView(prepared,guard,1)});
+    const library=window.TableViewLibrary.createExpression(window.TableExplorer);
+    let storage=null,locks=null;try{storage=window.localStorage;}catch(_){}try{locks=window.navigator?.locks;}catch(_){}
+    tableExpressionViews=window.TableViewsUI.create({...common,idPrefix:'table-expression-view',storageKey:window.TableViewStorage.EXPRESSION_KEY,library,store:window.TableViewStorage.createExpression({library,storage,locks}),available:()=>tableExplorer.queryVersion()===2,contract:()=>tableViewContract(2),snapshot:()=>tableViewSnapshot(2),apply:(prepared,guard)=>applyTableView(prepared,guard,2)});
   }
   function bindTableExplorer() {
     if(!window.TableExplorer||!window.TableExplorerUI){$('table-options').open=true;$('table-explorer-error').hidden=false;$('table-explorer-error').textContent='Erweiterte Tabellenfunktionen sind nicht geladen.';return;}
@@ -1134,7 +1142,10 @@
     $('page-prev').disabled = state.page === 0;
     $('page-next').disabled = state.page + 1 >= pages;
     tableExplorer?.render();
+    $('table-views').hidden=tableExplorer?.queryVersion()===2;
+    $('table-expression-views').hidden=tableExplorer?.queryVersion()!==2;
     tableViews?.render();
+    tableExpressionViews?.render();
     renderControls();
   }
 

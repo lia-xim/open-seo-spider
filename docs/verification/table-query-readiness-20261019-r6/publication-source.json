@@ -1,0 +1,85 @@
+{
+  "at": "2026-10-19T20:44:00.713Z",
+  "scope": "Publication-only Git attributes preserve original raw evidence CRLF/EOF bytes and the accepted native driver terminal blank line. Exactly597of598 R6 runtime inputs remain byte-identical; the sole difference appends three confined raw-proof rules and one EOF-whitespace rule. Product, native driver, browser tests, manifests, fixtures and binary are unchanged.",
+  "R6_manifest_sha256": "121477773255f773c5f85db8c10673d583864c67034ccfd7f2a5666698081d31",
+  "publication_manifest_sha256": "8e65708dcaadb7e58763bcc7a2694d1b1e512c1e9396df39f643be5544b075f4",
+  "source_inputs": 598,
+  "unchanged": 597,
+  "delta": {
+    "path": ".gitattributes",
+    "before": {
+      "path": ".gitattributes",
+      "bytes": 67749,
+      "sha256": "af7ca3370c20c370e93de7afa361805cf0531687942e0796c2534b3a774333ab"
+    },
+    "after": {
+      "path": ".gitattributes",
+      "bytes": 68359,
+      "sha256": "819e907da8862dac40b69a7366a2bc4f28ea7d059bcec0245171bec76762baf3"
+    }
+  },
+  "fresh_publication_states": {
+    "tests": 330,
+    "suites": 0,
+    "pass": 330,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "fresh_semantic_groups": 40,
+  "gates": [
+    {
+      "label": "states",
+      "command": "node",
+      "args": [
+        "--test",
+        "web/verification/serp-state-race.test.cjs",
+        "web/verification/robots-input-state.test.cjs",
+        "web/verification/list-import-state.test.mjs",
+        "web/verification/api-enrichment-state.test.cjs",
+        "web/verification/accessibility-state.test.cjs",
+        "web/verification/dashboard-segments-state.test.cjs",
+        "web/verification/config-profiles-state.test.cjs",
+        "web/verification/config-profile-catalog-state.test.cjs",
+        "web/verification/screenshot-state.test.cjs",
+        "web/verification/profile-response-capture.test.cjs",
+        "web/verification/table-explorer-state.test.cjs",
+        "web/verification/table-view-library.test.cjs",
+        "web/verification/table-view-storage.test.cjs",
+        "web/verification/table-views-ui.test.cjs",
+        "web/verification/table-expression-state.test.cjs",
+        "web/verification/expression-view-state.test.cjs",
+        "web/verification/table-expression-ui.test.cjs"
+      ],
+      "started_at": "2026-10-19T20:43:59.375Z",
+      "duration_ms": 611,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/table-query-publication-final-20261019-states.log",
+      "log_bytes": 34455,
+      "log_sha256": "abb7eaea847df6972207e75ccf17714ac41afeaba7ece6823c3e6ecccee8d4bd",
+      "frozen_inputs_sha256": "8e65708dcaadb7e58763bcc7a2694d1b1e512c1e9396df39f643be5544b075f4",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "semantic",
+      "command": "node",
+      "args": [
+        "scripts/check-ui-fixtures.mjs"
+      ],
+      "started_at": "2026-10-19T20:44:00.198Z",
+      "duration_ms": 470,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/table-query-publication-final-20261019-semantic.log",
+      "log_bytes": 1068,
+      "log_sha256": "499c31e1e863a6af1e3633f7176b2de8307d91d99265462a3d14be8539d82ce8",
+      "frozen_inputs_sha256": "8e65708dcaadb7e58763bcc7a2694d1b1e512c1e9396df39f643be5544b075f4",
+      "source_inputs_unchanged": true
+    }
+  ],
+  "reused_runtime": "R6 three prescribed native invocations and R5 Chromium22/screenshot acceptance retain original source-bound evidence, not reexecuted after Git metadata-only change.",
+  "full44": "REQUIRES_EXACT_PUBLISHED_SUCCESSOR_CI",
+  "normal_binary_sha256": "d7d7ecc453d752d6984b95cff0119f38f2bcf374b080c18b78fb07b8b6f0d57c"
+}

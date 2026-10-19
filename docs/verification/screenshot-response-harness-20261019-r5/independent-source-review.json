@@ -1,0 +1,236 @@
+{
+  "result": "SOURCE_REVIEW_PASS_RUNTIME_PENDING",
+  "reviewed_at": "2026-10-19T20:18:18.611Z",
+  "reviewer": "/root/named_native_finish",
+  "scope": "Independent read-only staged-source review only; no tracked source edits and no browser/native/Cargo runtime. Does not turn prior CI or the frozen R4 run into current patched-head acceptance.",
+  "manifest": {
+    "file": "artifacts/screenshot-response-harness-staged-20261019/patch-manifest.json",
+    "bytes": 2119,
+    "sha256": "eaa1214543435d84e1f5358a54ab61d3550a287a37e34d251865c683faabdbd6"
+  },
+  "apply_tool": {
+    "file": "artifacts/apply-screenshot-response-harness-staged-20261019.cjs",
+    "bytes": 2601,
+    "sha256": "72cdfa844a7669c95676a7d319b42cc07886ad42fd6bdf903fb7af973ab86d8f"
+  },
+  "files": [
+    {
+      "source": {
+        "file": "web/verification/profile-response-capture.cjs",
+        "bytes": 19586,
+        "sha256": "cecf33851a5e9628f015a6a420b3f8a618800a256c3eea5c15bff8cd56f706fb"
+      },
+      "staged": {
+        "file": "artifacts/screenshot-response-harness-staged-20261019/web/verification/profile-response-capture.cjs",
+        "bytes": 22344,
+        "sha256": "49ced7ee03e2d2c124bc6a217066cdc488c09a1bb4ed5ce03c4041f92c7bcfd6"
+      },
+      "source_unchanged": true,
+      "manifest_matches": true
+    },
+    {
+      "source": {
+        "file": "web/verification/ui-screenshot-viewport-live.cjs",
+        "bytes": 36577,
+        "sha256": "02442d345fbb869947c2d01cf40bbc1f1be7bd57b6ba4c56dcd937db831d6d76"
+      },
+      "staged": {
+        "file": "artifacts/screenshot-response-harness-staged-20261019/web/verification/ui-screenshot-viewport-live.cjs",
+        "bytes": 38151,
+        "sha256": "0a9af86f9ba36caeb6b5101c16e6918615ed34898e7d4ca6fdf2bd7fa5b02973"
+      },
+      "source_unchanged": true,
+      "manifest_matches": true
+    },
+    {
+      "source": {
+        "file": "web/verification/profile-response-capture.test.cjs",
+        "bytes": 32187,
+        "sha256": "743e19cec036a9dfe9814292c40238cca56e49d029e606bc0d30ac481928e257"
+      },
+      "staged": {
+        "file": "artifacts/screenshot-response-harness-staged-20261019/web/verification/profile-response-capture.test.cjs",
+        "bytes": 38869,
+        "sha256": "d964d3f6a3615332848dd6a45ff4a4037093b6442e4e516355649b55b1babf3c"
+      },
+      "source_unchanged": true,
+      "manifest_matches": true
+    },
+    {
+      "source": {
+        "file": "web/verification/profile-response-capture-browser.test.cjs",
+        "bytes": 21864,
+        "sha256": "d4c56c44d8234fc9a6e8e400a904a2392830046fec1093413a050497561d2685"
+      },
+      "staged": {
+        "file": "artifacts/screenshot-response-harness-staged-20261019/web/verification/profile-response-capture-browser.test.cjs",
+        "bytes": 27034,
+        "sha256": "520eea45cf68a1dc158250b79968fac9a489fb63d534dc8bdb77b956421bf5ff"
+      },
+      "source_unchanged": true,
+      "manifest_matches": true
+    }
+  ],
+  "byte_identical_controls": [
+    {
+      "name": "Original capture begin/readClone/observe/summary/select/chunk/release/install/mark/capture pipeline",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 12409,
+      "sha256": "dc533af778fad54bf0af0591125b4b0ae946d2e5e4a14a343741249391875479"
+    },
+    {
+      "name": "Default allowlist",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 453,
+      "sha256": "5de781dddad775187190be4fd194a72a8c27a4283c4a0ff9fbfec7b791e56897"
+    },
+    {
+      "name": "Native screenshot run body, captures, cold reopen, two EOF0, two410, zero refetch and mobile assertions",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 10589,
+      "sha256": "7c99498418ce44829bbdc55cd0232dcf82a3b4cd7980e44dc08fe61f3ff69fbf"
+    },
+    {
+      "name": "async function download(",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 1075,
+      "sha256": "cb111cfe6445ad6bd5533412716a80a22d3e0ee5de6d0c7c4ce172971a4c6db8"
+    },
+    {
+      "name": "async function nativeGuardControls(",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 666,
+      "sha256": "8e092bfc7edc24c9477d89e498a3d9879d88aa13975f28589f3f08b0a0e42f39"
+    },
+    {
+      "name": "async function importedControls(",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 1105,
+      "sha256": "25cf860e2fd3b3e7ca8bc0c68eea6ac4256c7653accf5654b92170e166fd18a0"
+    },
+    {
+      "name": "async function unavailableUI(",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 508,
+      "sha256": "3f658bb5ba679ed8ce6bfb426fed6daad558766a3fcd5fde049e4c197d79f721"
+    },
+    {
+      "name": "async function holdResponse(",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 1294,
+      "sha256": "6417da1348a038f73aaf827f08b717b55ea5f9c4d1e10aea871bb5e3afca697a"
+    },
+    {
+      "name": "async function lateResponses(",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 1960,
+      "sha256": "551ab2e810838799f26dac655780840db0590ca1505ed325b47dbcd948c571b2"
+    },
+    {
+      "name": "Both existing Chromium parent tests and their original subcontrols",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 15142,
+      "sha256": "7c8b76c0c93cb0f30d20069a990bffc1382e08923b45a51cfb8c9507b866a909"
+    },
+    {
+      "name": "All27 existing pure controls; only VM URLSearchParams global added",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 32186,
+      "sha256": "54b545e7ea83829bee823a3b2e54898e9f7599401b42df50011a82673a20967f"
+    },
+    {
+      "name": "Node and installed-document strict screenshotQuery body",
+      "result": "BYTE_IDENTICAL",
+      "bytes": 863,
+      "sha256": "eb8c225d5a0b344f6d853d345570c1d2c73327fa0a3e793e441bd6edfc4422d3"
+    }
+  ],
+  "findings": [],
+  "blockers": [],
+  "guards": [
+    {
+      "case": "Original-response provenance",
+      "assessment": "PASS_SOURCE",
+      "detail": "Only synchronous original fetch Response.clone is observed; original promise/Response and exactly one fetch remain unchanged. No HTTP replay and no CDP response.body/text/json in consumed JSON path. Held metadata/PNG route.fetch actual original APIResponse control remains unchanged."
+    },
+    {
+      "case": "Exact policy and query allowlist",
+      "assessment": "PASS_SOURCE",
+      "detail": "Separate explicit loopback-origin Screenshot policy permits only POST inspect, POST from-profile, GET UUID/config-profile, GET UUID/screenshot. Default and owned profile policies unchanged. Metadata requires canonical query ordered url then optional ordinal, exactly1or2 entries; bounded canonical HTTP(S) selected URL without credentials/hash/control characters; canonical nonnegative safe integer ordinal. PNG/catalog/wrong method/origin and extra query refused."
+    },
+    {
+      "case": "Pre-action lifecycle markers and binding",
+      "assessment": "PASS_SOURCE",
+      "detail": "Install awaited before initial document navigation. clickJSON/start/lazyOpen await document epoch+sequence mark before synchronous waiter registration and actual gesture. Full URL/query, method, request raw SHA+length, epoch/sequence, actual status and normalized full response headers bind capture. Current missing/ambiguous/stale/failed clone remains fatal."
+    },
+    {
+      "case": "Bounded transfer",
+      "assessment": "PASS_SOURCE",
+      "detail": "Driver installs maxResponseBytes65536, a decrease from unchanged global defaults. Existing Content-Length and streaming byte-limit enforcement occurs before chunk transfer; unchanged aggregate/read/chunk/hash/release guards remain. This is bounded fixture capture, not physical RSS proof."
+    },
+    {
+      "case": "Pending and failed diagnostics",
+      "assessment": "PASS_SOURCE",
+      "detail": "Before capture await, json_reads appends BODY_PENDING including method, full response URL/query, path, status, headers, request SHA+bytes and marker. Capture failures set BODY_FAIL/error and rethrow; final receipt serializes requests and json_reads. Existing excluded obsolete response failure is not consumed as current JSON."
+    },
+    {
+      "case": "Existing acceptance preservation",
+      "assessment": "PASS_SOURCE",
+      "detail": "Entire native run body and protected download/guard/import/unavailable/held-response/stale-response blocks byte-identical. Existing27 pure controls and both Chromium parent tests unchanged except needed VMglobal and HTTPfixture mode extension. No delay/deadline increase, success mock, assertion removal, global default policy expansion or product change."
+    },
+    {
+      "case": "Apply confinement",
+      "assessment": "PASS_SOURCE",
+      "detail": "Apply tool default check only. Exact ordered four targets and path prefixes enforced; original and staged lengths+SHA verified completely before writes; apply requires explicit current manifest SHA and verifies exact result. Root must enforce prior frozen acceptance termination; script does not auto-detect sourcefreeze."
+    }
+  ],
+  "author_pure_evidence": {
+    "artifact": {
+      "file": "artifacts/screenshot-response-harness-staged-20261019/pure-controls.tap",
+      "bytes": 4091,
+      "sha256": "54f4cb8aaf030f8d5ad0f219751615cd7ea62569ce629d0d5ddaf55c991bc6da"
+    },
+    "observed": {
+      "tests": 32,
+      "pass": 32,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 217.7465
+    },
+    "independently_rerun": false,
+    "scope": "Author-recorded staged Node controls only. Five added controls cover policy/matcher parity, original response identity, fullquery/epoch/release, obsoleteA/currentB failure binding and65537-byte refusal."
+  },
+  "prepared_real_browser_controls": {
+    "state": "NOT_RUN_BY_REVIEWER",
+    "parent_tests": 3,
+    "subcontrols": 19,
+    "total_expected": 22,
+    "additional_scope": "Five exact realHTTP requests for three profile operations+url-only/ordinal0 metadata; default/owned refusals; actual held-A AbortController while B succeeds; epoch reload/aboutblank; protectedResponse Proxy forbids CDP body/text/json."
+  },
+  "runtime_acceptance": {
+    "staged_browser_controls": "NOT_PROVEN",
+    "patched_native_screenshot_suite": "NOT_PROVEN",
+    "patched_full44": "NOT_PROVEN",
+    "patched_current_head_CI": "NOT_PROVEN"
+  },
+  "historical_CI": {
+    "run_id": "39308675253",
+    "job_id": "118252289096",
+    "receipt": {
+      "file": "artifacts/named-views-parent-renderer-ci-artifact-39308675253-20261019/screenshot-viewport/screenshot-viewport-1792439775686-4f93a07f/ui-screenshot-viewport-live.json",
+      "bytes": 11031,
+      "sha256": "a125a084451da49eec610a824f62e5ade46c4edc135e3de064d267a89502f3e4"
+    },
+    "result": "FAIL",
+    "observed": "One screenshot major group passed; two genuine captures and imported unavailable controls preceded fatal global CDP response.body observer error during lateResponses. Held A metadata489B SHA2af4ae2d89c1e85788554137154772546af356558906222af7b14c4a6ff4025a has no delivery field. PNG not globally observed.",
+    "not_proven": "Exact failed JSON request, and precise abort/navigation lifecycle cause were not serialized. Proposed narrower owned-clone consumption addresses observed unsafe harness path; it is not a proved product defect or proved root cause for an identified B response."
+  },
+  "limits": [
+    "No actual patched-head browser/native/full44/CI run performed in this review; Root owns runtime after current sourcefreeze terminal.",
+    "Generic browser request list still stores path only. Full query is durable for consumed JSON in json_reads; an unexpected URL that never matches the waiter is not a consumed JSON record. This does not block the requested consumption fix.",
+    "New64KiB screenshot cap is covered by a staged pure65537-byte control; actual browser suite reuses unchanged generic streaming guard and has not yet run.",
+    "No all-browser, all screenshot formats, full-page, device scale factor, crash durability or vendor parity claim."
+  ]
+}

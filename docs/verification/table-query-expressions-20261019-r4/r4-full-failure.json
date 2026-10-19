@@ -1,0 +1,92 @@
+{
+  "result": "FAIL_R4_COMPLETE_UI44_LAST_SUITE",
+  "recorded_at": "2026-10-19T20:33:25.097Z",
+  "full_gate": {
+    "label": "full-ui44",
+    "command": "node",
+    "args": [
+      "scripts/ui-e2e.mjs"
+    ],
+    "started_at": "2026-10-19T19:52:39.967Z",
+    "duration_ms": 2083580,
+    "code": 1,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-full-ui44.log",
+    "log_bytes": 2233,
+    "log_sha256": "d8491b1aa69301a6e102584918d2d666026105ced0731b3399e662cb0949be58",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  "full_aggregate_raw": {
+    "path": "artifacts/table-expressions-r4-20261019-full-ui44/proof.json",
+    "bytes": 11694,
+    "sha256": "e1a02346ae38dc7dd4f2158b1be3f103477754c5789c16b398d8df54da513063"
+  },
+  "full_aggregate_complete": false,
+  "registered_and_executed": 44,
+  "successful": 43,
+  "failed": 1,
+  "failed_suite": {
+    "name": "table-expressions",
+    "script": "ui-table-expressions-live.cjs",
+    "kind": "owned-native",
+    "code": 1,
+    "signal": null,
+    "timed_out": false,
+    "timeout_ms": 240000,
+    "duration_ms": 12551
+  },
+  "failed_native_raw": {
+    "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/ui-table-expressions-live.json",
+    "bytes": 166271,
+    "sha256": "f2b6afe4eb4c889b950fec354499a34b250296ac3b7d73b17eed945c57e37cbf"
+  },
+  "failed_native_result": "FAIL",
+  "failed_native_completed_groups": 1,
+  "failed_native_partial_views": 24,
+  "raw_error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'Keine Ergebnisse'\n- '1–31 von 31'\n\n    at applyView (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-expressions-live.cjs:173:364)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-expressions-live.cjs:203:2808",
+  "stderr": {
+    "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/stderr.log",
+    "bytes": 404,
+    "sha256": "881dce8e158e0a42a3b2c7470fd5ebf94b83602018223ee00465362fd4f6a488"
+  },
+  "cleanup": {
+    "failed_native": [
+      {
+        "phase": "warm",
+        "origin": "http://127.0.0.1:55401",
+        "pid": 6352,
+        "natural_eof": true,
+        "forced": false,
+        "close": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    ],
+    "coordinator_shutdown": {
+      "code": 0,
+      "signal": null
+    },
+    "binary_unchanged": true,
+    "tracked_sources_unchanged": true,
+    "changed": []
+  },
+  "later_failure_HTML": {
+    "raw": {
+      "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/table-expressions-failure.html",
+      "bytes": 166636,
+      "sha256": "c53e1134f7c3f698b534227cc0bcbb796889fc99fe5062a871d6d5fd5415e92d"
+    },
+    "rows": 31,
+    "page_label": "1–31 von 31",
+    "active_view": "Angewendet: Empty zero OR unknown",
+    "relevant_error_nodes_empty_and_hidden": true,
+    "scope": "Later diagnostic capture after the failed assertion, not the assertion-time DOM and not a completed native acceptance."
+  },
+  "inference": {
+    "assessment": "Likely driver owner-selection readiness gap before Apply: selectCrawl clears pages and renders a saved terminal summary before awaited refresh commits loaded pages/analysis/responses/fragments; the old selectJob waits only for selected ID and terminal summary. The focused run passed the same31-row path and later failure HTML has expected rows/binding with no visible error.",
+    "root_cause": "INFERENCE_ONLY_NOT_PROVEN_BY_A_TIMELINE: no mutation/event timestamps link assertion instant to later capture. No product failure or successful full native acceptance is inferred.",
+    "next_gate": "Separate minimal driver wait/ownership assertion with fresh R6 acceptance; R4 full44 stays FAIL."
+  }
+}

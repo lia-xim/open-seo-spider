@@ -6,8 +6,10 @@
 })(typeof globalThis==='object'?globalThis:this,function(){
   const KEY='open-seo-spider.table-views.v1';
   const LOCK_NAME=KEY+':mutation';
+  const EXPRESSION_KEY='open-seo-spider.table-views.v2';
+  const EXPRESSION_LOCK_NAME=EXPRESSION_KEY+':mutation';
   function refusal(code,message){return {ok:false,error:{code,message}};}
-  function create({library,storage,locks}){
+  function createStore({library,storage,locks},key,lockName){
     if(!library||typeof library.decodeCatalog!=='function'||typeof library.encodeCatalog!=='function'||typeof library.prepareReplacement!=='function')throw Error('Explicit TableViewLibrary instance required');
     const current=guard=>{try{return typeof guard==='function'&&guard()===true;}catch(_){return false;}};
     function argumentsFor(options,fields){
@@ -18,7 +20,7 @@
     }
     function rawRead(){
       if(!storage||typeof storage.getItem!=='function')throw Error('Browser storage unavailable');
-      const raw=storage.getItem(KEY);
+      const raw=storage.getItem(key);
       if(raw!==null&&typeof raw!=='string')throw Error('Unexpected browser storage value');
       return raw;
     }
@@ -33,7 +35,7 @@
       try{request=locks&&locks.request;}catch(_){return refusal('lock_unavailable','Der Browser stellt keine Schreibsperre für benannte Ansichten bereit.');}
       if(typeof request!=='function')return refusal('lock_unavailable','Der Browser stellt keine Schreibsperre für benannte Ansichten bereit.');
       try{
-        return await Reflect.apply(request,locks,[LOCK_NAME,{mode:'exclusive',ifAvailable:true},lock=>{
+        return await Reflect.apply(request,locks,[lockName,{mode:'exclusive',ifAvailable:true},lock=>{
           if(!lock)return refusal('lock_busy','Benannte Ansichten werden in einem anderen Fenster geändert. Erneut ausdrücklich versuchen.');
           if(!current(guard))return refusal('guard_refused','Die Ansicht wurde während der Schreibvorbereitung geändert.');
           return action();
@@ -57,7 +59,7 @@
             const setItem=storage&&storage.setItem;
             if(typeof setItem!=='function')throw Error('Browser storage unavailable');
             if(!current(guard))return refusal('guard_refused','Die Ansicht wurde vor dem Speichern geändert.');
-            Reflect.apply(setItem,storage,[KEY,replacement.value.nextRaw]);
+            Reflect.apply(setItem,storage,[key,replacement.value.nextRaw]);
           }catch(_){return refusal('storage_write_failed','Benannte Ansichten wurden nicht gespeichert. Browserspeicher oder Speicherplatz ist nicht verfügbar.');}
           // No await between the last guard and this one atomic localStorage write.
           // Only cooperating tabs using this lock are serialized; external edits
@@ -78,12 +80,14 @@
           const removeItem=storage&&storage.removeItem;
           if(typeof removeItem!=='function')throw Error('Browser storage unavailable');
           if(!current(guard))return refusal('guard_refused','Die Ansicht wurde vor dem Entfernen geändert.');
-          Reflect.apply(removeItem,storage,[KEY]);
+          Reflect.apply(removeItem,storage,[key]);
         }catch(_){return refusal('storage_remove_failed','Benannte Ansichten konnten nicht aus dem Browserspeicher entfernt werden.');}
         return {ok:true,value:Object.freeze({raw:null,entries:Object.freeze([]),missing:true})};
       });
     }
     return Object.freeze({read,mutate,reset});
   }
-  return Object.freeze({KEY,LOCK_NAME,create});
+  function create(options){return createStore(options,KEY,LOCK_NAME);}
+  function createExpression(options){return createStore(options,EXPRESSION_KEY,EXPRESSION_LOCK_NAME);}
+  return Object.freeze({KEY,LOCK_NAME,EXPRESSION_KEY,EXPRESSION_LOCK_NAME,create,createExpression});
 });

@@ -1,0 +1,39 @@
+{
+  "result": "PREPARED_NOT_APPLIED_RUNTIME_PENDING",
+  "prepared_at": "2026-10-19T20:31:53.592Z",
+  "records": [
+    {
+      "file": "web/verification/ui-table-expressions-live.cjs",
+      "before_bytes": 64800,
+      "before_sha256": "bb3e0049f9b7033fa34e14ab08414f64868972907d058944d478bbe4d3d6eb03",
+      "staged_file": "artifacts/table-expression-owner-readiness-staged-20261019/web/verification/ui-table-expressions-live.cjs",
+      "after_bytes": 66045,
+      "after_sha256": "a05fd0eef4978b92a4df52e7c81f192e078a0d56e56e7ee5c245a5cb970c78e0"
+    }
+  ],
+  "scope": "Driver-only await of selected crawl data readiness, not a product fix or relaxed data oracle.",
+  "protected_blocks": [
+    {
+      "from": "async function applyView",
+      "to": "async function race",
+      "bytes": 2107,
+      "sha256": "3b56b1ff23f6485b5e3b80fd19c06189610327fc389d495e26d9439e85131a36",
+      "unchanged": true
+    },
+    {
+      "from": "function expected",
+      "to": "async function grouped",
+      "bytes": 1364,
+      "sha256": "5f26ceb78705a0855ea706e368838d2c8d58d59a98692e94a577dbef006d0837",
+      "unchanged": true
+    }
+  ],
+  "timing": "New awaits explicitly bounded to existing30000ms DOM request budget; no original timeout/outer-suite deadline changed.",
+  "expected_raw_failure_stage": "R4 full44: apply saved zero/unknown definition to A immediately after switching from B; before zero CSV.",
+  "no_native_HTTP_replay": true,
+  "no_body_read_or_response_mock": true,
+  "no_first_page_mutation": true,
+  "original_first_page_assertions_unchanged": true,
+  "same_ID_select_requires_actual_follow_up_runtime": true,
+  "source_written": false
+}

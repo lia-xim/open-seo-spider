@@ -1,0 +1,99 @@
+{
+  "result": "READ_ONLY_R4_FULL_FAILURE_DIAGNOSIS_AND_R6_DRIVER_CANDIDATE_REVIEW",
+  "at": "2026-10-19T20:33:10.674Z",
+  "failed_receipt": {
+    "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/ui-table-expressions-live.json",
+    "bytes": 166271,
+    "sha256": "f2b6afe4eb4c889b950fec354499a34b250296ac3b7d73b17eed945c57e37cbf"
+  },
+  "failure_HTML": {
+    "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/table-expressions-failure.html",
+    "bytes": 166636,
+    "sha256": "c53e1134f7c3f698b534227cc0bcbb796889fc99fe5062a871d6d5fd5415e92d"
+  },
+  "failure_PNG": {
+    "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/table-expressions-failure.png",
+    "bytes": 226213,
+    "sha256": "2cb37e38bd139dbf008b7bf880481aa8dc04f5c3ae430abc47cccc6013a220d5"
+  },
+  "full_suite_aggregate": {
+    "path": "artifacts/table-expressions-r4-20261019-full-ui44/proof.json",
+    "bytes": 11694,
+    "sha256": "e1a02346ae38dc7dd4f2158b1be3f103477754c5789c16b398d8df54da513063"
+  },
+  "focused_PASS_receipt": {
+    "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/ui-table-expressions-live.json",
+    "bytes": 334562,
+    "sha256": "d4f776ecf506a59e4009d33a0d2a238a0ad3676695082c54779db24976c03aff"
+  },
+  "same_binary_and_all19_pins": true,
+  "observed": {
+    "exact_step": "applyView(zeroEntry,zeroView,jobA,zero) at203:2808 after switching B→A, before A zero CSV export",
+    "immediate_assertion_read": "Keine Ergebnisse",
+    "later_failure_HTML_page_label": "1–31 von 31",
+    "later_HTML_rows": 31,
+    "later_HTML_cells": 124,
+    "all_later_cells_independently_matched_native_A": true,
+    "ordered_later_cells_sha256": "af1af3b91c64ca0c391245bdbf01979518d1ae79c5b768935b0e9f0669f4855b",
+    "original_A": {
+      "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/7244bbca-d485-4746-bac3-5f3ed3c492c5-original-project.json",
+      "bytes": 1299430,
+      "sha256": "56f6a8484c0464d4c9dd1d25a83f018dfc52fc54b617c78c36e4a07a9242faf4"
+    },
+    "saved_complete_zero_definition": {
+      "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/expression-catalog-006.json",
+      "bytes": 3005,
+      "sha256": "43932cd7aa59c5bdc84e723e53b46a31f5621ec3bd94c45f99a6a82982e50964"
+    },
+    "later_active_badge": "Angewendet: Empty zero OR unknown",
+    "later_errors_hidden": true,
+    "native_EOF0": true
+  },
+  "source_causality": [
+    {
+      "location": "driver selectJob77",
+      "fact": "Only selected history ID and completed status are awaited; no report-data readiness or current native refresh terminal."
+    },
+    {
+      "location": "app selectCrawl411-449",
+      "fact": "Clears pages/issues/maps and resets query synchronously, then assigns an already-completed cached summary and renders before awaiting refresh."
+    },
+    {
+      "location": "app refresh333-386",
+      "fact": "Real pages, analysis, responses and final fragments dependencies are awaited before committing loaded rows and rerendering."
+    },
+    {
+      "location": "app applyTableView1044-1057 / controller apply65-74",
+      "fact": "Prepared complete query applies synchronously with page0 to whatever rows are currently loaded, then the active badge is published."
+    },
+    {
+      "location": "driver finally221",
+      "fact": "Failure screenshot is awaited, then HTML captured. No retry, query edit, Apply or pagination helper is invoked between failed assertion and later correct HTML."
+    }
+  ],
+  "conclusion": "The driver admits a summary-completed but data-empty owner and reads pagination immediately. The later unchanged zero query correctly renders all31 actual A observations without another Apply. Add a real data-readiness precondition to the driver; there is no raw evidence of persistent wrong AND/OR/search/filter/query ownership.",
+  "inference_boundary": "Exact request/microtask interleaving and the complete AST/owner at the instantaneous failed read were not recorded. The loading-window explanation is source-supported and consistent with the later complete HTML, not a claim that every transient render was independently captured.",
+  "staged_candidate": {
+    "manifest": {
+      "path": "artifacts/table-expression-owner-readiness-staged-20261019/patch-manifest.json",
+      "bytes": 1654,
+      "sha256": "b0af62daf29959833b490ebe5011782e3d14bdd3efca403c0b824fbefe0f689a"
+    },
+    "driver": {
+      "path": "artifacts/table-expression-owner-readiness-staged-20261019/web/verification/ui-table-expressions-live.cjs",
+      "bytes": 66045,
+      "sha256": "a05fd0eef4978b92a4df52e7c81f192e078a0d56e56e7ee5c245a5cb970c78e0"
+    },
+    "before": "bb3e0049f9b7033fa34e14ab08414f64868972907d058944d478bbe4d3d6eb03",
+    "only_selectJob_and_receipt_differ": true,
+    "tracked_driver_unchanged": true,
+    "scope": "Both native fixture captures are nonempty. Exact owned final fragments response200+finished followed by selected owner/completed/export-enabled waits for committed pages/issues without reading/replaying bodies or mutating page0.",
+    "same_ID_behavior": "Requires actual successor native proof; not presumed from this offline review.",
+    "browser_native_Cargo_execution": false,
+    "applied": false
+  },
+  "manufacturer_parity": "NOT_PROVEN",
+  "R4_full44": "FAIL_RETAINED",
+  "R4_focused": "PASS_RETAINED",
+  "R6": "NOT_RUN"
+}

@@ -19,7 +19,8 @@ async function ownedSite(){
     if(request.method==='GET'&&request.url==='/favicon.ico'){response.writeHead(204);return response.end();}
     const chunks=[];for await(const chunk of request)chunks.push(chunk);const body=Buffer.concat(chunks).toString();
     requests.push({method:request.method,url:request.url,body,sha256:sha(Buffer.from(body))});
-    const mode=body?JSON.parse(body).case:'get';
+    const metadataTarget=/^\/api\/crawls\/[0-9a-f-]+\/screenshot\?/.test(request.url)?new URL(request.url,'http://fixture.invalid').searchParams.get('url'):null;
+    const mode=body?JSON.parse(body).case:metadataTarget&&new URL(metadataTarget).pathname==='/held-a'?'abort':'get';
     response.writeHead(mode==='association-b'?201:mode==='owned-conflict'?409:200,{'content-type':'application/json; charset=utf-8','x-owned-transport':'actual-http-fixture'});
     if(['abort','error','stall'].includes(mode)){
       const closed=deferred();response.once('close',()=>closed.resolve());streams.set(mode,{response,closed:closed.promise});
@@ -199,4 +200,27 @@ test('actual Chromium explicitly owned JSON mutation capture remains observation
   const before=other.requests.length,response=await beginFetch(foreign,JSON.stringify({case:'owned-other-origin'}),{method:'POST',url:catalog});await original(foreign);assert.equal(other.requests.length,before+1);assert.equal(capture.canCapture('POST',other.origin+catalog,policy),false);assert.equal(response.status(),200);await foreign.goto('about:blank');await foreign.close();
  });
  assert.equal(site.requests.length,17,'Six excluded, six owned+one409 and four wrong-route requests, each exactly once');assert.equal(other.requests.length,1);assert.equal(site.documents.length,2);assert.equal(other.documents.length,1);assert.equal(cdp.calls,0);assert.deepEqual(pageErrors,[]);await pure.goto('about:blank');await owned.goto('about:blank');assert.deepEqual(pageErrors,[]);
+});
+
+
+test('actual Chromium screenshot-suite JSON policy captures original query responses and refuses obsolete metadata without CDP bodies',{timeout:60000},async t=>{
+ const executable=process.env.OPEN_SEO_BROWSER_PATH||process.env.SPIDER_CHROME;assert(executable&&fs.statSync(executable).isFile(),'Explicit pinned Chromium required');const site=await ownedSite();let browser,context;const errors=[],cdp={calls:0};
+ t.after(async()=>{try{if(context)await context.close();}finally{try{if(browser)await browser.close();}finally{await site.close();}}});browser=await chromium.launch({headless:true,executablePath:executable});context=await browser.newContext();context.on('page',page=>page.on('pageerror',error=>errors.push(error.message)));
+ const id='10101010-1111-4222-8333-444444444444',metadata='/api/crawls/'+id+'/screenshot',policy={name:capture.OWNED_SCREENSHOT_POLICY,origin:site.origin},urlFor=(value,ordinal)=>metadata+'?'+new URLSearchParams({url:site.origin+value,...(ordinal===undefined?{}:{ordinal})}),page=await context.newPage();await capture.install(page,{maxResponseBytes:65536},policy);await page.goto(site.origin);
+ await t.test('three profile operations and metadata with optional0 capture actual bytes/status/headers/request once',async()=>{
+  const routes=[['POST','/api/config-profiles/inspect'],['POST','/api/crawls/from-profile'],['GET','/api/crawls/'+id+'/config-profile'],['GET',urlFor('/page-a')],['GET',urlFor('/page-b','0')]],before=site.requests.length;
+  for(const [method,path]of routes){const body=method==='GET'?'':JSON.stringify({case:'screenshot-suite-original'}),mark=await capture.mark(page),response=await beginFetch(page,body,{method,url:path}),found=await capture.capture(page,protectedResponse(response,cdp),mark);await original(page);await boundEvidence(page,found,mark,body,site,originalBytes,200,{method,path});assert.deepEqual(found.evidence.capture_policy,policy);assert.equal(found.evidence.fixture_limits.maxResponseBytes,65536);}
+  assert.equal(site.requests.length,before+5);assert.equal(cdp.calls,0);
+ });
+ await t.test('default and owned profile policies still reject real metadata queries and the suite rejects PNG/extra query',async()=>{
+  for(const existing of [null,{name:capture.OWNED_POLICY,origin:site.origin}]){const other=await context.newPage();await capture.install(other,{},existing);await other.goto(site.origin);const mark=await capture.mark(other),path=urlFor('/old-policy'),response=await beginFetch(other,'',{method:'GET',url:path});await original(other);assert.equal(capture.canCapture('GET',site.origin+path,existing),false);await assert.rejects(capture.capture(other,protectedResponse(response,cdp),mark),/Only allowlisted/);assert.equal((await capture.history(other)).sequence,0);await other.goto('about:blank');await other.close();}
+  for(const path of [urlFor('/bad')+'&extra=1',metadata+'.png?url='+encodeURIComponent(site.origin+'/bad')]){const mark=await capture.mark(page),response=await beginFetch(page,'',{method:'GET',url:path});await original(page);await assert.rejects(capture.capture(page,protectedResponse(response,cdp),mark),/Only allowlisted/);}
+ });
+ await t.test('genuinely held A clone can abort while exact later B succeeds once, and current captured error remains observable',async()=>{
+  const held=site.expect('abort'),oldMark=await capture.mark(page),pathA=urlFor('/held-a'),responseA=await beginFetch(page,'',{method:'GET',url:pathA,abort:true});await held;await page.evaluate(()=>{window.oldMetadataController=window.ownedController;window.oldMetadataOriginal=window.ownedOriginal;});
+  const mark=await capture.mark(page),pathB=urlFor('/current-b'),before=site.requests.length,responseB=await beginFetch(page,'',{method:'GET',url:pathB});await page.evaluate(()=>window.oldMetadataController.abort());const found=await capture.capture(page,protectedResponse(responseB,cdp),mark);await original(page);await boundEvidence(page,found,mark,'',site,originalBytes,200,{method:'GET',path:pathB});assert.equal(site.requests.length,before+1);const old=await page.evaluate(()=>window.oldMetadataOriginal);assert.equal(old.ok,false);await assert.rejects(capture.capture(page,protectedResponse(responseA,cdp),oldMark),/response_read_failed/);assert.equal(cdp.calls,0);
+ });
+ await t.test('reload invalidates old metadata marks and aboutblank never becomes a capture document',async()=>{
+  const old=await capture.mark(page);await page.reload();const mark=await capture.mark(page);assert.notEqual(mark.epoch,old.epoch);const path=urlFor('/after-reload'),response=await beginFetch(page,'',{method:'GET',url:path});await assert.rejects(capture.capture(page,protectedResponse(response,cdp),old),/document_epoch_changed/);await capture.capture(page,protectedResponse(response,cdp),mark);await original(page);await page.goto('about:blank');await assert.rejects(capture.mark(page),/not installed/);assert.deepEqual(errors,[]);assert.equal(cdp.calls,0);
+ });
 });

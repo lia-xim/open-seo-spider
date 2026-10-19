@@ -56,6 +56,7 @@ const suites = [
   ['screenshot-viewport', 'ui-screenshot-viewport-live.cjs', 'owned-native'],
   ['table-explorer', 'ui-table-explorer-live.cjs', 'owned-native'],
   ['table-named-views', 'ui-table-views-live.cjs', 'owned-native'],
+  ['table-expressions', 'ui-table-expressions-live.cjs', 'owned-native'],
 ];
 const args = process.argv.slice(2);
 assert(args.length === 0 || (args.length === 2 && args[0] === '--only'), 'Usage: node scripts/ui-e2e.mjs [--only name,name]');

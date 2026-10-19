@@ -5,24 +5,39 @@ const assert=require('node:assert/strict'),crypto=require('node:crypto');
 const ENGINE='open-seo-spider/test-profile-response-capture-v1';
 const KEY='__openSeoProfileResponseCaptureV1';
 const OWNED_POLICY='open-seo-spider/owned-profile-json-v1';
+const OWNED_SCREENSHOT_POLICY='open-seo-spider/owned-screenshot-suite-json-v1';
 const UUID='[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
 const PURE_ROUTES=Object.freeze([['POST','^/api/config-profiles/inspect$'],['GET','^/api/config-profile-catalog(?:/'+UUID+')?$']]);
 const OWNED_ROUTES=Object.freeze([['POST','^/api/config-profile-catalog$'],['PUT','^/api/config-profile-catalog/'+UUID+'$'],['DELETE','^/api/config-profile-catalog/'+UUID+'$'],['POST','^/api/config-profile-catalog/'+UUID+'/rename$'],['POST','^/api/crawls/from-profile$'],['GET','^/api/crawls/'+UUID+'/config-profile$']]);
+const SCREENSHOT_ROUTES=Object.freeze([['POST','^/api/config-profiles/inspect$'],['POST','^/api/crawls/from-profile$'],['GET','^/api/crawls/'+UUID+'/config-profile$'],['GET','^/api/crawls/'+UUID+'/screenshot$']]);
+function screenshotQuery(location){
+  if(location.href!==location.origin+location.pathname+location.search||!location.search)return false;
+  const entries=[...location.searchParams];
+  if(entries.length<1||entries.length>2||entries[0][0]!=='url'||entries.length===2&&entries[1][0]!=='ordinal')return false;
+  if(new URLSearchParams(entries).toString()!==location.search.slice(1))return false;
+  const value=entries[0][1];if(!value||new TextEncoder().encode(value).length>8192||/[\u0000-\u001f\u007f]/.test(value))return false;
+  let selected;try{selected=new URL(value);}catch(_){return false;}
+  if(!['http:','https:'].includes(selected.protocol)||selected.href!==value||selected.username||selected.password||selected.hash)return false;
+  if(entries.length===2){const ordinal=entries[1][1];if(!/^(0|[1-9][0-9]*)$/.test(ordinal)||!Number.isSafeInteger(Number(ordinal)))return false;}
+  return true;
+}
 function policyFor(value){
   if(value===undefined||value===null)return null;
   assert(value&&typeof value==='object'&&!Array.isArray(value),'Explicit owned capture policy object required');
   assert.deepEqual(Object.keys(value).sort(),['name','origin'],'Owned policy permits only name and exact origin');
-  assert.equal(value.name,OWNED_POLICY,'Unknown owned capture policy');assert.equal(typeof value.origin,'string','Owned origin must be a string');
+  assert([OWNED_POLICY,OWNED_SCREENSHOT_POLICY].includes(value.name),'Unknown owned capture policy');assert.equal(typeof value.origin,'string','Owned origin must be a string');
   const url=new URL(value.origin),port=Number(url.port);
   assert(['http:','https:'].includes(url.protocol)&&['127.0.0.1','[::1]','localhost'].includes(url.hostname),'Owned policy requires an explicit loopback HTTP origin');
   assert(url.origin===value.origin&&url.href===value.origin+'/'&&url.port&&port>1024&&![8787,8790].includes(port),'Expected canonical non-reserved owned origin without path, credentials, query or fragment');
-  return Object.freeze({name:OWNED_POLICY,origin:value.origin});
+  return Object.freeze({name:value.name,origin:value.origin});
 }
-function routesFor(policy){return policy?[...PURE_ROUTES,...OWNED_ROUTES]:[...PURE_ROUTES];}
+function routesFor(policy){return policy?.name===OWNED_SCREENSHOT_POLICY?[...SCREENSHOT_ROUTES]:policy?[...PURE_ROUTES,...OWNED_ROUTES]:[...PURE_ROUTES];}
 function canCapture(method,url,policy){
   const selected=policyFor(policy);if(typeof method!=='string'||typeof url!=='string')return false;
   let location;try{location=new URL(url);}catch(_){return false;}
-  if(location.href!==url||location.href!==location.origin+location.pathname||selected&&location.origin!==selected.origin)return false;
+  if(location.href!==url||selected&&location.origin!==selected.origin)return false;
+  if(selected?.name===OWNED_SCREENSHOT_POLICY&&new RegExp('^/api/crawls/'+UUID+'/screenshot$').test(location.pathname)){if(!screenshotQuery(location))return false;}
+  else if(location.href!==location.origin+location.pathname)return false;
   return routesFor(selected).some(([verb,pattern])=>verb===method&&new RegExp(pattern).test(location.pathname));
 }
 const DEFAULT_LIMITS=Object.freeze({maxResponseBytes:2097152,maxAggregateBytes:16777216,maxRecords:64,maxRequestBytes:2097152,transferChunkBytes:32768,maxReadMs:10000});
@@ -43,6 +58,19 @@ function installInDocument({key,engine,limits,policy,routes}) {
   const originalFetch=globalThis.fetch,then=Promise.prototype.then,encoder=new TextEncoder();
   const epoch=crypto.randomUUID(),origin=location.origin;
   const routeMatchers=routes.map(([method,pattern])=>({method,pattern:new RegExp(pattern)}));
+  const screenshotQuery=function screenshotQuery(location){
+  if(location.href!==location.origin+location.pathname+location.search||!location.search)return false;
+  const entries=[...location.searchParams];
+  if(entries.length<1||entries.length>2||entries[0][0]!=='url'||entries.length===2&&entries[1][0]!=='ordinal')return false;
+  if(new URLSearchParams(entries).toString()!==location.search.slice(1))return false;
+  const value=entries[0][1];if(!value||new TextEncoder().encode(value).length>8192||/[\u0000-\u001f\u007f]/.test(value))return false;
+  let selected;try{selected=new URL(value);}catch(_){return false;}
+  if(!['http:','https:'].includes(selected.protocol)||selected.href!==value||selected.username||selected.password||selected.hash)return false;
+  if(entries.length===2){const ordinal=entries[1][1];if(!/^(0|[1-9][0-9]*)$/.test(ordinal)||!Number.isSafeInteger(Number(ordinal)))return false;}
+  return true;
+};
+  const screenshotPolicy=policy?.name==='open-seo-spider/owned-screenshot-suite-json-v1';
+  const screenshotPath=/^\/api\/crawls\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/screenshot$/;
   const records=[];let sequence=0,used=0,peak=0,overflow=null;
   const digest=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),value=>value.toString(16).padStart(2,'0')).join('');
   const reserve=bytes=>{if(bytes>limits.maxAggregateBytes-used)return false;used+=bytes;peak=Math.max(peak,used);return true;};
@@ -56,7 +84,9 @@ function installInDocument({key,engine,limits,policy,routes}) {
     // invoke arbitrary URL coercions, body getters, or consume Request streams.
     if(typeof input!=='string')return null;
     let parsed;try{parsed=new URL(input,location.href);}catch(_){return null;}
-    if(parsed.origin!==origin||parsed.href!==origin+parsed.pathname)return null;
+    if(parsed.origin!==origin)return null;
+    if(screenshotPolicy&&screenshotPath.test(parsed.pathname)){if(!screenshotQuery(parsed))return null;}
+    else if(parsed.href!==origin+parsed.pathname)return null;
     const url=parsed.href,matches=routeMatchers.filter(route=>route.pattern.test(parsed.pathname));
     if(!matches.length)return null;
     const method=init&&Object.getOwnPropertyDescriptor(init,'method');
@@ -176,4 +206,4 @@ async function capture(page,response,marker){
   const released=await page.evaluate(({key,query})=>globalThis[key].releaseCapture(query),{key:KEY,query});assert.deepEqual(released,{epoch:marker.epoch,sequence:selected.sequence,responseSha256:selected.responseSha256,released:true});
   return{bytes,status:selected.status,headers:selected.headers,evidence:{engine:ENGINE,source:'actual_browser_fetch_response_clone',epoch:marker.epoch,after_sequence:marker.afterSequence,sequence:selected.sequence,method,url,request_sha256:requestSha256,request_bytes:selected.requestBytes,response_sha256:selected.responseSha256,response_bytes:selected.responseBytes,headers_sha256:hash(Buffer.from(JSON.stringify(headers))),fixture_limits:{...limits},...(policy?{capture_policy:{...policy}}:{}),http_replay:false,buffer_released:true}};
 }
-module.exports={ENGINE,OWNED_POLICY,DEFAULT_LIMITS,install,mark,capture,history,canCapture,installInDocument};
+module.exports={ENGINE,OWNED_POLICY,OWNED_SCREENSHOT_POLICY,DEFAULT_LIMITS,install,mark,capture,history,canCapture,installInDocument};

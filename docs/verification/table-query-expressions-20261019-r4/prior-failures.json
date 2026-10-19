@@ -1,0 +1,306 @@
+{
+  "attempts": [
+    {
+      "raw": {
+        "path": "artifacts/table-expressions-r1-20261019-invalidated.json",
+        "bytes": 1013,
+        "sha256": "7195d277647a695bc11cb711d1a793d255269f2ac1aea04efcc44cafb29d66cf"
+      },
+      "record": {
+        "result": "INVALIDATED_PREFLIGHT_NOT_ACCEPTANCE",
+        "at": "2026-10-19T19:27:51.998Z",
+        "input_manifest_sha256": "1b74ab0f95fad93dcfd743724852c28c2eede2c1978de8498c19c19cd2023147",
+        "reason": "Driver author corrected only the response CSV provenance oracle after announcing freeze, concurrent with normal build. Guard detected exact sole source drift and stopped before state/semantic/native/browser execution. No passing source-bound build gate is issued for R1.",
+        "drift": [
+          {
+            "path": "web/verification/ui-table-expressions-live.cjs",
+            "before_sha256": "22671504a6b2113f5f15cd68f1dbf7d0e559bf6e8cde6cb8eba149bea4bdc9dc",
+            "after_sha256": "6255ca7f473de8ab641f8b0ea8f5c50a80f2ba807d7070e89e231936ad6227f0"
+          }
+        ],
+        "build_log": {
+          "path": "artifacts/table-expressions-r1-20261019-build-normal.log",
+          "bytes": 175,
+          "sha256": "a9a8fb6a145fce4058eb169af7558fe78dc2d481b4cbf052de58d275ba03a455"
+        },
+        "native_or_browser_started": false,
+        "product_source_unchanged": true
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/table-expressions-r2-20261019-failure.json",
+        "bytes": 2382,
+        "sha256": "5f2a2be7e2a617d9ca6e39f00f753873f99faffcf1c994664a1c2c34b3c4dabc"
+      },
+      "record": {
+        "result": "FAIL_FOCUSED_AGGREGATE_NEW_DRIVER_PAGINATION_ORACLE",
+        "at": "2026-10-19T19:30:41.829Z",
+        "driver_sha256": "6255ca7f473de8ab641f8b0ea8f5c50a80f2ba807d7070e89e231936ad6227f0",
+        "source_inputs_unchanged": true,
+        "binary_sha256": "d7d7ecc453d752d6984b95cff0119f38f2bcf374b080c18b78fb07b8b6f0d57c",
+        "passed_individual_old_suites": [
+          "table-explorer",
+          "table-named-views"
+        ],
+        "new_driver_failure": "Rejected null wrapping preserves the accepted AST and population but rerenders page0 through the existing changed callback. The test snapshot was taken after full pagination on the last page. Independent source review identified the same first-page/last-page oracle mismatch before this runtime failed at line183; mode/depth rejection snapshots require the same explicit first-page preparation.",
+        "runtime_new_groups_passed": 0,
+        "native": [
+          {
+            "phase": "warm",
+            "origin": "http://127.0.0.1:58803",
+            "pid": 16000,
+            "natural_eof": true,
+            "forced": false,
+            "close": {
+              "code": 0,
+              "signal": null
+            }
+          }
+        ],
+        "coordinator_shutdown": {
+          "code": 0,
+          "signal": null
+        },
+        "raw": [
+          {
+            "path": "artifacts/table-expressions-r2-20261019-inputs.json",
+            "bytes": 105699,
+            "sha256": "23daff93f6013686f7fb73e735d6d3c577d762bbc1e7b184d76aca8fb3d7fd5c"
+          },
+          {
+            "path": "artifacts/table-expressions-r2-20261019-gates.json",
+            "bytes": 3217,
+            "sha256": "ba6b10834bdeaef849c089a707c744ffdc28411ee7ff86dba150fa28c7542373"
+          },
+          {
+            "path": "artifacts/table-expressions-r2-20261019-targeted-native.log",
+            "bytes": 3749,
+            "sha256": "f4c05a9744a1ad01f35a680cf1d67d9798d643f70153112fc54ed0566143d820"
+          },
+          {
+            "path": "artifacts/table-expressions-r2-20261019-focused/proof.json",
+            "bytes": 4819,
+            "sha256": "09f0b93272eeb8104670819978dc2c94bf7f7aaa6a0e5a2034466b882ea4e997"
+          },
+          {
+            "path": "artifacts/table-expressions-r2-20261019-focused/table-expressions/table-expressions-1792438141330-d96787d5/ui-table-expressions-live.json",
+            "bytes": 53933,
+            "sha256": "1a6991c528c569b7565bc63ecf62bfc0a87ac49125c267e4369bd995cdb6c6a2"
+          }
+        ],
+        "scope": "Original FAIL retained; no browser/native process or success receipt from this attempt is represented as full acceptance. No product/source/deadline fix claimed."
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/table-expressions-r3-20261019-failure.json",
+        "bytes": 2578,
+        "sha256": "8493b7e5e9ee27a2ae6802a15c494ee505909e1c15b2bf5b89b288644a3f0fa9"
+      },
+      "record": {
+        "result": "FAIL_FOCUSED_DRIVER_ALL_SECTION_RELOAD_ORACLE",
+        "recorded_at": "2026-10-19T19:33:23.901Z",
+        "driver_sha256": "d29359e1b51346730de6c612e099ffef94dfe0bf41ae6ccb7980f74c42f9dca1",
+        "source_inputs_unchanged": true,
+        "binary_sha256": "d7d7ecc453d752d6984b95cff0119f38f2bcf374b080c18b78fb07b8b6f0d57c",
+        "cause": "Driver refresh waited for every catalog entry in the current section-only selector. After creating a response view, switching to titles correctly displayed only title definitions, making the driver predicate permanently false. The existing 30s wait expired; no deadline or product change is warranted.",
+        "independent_failure_html_check": {
+          "current_section": "titles",
+          "actual_option_ids": [
+            "2bd09dc1-2b11-4758-8707-343cc468c5f7",
+            "52119146-cf82-4d5e-b8c6-0f36074d54dc",
+            "6b53f608-7fac-4a0d-9d30-f96d9774ad2b"
+          ],
+          "expected_section_ids": [
+            "2bd09dc1-2b11-4758-8707-343cc468c5f7",
+            "52119146-cf82-4d5e-b8c6-0f36074d54dc",
+            "6b53f608-7fac-4a0d-9d30-f96d9774ad2b"
+          ],
+          "foreign_entry_count": 1,
+          "exact_correct_section_options": true
+        },
+        "passed_native_groups": 3,
+        "actual_download_rows": [
+          152,
+          118,
+          118,
+          31,
+          2
+        ],
+        "native": [
+          {
+            "phase": "warm",
+            "origin": "http://127.0.0.1:55018",
+            "pid": 22912,
+            "natural_eof": true,
+            "forced": false,
+            "close": {
+              "code": 0,
+              "signal": null
+            }
+          }
+        ],
+        "coordinator_shutdown": {
+          "code": 0,
+          "signal": null
+        },
+        "raw": [
+          {
+            "path": "artifacts/table-expressions-r3-20261019-inputs.json",
+            "bytes": 105699,
+            "sha256": "098db9b67513bb6a21847e1e019ef9d548c7d9c42f6d4a55209ec348734d2c2a"
+          },
+          {
+            "path": "artifacts/table-expressions-r3-20261019-gates.json",
+            "bytes": 3183,
+            "sha256": "8f0ef54a294a93801a3b3db274c40928768896315155bc8578e1e5a04ca51adb"
+          },
+          {
+            "path": "artifacts/table-expressions-r3-20261019-targeted-native.log",
+            "bytes": 795,
+            "sha256": "33a761f222e3461833cc2ee3046aa1f3c26dc137df948e85e8849c116108d096"
+          },
+          {
+            "path": "artifacts/table-expressions-r3-20261019-focused/proof.json",
+            "bytes": 1463,
+            "sha256": "04e48f6e894e42701d4f3ccd6385cf5cb51370e3e810414f4b26a71f96b32662"
+          },
+          {
+            "path": "artifacts/table-expressions-r3-20261019-focused/table-expressions/table-expressions-1792438282269-aff5dc3c/ui-table-expressions-live.json",
+            "bytes": 236541,
+            "sha256": "4705d7c533deca7ae17d11b8bfbe0248daef6c5d6349ff45279ce4dafc4d43c9"
+          }
+        ]
+      }
+    }
+  ],
+  "driver_only_corrections": [
+    {
+      "raw": {
+        "path": "artifacts/table-expression-page-oracle-fix-20261019-applied.json",
+        "bytes": 1553,
+        "sha256": "ad0083b77fcc5a0246fb5c271fa2923ade0fcffa32c08e34b8e248d66a0b0c04"
+      },
+      "record": {
+        "kind": "driver_only_explicit_first_page_oracle_precondition",
+        "applied_at": "2026-10-19T19:31:15.512Z",
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-expressions-live.cjs",
+        "before_sha256": "6255ca7f473de8ab641f8b0ea8f5c50a80f2ba807d7070e89e231936ad6227f0",
+        "after_sha256": "d29359e1b51346730de6c612e099ffef94dfe0bf41ae6ccb7980f74c42f9dca1",
+        "before_artifact": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\table-expression-page-oracle-fix-20261019-before.cjs",
+        "after_artifact": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\table-expression-page-oracle-fix-20261019-after.cjs",
+        "scope": "Use the same genuine previous-page control already used by exact(). Establish page0 before null-wrap, nonflattenable-mode and fifth-depth rejection snapshots. Preserve every prior snapshot/catalog/disabled-export assertion, then independently check each complete accepted population after refusal. Product behavior, CSV assertions, timeouts and limits are unchanged.",
+        "other_snapshot_review": "createView/mutate/refuse/reset V2 actions and storage-event callbacks render the named controller only, so they do not reset App page index; grouped detached controls are refused before query render. Replace/Rename/Delete snapshots exercise31 rows and cannot cross a pagination boundary. Only expressionFailure renders App page0 and needs this explicit precondition.",
+        "runtime_status": "NOT_RUN_BY_PATCH_SCRIPT"
+      }
+    },
+    {
+      "raw": {
+        "path": "artifacts/table-expressions-section-reload-fix-20261019.json",
+        "bytes": 481,
+        "sha256": "ea3b47ce040e0dc022c88b7f0516bd19f082b9df00c86c09d1f564941332399f"
+      },
+      "record": {
+        "at": "2026-10-19T19:33:23.909Z",
+        "path": "web/verification/ui-table-expressions-live.cjs",
+        "before_sha256": "d29359e1b51346730de6c612e099ffef94dfe0bf41ae6ccb7980f74c42f9dca1",
+        "after_sha256": "bb3e0049f9b7033fa34e14ab08414f64868972907d058944d478bbe4d3d6eb03",
+        "scope": "Only reload wait oracle now compares exact ordered IDs of actual aria-current section, also refusing foreign-section options. No assertions, row/CSV checks, deadlines or product sources changed."
+      }
+    }
+  ],
+  "r4_full_failure": {
+    "result": "FAIL_R4_COMPLETE_UI44_LAST_SUITE",
+    "recorded_at": "2026-10-19T20:33:25.097Z",
+    "full_gate": {
+      "label": "full-ui44",
+      "command": "node",
+      "args": [
+        "scripts/ui-e2e.mjs"
+      ],
+      "started_at": "2026-10-19T19:52:39.967Z",
+      "duration_ms": 2083580,
+      "code": 1,
+      "signal": null,
+      "log": "artifacts/table-expressions-r4-20261019-full-ui44.log",
+      "log_bytes": 2233,
+      "log_sha256": "d8491b1aa69301a6e102584918d2d666026105ced0731b3399e662cb0949be58",
+      "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+      "source_inputs_unchanged": true
+    },
+    "full_aggregate_raw": {
+      "path": "artifacts/table-expressions-r4-20261019-full-ui44/proof.json",
+      "bytes": 11694,
+      "sha256": "e1a02346ae38dc7dd4f2158b1be3f103477754c5789c16b398d8df54da513063"
+    },
+    "full_aggregate_complete": false,
+    "registered_and_executed": 44,
+    "successful": 43,
+    "failed": 1,
+    "failed_suite": {
+      "name": "table-expressions",
+      "script": "ui-table-expressions-live.cjs",
+      "kind": "owned-native",
+      "code": 1,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 12551
+    },
+    "failed_native_raw": {
+      "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/ui-table-expressions-live.json",
+      "bytes": 166271,
+      "sha256": "f2b6afe4eb4c889b950fec354499a34b250296ac3b7d73b17eed945c57e37cbf"
+    },
+    "failed_native_result": "FAIL",
+    "failed_native_completed_groups": 1,
+    "failed_native_partial_views": 24,
+    "raw_error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'Keine Ergebnisse'\n- '1–31 von 31'\n\n    at applyView (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-expressions-live.cjs:173:364)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-expressions-live.cjs:203:2808",
+    "stderr": {
+      "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/stderr.log",
+      "bytes": 404,
+      "sha256": "881dce8e158e0a42a3b2c7470fd5ebf94b83602018223ee00465362fd4f6a488"
+    },
+    "cleanup": {
+      "failed_native": [
+        {
+          "phase": "warm",
+          "origin": "http://127.0.0.1:55401",
+          "pid": 6352,
+          "natural_eof": true,
+          "forced": false,
+          "close": {
+            "code": 0,
+            "signal": null
+          }
+        }
+      ],
+      "coordinator_shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "binary_unchanged": true,
+      "tracked_sources_unchanged": true,
+      "changed": []
+    },
+    "later_failure_HTML": {
+      "raw": {
+        "path": "artifacts/table-expressions-r4-20261019-full-ui44/table-expressions/table-expressions-1792441627859-29350476/table-expressions-failure.html",
+        "bytes": 166636,
+        "sha256": "c53e1134f7c3f698b534227cc0bcbb796889fc99fe5062a871d6d5fd5415e92d"
+      },
+      "rows": 31,
+      "page_label": "1–31 von 31",
+      "active_view": "Angewendet: Empty zero OR unknown",
+      "relevant_error_nodes_empty_and_hidden": true,
+      "scope": "Later diagnostic capture after the failed assertion, not the assertion-time DOM and not a completed native acceptance."
+    },
+    "inference": {
+      "assessment": "Likely driver owner-selection readiness gap before Apply: selectCrawl clears pages and renders a saved terminal summary before awaited refresh commits loaded pages/analysis/responses/fragments; the old selectJob waits only for selected ID and terminal summary. The focused run passed the same31-row path and later failure HTML has expected rows/binding with no visible error.",
+      "root_cause": "INFERENCE_ONLY_NOT_PROVEN_BY_A_TIMELINE: no mutation/event timestamps link assertion instant to later capture. No product failure or successful full native acceptance is inferred.",
+      "next_gate": "Separate minimal driver wait/ownership assertion with fresh R6 acceptance; R4 full44 stays FAIL."
+    }
+  },
+  "scope": "R1 preflight invalidated; R2/R3 failed native attempts and current R4 full44 FAIL retained. No current full44 success is claimed."
+}

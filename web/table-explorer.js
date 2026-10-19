@@ -7,6 +7,7 @@
   // Browser column preferences belong to this origin, project ID and section.
   // They are not a native database or a portable crawl/project format.
   const LIMITS = Object.freeze({ maxColumns: 128, maxRules: 16, maxTextBytes: 4096, maxPreferencesBytes: 65536, maxKeyBytes: 256, maxProjectBytes: 256, maxSectionBytes: 128 });
+  const EXPRESSION_LIMITS = Object.freeze({ maxLeaves: 16, maxNodes: 31, maxGroupDepth: 4, maxExpressionBytes: 131072 });
   const encoder = new TextEncoder();
   const collator = new Intl.Collator('de-DE', { numeric: true, sensitivity: 'base' });
   const identityCollator = new Intl.Collator('de-DE', { numeric: true, sensitivity: 'variant' });
@@ -147,6 +148,97 @@
       return { columns: projected, rows };
     });
   }
+  // V2 declarations are copied without invoking accessors. Existing V1 APIs
+  // retain their own validation and limits; no expression cap is added to them.
+  function expressionObject(value, allowed, required=allowed) {
+    if(!object(value))reject('invalid_expression_shape','Ein Filterknoten muss ein Datenobjekt sein.');
+    const prototype=Object.getPrototypeOf(value);
+    if(prototype!==Object.prototype&&prototype!==null)reject('invalid_expression_shape','Filterdaten benötigen ein einfaches Objekt.');
+    const fields=Reflect.ownKeys(value);
+    if(fields.some(key=>typeof key!=='string'||!allowed.includes(key))||required.some(key=>!own(value,key)))reject('invalid_expression_shape','Unbekannte oder fehlende Filterdaten.');
+    const output={};
+    for(const key of fields){const descriptor=Object.getOwnPropertyDescriptor(value,key);if(!descriptor||!own(descriptor,'value')||!descriptor.enumerable)reject('invalid_expression_shape','Filterdaten dürfen keine Accessors oder versteckten Felder enthalten.');Object.defineProperty(output,key,{value:descriptor.value,enumerable:true,writable:true,configurable:true});}
+    return output;
+  }
+  function expressionArray(value,maximum,code='invalid_expression_array') {
+    if(!Array.isArray(value))reject(code,'Eine dichte Datenliste ist erforderlich.');
+    const descriptor=Object.getOwnPropertyDescriptor(value,'length'),length=descriptor&&descriptor.value;
+    if(!Number.isSafeInteger(length)||length<0||length>maximum)reject(code,'Die Datenliste überschreitet die Grenze.');
+    const fields=Reflect.ownKeys(value);
+    if(fields.length!==length+1||fields.some(key=>typeof key!=='string'||key!=='length'&&!/^(0|[1-9][0-9]*)$/.test(key)))reject(code,'Listen benötigen ausschließlich eigene dichte Datenindizes.');
+    const output=[];for(let index=0;index<length;index++){const cell=Object.getOwnPropertyDescriptor(value,String(index));if(!cell||!own(cell,'value')||!cell.enumerable)reject(code,'Fehlende, geerbte oder berechnete Listeneinträge sind nicht erlaubt.');output.push(cell.value);}return output;
+  }
+  function frozenExpression(value){if(value&&typeof value==='object'){for(const child of Object.values(value))frozenExpression(child);Object.freeze(value);}return value;}
+  function expressionSchema(columns){
+    const copied=expressionArray(columns,LIMITS.maxColumns,'invalid_columns');
+    for(const column of copied){
+      if(!object(column))reject('invalid_columns','Eine Spaltenbeschreibung fehlt.');
+      for(const key of ['key','type','mandatory','rawValue','value'])if(key in column){const descriptor=Object.getOwnPropertyDescriptor(column,key);if(!descriptor||!own(descriptor,'value'))reject('invalid_columns','Spaltenmetadaten und Leser müssen eigene Datenwerte sein.');}
+    }
+    return{columns:copied,byKey:schemaFor(copied)};
+  }
+  function expressionFor(byKey,expression) {
+    if(expression===null)return {declared:null,compiled:null};
+    const active=new Set();let nodes=0,leaves=0;
+    const leafFields={contains:['key','op','text'],equals:['key','op','text'],min:['key','op','min'],max:['key','op','max'],range:['key','op','min','max'],known:['key','op'],unknown:['key','op'],empty:['key','op']};
+    function visit(node,groupDepth){
+      if(node===null||!object(node))reject('invalid_expression_shape','Nur der gesamte Filter darf leer sein.');
+      if(active.has(node))reject('expression_cycle','Zyklische Filterdaten sind nicht erlaubt.');
+      if(++nodes>EXPRESSION_LIMITS.maxNodes)reject('expression_node_limit','Zu viele Filterknoten.');
+      active.add(node);
+      try{
+        const kindDescriptor=Object.getOwnPropertyDescriptor(node,'kind');
+        if(!kindDescriptor||!own(kindDescriptor,'value'))reject('invalid_expression_shape','Der Knotentyp muss ein eigener Datenwert sein.');
+        const kind=kindDescriptor.value;
+        if(kind==='rule'){
+          if(++leaves>EXPRESSION_LIMITS.maxLeaves)reject('expression_leaf_limit','Zu viele einzelne Filterregeln.');
+          const checked=expressionObject(node,['kind','rule']),opDescriptor=checked.rule&&Object.getOwnPropertyDescriptor(checked.rule,'op');
+          if(!opDescriptor||!own(opDescriptor,'value')||!own(leafFields,opDescriptor.value))reject('invalid_operator','Unbekannter Filteroperator.');
+          const rule=expressionObject(checked.rule,leafFields[opDescriptor.value]);
+          boundedText(rule.key,LIMITS.maxKeyBytes,'invalid_column_key',false);
+          const compiled=ruleFor(rule,byKey||new Map([[rule.key,{type:'auto'}]]));
+          return {declared:{kind:'rule',rule},compiled:{kind:'rule',rule:compiled}};
+        }
+        if(kind!=='all'&&kind!=='any')reject('invalid_expression_kind','Unbekannter Filtergruppentyp.');
+        const checked=expressionObject(node,['kind','children']),nextDepth=groupDepth+1;
+        if(nextDepth>EXPRESSION_LIMITS.maxGroupDepth)reject('expression_depth_limit','Filtergruppen sind zu tief verschachtelt.');
+        const children=expressionArray(checked.children,EXPRESSION_LIMITS.maxNodes);
+        if(!children.length)reject('empty_expression_group','Eine Filtergruppe benötigt mindestens einen Knoten.');
+        const prepared=children.map(child=>visit(child,nextDepth));
+        return {declared:{kind,children:prepared.map(child=>child.declared)},compiled:{kind,children:prepared.map(child=>child.compiled)}};
+      }finally{active.delete(node);}
+    }
+    const prepared=visit(expression,0),raw=JSON.stringify(prepared.declared);
+    if(encoder.encode(raw).length>EXPRESSION_LIMITS.maxExpressionBytes)reject('expression_byte_limit','Die Filterdefinition überschreitet 128 KiB.');
+    frozenExpression(prepared.declared);return prepared;
+  }
+  function validateExpression(columns,expression){return result(()=>expressionFor(expressionSchema(columns).byKey,expression).declared);}
+  function fromRules(rules){return result(()=>{const copied=expressionArray(rules,LIMITS.maxRules),expression=copied.length===0?null:copied.length===1?{kind:'rule',rule:copied[0]}:{kind:'all',children:copied.map(rule=>({kind:'rule',rule}))};return expressionFor(null,expression).declared;});}
+  function expressionMatches(node,value){if(node===null)return true;if(node.kind==='rule')return matches(value(node.rule.key),node.rule);return node.kind==='all'?node.children.every(child=>expressionMatches(child,value)):node.children.some(child=>expressionMatches(child,value));}
+  function compileExpression(columns,view,identity={}) {
+    return result(()=>{
+      const checkedSchema=expressionSchema(columns),byKey=checkedSchema.byKey,declaration=expressionObject(view,['version','search','expression','sort','visibleKeys']);
+      if(declaration.version!==2)reject('unsupported_expression_version','Die Filterdefinition benötigt Version 2.');
+      const search=normalizeText(boundedText(declaration.search,LIMITS.maxTextBytes,'search_text_limit')),prepared=expressionFor(byKey,declaration.expression),sort=expressionObject(declaration.sort,['key','direction']);
+      if(!byKey.has(sort.key)||![1,-1].includes(sort.direction))reject('invalid_sort','Ungültige Sortierspalte oder Richtung.');
+      const projected=projection(checkedSchema.columns,byKey,expressionArray(declaration.visibleKeys,LIMITS.maxColumns)),callbacks=expressionObject(identity,['identity','ordinal'],[]);
+      if(own(callbacks,'identity')&&typeof callbacks.identity!=='function'||own(callbacks,'ordinal')&&typeof callbacks.ordinal!=='function')reject('invalid_identity','Ungültiger Zeilenidentitäts-Leser.');
+      const getIdentity=callbacks.identity||(row=>row&&row.url),getOrdinal=callbacks.ordinal||(()=>null);
+      function rows(inputRows){return result(()=>{
+        if(!Array.isArray(inputRows))reject('invalid_rows','Die Tabellenzeilen sind keine Liste.');
+        const selected=[];
+        for(let index=0;index<inputRows.length;index++){
+          const row=inputRows[index],values=new Map(),value=key=>{if(!values.has(key)){const column=byKey.get(key);values.set(key,classify(column.getter(row),column.type));}return values.get(key);};
+          if(!expressionMatches(prepared.compiled,value))continue;
+          if(search&&!Array.from(byKey.keys()).some(key=>{const raw=value(key),column=byKey.get(key);if(raw.kind!=='unknown'&&raw.search.includes(search))return true;return column.displayGetter!==null&&classify(column.displayGetter(row)).search.includes(search);} ))continue;
+          const rawIdentity=getIdentity(row),rowIdentity=typeof rawIdentity==='string'?rawIdentity.normalize('NFC'):typeof rawIdentity==='number'&&Number.isFinite(rawIdentity)?String(rawIdentity):'',rawOrdinal=getOrdinal(row),ordinal=Number.isSafeInteger(rawOrdinal)&&rawOrdinal>=0?rawOrdinal:index;
+          selected.push({row,index,identity:rowIdentity,ordinal,sort:value(sort.key)});
+        }
+        selected.sort((a,b)=>compareValue(a.sort,b.sort,sort.direction)||identityCollator.compare(a.identity,b.identity)||a.ordinal-b.ordinal||a.index-b.index);return selected.map(entry=>entry.row);
+      });}
+      return{columns:projected,rows};
+    });
+  }
   function contextFor(context) {
     keys(context, ['projectId', 'section'], ['projectId', 'section']);
     boundedText(context.projectId, LIMITS.maxProjectBytes, 'invalid_context', false);
@@ -187,5 +279,5 @@
   function reset(storage, context) {
     return result(() => { const key = keyFor(context), target = storageFor(storage, 'removeItem'); try { target.removeItem(key); } catch (_) { reject('storage_unavailable', 'Die Spalten konnten nicht zurückgesetzt werden.'); } return null; });
   }
-  return Object.freeze({ LIMITS, normalizeText, classify, projectColumns, compile, keyFor, load, save, reset });
+  return Object.freeze({ LIMITS, EXPRESSION_LIMITS, normalizeText, classify, projectColumns, compile, validateExpression, compileExpression, fromRules, keyFor, load, save, reset });
 });

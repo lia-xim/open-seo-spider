@@ -1,0 +1,100 @@
+{
+  "result": "PASS_LOCAL_FOCUSED_TABLE_EXPRESSIONS_COMPLETE_UI44_FAILED",
+  "recorded_at": "2026-10-19T20:33:25.128Z",
+  "parent_commit": "1e1793d4bd50c6c5aab40a396392174a2bc210cd",
+  "source_manifest": {
+    "path": "artifacts/table-expressions-r4-20261019-inputs.json",
+    "bytes": 105699,
+    "sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2"
+  },
+  "normal_binary": {
+    "path": "target/debug/open-seo-spider.exe",
+    "bytes": 90159616,
+    "sha256": "d7d7ecc453d752d6984b95cff0119f38f2bcf374b080c18b78fb07b8b6f0d57c"
+  },
+  "inputs": 598,
+  "states": 325,
+  "semantic_fixture_groups": 40,
+  "profile_chromium_reported_tests": 17,
+  "profile_chromium_parents": 2,
+  "profile_chromium_subcontrols": 15,
+  "rust_workspace": {
+    "passed": 1831,
+    "failed": 0,
+    "ignored": 5
+  },
+  "explicit_rust_chromium_fixtures": 4,
+  "focused_native_raw": {
+    "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/ui-table-expressions-live.json",
+    "bytes": 334562,
+    "sha256": "d4f776ecf506a59e4009d33a0d2a238a0ad3676695082c54779db24976c03aff"
+  },
+  "independent_focused_review": {
+    "path": "artifacts/table-expression-native-independent-review-r4-20261019.json",
+    "bytes": 33311,
+    "sha256": "78b6e293e3e8ad5c8af5788edc3e7fe121dd855f28e9b9cd2766f1757a41e436"
+  },
+  "focused_native_scope": {
+    "groups": 5,
+    "views": 45,
+    "native_pages_per_capture": [
+      153,
+      153
+    ],
+    "four_group_levels": true,
+    "main_rows": 118,
+    "zero_or_unknown_rows": 31,
+    "response_original_occurrences": 2,
+    "actual_csv_files": 9,
+    "actual_csv_rows": 927,
+    "independently_reconstructed_CSV_cells": 9270,
+    "independently_reconstructed_DOM_cells": 19088,
+    "geometry_controls": 24,
+    "served_asset_checks": 28,
+    "same_origin_native_EOF0": 2,
+    "coordinator_natural_EOF0": 1,
+    "positive_HTTP410_controls": 2,
+    "offline_product_refetches": 0
+  },
+  "full_UI44": {
+    "result": "FAIL",
+    "complete": false,
+    "suites": 44,
+    "passed": 43,
+    "failed": 1,
+    "failed_suite": "table-expressions",
+    "failed_native_acceptance": false,
+    "gate": {
+      "label": "full-ui44",
+      "command": "node",
+      "args": [
+        "scripts/ui-e2e.mjs"
+      ],
+      "started_at": "2026-10-19T19:52:39.967Z",
+      "duration_ms": 2083580,
+      "code": 1,
+      "signal": null,
+      "log": "artifacts/table-expressions-r4-20261019-full-ui44.log",
+      "log_bytes": 2233,
+      "log_sha256": "d8491b1aa69301a6e102584918d2d666026105ced0731b3399e662cb0949be58",
+      "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+      "source_inputs_unchanged": true
+    },
+    "coordinator_shutdown": {
+      "code": 0,
+      "signal": null
+    }
+  },
+  "limits": [
+    "Focused PASS and independent offline review apply only to the separate completed focused native run.",
+    "R4 complete44-suite run is terminalFAIL after43PASS; final expression suite failed at immediate31-row pagination assertion and is not fully accepted.",
+    "Later HTML contains31 rows/correct active view/empty hidden errors. This supports a synchronization inference, not an assertion-time timeline or root-cause proof.",
+    "Existing R1 invalidated preflight and R2/R3 FAILs are retained alongside this new R4 FAIL.",
+    "Public exact successor CI and a fresh complete regression after the separately scoped driver correction remain required.",
+    "No full manufacturer parity, every operator/table combination, all-browser or large-corpus/performance claim. V2-specific native quota/corrupt/oversized/NoLocks, grouped response inspector/cold response path, portable definitions/XLSX/native project preferences and installed Source16 upgrade remain open."
+  ],
+  "installed_application_updated": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "new_exact_commit_CI": "NOT_PROVEN_REQUIRED",
+  "complete_current_UI44_success": false
+}

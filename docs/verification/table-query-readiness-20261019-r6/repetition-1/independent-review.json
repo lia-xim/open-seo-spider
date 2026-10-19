@@ -1,0 +1,1127 @@
+{
+  "result": "PASS_INDEPENDENT_OFFLINE_TABLE_EXPRESSIONS_NATIVE_REVIEW",
+  "reviewed_at": "2026-10-19T20:39:05.896Z",
+  "method": "Only Node built-ins. Original native reports and raw CSV parsed independently; fixture populations derived as closed-form source-index sets; no product/compiler/driver/helper import or runtime launch.",
+  "revision": "R6_owned_readiness_binding",
+  "r6_binding": {
+    "selected_gate": "targeted-native-1",
+    "repetition": 1,
+    "sequence_complete": {
+      "path": "artifacts/table-expressions-r6-20261019-targeted-complete.json",
+      "bytes": 2937,
+      "sha256": "e7326afcb0658b1fcec442393434ba85b55255817babddf6f477bc68915491be"
+    },
+    "equivalence": {
+      "path": "artifacts/table-expressions-r6-20261019-equivalence.json",
+      "bytes": 1104,
+      "sha256": "abf12111074ee8d5a5776c3d7021118c613efebd025d74aafd8643bfbed948a2"
+    },
+    "original_R5_manifest": {
+      "path": "artifacts/table-expressions-r5-20261019-inputs.json",
+      "bytes": 105699,
+      "sha256": "d9585bac6c41b9b399c4eb35ff702d72e513c07024605fe465e6e9317bcfe7f2"
+    },
+    "reused_R5_normal_binary_record": {
+      "path": "artifacts/table-expressions-r5-20261019-binary.json",
+      "bytes": 1115,
+      "sha256": "ef02ee304b12203974a2fb930a84c5d4306247e14711b47591bb8e27fbfcbc7e"
+    },
+    "reused_R5_target_acceptance": {
+      "path": "artifacts/table-expressions-r5-20261019-targeted-complete.json",
+      "bytes": 2430,
+      "sha256": "547c02ad98600a2b2b79e0774156e461177d010249b01c4a473badec40460d51"
+    },
+    "selected_aggregate": {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/proof.json",
+      "bytes": 897,
+      "sha256": "282f3f1f63c62ef424d0aa4b160877fc8536a7ad27d7142f4741f537cb7d5fd3"
+    },
+    "fresh_Rust": false,
+    "fresh_states": false,
+    "fresh_full44": false
+  },
+  "owner_readiness": [
+    {
+      "id": "3bfc3356-6ba0-4b0c-96a3-465f03ff0d32",
+      "origin": "http://127.0.0.1:49882",
+      "phase": "warm",
+      "route": "http://127.0.0.1:49882/api/crawls/3bfc3356-6ba0-4b0c-96a3-465f03ff0d32/fragments",
+      "method": "GET",
+      "status": 200,
+      "request_finished": true,
+      "DOM_owner_completed": true,
+      "export_enabled": true,
+      "timeout_ms": 30000,
+      "source": "actual_browser_final_refresh_dependency_and_committed_data"
+    },
+    {
+      "id": "65227626-12bd-434d-a0ed-f9cc5a09f3a0",
+      "origin": "http://127.0.0.1:49882",
+      "phase": "warm",
+      "route": "http://127.0.0.1:49882/api/crawls/65227626-12bd-434d-a0ed-f9cc5a09f3a0/fragments",
+      "method": "GET",
+      "status": 200,
+      "request_finished": true,
+      "DOM_owner_completed": true,
+      "export_enabled": true,
+      "timeout_ms": 30000,
+      "source": "actual_browser_final_refresh_dependency_and_committed_data"
+    },
+    {
+      "id": "3bfc3356-6ba0-4b0c-96a3-465f03ff0d32",
+      "origin": "http://127.0.0.1:49882",
+      "phase": "warm",
+      "route": "http://127.0.0.1:49882/api/crawls/3bfc3356-6ba0-4b0c-96a3-465f03ff0d32/fragments",
+      "method": "GET",
+      "status": 200,
+      "request_finished": true,
+      "DOM_owner_completed": true,
+      "export_enabled": true,
+      "timeout_ms": 30000,
+      "source": "actual_browser_final_refresh_dependency_and_committed_data"
+    },
+    {
+      "id": "65227626-12bd-434d-a0ed-f9cc5a09f3a0",
+      "origin": "http://127.0.0.1:49882",
+      "phase": "warm",
+      "route": "http://127.0.0.1:49882/api/crawls/65227626-12bd-434d-a0ed-f9cc5a09f3a0/fragments",
+      "method": "GET",
+      "status": 200,
+      "request_finished": true,
+      "DOM_owner_completed": true,
+      "export_enabled": true,
+      "timeout_ms": 30000,
+      "source": "actual_browser_final_refresh_dependency_and_committed_data"
+    },
+    {
+      "id": "3bfc3356-6ba0-4b0c-96a3-465f03ff0d32",
+      "origin": "http://127.0.0.1:49882",
+      "phase": "warm",
+      "route": "http://127.0.0.1:49882/api/crawls/3bfc3356-6ba0-4b0c-96a3-465f03ff0d32/fragments",
+      "method": "GET",
+      "status": 200,
+      "request_finished": true,
+      "DOM_owner_completed": true,
+      "export_enabled": true,
+      "timeout_ms": 30000,
+      "source": "actual_browser_final_refresh_dependency_and_committed_data"
+    },
+    {
+      "id": "3bfc3356-6ba0-4b0c-96a3-465f03ff0d32",
+      "origin": "http://127.0.0.1:49882",
+      "phase": "cold",
+      "route": "http://127.0.0.1:49882/api/crawls/3bfc3356-6ba0-4b0c-96a3-465f03ff0d32/fragments",
+      "method": "GET",
+      "status": 200,
+      "request_finished": true,
+      "DOM_owner_completed": true,
+      "export_enabled": true,
+      "timeout_ms": 30000,
+      "source": "actual_browser_final_refresh_dependency_and_committed_data"
+    },
+    {
+      "id": "65227626-12bd-434d-a0ed-f9cc5a09f3a0",
+      "origin": "http://127.0.0.1:49882",
+      "phase": "cold",
+      "route": "http://127.0.0.1:49882/api/crawls/65227626-12bd-434d-a0ed-f9cc5a09f3a0/fragments",
+      "method": "GET",
+      "status": 200,
+      "request_finished": true,
+      "DOM_owner_completed": true,
+      "export_enabled": true,
+      "timeout_ms": 30000,
+      "source": "actual_browser_final_refresh_dependency_and_committed_data"
+    }
+  ],
+  "r4_full44_failure_preserved": {
+    "path": "artifacts/table-expressions-r4-20261019-full-ui44/proof.json",
+    "bytes": 11694,
+    "sha256": "e1a02346ae38dc7dd4f2158b1be3f103477754c5789c16b398d8df54da513063"
+  },
+  "reviewer": {
+    "path": "artifacts/review-table-expression-native-r6-20261019.cjs",
+    "bytes": 41157,
+    "sha256": "be9c0e5147d977d999dfdbbe01e58c1e97403842988a8d2afa8e67116b51845a"
+  },
+  "native_receipt": {
+    "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/ui-table-expressions-live.json",
+    "bytes": 337932,
+    "sha256": "370225e77fd7fb84151277583191358d30d7982e3a40c83fbb09bdcc54dc7b99"
+  },
+  "frozen_source": {
+    "manifest": {
+      "path": "artifacts/table-expressions-r6-20261019-inputs.json",
+      "bytes": 105699,
+      "sha256": "121477773255f773c5f85db8c10673d583864c67034ccfd7f2a5666698081d31"
+    },
+    "input_count": 598,
+    "all_inputs_rehashed": true
+  },
+  "normal_binary": {
+    "path": "target/debug/open-seo-spider.exe",
+    "bytes": 90159616,
+    "sha256": "d7d7ecc453d752d6984b95cff0119f38f2bcf374b080c18b78fb07b8b6f0d57c"
+  },
+  "driver": {
+    "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-expressions-live.cjs",
+    "sha256": "a05fd0eef4978b92a4df52e7c81f192e078a0d56e56e7ee5c245a5cb970c78e0"
+  },
+  "focused_gate": {
+    "label": "targeted-native-1",
+    "command": "node",
+    "args": [
+      "scripts/ui-e2e.mjs",
+      "--only",
+      "table-expressions"
+    ],
+    "started_at": "2026-10-19T20:34:58.173Z",
+    "duration_ms": 34466,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r6-20261019-targeted-native-1.log",
+    "log_bytes": 163,
+    "log_sha256": "7b4389bac0de666c1b1c0e88b6aa63e3e1c501236a4c389280ef2a518ca32f82",
+    "frozen_inputs_sha256": "121477773255f773c5f85db8c10673d583864c67034ccfd7f2a5666698081d31",
+    "source_inputs_unchanged": true,
+    "log_binding": {
+      "path": "artifacts/table-expressions-r6-20261019-targeted-native-1.log",
+      "bytes": 163,
+      "sha256": "7b4389bac0de666c1b1c0e88b6aa63e3e1c501236a4c389280ef2a518ca32f82"
+    }
+  },
+  "measured": {
+    "major_groups": 5,
+    "native_original_captures": 2,
+    "original_page_records": 306,
+    "html_rows_per_capture": 152,
+    "actual_CSV_files": 9,
+    "browser_download_events": 9,
+    "CSV_data_rows": 927,
+    "CSV_data_cells": 9270,
+    "all_CSV_headers_cells_and_provenance_rechecked": true,
+    "DOM_observations": 45,
+    "DOM_rows_reconstructed": 4658,
+    "DOM_cells_reconstructed": 19088,
+    "catalog_snapshots": 12,
+    "complete_query_apply_observations": 18,
+    "immediate_first_page_observations": 18,
+    "geometry_observations": 24,
+    "scripted_same_turn_races": 4,
+    "negative_receipt_controls": 13,
+    "reviewer_controls": 8,
+    "native_processes": 2,
+    "natural_EOF_zero": 2,
+    "same_origin_cold": true,
+    "positive_410_controls": 2,
+    "offline_product_requests": 0,
+    "served_asset_bindings": 28,
+    "owner_readiness_observations": 7,
+    "owner_readiness_warm": 5,
+    "owner_readiness_cold": 2
+  },
+  "original_reports": [
+    {
+      "id": "3bfc3356-6ba0-4b0c-96a3-465f03ff0d32",
+      "original": {
+        "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/3bfc3356-6ba0-4b0c-96a3-465f03ff0d32-original-project.json",
+        "bytes": 1299458,
+        "sha256": "f2129355a851967939849265f5d6c3b2d353f2cd3aaf049baaa1c975ef9f7f49"
+      },
+      "saved": {
+        "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/store/3bfc3356-6ba0-4b0c-96a3-465f03ff0d32.json",
+        "bytes": 957410,
+        "sha256": "fadbbbd9ecee81a46db88a6f721a2d37706d3a92291ea6d4dfa09688fcb482a5"
+      },
+      "original_page_records": 153,
+      "html_table_rows": 152
+    },
+    {
+      "id": "65227626-12bd-434d-a0ed-f9cc5a09f3a0",
+      "original": {
+        "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/65227626-12bd-434d-a0ed-f9cc5a09f3a0-original-project.json",
+        "bytes": 1299445,
+        "sha256": "0ef62fd7175a40031dca00a13d7877305c744f2ba520dea8f97a0159507b7641"
+      },
+      "saved": {
+        "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/store/65227626-12bd-434d-a0ed-f9cc5a09f3a0.json",
+        "bytes": 957397,
+        "sha256": "f4e62f3df72e32df2c0738cb87efd422de6b5a39850981e4a527e0464aafc448"
+      },
+      "original_page_records": 153,
+      "html_table_rows": 152
+    }
+  ],
+  "csv_files": [
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/warm-a-all-152.csv",
+      "bytes": 25093,
+      "sha256": "e7a50ddb667a2af80c72a0c27051c355326ed2dd86925cd811ff852d3e35383d",
+      "label": "warm-a-all-152",
+      "rows": 152,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/warm-a-nested-118.csv",
+      "bytes": 19604,
+      "sha256": "9ad8393e7b4837922fa58dd6b76c3dc7bea5cfea0891ffa1aee44a3a3cb30d2e",
+      "label": "warm-a-nested-118",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/warm-b-nested-118.csv",
+      "bytes": 19610,
+      "sha256": "9d9afbd2f55aec71cc3d7675d28a08e2d9e08a1d398ba91d8b24d626ef635dc6",
+      "label": "warm-b-nested-118",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/warm-a-zero-unknown-31.csv",
+      "bytes": 5098,
+      "sha256": "0eb54895357988be409a053a5e3cdce679e972e31cfeac4bdcf71a1899f4bf85",
+      "label": "warm-a-zero-unknown-31",
+      "rows": 31,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/warm-b-response-occurrences-2.csv",
+      "bytes": 474,
+      "sha256": "965ff2483eaf30827f552c59ad985e181429779a73ded1a81bd9bcff5501b059",
+      "label": "warm-b-response-occurrences-2",
+      "rows": 2,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/cold-a-all-152.csv",
+      "bytes": 25093,
+      "sha256": "e7a50ddb667a2af80c72a0c27051c355326ed2dd86925cd811ff852d3e35383d",
+      "label": "cold-a-all-152",
+      "rows": 152,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/cold-a-nested-118.csv",
+      "bytes": 19604,
+      "sha256": "9ad8393e7b4837922fa58dd6b76c3dc7bea5cfea0891ffa1aee44a3a3cb30d2e",
+      "label": "cold-a-nested-118",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/cold-b-nested-118.csv",
+      "bytes": 19610,
+      "sha256": "9d9afbd2f55aec71cc3d7675d28a08e2d9e08a1d398ba91d8b24d626ef635dc6",
+      "label": "cold-b-nested-118",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/cold-b-nested-320.csv",
+      "bytes": 19610,
+      "sha256": "9d9afbd2f55aec71cc3d7675d28a08e2d9e08a1d398ba91d8b24d626ef635dc6",
+      "label": "cold-b-nested-320",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    }
+  ],
+  "views": [
+    {
+      "label": "actual A original152 titles before grouped mode",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_length",
+        "title_pixels",
+        "title_count",
+        "duplicates",
+        "status"
+      ],
+      "ordered_cells_sha256": "55d4127b8e4891940a90b12d1052a708031eae39ebfcbf8b6870806d6ce2c7c5"
+    },
+    {
+      "label": "actual B original152 titles before grouped mode",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_length",
+        "title_pixels",
+        "title_count",
+        "duplicates",
+        "status"
+      ],
+      "ordered_cells_sha256": "8a8e667814c7933db966e22e3aed94712af6d4c3aefe542af0a1569f982a6306"
+    },
+    {
+      "label": "explicit grouped null is unfiltered without invented leaves",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "a4a7ff35ed36004581e0ca207fbe04fe279f5089f66235d5a4c46fa7d757273e"
+    },
+    {
+      "label": "rejected null wrapping preserves all152 original observations",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "a4a7ff35ed36004581e0ca207fbe04fe279f5089f66235d5a4c46fa7d757273e"
+    },
+    {
+      "label": "four-level nested OR includes150 exact indexed originals once despite overlapping leaves",
+      "group": "a",
+      "population": "nested",
+      "rows": 150,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "40e9061ba087b6b6f315801f91d458c8b80859ca2f79526a606d33d25757ccaa"
+    },
+    {
+      "label": "actual root OR-to-AND changes semantics to contradictory zero",
+      "group": "a",
+      "population": "none",
+      "rows": 0,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "actual root AND-to-OR restores150 without URL union",
+      "group": "a",
+      "population": "nested",
+      "rows": 150,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "40e9061ba087b6b6f315801f91d458c8b80859ca2f79526a606d33d25757ccaa"
+    },
+    {
+      "label": "reordered overlapping OR branches retain original occurrence membership",
+      "group": "a",
+      "population": "nested",
+      "rows": 150,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "40e9061ba087b6b6f315801f91d458c8b80859ca2f79526a606d33d25757ccaa"
+    },
+    {
+      "label": "explicit removal of zero-count branch excludes only declared missing-title indices",
+      "group": "a",
+      "population": "without_missing",
+      "rows": 120,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "7c15ca75d74480b600617c30f13f98d5517f882ebb448ef081ba00cf4321e598"
+    },
+    {
+      "label": "explicit branch restoration keeps each original observation once",
+      "group": "a",
+      "population": "nested",
+      "rows": 150,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "40e9061ba087b6b6f315801f91d458c8b80859ca2f79526a606d33d25757ccaa"
+    },
+    {
+      "label": "outer section filter and hidden-column NFC global search remain AND with nested OR",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "2086eb925ce62b3541dd961298b3c1eb487a1132152e47a2a987225826f964e3"
+    },
+    {
+      "label": "explicit grouped A Apply from actual later page",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "2086eb925ce62b3541dd961298b3c1eb487a1132152e47a2a987225826f964e3"
+    },
+    {
+      "label": "second actual capture starts simple and retains its own legacy columns",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "f2e4378aa523e6c824ce53f01f3d24548e7e07b76c64df24ca2b9912d8328318"
+    },
+    {
+      "label": "explicit complete grouped view reused on118 actual B originals",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "outer global hidden-field search restricts every OR branch",
+      "group": "b",
+      "population": "cohort",
+      "rows": 17,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "602bb33dd6b308b3c8e404e72c0bde015358d3d8c271e6075a991f3a100c0d90"
+    },
+    {
+      "label": "full grouped B population restored",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "rejected nonflattenable mode preserves all118 accepted originals",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "explicit Apply clears rejected-mode error without changing definition",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "rejected fifth group level preserves all118 accepted originals",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "valid saved four-level AST remains applicable after bounded edit refusal",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "editable grouped Apply itself resets real later page",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "measured0 OR absent title selects31 original rows with no invented zero",
+      "group": "b",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "b87e78959cf80175a0ba10e733dbebe7032bbba8afb34f6563896eea413822a8"
+    },
+    {
+      "label": "actual accepted edit before active v2 Rename",
+      "group": "b",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "b6c7b8aeec4639fe17d40ec8f5ba8bb9aee2f0f97d777aa750d1af71805ac47a"
+    },
+    {
+      "label": "zero query restored after deleting only stored definition",
+      "group": "b",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "b87e78959cf80175a0ba10e733dbebe7032bbba8afb34f6563896eea413822a8"
+    },
+    {
+      "label": "zero/unknown view explicitly applied to A saved capture",
+      "group": "a",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "9960e7242ee00f045e948ea072f5df355995668e6e3239e132e88ec7d904c6f7"
+    },
+    {
+      "label": "main A before stale grouped controls",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "2086eb925ce62b3541dd961298b3c1eb487a1132152e47a2a987225826f964e3"
+    },
+    {
+      "label": "old saved action cannot win against actual search revision",
+      "group": "a",
+      "population": "none",
+      "rows": 0,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "restored A before group-kind race",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "2086eb925ce62b3541dd961298b3c1eb487a1132152e47a2a987225826f964e3"
+    },
+    {
+      "label": "old saved action cannot win against actual group-kind edit",
+      "group": "a",
+      "population": "none",
+      "rows": 0,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "v2 applies explicitly after actual lossless grouped-to-simple switch",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "2086eb925ce62b3541dd961298b3c1eb487a1132152e47a2a987225826f964e3"
+    },
+    {
+      "label": "actual owner race accepts B without stale grouped-save write",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "f2e4378aa523e6c824ce53f01f3d24548e7e07b76c64df24ca2b9912d8328318"
+    },
+    {
+      "label": "B grouped query after rejected stale owner save",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "actual overlapping OR preserves two equal observed URLs and their separate original source occurrence",
+      "group": "b",
+      "population": "response",
+      "rows": 2,
+      "columns": [
+        "url",
+        "requested_url",
+        "response_index",
+        "status"
+      ],
+      "ordered_cells_sha256": "94df041f38c21031f80fe0f6fc7910b72b53409d357132b678291bbef3c58f29"
+    },
+    {
+      "label": "saved v2 response expression retains original duplicate URL occurrences",
+      "group": "b",
+      "population": "response",
+      "rows": 2,
+      "columns": [
+        "url",
+        "requested_url",
+        "response_index",
+        "status"
+      ],
+      "ordered_cells_sha256": "94df041f38c21031f80fe0f6fc7910b72b53409d357132b678291bbef3c58f29"
+    },
+    {
+      "label": "main title expression before explicit v2 reset",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "explicit v2 reset retains every grouped query row",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "zero query before recreating v2 saved definition",
+      "group": "b",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "b87e78959cf80175a0ba10e733dbebe7032bbba8afb34f6563896eea413822a8"
+    },
+    {
+      "label": "null expression before recreating unfiltered saved definition",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "82111eb32cec85d7eb98c4a0f7112edeb9707a8011e608a17bf8330175f4f2c5"
+    },
+    {
+      "label": "main grouped view restored after v2-only catalog reset",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    },
+    {
+      "label": "fresh cold context restores v1/legacy bytes but never auto-applies grouped definition",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "a4a7ff35ed36004581e0ca207fbe04fe279f5089f66235d5a4c46fa7d757273e"
+    },
+    {
+      "label": "cold explicitly applied A grouped definition",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "2086eb925ce62b3541dd961298b3c1eb487a1132152e47a2a987225826f964e3"
+    },
+    {
+      "label": "cold explicit null expression restores all152 without inventing a leaf",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "a4a7ff35ed36004581e0ca207fbe04fe279f5089f66235d5a4c46fa7d757273e"
+    },
+    {
+      "label": "cold saved nested A restored after null",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "2086eb925ce62b3541dd961298b3c1eb487a1132152e47a2a987225826f964e3"
+    },
+    {
+      "label": "cold B retains separate legacy columns without grouped autoApply",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "f2e4378aa523e6c824ce53f01f3d24548e7e07b76c64df24ca2b9912d8328318"
+    },
+    {
+      "label": "cold explicitly applied B grouped definition",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "547ed44b5fa9ef94f62ec893fc7b94479d7365cde478d198ada39a4dc60dfabe"
+    }
+  ],
+  "catalogs": [
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-000.json",
+      "bytes": 830,
+      "sha256": "b6155ebd8b901bdd1294558baf4008ff882f7d93569e7562338a44cc0fc80fc7"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-001.json",
+      "bytes": 2073,
+      "sha256": "c25fc1318eb8b5ccd975078d9fce7c2f17d1a729159c899761fee8ff05e897ae"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-002.json",
+      "bytes": 3312,
+      "sha256": "344f13288ebca39e0de0eec3648c77d5b7f8be3c0b6da48f76642006a2b9e69b"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-003.json",
+      "bytes": 2995,
+      "sha256": "b01774ee34c532c6c9cb260275ef976dbc9958bb7b4e7c11d716d387e5ec9211"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-004.json",
+      "bytes": 3000,
+      "sha256": "f66af83eca7be9b66bb1a69ff711f53c3efab702b50492fd85b21b50df20475a"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-005.json",
+      "bytes": 2073,
+      "sha256": "c25fc1318eb8b5ccd975078d9fce7c2f17d1a729159c899761fee8ff05e897ae"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-006.json",
+      "bytes": 3005,
+      "sha256": "e53db12b3fa610098dc85350bdca7cc51ae6672bf2c15a60d0438e22b5a726c2"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-007.json",
+      "bytes": 4357,
+      "sha256": "185835c99425f28df876911b1d01ecf7b3f0b1a85a66640cf7fa4c13e46918d2"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-008.json",
+      "bytes": 1310,
+      "sha256": "bc9ffac54e8d57f513810858579368c040e08f586a4f72e8af2d8fa0e6f33c91"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-009.json",
+      "bytes": 2242,
+      "sha256": "06a669683f20a3b49e7f2245ae8cbb241ed1c18444978304acab75f23bea225e"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-010.json",
+      "bytes": 3005,
+      "sha256": "7e513c4816e82816d182b21b31f5f6d370aa72e240b2479c1e69cfd9a1bcbb2a"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/expression-catalog-011.json",
+      "bytes": 3005,
+      "sha256": "7e513c4816e82816d182b21b31f5f6d370aa72e240b2479c1e69cfd9a1bcbb2a"
+    }
+  ],
+  "v1_catalog": {
+    "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/original-v1-browser-catalog.json",
+    "bytes": 860,
+    "sha256": "a4d652825f54368c874786fe8936a415ec78c0a279bca4c95c9e17b18907ba85"
+  },
+  "shutdowns": [
+    {
+      "phase": "warm",
+      "log": {
+        "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/native-warm.log",
+        "bytes": 1781,
+        "sha256": "28bb4242360c18581ec376502f34e9e460ce375da5f45b8e922bfc20b2702db5"
+      },
+      "cause": "owned_stdin_eof",
+      "clean": true
+    },
+    {
+      "phase": "cold",
+      "log": {
+        "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/native-cold.log",
+        "bytes": 1773,
+        "sha256": "201fc8761281381a291d322ff202c9f5d2a6cfb962d82bb52a3a19a270718c98"
+      },
+      "cause": "owned_stdin_eof",
+      "clean": true
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/table-expressions-warm-1440.png",
+      "bytes": 326325,
+      "sha256": "b7ff358d08ea728a1cba2888430b8b8c3ab17045d5de1c20347fab5afee60491"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/table-expressions-warm-320.png",
+      "bytes": 279400,
+      "sha256": "78e25cac65bc42303aaf405ba7a834af62dde3bc88cfebe0a90d7f2b5c16f301"
+    },
+    {
+      "path": "artifacts/table-expressions-r6-20261019-focused-1/table-expressions/table-expressions-1792442101513-6bbb2d8c/table-expressions-cold-320.png",
+      "bytes": 269916,
+      "sha256": "5b1d9de04f44d16beb94841436a56f4ef8b30da2bfbcd6675567062b2d776ef3"
+    }
+  ],
+  "reviewer_controls": [
+    {
+      "label": "legal final quoted URL at EOF",
+      "expected_refusal": false,
+      "pass": true
+    },
+    {
+      "label": "escaped quote and quoted multiline field",
+      "expected_refusal": false,
+      "pass": true
+    },
+    {
+      "label": "duplicate header refused",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "unterminated final quoted field refused",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "text after quote refused",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "extra trailing blank record refused",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "response occurrence identity cannot collapse by observed URL",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "native measured zero cannot be absent",
+      "expected_refusal": true,
+      "pass": true
+    }
+  ],
+  "historical_driver_oracle_failures": {
+    "records": [
+      {
+        "revision": "r2",
+        "receipt": {
+          "path": "artifacts/table-expressions-r2-20261019-failure.json",
+          "bytes": 2382,
+          "sha256": "5f2a2be7e2a617d9ca6e39f00f753873f99faffcf1c994664a1c2c34b3c4dabc"
+        },
+        "preserved": true
+      },
+      {
+        "revision": "r3",
+        "receipt": {
+          "path": "artifacts/table-expressions-r3-20261019-failure.json",
+          "bytes": 2578,
+          "sha256": "8493b7e5e9ee27a2ae6802a15c494ee505909e1c15b2bf5b89b288644a3f0fa9"
+        },
+        "preserved": true
+      }
+    ],
+    "original_frozen_driver_sha256": "6255ca7f473de8ab641f8b0ea8f5c50a80f2ba807d7070e89e231936ad6227f0",
+    "resolved_in_current_driver_only": [
+      {
+        "issue": "Three refusal snapshots were on the final page left by exact(); existing error rendering resets page0.",
+        "resolution": "Explicit firstPage before each negative snapshot; subsequent complete accepted populations still checked. No product change."
+      },
+      {
+        "issue": "Reload demanded all catalog entries in a section-specific select after saving a response view.",
+        "resolution": "Exact ordered IDs from actual current section, including absence of foreign-section IDs. No product or deadline change."
+      }
+    ],
+    "earlier_raw_failures_unchanged": true
+  },
+  "proof_boundaries": {
+    "offline_review_does_not_reexecute_browser": true,
+    "driver_real_DOM_guard_assertions_reviewed_but_no_independent_event_replay": true,
+    "v1_and_legacy_cold_byte_preservation_is_driver_assertion_plus_independent_saved_bytes_hash_recheck": true,
+    "real_cross_tab_storage_event_refusal_is_driver_assertion_not_separate_negative_receipt_record": true,
+    "active_badge_and_no_auto_apply_are_driver_assertions_not_reconstructed_from_standalone_badge_snapshots": true,
+    "no_positive_synthetic_PageRecords": true,
+    "no_API_success_mock": true,
+    "no_native_Start_button_proof": true,
+    "no_all_operator_or_table_coverage": true,
+    "no_unbounded_corpus_or_manufacturer_parity": true,
+    "no_new_native_quota_corrupt_oversize_or_NoLocks_claim": true,
+    "no_response_inspector_or_cold_response_view_claim": true,
+    "owner_readiness_is_driver_observation_plus_independent_receipt_binding_not_event_reexecution": true,
+    "full44_suite": "NOT_ASSESSED_BY_THIS_REVIEWER_R4_FAILURE_PRESERVED",
+    "stable_release_ready": false,
+    "manufacturer_parity": "NOT_PROVEN"
+  }
+}

@@ -7107,11 +7107,50 @@
   "last_verified_at": "2026-10-19T19:08:46.864Z",
   "current_work": [
     {
+      "id": "table-query-expressions-20261019",
+      "priority": -16,
+      "status": "LOCAL_R6_THREE_NATIVE_PASS_R4_FULL44_FAIL_PUBLIC_CI_PENDING",
+      "summary_de": "Echte verschachtelte UND/ODER-Ausdrücke und explizite browserlokale v2-Gruppenansichten sind implementiert. Drei vorab festgelegte native R6-Durchläufe bestehen mit je zwei153-Seiten-Captures,45 Tabellenbeobachtungen und9 CSV-Dateien/927 Datenzeilen. R5 besteht330 reine Tests,40 Fixturegruppen,22 Chromium-Kontrollen und den nativen Screenshotablauf. R4 besteht1831 Rust-Tests sowie4 Opt-in-Chromium-Fixtures; diese unveränderten Prüfinputs werden ausdrücklich wiederverwendet. Der R4-Gesamtlauf bleibt FAIL mit43 bestandenen Suiten und einer fehlgeschlagenen Driver-Bereitschaftsprüfung. Neue vollständige44-Suiten-CI und Herstellerparität sind offen.",
+      "completed_acceptance_de": [
+        "Rekursive UND/ODER-Ausdrücke bis vier Gruppenebenen werden vollständig validiert; echte Verschachtelung, überlappende ODER-Zweige, leere/unbekannte/0-Werte, NFC und ursprüngliche doppelte URL-Beobachtungen sind geprüft.",
+        "Explizite verlustlose Moduswechsel, atomare komplette Ansichtsübernahme, v2-CRUD/Reset, unveränderte v1-/Legacy-Bytes sowie Mode-/Query-/Group-/Owner-/Detached-DOM-Guards, Web Locks, Byte-CAS und Cross-Tab-Ereignisse sind tatsächlich geprüft.",
+        "Je R6-Durchlauf45 vollständige DOM-Beobachtungen/19088 Zellen sowie9 echte CSV-Dateien/927 Zeilen/9270 Datenzellen samt Provenienz unabhängig rekonstruiert. Zwei natürliche native EOF0,24 Geometriekontrollen bei1440/320px,28 Assetprüfungen,2 positive410 und null Offline-Neuabrufe sind belegt.",
+        "Die neue Screenshot-Testpolicy erfasst11 originale Browser-Clone-Antworten mit voller Anfrage-/Dokumentbindung und64KiB-Clonegrenze ohne HTTP-Replay. Fünf echte PNG-Dateien, ursprüngliche Negativ-/Late-Response- und Kaltstartprüfungen sowie330 reine und22 echte Chromium-Tests bestehen auf R5.",
+        "R1 invalidierter Preflight sowie R2/R3/R4 fehlgeschlagene Versuche bleiben erhalten. R6 ändert ausschließlich den Driver: tatsächliche letzte Owner-Refresh-Antwort und Datencommit abwarten. Datenorakel, erste-Seite-Assertions und ursprüngliche Fristen bleiben erhalten. Drei vorab festgelegte Wiederholungen bestehen."
+      ],
+      "pending_acceptance_de": [
+        "Den exakten veröffentlichten Nachfolgecommit in vollständiger44-Suiten- und Cross-Platform-CI terminal abnehmen. Drei fokussierte Durchläufe sind kein vollständiger44-Suiten-PASS.",
+        "Weitere Tabellen-/Operator-/Browserkombinationen, V2-spezifische Quota-/Korrupt-/Oversize-/NoLocks-Kombinationen, gruppierten Response-Inspector/Kaltstart und größere Ressourcen-/Latenz-Corpora gesondert prüfen.",
+        "Portable Definitionen mit Import-/Exportvorschau, native Projektpräferenzen und XLSX implementieren und E2E abnehmen. Der rein geprüfte Portabilitätsentwurf ist noch nicht in die Produktoberfläche integriert.",
+        "Vollständige Herstellerparität und der gesamte ui.filter-details-export-Vertrag bleiben NOT_PROVEN; der installierte Source16-Pilot wurde nicht aktualisiert."
+      ],
+      "documentation": [
+        "docs/table-query-expressions.md",
+        "docs/FEATURE_TODO.md",
+        "docs/e2e-testing.md",
+        "docs/verification/table-query-readiness-20261019-r6/README.md",
+        "docs/verification/table-query-expressions-20261019-r4/README.md",
+        "docs/verification/screenshot-response-harness-20261019-r5/README.md"
+      ],
+      "gates": {
+        "implementation": "PASS_BOUNDED_NESTED_MAIN_TABLE_AND_SEPARATE_V2",
+        "pure_tests": "PASS330_R5_REUSED_R6_UNCHANGED_INPUTS",
+        "native_browser": "PASS_R6_THREE_PRESPECIFIED_5GROUPS45VIEWS9CSV927ROWS7OWNER_READINESS_EACH",
+        "full_UI44": "R4_FAIL43PASS1FAIL_RETAINED_R6_NOT_RUN_EXACT_PUBLIC_CI_REQUIRED",
+        "rust": "PASS1831_0FAIL5IGNORED_PLUS4_CHROMIUM_R4_REUSED",
+        "new_public_CI": "REQUIRED_EXACT_SUCCESSOR_NOT_PROVEN",
+        "manufacturer_parity": "NOT_PROVEN",
+        "publication_source": "PASS597_RUNTIME_INPUTS_IDENTICAL_ONLY_RAW_PROOF_GIT_ATTRIBUTES_FRESH330_AND40"
+      },
+      "reference_parity": "NOT_PROVEN",
+      "title_de": "Verschachtelte UND/ODER-Filter und getrennte Gruppenansichten"
+    },
+    {
       "id": "table-named-views-20261019",
       "priority": -15,
       "title_de": "Benannte vollständige Tabellenansichten speichern und ausdrücklich anwenden",
-      "status": "LOCAL_R3_NAMED_VIEWS_AND43_UI_PASS_PUBLIC_CI_PENDING",
-      "summary_de": "Vollständige browserlokale Bereichsfilter-/Such-/UND-Regel-/Sortier-/Spaltendefinitionen sind integriert und ausdrücklich auf zwei separat gespeicherte native Crawls angewendet. Fünf native Gruppen, 29 Tabellenbeobachtungen und neun echte CSV-Dateien mit 719 Datenzeilen prüfen jede ausgewählte Zelle und Provenienz. Reale Locks, Byte-CAS, Cross-Tab-Ereignisse, Quota, korrupte Daten, Statusmarkierung, Seitensprung sowie Same-Origin-Kaltstart und 320px sind belegt. Frische 282 Zustandskontrollen, 40 semantische Gruppen, 17 berichtete Chromium-Transporttests, 1831 gewöhnliche Rust-Tests und alle 43 UI-Suiten bestehen auf 593 unveränderten Inputs. R1/R2 sowie der erste R3-Gesamtlauf nach elf Erfolgen mit DOM-Node-Prozessabbruch3221226505/0xc0000409 bleiben FAIL. Eine unveränderte Einzeldiagnose und ein frischer vollständiger43-Suiten-Retry bestehen; die ursprüngliche Ursache bleibt NOT_PROVEN. Neue öffentliche CI, weitere Tabellen-/Browser-/Exportpfade und Herstellerparität bleiben offen.",
+      "status": "LOCAL_R3_NAMED_VIEWS_AND43_UI_PASS_PARENT_PUBLIC_CI_FAIL_RETAINED",
+      "summary_de": "Vollständige browserlokale Bereichsfilter-/Such-/UND-Regel-/Sortier-/Spaltendefinitionen sind integriert und ausdrücklich auf zwei separat gespeicherte native Crawls angewendet. Fünf native Gruppen, 29 Tabellenbeobachtungen und neun echte CSV-Dateien mit 719 Datenzeilen prüfen jede ausgewählte Zelle und Provenienz. Reale Locks, Byte-CAS, Cross-Tab-Ereignisse, Quota, korrupte Daten, Statusmarkierung, Seitensprung sowie Same-Origin-Kaltstart und 320px sind belegt. Frische 282 Zustandskontrollen, 40 semantische Gruppen, 17 berichtete Chromium-Transporttests, 1831 gewöhnliche Rust-Tests und alle 43 UI-Suiten bestehen auf 593 unveränderten Inputs. R1/R2 sowie der erste R3-Gesamtlauf nach elf Erfolgen mit DOM-Node-Prozessabbruch3221226505/0xc0000409 bleiben FAIL. Eine unveränderte Einzeldiagnose und ein frischer vollständiger43-Suiten-Retry bestehen; die ursprüngliche Ursache bleibt NOT_PROVEN. Die öffentliche1e-CI39308675253 endet mit FAIL: Renderer-Screenshot nach40 bestandenen Suiten, Container/Ubuntu/Windows erfolgreich. Der neue Nachfolgecommit benötigt eigene vollständige CI; weitere Pfade und Herstellerparität bleiben offen.",
       "completed_acceptance_de": [
         "Zwei tatsächliche 107-Seiten-Captures enthalten je 106 Title-Beobachtungen; dieselbe vollständige benannte Definition wird ausdrücklich auf je 101 unabhängig erfasste Zielzeilen angewendet. Auswahl und Save wenden nie automatisch an; Apply beginnt nachweislich auf Seite 0, bevor das unabhängige Pagination-Orakel eingreift.",
         "Neun echte CSV-Downloads mit insgesamt 719 Datenzeilen prüfen geordnete Header, jede Datenzelle und Provenienz unabhängig aus originalen Native-Fakten. Warme, kalte und 320px-Dateien bleiben byteidentisch; getrennte Crawl-Owner bleiben verschieden. Null, leer, unbekannt und NFC/Unicode sind getrennt.",
@@ -7125,9 +7164,9 @@
         "Git-Zeilenenden sind gesondert belegt: ausschließlich das finale CRLF zweier Node-Testdateien wurde zu LF normalisiert. 591 von 593 Inputs, alle kompilierten Produktquellen, Browser-Treiber und die Binary bleiben bytegleich. Alle 282 Zustandstests bestanden nochmals auf dem kanonischen 7cef-Veröffentlichungsinventar. Ursprüngliche Rust-/Browser-/UI-Belege bleiben mit 6157 gebunden und werden nicht als neue Läufe ausgegeben."
       ],
       "pending_acceptance_de": [
-        "Öffentliche Cross-Platform-CI des exakten Nachfolgecommits terminal abnehmen; lokale Gates ersetzen diesen neuen öffentlichen Lauf nicht. Der frühere 2281086-Lauf ist gesondert erfolgreich, historische 25b-Fehler bleiben erhalten.",
+        "Parent1e-CI39308675253 bleibt terminal FAIL (Renderer-Screenshot, andere drei Jobs erfolgreich). Exakten Nachfolgecommit nach Korrekturen erneut vollständig abnehmen; historische2281086-PASS- und25b-FAIL-Belege bleiben getrennt.",
         "Inkompatible Schema-/Semantik-Verträge, übergroße/unsupported Kataloge, No-Crawl-Gating und zusätzliche Name-/Selection-/Contract-Races sind rein geprüft; native Browserabnahme weiterer Bereiche/Operatoren/Formate und negativer Kombinationen bleibt gesondert offen.",
-        "Portable Definition-Import-/Exportpfade, native Projektpräferenzen, ODER-/verschachtelte Regeln und XLSX implementieren und vollständig mit Export abnehmen.",
+        "Portable Definition-Import-/Exportpfade, native Projektpräferenzen und XLSX bleiben offen. Verschachtelte UND/ODER-Gruppenansichten besitzen die separate begrenzte R6-Abnahme; diese schließt den Gesamtvertrag nicht.",
         "Spezialtabellen mit vollständigen nativen Cursor-/Exportverträgen, andere Browser, große Corpora sowie Ressourcen-/Crash-/Latenzgrenzen gesondert prüfen. Vollständige Herstellerparität und der Gesamtworkflow ui.filter-details-export bleiben NOT_PROVEN; installierter Pilot bleibt Source16."
       ],
       "documentation": [
@@ -7149,7 +7188,7 @@
         "native_browser": "PASS5_GROUPS29_TABLE_OBSERVATIONS9_CSV719_ROWS26_GEOMETRY2_NATURAL_EOF0_SAME_ORIGIN",
         "full_UI43": "PASS_ONE_COMPLETE_RETRY1_INVOCATION_9_FIXTURE34_NATIVE_PRIOR_R3_DOM_PROCESS_FAIL_RETAINED",
         "rust": "PASS_FRESH1831_0FAILED_5OPTIN_IGNORED_PLUS4_EXPLICIT_CHROMIUM_FIXTURES",
-        "new_public_CI": "NOT_RUN_FOR_SUCCESSOR_SOURCE_PRIOR2281086_ALL4_PASS",
+        "new_public_CI": "PARENT1E_FAIL39308675253_RENDERER_SCREENSHOT_AFTER40PASS_OTHER3_JOBS_SUCCESS",
         "manufacturer_parity": "NOT_PROVEN",
         "publication_source": "PASS_591_RAW_IDENTICAL_2_NODE_TEST_FINAL_CRLF_TO_LF_FRESH282_CANONICAL7CEF_RUNTIME6157_RETAINED"
       },

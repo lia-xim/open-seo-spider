@@ -850,6 +850,15 @@ body.tool-page { margin: 0; padding: 0; max-width: none; background: var(--bg); 
 
 .table-views { margin: 14px 0 0; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-sm, 6px); min-width: 0; }
 .table-views legend { font-weight: 600; padding: 0 5px; }
+.table-rule-mode, .table-expression-target { display: grid; gap: 5px; margin: 10px 0; max-width: 100%; min-width: 0; }
+.table-rule-mode select, .table-expression-target select { width: 100%; min-width: 0; max-width: 100%; }
+.table-expression-toolbar, .table-expression-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; min-width: 0; }
+.table-expression-tree { padding: 0; margin: 8px 0; list-style: none; min-width: 0; }
+.table-expression-tree .table-expression-tree { margin-left: 10px; padding-left: 8px; border-left: 2px solid var(--line); }
+.table-expression-node { margin: 8px 0; padding: 8px; border: 1px solid var(--line); border-radius: 5px; min-width: 0; overflow-wrap: anywhere; }
+.table-expression-label { display: block; margin-bottom: 6px; overflow-wrap: anywhere; }
+.table-expression-node button, .table-expression-node select, .table-expression-toolbar button { max-width: 100%; min-width: 0; white-space: normal; height: auto; min-height: 32px; }
+@media (max-width: 640px) { .table-expression-tree .table-expression-tree { margin-left: 4px; padding-left: 4px; } .table-expression-node { padding: 5px; } .table-expression-actions .button { flex: 1 1 90px; } }
 .table-views p { overflow-wrap: anywhere; }
 .table-view-fields, .table-view-actions { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; min-width: 0; }
 .table-view-fields label { display: flex; flex: 1 1 220px; flex-direction: column; gap: 5px; min-width: 0; font-size: 12px; }

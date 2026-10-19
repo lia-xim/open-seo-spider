@@ -1,0 +1,987 @@
+{
+  "result": "PASS_INDEPENDENT_OFFLINE_TABLE_EXPRESSIONS_NATIVE_REVIEW",
+  "reviewed_at": "2026-10-19T19:38:50.712Z",
+  "method": "Only Node built-ins. Original native reports and raw CSV parsed independently; fixture populations derived as closed-form source-index sets; no product/compiler/driver/helper import or runtime launch.",
+  "reviewer": {
+    "path": "artifacts/review-table-expression-native-20261019.cjs",
+    "bytes": 33376,
+    "sha256": "8ac476892d8fcd4940e498ef763e9d55f7d59e6f04f40aae7cd8c855dceb2646"
+  },
+  "native_receipt": {
+    "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/ui-table-expressions-live.json",
+    "bytes": 334562,
+    "sha256": "d4f776ecf506a59e4009d33a0d2a238a0ad3676695082c54779db24976c03aff"
+  },
+  "frozen_source": {
+    "manifest": {
+      "path": "artifacts/table-expressions-r4-20261019-inputs.json",
+      "bytes": 105699,
+      "sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2"
+    },
+    "input_count": 598,
+    "all_inputs_rehashed": true
+  },
+  "normal_binary": {
+    "path": "target/debug/open-seo-spider.exe",
+    "bytes": 90159616,
+    "sha256": "d7d7ecc453d752d6984b95cff0119f38f2bcf374b080c18b78fb07b8b6f0d57c"
+  },
+  "driver": {
+    "file": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-expressions-live.cjs",
+    "sha256": "bb3e0049f9b7033fa34e14ab08414f64868972907d058944d478bbe4d3d6eb03"
+  },
+  "focused_gate": {
+    "label": "targeted-native",
+    "command": "node",
+    "args": [
+      "scripts/ui-e2e.mjs",
+      "--only",
+      "table-expressions"
+    ],
+    "started_at": "2026-10-19T19:33:27.079Z",
+    "duration_ms": 34095,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-targeted-native.log",
+    "log_bytes": 161,
+    "log_sha256": "ae747377937ed23efd7e8e869875897353f41a544d81bebe954bc827ebe973c6",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true,
+    "log_binding": {
+      "path": "artifacts/table-expressions-r4-20261019-targeted-native.log",
+      "bytes": 161,
+      "sha256": "ae747377937ed23efd7e8e869875897353f41a544d81bebe954bc827ebe973c6"
+    }
+  },
+  "measured": {
+    "major_groups": 5,
+    "native_original_captures": 2,
+    "original_page_records": 306,
+    "html_rows_per_capture": 152,
+    "actual_CSV_files": 9,
+    "browser_download_events": 9,
+    "CSV_data_rows": 927,
+    "CSV_data_cells": 9270,
+    "all_CSV_headers_cells_and_provenance_rechecked": true,
+    "DOM_observations": 45,
+    "DOM_rows_reconstructed": 4658,
+    "DOM_cells_reconstructed": 19088,
+    "catalog_snapshots": 12,
+    "complete_query_apply_observations": 18,
+    "immediate_first_page_observations": 18,
+    "geometry_observations": 24,
+    "scripted_same_turn_races": 4,
+    "negative_receipt_controls": 13,
+    "reviewer_controls": 8,
+    "native_processes": 2,
+    "natural_EOF_zero": 2,
+    "same_origin_cold": true,
+    "positive_410_controls": 2,
+    "offline_product_requests": 0,
+    "served_asset_bindings": 28
+  },
+  "original_reports": [
+    {
+      "id": "17eaea2e-75c2-4afb-aefb-f01c065f61f4",
+      "original": {
+        "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/17eaea2e-75c2-4afb-aefb-f01c065f61f4-original-project.json",
+        "bytes": 1299466,
+        "sha256": "828a019b04ad5c41f66a80ddb9909fa4f7dead165eb3133f51ff5dbfc928b719"
+      },
+      "saved": {
+        "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/store/17eaea2e-75c2-4afb-aefb-f01c065f61f4.json",
+        "bytes": 957418,
+        "sha256": "7ddfe477dc682ea50cb2735c946f4da02fb3b74bd3020d01764467ac58439043"
+      },
+      "original_page_records": 153,
+      "html_table_rows": 152
+    },
+    {
+      "id": "4569e58a-e83f-4660-b177-54517e166e1d",
+      "original": {
+        "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/4569e58a-e83f-4660-b177-54517e166e1d-original-project.json",
+        "bytes": 1299469,
+        "sha256": "dc5a46c1577ebebd916fb9e67c577cf11500d0859790bea751819cfd6673c42a"
+      },
+      "saved": {
+        "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/store/4569e58a-e83f-4660-b177-54517e166e1d.json",
+        "bytes": 957421,
+        "sha256": "b1666d0bbadd2c65e21841ff1886cfb5c3c55fd03d72959e8537a0d2f790338e"
+      },
+      "original_page_records": 153,
+      "html_table_rows": 152
+    }
+  ],
+  "csv_files": [
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/warm-a-all-152.csv",
+      "bytes": 25099,
+      "sha256": "a611b6794218331478b8c7a279cf55b6732af73950a36d7fc2d3d8f7405158df",
+      "label": "warm-a-all-152",
+      "rows": 152,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/warm-a-nested-118.csv",
+      "bytes": 19610,
+      "sha256": "4210ff32fd32ef98b4bd6cb9ee073699cd7b9578c3d69bfe2bfd4e86a8ea450a",
+      "label": "warm-a-nested-118",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/warm-b-nested-118.csv",
+      "bytes": 19616,
+      "sha256": "2dce8ac638f3b51429e1413db5d64dd89102c86ea1136acb810da239c6e24383",
+      "label": "warm-b-nested-118",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/warm-a-zero-unknown-31.csv",
+      "bytes": 5098,
+      "sha256": "b46dfa8021294bf205fbb8718874620b3a6625b174eaf7699a1dbfcbfcf063d8",
+      "label": "warm-a-zero-unknown-31",
+      "rows": 31,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/warm-b-response-occurrences-2.csv",
+      "bytes": 474,
+      "sha256": "885250c3660ee136b839130aba71ce48f41ce1c6e09a9aa17e864a52eed1d893",
+      "label": "warm-b-response-occurrences-2",
+      "rows": 2,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/cold-a-all-152.csv",
+      "bytes": 25099,
+      "sha256": "a611b6794218331478b8c7a279cf55b6732af73950a36d7fc2d3d8f7405158df",
+      "label": "cold-a-all-152",
+      "rows": 152,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/cold-a-nested-118.csv",
+      "bytes": 19610,
+      "sha256": "4210ff32fd32ef98b4bd6cb9ee073699cd7b9578c3d69bfe2bfd4e86a8ea450a",
+      "label": "cold-a-nested-118",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/cold-b-nested-118.csv",
+      "bytes": 19616,
+      "sha256": "2dce8ac638f3b51429e1413db5d64dd89102c86ea1136acb810da239c6e24383",
+      "label": "cold-b-nested-118",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/cold-b-nested-320.csv",
+      "bytes": 19616,
+      "sha256": "2dce8ac638f3b51429e1413db5d64dd89102c86ea1136acb810da239c6e24383",
+      "label": "cold-b-nested-320",
+      "rows": 118,
+      "columns": 10,
+      "all_cells_and_provenance_independently_rechecked": true
+    }
+  ],
+  "views": [
+    {
+      "label": "actual A original152 titles before grouped mode",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_length",
+        "title_pixels",
+        "title_count",
+        "duplicates",
+        "status"
+      ],
+      "ordered_cells_sha256": "73e37ad36fb603bca17422eed2a25e4f19ccddfce5e13a92859bfbe7d80e96fb"
+    },
+    {
+      "label": "actual B original152 titles before grouped mode",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_length",
+        "title_pixels",
+        "title_count",
+        "duplicates",
+        "status"
+      ],
+      "ordered_cells_sha256": "102420687bf3a29ac59005a39db1d905548ff94d4083a7ab89de6f18876e14d8"
+    },
+    {
+      "label": "explicit grouped null is unfiltered without invented leaves",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "a6fefff5e98e13b6cb1fd6f436e4cc5e509bf92162a25c9d460937ec2a7cb404"
+    },
+    {
+      "label": "rejected null wrapping preserves all152 original observations",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "a6fefff5e98e13b6cb1fd6f436e4cc5e509bf92162a25c9d460937ec2a7cb404"
+    },
+    {
+      "label": "four-level nested OR includes150 exact indexed originals once despite overlapping leaves",
+      "group": "a",
+      "population": "nested",
+      "rows": 150,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "530350c8bda18490c46cd7c0afb1418a6c5be00dd0e02918240171185644ec45"
+    },
+    {
+      "label": "actual root OR-to-AND changes semantics to contradictory zero",
+      "group": "a",
+      "population": "none",
+      "rows": 0,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "actual root AND-to-OR restores150 without URL union",
+      "group": "a",
+      "population": "nested",
+      "rows": 150,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "530350c8bda18490c46cd7c0afb1418a6c5be00dd0e02918240171185644ec45"
+    },
+    {
+      "label": "reordered overlapping OR branches retain original occurrence membership",
+      "group": "a",
+      "population": "nested",
+      "rows": 150,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "530350c8bda18490c46cd7c0afb1418a6c5be00dd0e02918240171185644ec45"
+    },
+    {
+      "label": "explicit removal of zero-count branch excludes only declared missing-title indices",
+      "group": "a",
+      "population": "without_missing",
+      "rows": 120,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "e05d89548d623b183405d51bf4263e187d59e15d91a470a39150811aa9cf7cd9"
+    },
+    {
+      "label": "explicit branch restoration keeps each original observation once",
+      "group": "a",
+      "population": "nested",
+      "rows": 150,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "530350c8bda18490c46cd7c0afb1418a6c5be00dd0e02918240171185644ec45"
+    },
+    {
+      "label": "outer section filter and hidden-column NFC global search remain AND with nested OR",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "1839d5ed6ef879c97f0433a3219114ba15db67fd9783c7aeb5390ebfc0ab700c"
+    },
+    {
+      "label": "explicit grouped A Apply from actual later page",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "1839d5ed6ef879c97f0433a3219114ba15db67fd9783c7aeb5390ebfc0ab700c"
+    },
+    {
+      "label": "second actual capture starts simple and retains its own legacy columns",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "687967e9d52b6a22a31fd4ddec50e3a1d601b8e8bed316ceb63792c5b9398fa8"
+    },
+    {
+      "label": "explicit complete grouped view reused on118 actual B originals",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "outer global hidden-field search restricts every OR branch",
+      "group": "b",
+      "population": "cohort",
+      "rows": 17,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "e45aada8921feef8f4ea11b110e9adcebb2e905469443c3716e7e7d4123789ea"
+    },
+    {
+      "label": "full grouped B population restored",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "rejected nonflattenable mode preserves all118 accepted originals",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "explicit Apply clears rejected-mode error without changing definition",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "rejected fifth group level preserves all118 accepted originals",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "valid saved four-level AST remains applicable after bounded edit refusal",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "editable grouped Apply itself resets real later page",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "measured0 OR absent title selects31 original rows with no invented zero",
+      "group": "b",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "bb6d6f12a3b4450fab089685c47df166805212edcde9131757b52f4c9a68f83d"
+    },
+    {
+      "label": "actual accepted edit before active v2 Rename",
+      "group": "b",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "6f09555204ed099ea167c50d01537b54821bbb00f29de756b21c8fde7752a9ca"
+    },
+    {
+      "label": "zero query restored after deleting only stored definition",
+      "group": "b",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "bb6d6f12a3b4450fab089685c47df166805212edcde9131757b52f4c9a68f83d"
+    },
+    {
+      "label": "zero/unknown view explicitly applied to A saved capture",
+      "group": "a",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "6d450905c6f661ba09ee700324ed1d87b2aa500cabc9c49535a5fca53c0b5338"
+    },
+    {
+      "label": "main A before stale grouped controls",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "1839d5ed6ef879c97f0433a3219114ba15db67fd9783c7aeb5390ebfc0ab700c"
+    },
+    {
+      "label": "old saved action cannot win against actual search revision",
+      "group": "a",
+      "population": "none",
+      "rows": 0,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "restored A before group-kind race",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "1839d5ed6ef879c97f0433a3219114ba15db67fd9783c7aeb5390ebfc0ab700c"
+    },
+    {
+      "label": "old saved action cannot win against actual group-kind edit",
+      "group": "a",
+      "population": "none",
+      "rows": 0,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "label": "v2 applies explicitly after actual lossless grouped-to-simple switch",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "1839d5ed6ef879c97f0433a3219114ba15db67fd9783c7aeb5390ebfc0ab700c"
+    },
+    {
+      "label": "actual owner race accepts B without stale grouped-save write",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "687967e9d52b6a22a31fd4ddec50e3a1d601b8e8bed316ceb63792c5b9398fa8"
+    },
+    {
+      "label": "B grouped query after rejected stale owner save",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "actual overlapping OR preserves two equal observed URLs and their separate original source occurrence",
+      "group": "b",
+      "population": "response",
+      "rows": 2,
+      "columns": [
+        "url",
+        "requested_url",
+        "response_index",
+        "status"
+      ],
+      "ordered_cells_sha256": "f167f65466e0d44bfea09f253233d0e68d77458d3ceaed05b4507efe20eb5a2e"
+    },
+    {
+      "label": "saved v2 response expression retains original duplicate URL occurrences",
+      "group": "b",
+      "population": "response",
+      "rows": 2,
+      "columns": [
+        "url",
+        "requested_url",
+        "response_index",
+        "status"
+      ],
+      "ordered_cells_sha256": "f167f65466e0d44bfea09f253233d0e68d77458d3ceaed05b4507efe20eb5a2e"
+    },
+    {
+      "label": "main title expression before explicit v2 reset",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "explicit v2 reset retains every grouped query row",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "zero query before recreating v2 saved definition",
+      "group": "b",
+      "population": "zero",
+      "rows": 31,
+      "columns": [
+        "url",
+        "title_text",
+        "title_pixels",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "bb6d6f12a3b4450fab089685c47df166805212edcde9131757b52f4c9a68f83d"
+    },
+    {
+      "label": "null expression before recreating unfiltered saved definition",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "1cf96920ad806aedf9ebe6fd57c476757907c1f8886b7c57a015688afdc066a1"
+    },
+    {
+      "label": "main grouped view restored after v2-only catalog reset",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    },
+    {
+      "label": "fresh cold context restores v1/legacy bytes but never auto-applies grouped definition",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "a6fefff5e98e13b6cb1fd6f436e4cc5e509bf92162a25c9d460937ec2a7cb404"
+    },
+    {
+      "label": "cold explicitly applied A grouped definition",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "1839d5ed6ef879c97f0433a3219114ba15db67fd9783c7aeb5390ebfc0ab700c"
+    },
+    {
+      "label": "cold explicit null expression restores all152 without inventing a leaf",
+      "group": "a",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "a6fefff5e98e13b6cb1fd6f436e4cc5e509bf92162a25c9d460937ec2a7cb404"
+    },
+    {
+      "label": "cold saved nested A restored after null",
+      "group": "a",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "1839d5ed6ef879c97f0433a3219114ba15db67fd9783c7aeb5390ebfc0ab700c"
+    },
+    {
+      "label": "cold B retains separate legacy columns without grouped autoApply",
+      "group": "b",
+      "population": "all",
+      "rows": 152,
+      "columns": [
+        "url",
+        "title_text",
+        "title_count"
+      ],
+      "ordered_cells_sha256": "687967e9d52b6a22a31fd4ddec50e3a1d601b8e8bed316ceb63792c5b9398fa8"
+    },
+    {
+      "label": "cold explicitly applied B grouped definition",
+      "group": "b",
+      "population": "main",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "9503417b5651e71a720836b2755a7cd471e0e7eb894ebc1f3997d1328d0b40e0"
+    }
+  ],
+  "catalogs": [
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-000.json",
+      "bytes": 830,
+      "sha256": "473875a233702831e9084d97f544e5e86b9dda745c84e992038a84f436897ff5"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-001.json",
+      "bytes": 2073,
+      "sha256": "78eb942ec345b429f1bb7fdc2e308f19c7845911b2b50a5cd99c2e4ef11b4da9"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-002.json",
+      "bytes": 3312,
+      "sha256": "10522742433343bde65e701ec2d733926d352e7bdb02b752949658145677c1e8"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-003.json",
+      "bytes": 2995,
+      "sha256": "54745917dc452f1419be5f5b7b6b5a1e5630e6da6b6c0e44eb0035c601308f2a"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-004.json",
+      "bytes": 3000,
+      "sha256": "a0313c54c187a6cae2c15265c80b8bee8c3f0531bfd783e86e7be4d0bfca8bcd"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-005.json",
+      "bytes": 2073,
+      "sha256": "78eb942ec345b429f1bb7fdc2e308f19c7845911b2b50a5cd99c2e4ef11b4da9"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-006.json",
+      "bytes": 3005,
+      "sha256": "620a732e51a154161d6b9ecaf8ea82e56bc11f900abcc223878fe0b529e3d58d"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-007.json",
+      "bytes": 4357,
+      "sha256": "eb1e38bcfb97f28aeff2cfd8f24256b153463b24defa4422c1d7da8be8c73803"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-008.json",
+      "bytes": 1310,
+      "sha256": "6a896508288188945a7394d66750c7965daba8ac0252372fa35c35d272921ee1"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-009.json",
+      "bytes": 2242,
+      "sha256": "d26a0175e4d0bd5a725fbf585acafb28f612f4071b0af1f0edf97d5a133a651b"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-010.json",
+      "bytes": 3005,
+      "sha256": "a7db6d001bfccea727c4a55b8aaffdd5515fca327347d7089113e98315dedd2b"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/expression-catalog-011.json",
+      "bytes": 3005,
+      "sha256": "a7db6d001bfccea727c4a55b8aaffdd5515fca327347d7089113e98315dedd2b"
+    }
+  ],
+  "v1_catalog": {
+    "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/original-v1-browser-catalog.json",
+    "bytes": 860,
+    "sha256": "2ea5474ffa62a7aa54a4b0ed7a198ffd67e744304df2f75a75339394dd3bc501"
+  },
+  "shutdowns": [
+    {
+      "phase": "warm",
+      "log": {
+        "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/native-warm.log",
+        "bytes": 1781,
+        "sha256": "de81ab2dbab5e7e03a2f6e000421bdf53aa4cd4d1952caebe11200215882f9c5"
+      },
+      "cause": "owned_stdin_eof",
+      "clean": true
+    },
+    {
+      "phase": "cold",
+      "log": {
+        "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/native-cold.log",
+        "bytes": 1773,
+        "sha256": "6f8fc46bd6ba7809be30f04ca0431c94c56be55009592b9dcca8600a1af1ac67"
+      },
+      "cause": "owned_stdin_eof",
+      "clean": true
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/table-expressions-warm-1440.png",
+      "bytes": 324229,
+      "sha256": "f9a1413754bc7c3d3d7595a2b1cd0bc4931c268537508c879033f6056e947c9e"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/table-expressions-warm-320.png",
+      "bytes": 278131,
+      "sha256": "0892d4c15ce64da399fc4c11b44ff1955ae8595018d69a234e07460508c98f7b"
+    },
+    {
+      "path": "artifacts/table-expressions-r4-20261019-focused/table-expressions/table-expressions-1792438410548-3b1e7338/table-expressions-cold-320.png",
+      "bytes": 268609,
+      "sha256": "56c9517f392b844dbedd64d114d353e31f83522d68ce0076d8c4294e7f5f11c6"
+    }
+  ],
+  "reviewer_controls": [
+    {
+      "label": "legal final quoted URL at EOF",
+      "expected_refusal": false,
+      "pass": true
+    },
+    {
+      "label": "escaped quote and quoted multiline field",
+      "expected_refusal": false,
+      "pass": true
+    },
+    {
+      "label": "duplicate header refused",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "unterminated final quoted field refused",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "text after quote refused",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "extra trailing blank record refused",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "response occurrence identity cannot collapse by observed URL",
+      "expected_refusal": true,
+      "pass": true
+    },
+    {
+      "label": "native measured zero cannot be absent",
+      "expected_refusal": true,
+      "pass": true
+    }
+  ],
+  "historical_driver_oracle_failures": {
+    "records": [
+      {
+        "revision": "r2",
+        "receipt": {
+          "path": "artifacts/table-expressions-r2-20261019-failure.json",
+          "bytes": 2382,
+          "sha256": "5f2a2be7e2a617d9ca6e39f00f753873f99faffcf1c994664a1c2c34b3c4dabc"
+        },
+        "preserved": true
+      },
+      {
+        "revision": "r3",
+        "receipt": {
+          "path": "artifacts/table-expressions-r3-20261019-failure.json",
+          "bytes": 2578,
+          "sha256": "8493b7e5e9ee27a2ae6802a15c494ee505909e1c15b2bf5b89b288644a3f0fa9"
+        },
+        "preserved": true
+      }
+    ],
+    "original_frozen_driver_sha256": "6255ca7f473de8ab641f8b0ea8f5c50a80f2ba807d7070e89e231936ad6227f0",
+    "resolved_in_current_driver_only": [
+      {
+        "issue": "Three refusal snapshots were on the final page left by exact(); existing error rendering resets page0.",
+        "resolution": "Explicit firstPage before each negative snapshot; subsequent complete accepted populations still checked. No product change."
+      },
+      {
+        "issue": "Reload demanded all catalog entries in a section-specific select after saving a response view.",
+        "resolution": "Exact ordered IDs from actual current section, including absence of foreign-section IDs. No product or deadline change."
+      }
+    ],
+    "earlier_raw_failures_unchanged": true
+  },
+  "proof_boundaries": {
+    "offline_review_does_not_reexecute_browser": true,
+    "driver_real_DOM_guard_assertions_reviewed_but_no_independent_event_replay": true,
+    "v1_and_legacy_cold_byte_preservation_is_driver_assertion_plus_independent_saved_bytes_hash_recheck": true,
+    "real_cross_tab_storage_event_refusal_is_driver_assertion_not_separate_negative_receipt_record": true,
+    "active_badge_and_no_auto_apply_are_driver_assertions_not_reconstructed_from_standalone_badge_snapshots": true,
+    "no_positive_synthetic_PageRecords": true,
+    "no_API_success_mock": true,
+    "no_native_Start_button_proof": true,
+    "no_all_operator_or_table_coverage": true,
+    "no_unbounded_corpus_or_manufacturer_parity": true,
+    "no_new_native_quota_corrupt_oversize_or_NoLocks_claim": true,
+    "no_response_inspector_or_cold_response_view_claim": true,
+    "full44_suite": "NOT_ASSESSED_BY_THIS_REVIEWER",
+    "stable_release_ready": false,
+    "manufacturer_parity": "NOT_PROVEN"
+  }
+}

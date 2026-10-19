@@ -12,7 +12,7 @@
   function create(hooks) {
     const tools=window.TableExplorer,$=id=>document.getElementById(id);
     if (!tools) throw Error('Die Tabellenfunktionen sind nicht geladen.');
-    const state={scope:null,schema:[],visibleKeys:[],rules:[],error:'',storageError:'',evaluationError:'',notice:''};
+    const state={scope:null,schema:[],visibleKeys:[],rules:[],mode:'simple',expression:null,expressionError:'',error:'',storageError:'',evaluationError:'',notice:''};
     let revision=0;
     const context=()=>{const owner=hooks.owner();return {projectId:owner.projectId,section:owner.section};};
     const stamp=()=>JSON.stringify([hooks.owner(),revision]);
@@ -20,12 +20,25 @@
     const storage=()=>{try{return window.localStorage;}catch(_){return null;}};
     const canonical=keys=>[...state.schema.filter(column=>column.mandatory).map(column=>column.key),...keys.filter(key=>!state.schema.find(column=>column.key===key)?.mandatory)];
     const edited=()=>{revision++;hooks.queryEdited?.();};
+    const fail=message=>({ok:false,error:{code:'invalid_expression_edit',message}});
+    const expressionTools=window.TableExpressionEditor;
+    let expressionEditor=null;
     function changed() { state.evaluationError='';hooks.changed(); }
+    function expressionFailure(message){edited();state.expressionError=message+' Die bisherige Auswahl bleibt bestehen.';hooks.changed();}
+    function acceptExpressionAction(action){
+      if(state.mode!=='grouped')return;
+      if(!expressionTools||typeof tools.validateExpression!=='function')return expressionFailure('Die Gruppenfunktionen sind nicht geladen.');
+      const original=tools.validateExpression(state.schema,state.expression);if(!original.ok)return expressionFailure(original.error.message);
+      const next=expressionTools.update(original.value,action);if(!next.ok)return expressionFailure(next.error.message);
+      const accepted=tools.validateExpression(state.schema,next.value.expression);if(!accepted.ok)return expressionFailure(accepted.error.message);
+      edited();state.expression=accepted.value;state.expressionError='';state.error='';expressionEditor?.select(next.value.selection);changed();
+    }
+    if(expressionTools&&$('table-expression-editor')&&$('table-expression-target'))expressionEditor=expressionTools.create({document,container:$('table-expression-editor'),target:$('table-expression-target'),columns:()=>state.schema,expression:()=>state.expression,stamp,current:same,action:acceptExpressionAction,selectionChanged:()=>render()});
     function synchronize(schema) {
       const owner=hooks.owner(),scope=JSON.stringify([owner.projectId,owner.section,schema.map(column=>[column.key,column.type,column.mandatory])]);
       state.schema=schema;
       if (scope===state.scope) return;
-      state.scope=scope;state.rules=[];state.error='';state.evaluationError='';state.storageError='';
+      state.scope=scope;state.rules=[];state.mode='simple';state.expression=null;state.expressionError='';expressionEditor?.reset();state.error='';state.evaluationError='';state.storageError='';
       state.visibleKeys=canonical(schema.map(column=>column.key));
       state.notice=owner.projectId?'Standardspalten · Änderungen mit „Spalten speichern“ sichern.':'Spalten lassen sich nach Auswahl eines Crawls speichern.';
       if(owner.projectId) {
@@ -42,7 +55,7 @@
       for(const column of schema){const option=document.createElement('option');option.value=column.key;option.textContent=column.label;select.append(option);}
       if(schema.some(column=>column.key===selected))select.value=selected;
     }
-    function compile(search,sort) {return tools.compile(state.schema,{search,rules:state.rules,sort,visibleKeys:canonical(state.visibleKeys)},hooks.identity);}
+    function compile(search,sort) {return state.mode==='grouped'?(typeof tools.compileExpression==='function'?tools.compileExpression(state.schema,{version:2,search,expression:state.expression,sort,visibleKeys:canonical(state.visibleKeys)},hooks.identity):fail('Die Gruppenfunktionen sind nicht geladen.')):tools.compile(state.schema,{search,rules:state.rules,sort,visibleKeys:canonical(state.visibleKeys)},hooks.identity);}
     function columns(schema) {
       synchronize(schema);const result=tools.projectColumns(schema,canonical(state.visibleKeys));
       if(!result.ok){state.evaluationError=result.error.message;return schema.filter(column=>column.mandatory);}
@@ -75,15 +88,15 @@
     function render() {
       revision++;const owner=stamp(),list=$('table-rules'),focused=document.activeElement;
       const columnFocus=focused?.dataset?.tableColumn!==undefined?{key:focused.dataset.tableColumn}:focused?.dataset?.tableColumnMove?{key:focused.dataset.columnKey,move:focused.dataset.tableColumnMove}:null;
-      const ruleFocus=focused?.dataset?.tableRuleRemove;list.replaceChildren();
-      for(const [index,rule]of state.rules.entries()){
+      const ruleFocus=focused?.dataset?.tableRuleRemove;list.replaceChildren();list.hidden=state.mode==='grouped';
+      for(const [index,rule]of (state.mode==='simple'?state.rules:[]).entries()){
         const item=document.createElement('li'),column=state.schema.find(column=>column.key===rule.key),button=document.createElement('button');
         item.dataset.tableRuleIndex=String(index);const text=[column?.label||rule.key,labels[rule.op]];
         if('text'in rule)text.push('„'+rule.text+'“');if('min'in rule)text.push(String(rule.min));if('max'in rule)text.push(String(rule.max));
         item.append(document.createTextNode(text.join(' ')+' '));button.type='button';button.className='button small';button.dataset.tableRuleRemove=String(index);button.textContent='Entfernen';button.setAttribute('aria-label','Filter entfernen: '+text.join(' '));
         button.addEventListener('click',()=>{if(!same(owner))return;edited();state.rules.splice(index,1);state.error='';changed();});item.append(button);list.append(item);
       }
-      $('table-rules-clear').disabled=!state.rules.length&&!state.error;
+      $('table-rules-clear').disabled=!(state.mode==='grouped'?state.expression:state.rules.length)&&!state.error&&!state.expressionError;
       const columnList=$('table-column-list');columnList.replaceChildren();
       const ordered=[...canonical(state.visibleKeys),...state.schema.map(column=>column.key).filter(key=>!state.visibleKeys.includes(key))];
       for(const key of ordered){
@@ -101,19 +114,41 @@
       const sort=hooks.sort();$('table-sort-column').value=state.schema.some(column=>column.key===sort.key)?sort.key:state.schema[0]?.key||'';$('table-sort-direction').value=String(sort.direction);
       const error=[state.error,state.storageError,state.evaluationError].filter(Boolean).join(' ');$('table-explorer-error').hidden=!error;$('table-explorer-error').textContent=error;
       if(error)$('table-options').open=true;
+      const modeControl=$('table-rule-mode');if(modeControl)modeControl.value=state.mode;
+      const expressionRoot=$('table-expression-editor'),expressionTarget=$('table-expression-target'),expressionError=$('table-expression-error'),expressionStatus=$('table-expression-status');
+      if(expressionRoot)expressionRoot.hidden=state.mode!=='grouped';if(expressionTarget){expressionTarget.disabled=state.mode!=='grouped';expressionTarget.hidden=state.mode!=='grouped';}
+      const expressionTargetLabel=$('table-expression-target-label');if(expressionTargetLabel)expressionTargetLabel.hidden=state.mode!=='grouped';if(expressionStatus)expressionStatus.hidden=state.mode!=='grouped';
+      if(expressionError){expressionError.hidden=!state.expressionError;expressionError.textContent=state.expressionError;}
+      if(expressionStatus)expressionStatus.textContent=state.mode==='grouped'?'Regelgruppen aktiv · UND verlangt alle, ODER mindestens eine Bedingung. Die Formularregel wird zum gewählten Ziel hinzugefügt.':'Einfache Regeln · alle Bedingungen werden mit UND verknüpft.';
+      if(state.expressionError)$('table-options').open=true;
+      if(state.mode==='grouped')expressionEditor?.render();
       $('table-column-storage-status').textContent=state.notice;$('table-columns-save').disabled=!hooks.owner().projectId||Boolean(state.evaluationError);$('table-columns-reset').disabled=!hooks.owner().projectId;
       if(columnFocus){const controls=[...columnList.querySelectorAll('input,button')];const target=controls.find(control=>!control.disabled&&(columnFocus.move?control.dataset.columnKey===columnFocus.key&&control.dataset.tableColumnMove===columnFocus.move:control.dataset.tableColumn===columnFocus.key))||controls.find(control=>!control.disabled&&control.dataset.tableColumn===columnFocus.key);target?.focus();}
       if(ruleFocus!==undefined){const buttons=[...list.querySelectorAll('[data-table-rule-remove]')];(buttons[Math.min(Number(ruleFocus),buttons.length-1)]||$('table-rule-add')).focus();}
     }
     $('table-rule-form').addEventListener('submit',event=>{
       event.preventDefault();
+      if(state.mode==='grouped'){try{acceptExpressionAction({type:'addRule',path:expressionEditor?.target()||'root',rule:readRule()});}catch(error){expressionFailure('Gruppenregel nicht übernommen: '+error.message);}return;}
       try{
         const candidate=[...state.rules,readRule()],result=tools.compile(state.schema,{search:'',rules:candidate,sort:hooks.sort(),visibleKeys:canonical(state.visibleKeys)},hooks.identity);
         if(!result.ok)throw Error(result.error.message);edited();state.rules=candidate;state.error='';changed();
       }catch(error){edited();state.error='Filter nicht übernommen: '+error.message+' Die bisherige Auswahl bleibt bestehen.';hooks.changed();}
     });
     $('table-rule-column').addEventListener('change',renderRuleInputs);$('table-rule-op').addEventListener('change',renderRuleInputs);
-    $('table-rules-clear').addEventListener('click',()=>{edited();state.rules=[];state.error='';changed();});
+    $('table-rules-clear').addEventListener('click',()=>{edited();state.rules=[];state.expression=null;state.expressionError='';expressionEditor?.reset();state.error='';changed();});
+    $('table-rule-mode')?.addEventListener('change',()=>{
+      const requested=$('table-rule-mode').value;if(requested===state.mode)return;
+      if(!['simple','grouped'].includes(requested)){expressionFailure('Unbekannter Regelmodus.');return;}
+      if(requested==='grouped'){
+        if(!expressionTools||typeof tools.fromRules!=='function'||typeof tools.validateExpression!=='function'){expressionFailure('Die Gruppenfunktionen sind nicht geladen.');return;}
+        const next=tools.fromRules(state.rules);if(!next.ok){expressionFailure(next.error.message);return;}const validated=tools.validateExpression(state.schema,next.value);if(!validated.ok){expressionFailure(validated.error.message);return;}
+        edited();state.mode='grouped';state.expression=validated.value;state.rules=[];state.expressionError='';state.error='';expressionEditor?.reset();changed();
+      }else{
+        const next=expressionTools?expressionTools.flatRules(state.expression):fail('Die Gruppenfunktionen sind nicht geladen.');if(!next.ok){expressionFailure(next.error.message);return;}
+        const checked=tools.compile(state.schema,{search:'',rules:next.value,sort:hooks.sort(),visibleKeys:canonical(state.visibleKeys)},hooks.identity);if(!checked.ok){expressionFailure(checked.error.message);return;}
+        edited();state.mode='simple';state.rules=next.value;state.expression=null;state.expressionError='';state.error='';expressionEditor?.reset();changed();
+      }
+    });
     for(const id of ['table-sort-column','table-sort-direction'])$(id).addEventListener('change',()=>{const sort={key:$('table-sort-column').value,direction:Number($('table-sort-direction').value)};edited();hooks.setSort(sort);changed();});
     $('table-columns-save').addEventListener('click',()=>{
       const result=tools.save(storage(),context(),state.schema,{visibleKeys:canonical(state.visibleKeys)});
@@ -131,7 +166,11 @@
       state.storageError='Die gespeicherte Spaltenansicht wurde in einem anderen Fenster geändert. Die aktuelle Ansicht bleibt erhalten; zum Laden den Crawl/Bereich erneut öffnen oder die aktuelle Ansicht ausdrücklich speichern.';hooks.changed();
     });
     function draft(){
-      if(state.error||state.evaluationError)return{ok:false,error:{code:'invalid_working_view',message:'Die aktuelle Tabellenansicht enthält einen Fehler. Diesen vor dem Speichern beheben.'}};
+      if(state.error||state.evaluationError||state.expressionError)return{ok:false,error:{code:'invalid_working_view',message:'Die aktuelle Tabellenansicht enthält einen Fehler. Diesen vor dem Speichern beheben.'}};
+      if(state.mode==='grouped'){
+        if(!expressionTools||typeof tools.validateExpression!=='function')return fail('Die Gruppenfunktionen sind nicht geladen.');
+        const check=tools.validateExpression(state.schema,state.expression);return check.ok?{ok:true,value:{expression:expressionTools.copy(check.value),visibleKeys:[...canonical(state.visibleKeys)],queryVersion:2}}:check;
+      }
       const rules=state.rules.map(rule=>({...rule})),visibleKeys=canonical(state.visibleKeys),check=tools.compile(state.schema,{search:'',rules,sort:hooks.sort(),visibleKeys},hooks.identity);
       return check.ok?{ok:true,value:{rules,visibleKeys:[...visibleKeys]}}:check;
     }
@@ -139,15 +178,22 @@
       // Validate all inputs before touching accepted state. The App performs its
       // complete owner/revision/filter validation and commits synchronously.
       try{
+        if(view&&Object.prototype.hasOwnProperty.call(view,'expression')){
+          if(Object.prototype.hasOwnProperty.call(view,'rules')||!expressionTools||typeof tools.compileExpression!=='function'||typeof tools.validateExpression!=='function')return fail('Die vollständige Gruppenansicht ist ungültig oder nicht geladen.');
+          const accepted=tools.validateExpression(state.schema,view.expression);if(!accepted.ok)return accepted;
+          const check=tools.compileExpression(state.schema,{version:2,search:view.search,expression:accepted.value,sort:{...view.sort},visibleKeys:[...view.visibleKeys]},hooks.identity);if(!check.ok)return check;
+          state.expression=accepted.value;state.rules=[];state.mode='grouped';state.visibleKeys=canonical(check.value.columns.map(column=>column.key));state.error='';state.expressionError='';state.evaluationError='';state.notice='Benannte Gruppenansicht angewendet · gespeicherte Spaltenpräferenzen unverändert.';expressionEditor?.reset();revision++;
+          return{ok:true,value:null};
+        }
         const rules=view.rules.map(rule=>({...rule})),visibleKeys=[...view.visibleKeys],sort={...view.sort};
         const check=tools.compile(state.schema,{search:view.search,rules,sort,visibleKeys},hooks.identity);
         if(!check.ok)return check;
         const projected=canonical(check.value.columns.map(column=>column.key));
-        state.rules=rules;state.visibleKeys=projected;state.error='';state.evaluationError='';state.notice='Benannte Ansicht angewendet · gespeicherte Spaltenpräferenzen unverändert.';revision++;
+        state.rules=rules;state.expression=null;state.mode='simple';state.expressionError='';expressionEditor?.reset();state.visibleKeys=projected;state.error='';state.evaluationError='';state.notice='Benannte Ansicht angewendet · gespeicherte Spaltenpräferenzen unverändert.';revision++;
         return{ok:true,value:null};
       }catch(_){return{ok:false,error:{code:'invalid_working_view',message:'Die vollständige Tabellenansicht ist ungültig; bisherige Auswahl bleibt erhalten.'}};}
     }
-    return Object.freeze({columns,rows,render,synchronize,draft,installPrepared,hasRules:()=>Boolean(state.rules.length),canExport:()=>!state.error&&!state.evaluationError,resetOwner:()=>{revision++;state.scope=null;}});
+    return Object.freeze({columns,rows,render,synchronize,draft,installPrepared,queryVersion:()=>state.mode==='grouped'?2:1,hasRules:()=>state.mode==='grouped'?state.expression!==null:Boolean(state.rules.length),canExport:()=>!state.error&&!state.evaluationError&&!state.expressionError,resetOwner:()=>{revision++;state.scope=null;state.rules=[];state.mode='simple';state.expression=null;state.expressionError='';state.error='';state.evaluationError='';expressionEditor?.reset();}});
   }
   window.TableExplorerUI=Object.freeze({create});
 })();

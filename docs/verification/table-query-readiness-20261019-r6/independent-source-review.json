@@ -1,0 +1,67 @@
+{
+  "result": "PASS_SOURCE_ONLY_RUNTIME_NOT_PROVEN",
+  "at": "2026-10-19T20:33:47.375Z",
+  "manifest": {
+    "path": "artifacts/table-expression-owner-readiness-staged-20261019/patch-manifest.json",
+    "bytes": 1654,
+    "sha256": "b0af62daf29959833b490ebe5011782e3d14bdd3efca403c0b824fbefe0f689a"
+  },
+  "files": {
+    "source": {
+      "path": "web/verification/ui-table-expressions-live.cjs",
+      "bytes": 64800,
+      "sha256": "bb3e0049f9b7033fa34e14ab08414f64868972907d058944d478bbe4d3d6eb03"
+    },
+    "staged": {
+      "path": "artifacts/table-expression-owner-readiness-staged-20261019/web/verification/ui-table-expressions-live.cjs",
+      "bytes": 66045,
+      "sha256": "a05fd0eef4978b92a4df52e7c81f192e078a0d56e56e7ee5c245a5cb970c78e0"
+    },
+    "app": {
+      "path": "web/app.js",
+      "bytes": 520069,
+      "sha256": "ee418e01b619fdd1b962003266db9da6396f16439b270fc12bf30a79ffb3da11"
+    },
+    "registry": {
+      "path": "scripts/ui-e2e.mjs",
+      "bytes": 9816,
+      "sha256": "25f120db400ea7c9e9efbcca9f20f6439d85cdda18703cfc1d5764db469bd06c"
+    }
+  },
+  "scope": "Read-only independent review. No source apply, reviewer/runtime execution, browser/native/Cargo. This does not repair or relabel R4 actual full44FAIL.",
+  "changes_verified": {
+    "only_selectJob_and_diagnostic_array_serialization": true,
+    "comparison": "Exact text after CRLF-to-LF normalization; original and staged raw bytes separately SHA-bound.",
+    "original_applyView_pagination_and_exact_rows_preserved": true,
+    "original_oracle_CSV_download_and_provenance_preserved": true,
+    "existing_deadlines_not_increased": true
+  },
+  "source_reasoning": {
+    "app_selectCrawl": "web/app.js411..449 clears pages/issues/responses/fragments and renders cached crawl status before awaiting refresh.",
+    "app_refresh": "web/app.js334..386 awaits pages, analysis, responses and finally fragments; then commits pages/maps/inventories/issues and renders.",
+    "old_driver": "Selected ID plus cached terminal summary can be satisfied while the new owner has no committed pages.",
+    "new_driver": "Registers exact owned GET /api/crawls/{id}/fragments response waiter before selectOption; requires200 and finished() null; then waits for selected ID+completed summary+enabled export for these declared nonempty fixtures.",
+    "boundary": "Actual final dependency is observed; no response body read, extra network request, HTTP replay, API success mock, internal App call, arbitrary sleep or page reset is introduced."
+  },
+  "guards": [
+    "Pending response waiter is registered before the gesture, exact origin/full path/GET, explicit30000ms existing DOM budget.",
+    "Finished response error remains fatal; selected owner and data-enabled DOM are independently awaited.",
+    "A possibly old same-ID response alone cannot satisfy DOM readiness after selectCrawl clears pages; actual same-ID selection and browser event behavior still require R6 runtime.",
+    "All old applyView immediate page0 assertions and full-row/CSV oracles remain unchanged.",
+    "Receipt owner_readiness records ID/origin/phase/route/status/finished/DOM/export/source rather than claiming JSON-byte capture."
+  ],
+  "blockers": [],
+  "runtime": {
+    "same_ID_reselection": "NOT_PROVEN",
+    "focused_native": "NOT_PROVEN",
+    "full44": "NOT_PROVEN",
+    "exact_public_CI": "NOT_PROVEN"
+  },
+  "prior_R4": {
+    "aggregate_result": "FAIL43PASS1FAIL",
+    "assertion_actual": "Keine Ergebnisse",
+    "assertion_expected": "1–31 von 31",
+    "later_HTML": "31rows/correct activezeroView/empty hidden relevant errors. Later snapshot is not assertion-time timeline.",
+    "root_cause": "Owner-readiness synchronization gap supported by source ordering; exact timeline remains INFERENCE_ONLY."
+  }
+}

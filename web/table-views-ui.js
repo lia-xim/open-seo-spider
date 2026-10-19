@@ -6,9 +6,11 @@
     const {library,store}=hooks;
     const state={raw:null,entries:[],loaded:false,catalogValid:false,selectedId:'',name:'',busy:false,error:'',notice:'',active:null,deleteConfirmation:null,resetConfirmation:null};
     let context=null,revision=0,operation=null,resetRaw;
+    const available=()=>{try{return hooks.available?hooks.available()===true:true;}catch(_){return false;}};
+    const unavailable=()=>failure('inactive_query_mode','Diese Ansichten gehören zum anderen Filtermodus. Zuerst den passenden Modus auswählen.');
     const notify=()=>hooks.notify?.();
     const contractStamp=()=>{const c=hooks.contract();return JSON.stringify([c.section,c.query_semantics,c.columns.map(x=>[x.key,x.type??'auto',Boolean(x.mandatory)]),c.sectionFilters]);};
-    const ownerStamp=()=>JSON.stringify([hooks.owner(),contractStamp()]);
+    const ownerStamp=()=>JSON.stringify([hooks.owner(),contractStamp(),available()]);
     const stamp=()=>JSON.stringify([ownerStamp(),hooks.queryRevision(),revision]);
     function invalidate(queryChanged=true){revision++;operation=null;state.busy=false;state.deleteConfirmation=null;state.resetConfirmation=null;if(queryChanged&&state.active)state.active={...state.active,modified:true};}
     function synchronize(){let next;try{next=ownerStamp();}catch(_){next=null;}if(next!==context){invalidate(false);context=next;resetRaw=undefined;state.selectedId='';state.name='';state.active=null;state.error='';state.notice='';}}
@@ -17,7 +19,7 @@
     function refresh(){synchronize();invalidate(false);let result;try{result=store.read();}catch(_){result=failure('storage_unavailable','Der Browserkatalog ist nicht lesbar.');}if(!result.ok){resetRaw=Object.hasOwn(result,'observedRaw')?result.observedRaw:undefined;state.catalogValid=false;return showError(result);}resetRaw=result.value.raw;state.raw=result.value.raw;state.entries=result.value.entries;state.loaded=true;state.catalogValid=true;state.error='';const entry=selected();if(!entry){state.selectedId='';state.name='';}else state.name=entry.name;state.notice='Katalog gelesen. Die aktuelle Tabellenansicht bleibt unverändert.';notify();return result;}
     function select(id){synchronize();invalidate(false);if(id&& !state.entries.some(entry=>entry.id===id&&entry.section===hooks.contract().section))return showError(failure('unknown_view','Die gewählte Ansicht ist in diesem Bereich nicht verfügbar.'));state.selectedId=id;state.name=selected()?.name||'';state.error='';notify();return ok(null);}
     function name(value){invalidate(false);state.name=value;state.error='';notify();}
-    function begin(reset=false){synchronize();if(!reset&&(!state.loaded||!state.catalogValid))return showError(failure('catalog_unavailable','Den gültigen Katalog zuerst ausdrücklich neu laden.'));const ticket={stamp:stamp()};operation=ticket;state.busy=true;state.error='';state.deleteConfirmation=null;state.resetConfirmation=null;const guard=()=>operation===ticket&&ticket.stamp===stamp();notify();return{ticket,guard};}
+    function begin(reset=false){synchronize();if(!available())return showError(unavailable());if(!reset&&(!state.loaded||!state.catalogValid))return showError(failure('catalog_unavailable','Den gültigen Katalog zuerst ausdrücklich neu laden.'));const ticket={stamp:stamp()};operation=ticket;state.busy=true;state.error='';state.deleteConfirmation=null;state.resetConfirmation=null;const guard=()=>available()&&operation===ticket&&ticket.stamp===stamp();notify();return{ticket,guard};}
     function stale(started,message){
       const result=failure('stale_operation',message);
       // A completion may arrive after a newer explicit operation has started.
@@ -28,7 +30,7 @@
     }
     function requireCrawl(){return hooks.owner()?.projectId?ok(null):failure('no_crawl','Zuerst einen Crawl und eine Ergebnistabelle auswählen.');}
     async function mutate(kind){
-      synchronize();if(state.busy)return failure('busy','Eine Katalogaktion läuft bereits.');
+      synchronize();if(!available())return showError(unavailable());if(state.busy)return failure('busy','Eine Katalogaktion läuft bereits.');
       if(!state.loaded||!state.catalogValid)return showError(failure('catalog_unavailable','Den gültigen Katalog zuerst ausdrücklich neu laden.'));
       if(kind==='create'||kind==='replace'){const crawl=requireCrawl();if(!crawl.ok)return showError(crawl);}
       const entry=selected();if(['replace','rename','delete'].includes(kind)&&!entry)return showError(failure('no_selection','Zuerst eine gespeicherte Ansicht auswählen.'));
@@ -61,7 +63,7 @@
       notify();return result;
     }
     function apply(){
-      synchronize();if(state.busy)return failure('busy','Eine Katalogaktion läuft bereits.');if(!state.catalogValid)return showError(failure('catalog_unavailable','Den gültigen Katalog zuerst neu laden.'));const crawl=requireCrawl();if(!crawl.ok)return showError(crawl);const entry=selected();if(!entry)return showError(failure('no_selection','Zuerst eine gespeicherte Ansicht auswählen.'));
+      synchronize();if(!available())return showError(unavailable());if(state.busy)return failure('busy','Eine Katalogaktion läuft bereits.');if(!state.catalogValid)return showError(failure('catalog_unavailable','Den gültigen Katalog zuerst neu laden.'));const crawl=requireCrawl();if(!crawl.ok)return showError(crawl);const entry=selected();if(!entry)return showError(failure('no_selection','Zuerst eine gespeicherte Ansicht auswählen.'));
       const prepared=library.prepareApply(entry,hooks.contract());if(!prepared.ok)return showError(prepared);
       const started=begin();if(!started.guard)return started;
       let result;try{result=hooks.apply(prepared.value,started.guard);}catch(_){result=failure('apply_failed','Die Ansicht konnte nicht atomar angewendet werden.');}
@@ -70,17 +72,18 @@
       if(result?.ok===true){state.busy=false;operation=null;state.active={id:entry.id,name:entry.name,modified:false};state.error='';state.notice='Vollständige Ansicht auf den aktuellen Crawl angewendet.';notify();return result;}
       if(!started.guard())return stale(started,'Die alte Anwendung wurde verworfen.');state.busy=false;operation=null;return showError(result||failure('apply_failed','Keine atomare Anwendung bestätigt.'));
     }
-    function requestDelete(){synchronize();if(!state.catalogValid)return showError(failure('catalog_unavailable','Den gültigen Katalog zuerst neu laden.'));const entry=selected();if(!entry)return showError(failure('no_selection','Zuerst eine gespeicherte Ansicht auswählen.'));invalidate(false);state.deleteConfirmation={id:entry.id,name:entry.name,stamp:stamp()};state.error='';notify();return ok(null);}
+    function requestDelete(){synchronize();if(!available())return showError(unavailable());if(!state.catalogValid)return showError(failure('catalog_unavailable','Den gültigen Katalog zuerst neu laden.'));const entry=selected();if(!entry)return showError(failure('no_selection','Zuerst eine gespeicherte Ansicht auswählen.'));invalidate(false);state.deleteConfirmation={id:entry.id,name:entry.name,stamp:stamp()};state.error='';notify();return ok(null);}
     function confirmDelete(){const confirm=state.deleteConfirmation;if(!confirm||confirm.id!==state.selectedId||confirm.stamp!==stamp())return failure('stale_confirmation','Die Löschbestätigung ist nicht mehr aktuell.');return mutate('delete');}
     function cancelDelete(){invalidate(false);notify();}
-    function requestReset(){synchronize();if(resetRaw===undefined)return showError(failure('unobserved_catalog','Katalog zuerst neu laden. Nicht gelesene Daten können nicht zurückgesetzt werden.'));invalidate(false);state.resetConfirmation={stamp:stamp()};notify();return ok(null);}
-    async function confirmReset(){const confirm=state.resetConfirmation;if(!confirm||confirm.stamp!==stamp()||resetRaw===undefined)return failure('stale_confirmation','Die Rücksetzbestätigung ist nicht mehr aktuell.');const expectedRaw=resetRaw,started=begin(true);let result;try{result=await store.reset({expectedRaw,guard:started.guard});}catch(_){result=failure('storage_unavailable','Der benannte Katalog konnte nicht zurückgesetzt werden.');}if(!started.guard())return stale(started,'Die alte Rücksetzung wurde verworfen.');state.busy=false;operation=null;if(!result.ok)return showError(result);state.raw=null;resetRaw=null;state.entries=[];state.loaded=true;state.catalogValid=true;state.selectedId='';state.name='';state.active=null;state.error='';state.notice='Alle benannten Ansichten dieses Browsers entfernt. Die aktuelle Tabelle und gespeicherte Spalten bleiben erhalten.';notify();return result;}
+    function requestReset(){synchronize();if(!available())return showError(unavailable());if(resetRaw===undefined)return showError(failure('unobserved_catalog','Katalog zuerst neu laden. Nicht gelesene Daten können nicht zurückgesetzt werden.'));invalidate(false);state.resetConfirmation={stamp:stamp()};notify();return ok(null);}
+    async function confirmReset(){const confirm=state.resetConfirmation;if(!confirm||confirm.stamp!==stamp()||resetRaw===undefined)return failure('stale_confirmation','Die Rücksetzbestätigung ist nicht mehr aktuell.');const expectedRaw=resetRaw,started=begin(true);if(!started.guard)return started;let result;try{result=await store.reset({expectedRaw,guard:started.guard});}catch(_){result=failure('storage_unavailable','Der benannte Katalog konnte nicht zurückgesetzt werden.');}if(!started.guard())return stale(started,'Die alte Rücksetzung wurde verworfen.');state.busy=false;operation=null;if(!result.ok)return showError(result);state.raw=null;resetRaw=null;state.entries=[];state.loaded=true;state.catalogValid=true;state.selectedId='';state.name='';state.active=null;state.error='';state.notice='Der ausgewählte Ansichtskatalog wurde entfernt. Andere Ansichtskataloge, die aktuelle Tabelle und gespeicherte Spalten bleiben erhalten.';notify();return result;}
     function externalChange(){invalidate(false);state.catalogValid=false;resetRaw=undefined;state.notice='Der Katalog wurde in einem anderen Fenster geändert. Die Tabelle bleibt erhalten; Katalog ausdrücklich neu laden.';notify();}
     function status(){synchronize();const c=hooks.contract(),entries=state.entries.filter(entry=>entry.section===c.section);const {raw,...publicState}=state;return{...publicState,entries:[...entries],resetAvailable:resetRaw!==undefined,active:state.active?{...state.active}:null,deleteConfirmation:state.deleteConfirmation?{...state.deleteConfirmation}:null,resetConfirmation:state.resetConfirmation?{...state.resetConfirmation}:null};}
     return Object.freeze({status,refresh,select,name,create:()=>mutate('create'),replace:()=>mutate('replace'),rename:()=>mutate('rename'),apply,requestDelete,confirmDelete,cancelDelete,requestReset,confirmReset,cancelReset:cancelDelete,externalChange,invalidate,resetOwner:()=>{context=null;invalidate(false);resetRaw=undefined;},synchronize});
   }
   function create(hooks){
-    const env=hooks.environment||globalThis,document=hooks.document||env.document,$=id=>document.getElementById(id);
+    const env=hooks.environment||globalThis,document=hooks.document||env.document;
+    const prefix=hooks.idPrefix||'table-view',$=id=>document.getElementById(prefix+id.slice('table-view'.length));
     const library=hooks.library||env.TableViewLibrary.create(env.TableExplorer);
     let storage=null,locks=null;try{storage=env.localStorage;}catch(_){}try{locks=env.navigator?.locks;}catch(_){}
     const store=hooks.store||env.TableViewStorage.create({library,storage,locks});
@@ -103,13 +106,16 @@
         $('table-view-delete-confirmation').hidden=!s.deleteConfirmation;
         $('table-view-delete-prompt').textContent=s.deleteConfirmation?'Gespeicherte Ansicht „'+s.deleteConfirmation.name+'“ aus diesem Browserkatalog löschen? Die aktuelle Tabelle bleibt erhalten.':'';
         $('table-view-reset').disabled=s.busy||!s.resetAvailable;$('table-view-reset-confirmation').hidden=!s.resetConfirmation;
+        if(hooks.available&&hooks.available()!==true)for(const suffix of['select','name','refresh','create','replace','rename','delete','apply','reset','delete-confirm','delete-cancel','reset-confirm','reset-cancel'])$('table-view-'+suffix).disabled=true;
+        else for(const suffix of['select','name','refresh','delete-confirm','delete-cancel','reset-confirm','reset-cancel'])$('table-view-'+suffix).disabled=false;
       }finally{rendering=false;}
     }
     controller=createController({...hooks,library,store,uuid:hooks.uuid||(()=>env.crypto.randomUUID()),notify:render});
-    function bind(id,event,action){const element=$(id);element.addEventListener(event,e=>{if(!element.isConnected||$(id)!==element)return;if(event==='click')e.preventDefault();action(e);});}
+    function bind(id,event,action){const element=$(id);element.addEventListener(event,e=>{if(!element.isConnected||$(id)!==element||hooks.available&&hooks.available()!==true)return;if(event==='click')e.preventDefault();action(e);});}
     bind('table-view-select','change',e=>controller.select(e.target.value));bind('table-view-name','input',e=>{const value=e.target.value;controller.name(value);});
     for(const[id,method]of[['refresh','refresh'],['create','create'],['apply','apply'],['replace','replace'],['rename','rename'],['delete','requestDelete'],['delete-confirm','confirmDelete'],['delete-cancel','cancelDelete'],['reset','requestReset'],['reset-confirm','confirmReset'],['reset-cancel','cancelReset']])bind('table-view-'+id,'click',()=>{Promise.resolve(controller[method]()).catch(()=>{ /* Controller reports owned failures as Results. */ });});
-    env.addEventListener?.('storage',event=>{if(event.key===env.TableViewStorage?.KEY||event.key===null)controller.externalChange();});
+    const storageKey=hooks.storageKey||env.TableViewStorage?.KEY;
+    env.addEventListener?.('storage',event=>{if(event.key===storageKey||event.key===null)controller.externalChange();});
     controller.refresh();render();
     return Object.freeze({render,invalidate:()=>{controller.invalidate();render();},edited:()=>{controller.invalidate();render();},resetOwner:()=>{controller.resetOwner();render();}});
   }

@@ -1,0 +1,139 @@
+{
+  "scope": "Four verification-only changes. Original R4 results retain their original source manifest; ordinary Rust and opt-in renderer fixture evidence is reused for byte-identical product/compiler/fixture inputs, not represented as freshly executed R5 tests. Full R4 UI retains its actual terminal outcome; fresh successor full44 is a separate gate.",
+  "at": "2026-10-19T20:33:37.807Z",
+  "original_manifest_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+  "successor_manifest_sha256": "d9585bac6c41b9b399c4eb35ff702d72e513c07024605fe465e6e9317bcfe7f2",
+  "original_full44": {
+    "label": "full-ui44",
+    "command": "node",
+    "args": [
+      "scripts/ui-e2e.mjs"
+    ],
+    "started_at": "2026-10-19T19:52:39.967Z",
+    "duration_ms": 2083580,
+    "code": 1,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-full-ui44.log",
+    "log_bytes": 2233,
+    "log_sha256": "d8491b1aa69301a6e102584918d2d666026105ced0731b3399e662cb0949be58",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  "source_delta": [
+    {
+      "file": "web/verification/profile-response-capture.cjs",
+      "before_sha256": "cecf33851a5e9628f015a6a420b3f8a618800a256c3eea5c15bff8cd56f706fb",
+      "before_bytes": 19586,
+      "staged_file": "artifacts/screenshot-response-harness-staged-20261019/web/verification/profile-response-capture.cjs",
+      "after_sha256": "49ced7ee03e2d2c124bc6a217066cdc488c09a1bb4ed5ce03c4041f92c7bcfd6",
+      "after_bytes": 22344
+    },
+    {
+      "file": "web/verification/ui-screenshot-viewport-live.cjs",
+      "before_sha256": "02442d345fbb869947c2d01cf40bbc1f1be7bd57b6ba4c56dcd937db831d6d76",
+      "before_bytes": 36577,
+      "staged_file": "artifacts/screenshot-response-harness-staged-20261019/web/verification/ui-screenshot-viewport-live.cjs",
+      "after_sha256": "0a9af86f9ba36caeb6b5101c16e6918615ed34898e7d4ca6fdf2bd7fa5b02973",
+      "after_bytes": 38151
+    },
+    {
+      "file": "web/verification/profile-response-capture.test.cjs",
+      "before_sha256": "743e19cec036a9dfe9814292c40238cca56e49d029e606bc0d30ac481928e257",
+      "before_bytes": 32187,
+      "staged_file": "artifacts/screenshot-response-harness-staged-20261019/web/verification/profile-response-capture.test.cjs",
+      "after_sha256": "d964d3f6a3615332848dd6a45ff4a4037093b6442e4e516355649b55b1babf3c",
+      "after_bytes": 38869
+    },
+    {
+      "file": "web/verification/profile-response-capture-browser.test.cjs",
+      "before_sha256": "d4c56c44d8234fc9a6e8e400a904a2392830046fec1093413a050497561d2685",
+      "before_bytes": 21864,
+      "staged_file": "artifacts/screenshot-response-harness-staged-20261019/web/verification/profile-response-capture-browser.test.cjs",
+      "after_sha256": "520eea45cf68a1dc158250b79968fac9a489fb63d534dc8bdb77b956421bf5ff",
+      "after_bytes": 27034
+    }
+  ],
+  "reused_gates": [
+    {
+      "label": "format",
+      "command": "cargo",
+      "args": [
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "started_at": "2026-10-19T19:34:34.213Z",
+      "duration_ms": 2739,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/table-expressions-r4-20261019-format.log",
+      "log_bytes": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "clippy",
+      "command": "cargo",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--offline",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "started_at": "2026-10-19T19:34:37.130Z",
+      "duration_ms": 23593,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/table-expressions-r4-20261019-clippy.log",
+      "log_bytes": 175,
+      "log_sha256": "7c36f469637b286c040fee5d090e08edb54c985fb4abe1cb91819d3f2670d68a",
+      "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "rust-workspace",
+      "command": "cargo",
+      "args": [
+        "test",
+        "--workspace",
+        "--locked",
+        "--offline",
+        "--",
+        "--test-threads=2"
+      ],
+      "started_at": "2026-10-19T19:35:00.901Z",
+      "duration_ms": 1046107,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/table-expressions-r4-20261019-rust-workspace.log",
+      "log_bytes": 209614,
+      "log_sha256": "3d25b40e6a4790d4eb7ca37d1c6d13db6067f11372bc3555e00da0958cfaa977",
+      "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+      "source_inputs_unchanged": true
+    },
+    {
+      "label": "renderer-rust",
+      "command": "node",
+      "args": [
+        "scripts/renderer-rust-e2e.mjs"
+      ],
+      "started_at": "2026-10-19T19:52:27.256Z",
+      "duration_ms": 8973,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/table-expressions-r4-20261019-renderer-rust.log",
+      "log_bytes": 4279,
+      "log_sha256": "510bff694f68148cb5205548bb11642e508e910bb3bb5bfde7ef92099217bd15",
+      "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+      "source_inputs_unchanged": true
+    }
+  ],
+  "fresh_full44": "NOT_RUN_BY_TARGETED_SUCCESSOR_SCRIPT"
+}
