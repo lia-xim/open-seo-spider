@@ -1,6 +1,7 @@
 'use strict';
 // UI for the main in-memory result table. Specialist inventories keep their own
-// pagination and exports. Only column keys are saved, in this browser origin.
+// pagination and exports. Legacy persistence saves column keys only. Named full
+// views use their separate browser catalog and an atomic App-owned transaction.
 (() => {
   const labels = {contains:'enthält Text',equals:'Text ist gleich',min:'mindestens',max:'höchstens',range:'im Zahlenbereich',known:'Wert vorhanden (auch 0)',unknown:'Kein Messwert',empty:'Leerer Text'};
   const decimal = value => {
@@ -18,6 +19,7 @@
     const same=owner=>owner===stamp();
     const storage=()=>{try{return window.localStorage;}catch(_){return null;}};
     const canonical=keys=>[...state.schema.filter(column=>column.mandatory).map(column=>column.key),...keys.filter(key=>!state.schema.find(column=>column.key===key)?.mandatory)];
+    const edited=()=>{revision++;hooks.queryEdited?.();};
     function changed() { state.evaluationError='';hooks.changed(); }
     function synchronize(schema) {
       const owner=hooks.owner(),scope=JSON.stringify([owner.projectId,owner.section,schema.map(column=>[column.key,column.type,column.mandatory])]);
@@ -79,7 +81,7 @@
         item.dataset.tableRuleIndex=String(index);const text=[column?.label||rule.key,labels[rule.op]];
         if('text'in rule)text.push('„'+rule.text+'“');if('min'in rule)text.push(String(rule.min));if('max'in rule)text.push(String(rule.max));
         item.append(document.createTextNode(text.join(' ')+' '));button.type='button';button.className='button small';button.dataset.tableRuleRemove=String(index);button.textContent='Entfernen';button.setAttribute('aria-label','Filter entfernen: '+text.join(' '));
-        button.addEventListener('click',()=>{if(!same(owner))return;state.rules.splice(index,1);state.error='';changed();});item.append(button);list.append(item);
+        button.addEventListener('click',()=>{if(!same(owner))return;edited();state.rules.splice(index,1);state.error='';changed();});item.append(button);list.append(item);
       }
       $('table-rules-clear').disabled=!state.rules.length&&!state.error;
       const columnList=$('table-column-list');columnList.replaceChildren();
@@ -87,12 +89,12 @@
       for(const key of ordered){
         const column=state.schema.find(entry=>entry.key===key),item=document.createElement('li'),label=document.createElement('label'),input=document.createElement('input');
         item.dataset.columnKey=key;input.type='checkbox';input.value=key;input.dataset.tableColumn=key;input.checked=state.visibleKeys.includes(key);input.disabled=Boolean(column.mandatory);label.append(input,document.createTextNode(' '+column.label+(column.mandatory?' (Identität)':'')));item.append(label);
-        input.addEventListener('change',()=>{if(!same(owner))return;state.visibleKeys=input.checked?[...state.visibleKeys,key]:state.visibleKeys.filter(value=>value!==key);state.visibleKeys=canonical(state.visibleKeys);state.notice='Spalten geändert · noch nicht gespeichert.';changed();});
+        input.addEventListener('change',()=>{if(!same(owner))return;const checked=input.checked;edited();state.visibleKeys=checked?[...state.visibleKeys,key]:state.visibleKeys.filter(value=>value!==key);state.visibleKeys=canonical(state.visibleKeys);state.notice='Spalten geändert · noch nicht gespeichert.';changed();});
         const position=state.visibleKeys.indexOf(key),fixed=state.schema.filter(entry=>entry.mandatory).length;
         for(const[direction,offset,caption]of [['up',-1,'Nach oben'],['down',1,'Nach unten']]){
           const button=document.createElement('button');button.type='button';button.className='button small';button.dataset.tableColumnMove=direction;button.dataset.columnKey=key;button.textContent=offset<0?'↑':'↓';button.setAttribute('aria-label',column.label+': '+caption);
           button.disabled=Boolean(column.mandatory)||position<0||(offset<0?position<=fixed:position>=state.visibleKeys.length-1);
-          button.addEventListener('click',()=>{if(!same(owner))return;const next=[...state.visibleKeys];[next[position],next[position+offset]]=[next[position+offset],next[position]];state.visibleKeys=next;state.notice='Spaltenreihenfolge geändert · noch nicht gespeichert.';changed();});item.append(button);
+          button.addEventListener('click',()=>{if(!same(owner))return;const next=[...state.visibleKeys];[next[position],next[position+offset]]=[next[position+offset],next[position]];edited();state.visibleKeys=next;state.notice='Spaltenreihenfolge geändert · noch nicht gespeichert.';changed();});item.append(button);
         }
         columnList.append(item);
       }
@@ -107,12 +109,12 @@
       event.preventDefault();
       try{
         const candidate=[...state.rules,readRule()],result=tools.compile(state.schema,{search:'',rules:candidate,sort:hooks.sort(),visibleKeys:canonical(state.visibleKeys)},hooks.identity);
-        if(!result.ok)throw Error(result.error.message);state.rules=candidate;state.error='';changed();
-      }catch(error){state.error='Filter nicht übernommen: '+error.message+' Die bisherige Auswahl bleibt bestehen.';hooks.changed();}
+        if(!result.ok)throw Error(result.error.message);edited();state.rules=candidate;state.error='';changed();
+      }catch(error){edited();state.error='Filter nicht übernommen: '+error.message+' Die bisherige Auswahl bleibt bestehen.';hooks.changed();}
     });
     $('table-rule-column').addEventListener('change',renderRuleInputs);$('table-rule-op').addEventListener('change',renderRuleInputs);
-    $('table-rules-clear').addEventListener('click',()=>{state.rules=[];state.error='';changed();});
-    for(const id of ['table-sort-column','table-sort-direction'])$(id).addEventListener('change',()=>{hooks.setSort({key:$('table-sort-column').value,direction:Number($('table-sort-direction').value)});changed();});
+    $('table-rules-clear').addEventListener('click',()=>{edited();state.rules=[];state.error='';changed();});
+    for(const id of ['table-sort-column','table-sort-direction'])$(id).addEventListener('change',()=>{const sort={key:$('table-sort-column').value,direction:Number($('table-sort-direction').value)};edited();hooks.setSort(sort);changed();});
     $('table-columns-save').addEventListener('click',()=>{
       const result=tools.save(storage(),context(),state.schema,{visibleKeys:canonical(state.visibleKeys)});
       if(result.ok){state.visibleKeys=canonical(result.value.visibleKeys);state.storageError='';state.notice='Spaltenansicht für diesen Crawl und Bereich gespeichert.';}else state.storageError='Spalten nicht gespeichert: '+result.error.message;
@@ -120,7 +122,7 @@
     });
     $('table-columns-reset').addEventListener('click',()=>{
       const result=tools.reset(storage(),context());
-      if(result.ok){state.visibleKeys=canonical(state.schema.map(column=>column.key));state.storageError='';state.notice='Gespeicherte Spaltenansicht dieses Crawls und Bereichs entfernt; Standardspalten aktiv.';}else state.storageError='Spaltenansicht nicht zurückgesetzt: '+result.error.message;
+      if(result.ok){edited();state.visibleKeys=canonical(state.schema.map(column=>column.key));state.storageError='';state.notice='Gespeicherte Spaltenansicht dieses Crawls und Bereichs entfernt; Standardspalten aktiv.';}else state.storageError='Spaltenansicht nicht zurückgesetzt: '+result.error.message;
       hooks.changed();
     });
     window.addEventListener('storage',event=>{
@@ -128,7 +130,24 @@
       if(event.key!==key&&event.key!==null)return;
       state.storageError='Die gespeicherte Spaltenansicht wurde in einem anderen Fenster geändert. Die aktuelle Ansicht bleibt erhalten; zum Laden den Crawl/Bereich erneut öffnen oder die aktuelle Ansicht ausdrücklich speichern.';hooks.changed();
     });
-    return Object.freeze({columns,rows,render,synchronize,hasRules:()=>Boolean(state.rules.length),canExport:()=>!state.error&&!state.evaluationError,resetOwner:()=>{state.scope=null;}});
+    function draft(){
+      if(state.error||state.evaluationError)return{ok:false,error:{code:'invalid_working_view',message:'Die aktuelle Tabellenansicht enthält einen Fehler. Diesen vor dem Speichern beheben.'}};
+      const rules=state.rules.map(rule=>({...rule})),visibleKeys=canonical(state.visibleKeys),check=tools.compile(state.schema,{search:'',rules,sort:hooks.sort(),visibleKeys},hooks.identity);
+      return check.ok?{ok:true,value:{rules,visibleKeys:[...visibleKeys]}}:check;
+    }
+    function installPrepared(view){
+      // Validate all inputs before touching accepted state. The App performs its
+      // complete owner/revision/filter validation and commits synchronously.
+      try{
+        const rules=view.rules.map(rule=>({...rule})),visibleKeys=[...view.visibleKeys],sort={...view.sort};
+        const check=tools.compile(state.schema,{search:view.search,rules,sort,visibleKeys},hooks.identity);
+        if(!check.ok)return check;
+        const projected=canonical(check.value.columns.map(column=>column.key));
+        state.rules=rules;state.visibleKeys=projected;state.error='';state.evaluationError='';state.notice='Benannte Ansicht angewendet · gespeicherte Spaltenpräferenzen unverändert.';revision++;
+        return{ok:true,value:null};
+      }catch(_){return{ok:false,error:{code:'invalid_working_view',message:'Die vollständige Tabellenansicht ist ungültig; bisherige Auswahl bleibt erhalten.'}};}
+    }
+    return Object.freeze({columns,rows,render,synchronize,draft,installPrepared,hasRules:()=>Boolean(state.rules.length),canExport:()=>!state.error&&!state.evaluationError,resetOwner:()=>{revision++;state.scope=null;}});
   }
   window.TableExplorerUI=Object.freeze({create});
 })();

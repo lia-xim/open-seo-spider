@@ -34,6 +34,12 @@
   let screenshotController = null, screenshotView = null;
   let tableExplorer = null;
   let tableRenderSequence = 0;
+  let tableViews = null, tableQueryRevision = 0, tableSearchTimer = null;
+  function tableQueryEdited() {
+    tableQueryRevision++;
+    clearTimeout(tableSearchTimer);tableSearchTimer=null;
+    tableViews?.invalidate();
+  }
   const legacySettingsDefaults = {...state.settings};
   let dashboardSegments = null;
   const separateSegmentSections = new Set(['inputs','policy','policyaliases','content','resource-discovery','sitemap-membership','sitemap-findings']);
@@ -424,6 +430,7 @@
     state.fragments = null;
     state.fragmentsError = '';
     state.page = 0;
+    tableQueryEdited();
     tableExplorer?.resetOwner();
     state.search='';state.filter='all';state.sort=state.section==='inputs'?'list_index':'url';state.direction=1;
     $('table-search').value='';$('table-filter').value='all';
@@ -1024,9 +1031,35 @@
   function tableIdentity(row) {
     return JSON.stringify([row.requested_url??row._page?.url??row.url??row.normalized_url??'',row.url??'',row.list_index??null,row.occurrence_index??null,row.source_index??null,row.response_index??null,row.dom_location?.index??null,row.rule_name??null,row.source??null,row._segmentOrdinal??row._page?._segmentOrdinal??null]);
   }
+  function tableViewContract() {
+    return {section:state.section,query_semantics:window.TableViewLibrary.QUERY_SEMANTICS,columns:tableSchema(),sectionFilters:filterOptions().map(option=>option[0])};
+  }
+  function tableViewSnapshot() {
+    if(!state.crawl?.id||!tableExplorer)return {ok:false,error:{code:'no_crawl',message:'Zuerst einen Crawl und eine Ergebnistabelle auswählen.'}};
+    const draft=tableExplorer.draft();if(!draft.ok)return draft;
+    return {ok:true,value:{sectionFilter:state.filter,search:state.search,rules:draft.value.rules,sort:{key:state.sort,direction:state.direction},visibleKeys:draft.value.visibleKeys}};
+  }
+  function applyTableView(prepared,guard) {
+    const stale=()=>({ok:false,error:{code:'stale_view',message:'Crawl, Suche oder Ansicht wurden inzwischen geändert. Die Ansicht erneut ausdrücklich anwenden.'}});
+    if(typeof guard!=='function'||!guard()||!state.crawl?.id||!tableExplorer)return stale();
+    const contract=tableViewContract();
+    if(prepared?.section!==contract.section||prepared?.query_semantics!==contract.query_semantics)return {ok:false,error:{code:'incompatible_view',message:'Die Ansicht passt nicht zur aktuellen Tabellenbedeutung.'}};
+    const checked=window.TableViewLibrary.create(window.TableExplorer).prepareView(contract,{sectionFilter:prepared.sectionFilter,search:prepared.search,rules:prepared.rules,sort:prepared.sort,visibleKeys:prepared.visibleKeys});
+    if(!checked.ok)return checked;if(!guard())return stale();
+    // No await or externally visible partial render occurs between validation and commit.
+    const installed=tableExplorer.installPrepared(checked.value);if(!installed.ok)return installed;
+    state.search=checked.value.search;state.filter=checked.value.sectionFilter;state.sort=checked.value.sort.key;state.direction=checked.value.sort.direction;state.page=0;
+    $('table-search').value=state.search;$('table-filter').value=state.filter;
+    tableQueryEdited();
+    renderTable();return {ok:true,value:checked.value};
+  }
+  function bindNamedTableViews() {
+    if(!window.TableViewsUI||!window.TableViewLibrary||!window.TableViewStorage||!tableExplorer){$('table-view-error').hidden=false;$('table-view-error').textContent='Benannte Tabellenansichten sind nicht geladen.';return;}
+    tableViews=window.TableViewsUI.create({owner:tableOwner,queryRevision:()=>tableQueryRevision,contract:tableViewContract,snapshot:tableViewSnapshot,apply:applyTableView});
+  }
   function bindTableExplorer() {
     if(!window.TableExplorer||!window.TableExplorerUI){$('table-options').open=true;$('table-explorer-error').hidden=false;$('table-explorer-error').textContent='Erweiterte Tabellenfunktionen sind nicht geladen.';return;}
-    tableExplorer=window.TableExplorerUI.create({owner:tableOwner,identity:{identity:tableIdentity},sort:()=>({key:state.sort,direction:state.direction}),setSort:sort=>{state.sort=sort.key;state.direction=sort.direction;},changed:()=>{state.page=0;renderTable();}});
+    tableExplorer=window.TableExplorerUI.create({owner:tableOwner,identity:{identity:tableIdentity},sort:()=>({key:state.sort,direction:state.direction}),setSort:sort=>{state.sort=sort.key;state.direction=sort.direction;},queryEdited:tableQueryEdited,changed:()=>{state.page=0;renderTable();}});
   }
   function filteredRows(useExplorer=true) {
     if(tableExplorer&&useExplorer){
@@ -1074,6 +1107,7 @@
     });
     table.querySelectorAll('[data-sort]').forEach((button) => button.addEventListener('click', () => {
       if(!currentTable())return;
+      tableQueryEdited();
       state.direction = state.sort === button.dataset.sort ? -state.direction : 1;
       state.sort = button.dataset.sort;
       state.page = 0;
@@ -1100,6 +1134,7 @@
     $('page-prev').disabled = state.page === 0;
     $('page-next').disabled = state.page + 1 >= pages;
     tableExplorer?.render();
+    tableViews?.render();
     renderControls();
   }
 
@@ -1112,6 +1147,7 @@
     state.page = 0;
     state.filter = 'all';
     state.search = '';
+    tableQueryEdited();
     state.sort = section === 'inputs' ? 'list_index' : 'url';
     state.direction = 1;
     tableExplorer?.resetOwner();
@@ -3955,14 +3991,16 @@
     });
     $('crawl-history').addEventListener('change', (event) => selectCrawl(event.target.value));
     document.querySelectorAll('[data-section]').forEach((button) => button.addEventListener('click', () => selectSection(button.dataset.section)));
-    let searchTimer;
+    // Search revision changes before the deferred render so late view operations cannot win.
     $('table-search').addEventListener('input', (event) => {
+      tableQueryEdited();
       state.search = event.target.value;
       state.page = 0;
-      clearTimeout(searchTimer);
-      searchTimer = setTimeout(renderTable, 100);
+      clearTimeout(tableSearchTimer);
+      const revision=tableQueryRevision,owner=JSON.stringify(tableOwner());
+      tableSearchTimer=setTimeout(()=>{if(revision===tableQueryRevision&&owner===JSON.stringify(tableOwner())){tableSearchTimer=null;renderTable();}},100);
     });
-    $('table-filter').addEventListener('change', (event) => { state.filter = event.target.value; state.page = 0; renderTable(); });
+    $('table-filter').addEventListener('change', (event) => { tableQueryEdited();state.filter = event.target.value; state.page = 0; renderTable(); });
     $('page-size').addEventListener('change', (event) => { state.pageSize = Number(event.target.value); state.page = 0; renderTable(); });
     $('page-prev').addEventListener('click', () => { state.page -= 1; renderTable(); });
     $('page-next').addEventListener('click', () => { state.page += 1; renderTable(); });
@@ -4021,6 +4059,7 @@
     restoreSettings();
     bindEvents();
     bindTableExplorer();
+    bindNamedTableViews();
     selectSection('overview');
     render();
     await initializeConfigProfiles();

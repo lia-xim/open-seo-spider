@@ -847,3 +847,15 @@ body.tool-page { margin: 0; padding: 0; max-width: none; background: var(--bg); 
 .dashboard-segment-exports > label { display: flex; flex-direction: column; gap: 5px; flex: 1 1 240px; max-width: 360px; min-width: 0; font-size: 12px; color: var(--muted); }
 .dashboard-segment-exports select { width: 100%; max-width: 100%; min-width: 0; }
 @media (max-width: 640px) { .dashboard-segment-exports > label { flex-basis: 100%; max-width: 100%; } }
+
+.table-views { margin: 14px 0 0; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-sm, 6px); min-width: 0; }
+.table-views legend { font-weight: 600; padding: 0 5px; }
+.table-views p { overflow-wrap: anywhere; }
+.table-view-fields, .table-view-actions { display: flex; flex-wrap: wrap; align-items: end; gap: 8px; min-width: 0; }
+.table-view-fields label { display: flex; flex: 1 1 220px; flex-direction: column; gap: 5px; min-width: 0; font-size: 12px; }
+.table-view-fields input, .table-view-fields select { width: 100%; max-width: 100%; min-width: 0; }
+.table-view-actions { margin-top: 9px; }
+.table-views .button { white-space: normal; height: auto; min-height: 32px; }
+.table-view-confirmation { margin-top: 10px; padding: 10px; background: var(--surface-soft); border: 1px solid var(--line); border-radius: 5px; }
+.table-view-confirmation .button { margin: 0 6px 6px 0; }
+@media (max-width: 640px) { .table-views { padding: 9px; } .table-view-fields label { flex-basis: 100%; } .table-view-actions .button { flex: 1 1 130px; min-width: 0; } }

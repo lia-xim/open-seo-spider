@@ -319,6 +319,33 @@ async fn serve_with_mcp_files_ready_source_inner(
             }),
         )
         .route(
+            "/table-view-library.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/table-view-library.js"),
+                )
+            }),
+        )
+        .route(
+            "/table-view-storage.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/table-view-storage.js"),
+                )
+            }),
+        )
+        .route(
+            "/table-views-ui.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/table-views-ui.js"),
+                )
+            }),
+        )
+        .route(
             "/screenshots.js",
             get(|| async {
                 (

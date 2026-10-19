@@ -13,7 +13,10 @@
   <script src="/config-profiles.js" defer></script>
   <script src="/screenshots.js" defer></script>
   <script src="/table-explorer.js" defer></script>
+  <script src="/table-view-library.js" defer></script>
+  <script src="/table-view-storage.js" defer></script>
   <script src="/table-explorer-ui.js" defer></script>
+  <script src="/table-views-ui.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -131,6 +134,15 @@
             <details class="table-columns"><summary>Spalten auswählen und anordnen</summary><p>Die Identitätsspalten bleiben vorne sichtbar. Der CSV-Export enthält alle gefilterten Zeilen mit diesen Spalten und den Befundinformationen.</p><ul id="table-column-list" aria-label="Spaltenreihenfolge und Sichtbarkeit"></ul></details>
             <div class="table-column-actions"><button id="table-columns-save" class="button small" type="button" disabled>Spalten speichern</button><button id="table-columns-reset" class="button small" type="button" disabled>Spalten zurücksetzen</button><span id="table-column-storage-status" role="status" aria-live="polite"></span></div>
             <p>Die Spaltenansicht wird nur in diesem Browser für den ausgewählten Crawl und Bereich gespeichert. Suchbegriffe, Filter und Sortierung werden nicht gespeichert.</p>
+            <fieldset id="table-views" class="table-views">
+              <legend>Benannte Ansichten</legend>
+              <p>Speichert Suchbegriffe, Bereichsfilter, aktive Regeln, Sortierung und Spalten in diesem Browser. Eine Ansicht wird erst mit „Anwenden“ auf den ausgewählten Crawl übernommen.</p>
+              <div class="table-view-fields"><label>Gespeicherte Ansicht<select id="table-view-select"><option value="">Keine Ansicht ausgewählt</option></select></label><label>Name<input id="table-view-name" type="text" maxlength="128" autocomplete="off"></label></div>
+              <div class="table-view-actions"><button id="table-view-create" class="button small" type="button">Als neue Ansicht speichern</button><button id="table-view-apply" class="button small" type="button" disabled>Anwenden</button><button id="table-view-replace" class="button small" type="button" disabled>Mit aktueller Ansicht überschreiben</button><button id="table-view-rename" class="button small" type="button" disabled>Umbenennen</button><button id="table-view-delete" class="button small" type="button" disabled>Löschen</button><button id="table-view-refresh" class="button small" type="button">Gespeicherte Liste neu laden</button><button id="table-view-reset" class="button small" type="button">Alle benannten Ansichten entfernen</button></div>
+              <div id="table-view-delete-confirmation" class="table-view-confirmation" hidden><p id="table-view-delete-prompt"></p><button id="table-view-delete-confirm" class="button small" type="button">Ansicht endgültig löschen</button><button id="table-view-delete-cancel" class="button small" type="button">Abbrechen</button></div>
+              <div id="table-view-reset-confirmation" class="table-view-confirmation" hidden><p>Alle benannten Ansichten aller Bereiche in diesem Browser entfernen? Die aktuelle Tabelle, gespeicherte Crawls und die getrennten Spaltenpräferenzen bleiben erhalten.</p><button id="table-view-reset-confirm" class="button small" type="button">Alle benannten Ansichten endgültig entfernen</button><button id="table-view-reset-cancel" class="button small" type="button">Abbrechen</button></div>
+              <p id="table-view-active" role="status" aria-live="polite"></p><p id="table-view-status" role="status" aria-live="polite"></p><p id="table-view-error" class="message error" role="alert" hidden></p>
+            </fieldset>
             <p id="table-explorer-error" class="message error" role="alert" hidden></p>
           </details>
           <div class="table-scroll" tabindex="0" aria-label="Ergebnistabelle, horizontal scrollbar"><table id="results-table"><thead></thead><tbody></tbody></table></div>

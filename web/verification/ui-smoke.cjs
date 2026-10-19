@@ -61,7 +61,7 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname.endsWith('/sitemap.xml')) return send('<?xml version="1.0"?><urlset/>', 'application/xml');
   if (/^\/api\/crawls\//.test(url.pathname)) return send(url.pathname.split('/')[3]==='zero-input'?zeroInputStatus():status(url.pathname.split('/')[3]));
   const file = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
-  if (!['index.html', 'app.js','dashboard-segments.js','config-profiles.js','screenshots.js','table-explorer.js','table-explorer-ui.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
+  if (!['index.html', 'app.js','dashboard-segments.js','config-profiles.js','screenshots.js','table-explorer.js','table-explorer-ui.js','table-view-library.js','table-view-storage.js','table-views-ui.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
   send(fs.readFileSync(path.join(web, file), 'utf8'), file.endsWith('css') ? 'text/css' : file.endsWith('js') ? 'text/javascript' : 'text/html');
 });
 

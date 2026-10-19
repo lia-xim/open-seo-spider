@@ -1,0 +1,1387 @@
+{
+  "result": "PASS_LOCAL_NAMED_VIEWS_AND_FORTY_THREE_SUITE_REGRESSION",
+  "recorded_at": "2026-10-19T19:03:56.255Z",
+  "selected_full_UI_gate_label": "full-ui43-retry1",
+  "validator": {
+    "path": "artifacts/finalize-named-views-20261019.cjs",
+    "bytes": 40846,
+    "sha256": "80e1a88eba17ec88cf27cbb2aaab4da460e90b169cc95bedad818ef147001da3"
+  },
+  "source": {
+    "manifest": {
+      "path": "artifacts/named-views-r3-20261019-inputs.json",
+      "bytes": 104804,
+      "sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94"
+    },
+    "input_count": 593,
+    "current_raw_inputs_verified": true,
+    "scope": "Explicit source/harness acceptance inventory; not exhaustive compiler/transitive dependency attestation."
+  },
+  "normal_binary": {
+    "path": "target/debug/open-seo-spider.exe",
+    "bytes": 90109952,
+    "sha256": "9ae115ef2679132189b5b8c39f7c72384c5d905ed3b6942da6e176fdd0ffb4bf"
+  },
+  "current_gate_receipts": {
+    "build-normal": {
+      "label": "build-normal",
+      "command": "cargo",
+      "args": [
+        "build",
+        "--locked",
+        "--offline",
+        "-p",
+        "open-seo-spider",
+        "--bin",
+        "open-seo-spider"
+      ],
+      "started_at": "2026-10-19T17:59:52.736Z",
+      "duration_ms": 883,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-build-normal.log",
+      "log_bytes": 60,
+      "log_sha256": "35fc72bacfe065673ddba4b566b6467dc5b94a887c640891f8cbf1f5e1028448",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "states": {
+      "label": "states",
+      "command": "node",
+      "args": [
+        "--test",
+        "web/verification/serp-state-race.test.cjs",
+        "web/verification/robots-input-state.test.cjs",
+        "web/verification/list-import-state.test.mjs",
+        "web/verification/api-enrichment-state.test.cjs",
+        "web/verification/accessibility-state.test.cjs",
+        "web/verification/dashboard-segments-state.test.cjs",
+        "web/verification/config-profiles-state.test.cjs",
+        "web/verification/config-profile-catalog-state.test.cjs",
+        "web/verification/screenshot-state.test.cjs",
+        "web/verification/profile-response-capture.test.cjs",
+        "web/verification/table-explorer-state.test.cjs",
+        "web/verification/table-view-library.test.cjs",
+        "web/verification/table-view-storage.test.cjs",
+        "web/verification/table-views-ui.test.cjs"
+      ],
+      "started_at": "2026-10-19T17:59:54.246Z",
+      "duration_ms": 686,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-states.log",
+      "log_bytes": 29330,
+      "log_sha256": "d232847bd376a5733995d89b3bfb9c8b2ce0e136b5c3b34a74697dc413ea47ac",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "semantic": {
+      "label": "semantic",
+      "command": "node",
+      "args": [
+        "scripts/check-ui-fixtures.mjs"
+      ],
+      "started_at": "2026-10-19T17:59:55.236Z",
+      "duration_ms": 614,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-semantic.log",
+      "log_bytes": 1068,
+      "log_sha256": "c08978e6147eb2aae59bea98392f02d8d43d917a5d8c9bd877b314ccbb37f5f1",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "targeted-native": {
+      "label": "targeted-native",
+      "command": "node",
+      "args": [
+        "scripts/ui-e2e.mjs",
+        "--only",
+        "table-named-views"
+      ],
+      "started_at": "2026-10-19T17:59:56.139Z",
+      "duration_ms": 57788,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-targeted-native.log",
+      "log_bytes": 154,
+      "log_sha256": "e208d09c8d0913c79720bf12d9ed07e476d2412317f32609ee389de7e2f9da49",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "format": {
+      "label": "format",
+      "command": "cargo",
+      "args": [
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "started_at": "2026-10-19T18:01:03.523Z",
+      "duration_ms": 6802,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-format.log",
+      "log_bytes": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "clippy": {
+      "label": "clippy",
+      "command": "cargo",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--offline",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "started_at": "2026-10-19T18:01:10.545Z",
+      "duration_ms": 27733,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-clippy.log",
+      "log_bytes": 175,
+      "log_sha256": "33dcad94b435ae3aecb9a21deeb86bdd0e5fbae0a5b3b7de6d75dfaf55dd699a",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "rust-workspace": {
+      "label": "rust-workspace",
+      "command": "cargo",
+      "args": [
+        "test",
+        "--workspace",
+        "--locked",
+        "--offline",
+        "--",
+        "--test-threads=2"
+      ],
+      "started_at": "2026-10-19T18:01:38.475Z",
+      "duration_ms": 1111816,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-rust-workspace.log",
+      "log_bytes": 209613,
+      "log_sha256": "6e2a10cd36b7bb1aadba727b192478d11cb2d4b99560152b7153efbbd0a6a134",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "renderer-rust": {
+      "label": "renderer-rust",
+      "command": "node",
+      "args": [
+        "scripts/renderer-rust-e2e.mjs"
+      ],
+      "started_at": "2026-10-19T18:20:10.475Z",
+      "duration_ms": 13480,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-renderer-rust.log",
+      "log_bytes": 4279,
+      "log_sha256": "171c4dd1171acdb2f7d03d6cdc9dac238356b9c4944121a265be4b7038587c0c",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "profile-capture-browser": {
+      "label": "profile-capture-browser",
+      "command": "node",
+      "args": [
+        "--test",
+        "web/verification/profile-response-capture-browser.test.cjs"
+      ],
+      "started_at": "2026-10-19T18:20:24.158Z",
+      "duration_ms": 2379,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-profile-capture-browser.log",
+      "log_bytes": 2057,
+      "log_sha256": "4df12ef92f8cb9122c49a46de8fda3b4f1591bafcdb631ee93c914b7d0f9a54a",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    },
+    "full-ui43": {
+      "label": "full-ui43-retry1",
+      "command": "node",
+      "args": [
+        "scripts/ui-e2e.mjs"
+      ],
+      "started_at": "2026-10-19T18:25:00.302Z",
+      "duration_ms": 2009134,
+      "code": 0,
+      "signal": null,
+      "log": "artifacts/named-views-r3-20261019-full-ui43-retry1.log",
+      "log_bytes": 1464,
+      "log_sha256": "a243834f40451e58faab429656794704e38201e406d639ddf581fd643e292edf",
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "source_inputs_unchanged": true
+    }
+  },
+  "states": {
+    "tests": 282,
+    "pass": 282,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "semantic": {
+    "groups": 40,
+    "actual_browser": false,
+    "actual_engine": false
+  },
+  "rust": {
+    "passed": 1831,
+    "failed": 0,
+    "ignored": 5,
+    "blocks": 17
+  },
+  "profile_Chromium": {
+    "reported": 17,
+    "parents": 2,
+    "subcontrols": 15,
+    "ordinary_Rust_counts_separate": true
+  },
+  "opt_in_Rust_Chromium": {
+    "passed": 4,
+    "executed": [
+      "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+      "live_browser_worker_executes_javascript_for_core_crawl",
+      "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+      "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"
+    ],
+    "separate_from_ordinary_ignored": true
+  },
+  "focused_UI": {
+    "aggregate": {
+      "path": "artifacts/named-views-native-r3-20261019/proof.json",
+      "bytes": 891,
+      "sha256": "212948c43786d99c9def9701c7f7c6c24cd81ed37a6b43b6d8628c413f0d1ab9"
+    },
+    "suite_names": [
+      "table-named-views"
+    ],
+    "native": {
+      "receipt": {
+        "path": "artifacts/named-views-native-r3-20261019/table-named-views/table-views-1792432799864-49c60e48/ui-table-views-live.json",
+        "bytes": 140865,
+        "sha256": "6cc0087c7bddf8d4c74cb626732e4b14bb39635fe1a346b16b440e5fd40d1d3c"
+      },
+      "major_groups": 5,
+      "native_captures": 2,
+      "native_pages": [
+        107,
+        107
+      ],
+      "actual_CSV_files": 9,
+      "browser_download_events": 9,
+      "independently_rechecked_CSV_data_rows": 719,
+      "CSV_header_and_all_native_cells_rechecked": true,
+      "native_processes": 2,
+      "natural_EOF_zero": 2,
+      "positive_410_controls": 2,
+      "offline_product_requests": 0,
+      "page_errors": 0,
+      "external_browser_requests": 0,
+      "geometry_observations": 26,
+      "NoLocks_transport": {
+        "path": "artifacts/named-views-native-r3-20261019/table-named-views/table-views-1792432799864-49c60e48/table-views-no-locks-transport.json",
+        "bytes": 15965,
+        "sha256": "ddbc8b7c9fa5ab42309ce13ac398ca05a212c12834f72f5a3b01e11e27bda886"
+      },
+      "NoLocks_scope": "Real insecure owned read-only HTTP passthrough to unchanged native loopback listener; original direct alias-host403 is separately recorded. It is a negative platform fixture, not a new supported native alias binding."
+    }
+  },
+  "full_UI": {
+    "aggregate": {
+      "path": "artifacts/named-views-full-r3-retry1-20261019/proof.json",
+      "bytes": 10780,
+      "sha256": "ef3208bfaea0b61093137e5ccfff2d505c5390e7b061e9e6642e80463faef500"
+    },
+    "selected_gate_label": "full-ui43-retry1",
+    "one_complete_invocation": true,
+    "suite_count": 43,
+    "results": [
+      {
+        "name": "dashboard",
+        "script": "ui-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8708
+      },
+      {
+        "name": "pause-controls",
+        "script": "ui-crawl-control-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6843
+      },
+      {
+        "name": "recrawl-controls",
+        "script": "ui-selected-recrawl-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5794
+      },
+      {
+        "name": "policy-controls",
+        "script": "ui-policy-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6902
+      },
+      {
+        "name": "content-controls",
+        "script": "ui-content-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 21674
+      },
+      {
+        "name": "resource-controls",
+        "script": "ui-resource-discovery-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 15263
+      },
+      {
+        "name": "resource-ledger",
+        "script": "ui-resource-ledger-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 10191
+      },
+      {
+        "name": "resource-contract",
+        "script": "ui-resource-contract-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 11642
+      },
+      {
+        "name": "comparison-controls",
+        "script": "ui-saved-comparison-smoke.cjs",
+        "kind": "fixture",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4341
+      },
+      {
+        "name": "tool-navigation",
+        "script": "ui-tools-navigation-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4248
+      },
+      {
+        "name": "rendered-crawl",
+        "script": "ui-renderer-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4577
+      },
+      {
+        "name": "dom-capture",
+        "script": "ui-dom-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14627
+      },
+      {
+        "name": "accessibility-review",
+        "script": "ui-accessibility-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 20557
+      },
+      {
+        "name": "resources",
+        "script": "ui-resource-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8781
+      },
+      {
+        "name": "robots",
+        "script": "ui-robots-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 2157
+      },
+      {
+        "name": "serp",
+        "script": "ui-serp-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1680
+      },
+      {
+        "name": "list-import",
+        "script": "ui-list-import-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4995
+      },
+      {
+        "name": "pause-resume",
+        "script": "ui-crawl-control-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 16354
+      },
+      {
+        "name": "selected-recrawl",
+        "script": "ui-selected-recrawl-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8536
+      },
+      {
+        "name": "policy",
+        "script": "ui-policy-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5093
+      },
+      {
+        "name": "content",
+        "script": "ui-content-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8816
+      },
+      {
+        "name": "resource-discovery",
+        "script": "ui-resource-discovery-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 8566
+      },
+      {
+        "name": "resource-persistence",
+        "script": "ui-resource-contract-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 6847
+      },
+      {
+        "name": "saved-spelling",
+        "script": "ui-spelling-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 2651
+      },
+      {
+        "name": "link-workflows",
+        "script": "ui-link-workflows-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3497
+      },
+      {
+        "name": "api-enrichment",
+        "script": "ui-enrichment-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 1411
+      },
+      {
+        "name": "directory-tree",
+        "script": "ui-directory-tree-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5326
+      },
+      {
+        "name": "saved-ngrams",
+        "script": "ui-ngrams-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5010
+      },
+      {
+        "name": "saved-segments",
+        "script": "ui-segments-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4603
+      },
+      {
+        "name": "dashboard-segments",
+        "script": "ui-dashboard-segments-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 900000,
+        "duration_ms": 363474
+      },
+      {
+        "name": "segments-repeated-metadata",
+        "script": "ui-segments-repeated-metadata-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 1800000,
+        "duration_ms": 1239948
+      },
+      {
+        "name": "segments-density",
+        "script": "ui-segments-density-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5002
+      },
+      {
+        "name": "ngrams-cold-restart",
+        "script": "ui-ngrams-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9975
+      },
+      {
+        "name": "segments-cold-restart",
+        "script": "ui-segments-cold-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 12177
+      },
+      {
+        "name": "resource-sources",
+        "script": "ui-resource-sources-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14985
+      },
+      {
+        "name": "custom-search",
+        "script": "ui-custom-search-live.cjs",
+        "kind": "live",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 20894
+      },
+      {
+        "name": "saved-comparison",
+        "script": "ui-saved-comparison-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 3602
+      },
+      {
+        "name": "comparison-bundles",
+        "script": "ui-saved-comparison-bundle-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 4951
+      },
+      {
+        "name": "configuration-profiles",
+        "script": "ui-config-profiles-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9575
+      },
+      {
+        "name": "configuration-profile-catalog",
+        "script": "ui-config-profile-catalog-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 9986
+      },
+      {
+        "name": "screenshot-viewport",
+        "script": "ui-screenshot-viewport-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14917
+      },
+      {
+        "name": "table-explorer",
+        "script": "ui-table-explorer-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 14569
+      },
+      {
+        "name": "table-named-views",
+        "script": "ui-table-views-live.cjs",
+        "kind": "owned-native",
+        "code": 0,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 48777
+      }
+    ],
+    "coordinator_shutdown": {
+      "code": 0,
+      "signal": null
+    },
+    "native": {
+      "receipt": {
+        "path": "artifacts/named-views-full-r3-retry1-20261019/table-named-views/table-views-1792436257596-d2fbb4a0/ui-table-views-live.json",
+        "bytes": 141236,
+        "sha256": "e58effa8015604fa62083655bc7e07d536cda10e6fd5b08383aef19faeff3408"
+      },
+      "major_groups": 5,
+      "native_captures": 2,
+      "native_pages": [
+        107,
+        107
+      ],
+      "actual_CSV_files": 9,
+      "browser_download_events": 9,
+      "independently_rechecked_CSV_data_rows": 719,
+      "CSV_header_and_all_native_cells_rechecked": true,
+      "native_processes": 2,
+      "natural_EOF_zero": 2,
+      "positive_410_controls": 2,
+      "offline_product_requests": 0,
+      "page_errors": 0,
+      "external_browser_requests": 0,
+      "geometry_observations": 26,
+      "NoLocks_transport": {
+        "path": "artifacts/named-views-full-r3-retry1-20261019/table-named-views/table-views-1792436257596-d2fbb4a0/table-views-no-locks-transport.json",
+        "bytes": 15965,
+        "sha256": "55b8462e86121dded700a0aa7a685be22f7037abfa75441d4c1e555bcfee3551"
+      },
+      "NoLocks_scope": "Real insecure owned read-only HTTP passthrough to unchanged native loopback listener; original direct alias-host403 is separately recorded. It is a negative platform fixture, not a new supported native alias binding."
+    }
+  },
+  "prior_failures": [
+    {
+      "revision": "R1",
+      "result": "FAIL",
+      "stage": "Driver attempted to click disabled Clear before configuration; retained failed attempt.",
+      "manifest": {
+        "path": "artifacts/named-views-r1-20261019-inputs.json",
+        "bytes": 104804,
+        "sha256": "09c353595de9ef43d6beaccaf08cc099b71592f2abc094dd1e82f47fd99fc8de"
+      },
+      "gates": {
+        "path": "artifacts/named-views-r1-20261019-gates.json",
+        "bytes": 3008,
+        "sha256": "0da54a00ffe29c9a0d922cb5e780f30db0ebf5e48934fb1f6938680a941bc434"
+      },
+      "aggregate": {
+        "path": "artifacts/named-views-native-r1-20261019/proof.json",
+        "bytes": 2769,
+        "sha256": "3b888d5981d6baf47b2c35f56f6a1640ee47556589d51109b7122e84f0e74a35"
+      },
+      "native": {
+        "path": "artifacts/named-views-native-r1-20261019/table-named-views/table-views-1792432316349-19d1fe1f/ui-table-views-live.json",
+        "bytes": 32479,
+        "sha256": "85276259021c6f958df49331355598f5719dde35a0a04971364622a2fb7b3b3f"
+      },
+      "passed_major_groups": 0,
+      "historical_receipts_modified": false
+    },
+    {
+      "revision": "R2",
+      "result": "FAIL",
+      "stage": "Negative-platform alias setup never reached connected UI; three earlier groups and five CSVs are retained, not a completed acceptance.",
+      "manifest": {
+        "path": "artifacts/named-views-r2-20261019-inputs.json",
+        "bytes": 104804,
+        "sha256": "2169e6f6c9e2c3a308469da88673f87738e8e522925eda64e7ab53ce2b3d5175"
+      },
+      "gates": {
+        "path": "artifacts/named-views-r2-20261019-gates.json",
+        "bytes": 2990,
+        "sha256": "68f0b8bff25df66156d105b58447c0c8b5ec0ff7434df07500075fc625a0da99"
+      },
+      "aggregate": {
+        "path": "artifacts/named-views-native-r2-20261019/proof.json",
+        "bytes": 1550,
+        "sha256": "cf6b6244d42871f7aa48ddfb52f990cb1406fc1278da30aa12b72f284fe9d353"
+      },
+      "native": {
+        "path": "artifacts/named-views-native-r2-20261019/table-named-views/table-views-1792432452364-a1a4657a/ui-table-views-live.json",
+        "bytes": 106466,
+        "sha256": "cfd6a50772ffefc91bea2bc5ba6c92ef23e020ebe3007eba2601e2fbbbe669de"
+      },
+      "passed_major_groups": 3,
+      "historical_receipts_modified": false
+    }
+  ],
+  "prior_full_UI_failures": [
+    {
+      "attempt": "R3 original full-ui43",
+      "result": "FAIL",
+      "successful_suites": 11,
+      "total_suites_observed": 12,
+      "failed_suite": {
+        "name": "dom-capture",
+        "script": "ui-dom-live.cjs",
+        "kind": "live",
+        "code": 3221226505,
+        "signal": null,
+        "timed_out": false,
+        "timeout_ms": 240000,
+        "duration_ms": 5877
+      },
+      "exit_code": 3221226505,
+      "exit_hex": "0xc0000409",
+      "process": "Node child running ui-dom-live.cjs",
+      "root_cause": "NOT_PROVEN",
+      "gate": {
+        "label": "full-ui43",
+        "command": "node",
+        "args": [
+          "scripts/ui-e2e.mjs"
+        ],
+        "started_at": "2026-10-19T18:20:26.722Z",
+        "duration_ms": 115011,
+        "code": 1,
+        "signal": null,
+        "log": "artifacts/named-views-r3-20261019-full-ui43.log",
+        "log_bytes": 784,
+        "log_sha256": "d82aa0dcfc0c002eb1ed30ebaefb7b3c5dd6c012c0cb30babef3ec8c55ddc522",
+        "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+        "source_inputs_unchanged": true
+      },
+      "aggregate": {
+        "path": "artifacts/named-views-full-r3-20261019/proof.json",
+        "bytes": 3687,
+        "sha256": "144fee5ce3e7e19f71c0f1a6a07023adaaeddffd8b4cde70b5ebcebb63908464"
+      },
+      "stdout": {
+        "path": "artifacts/named-views-full-r3-20261019/dom-capture/stdout.log",
+        "bytes": 178,
+        "sha256": "714d6415397424b8f8c8798979e9faf0842e3d5b970b8b49d4d1521a519184d3"
+      },
+      "stderr": {
+        "path": "artifacts/named-views-full-r3-20261019/dom-capture/stderr.log",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr_empty": true,
+      "app_log": {
+        "path": "artifacts/named-views-full-r3-20261019/app.log",
+        "bytes": 1781,
+        "sha256": "372971bfe40955a3e8f4967f1874e756b761d2ed50244884b16688e2aa082474"
+      },
+      "diagnosis": {
+        "path": "artifacts/named-view-dom-full-r3-readonly-diagnosis-20261019.json",
+        "bytes": 4154,
+        "sha256": "dc2c0a101a7ff6d2b65cf1580da3ef253589db8711815ea13960ef205419ef8c"
+      },
+      "native_shutdown": {
+        "code": 0,
+        "signal": null,
+        "cause": "owned_stdin_eof",
+        "clean": true
+      },
+      "source_inputs_unchanged": true,
+      "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "normal_binary_sha256": "9ae115ef2679132189b5b8c39f7c72384c5d905ed3b6942da6e176fdd0ffb4bf",
+      "standalone_diagnostic": {
+        "result": "PASS_SEPARATE_DOM_DIAGNOSTIC",
+        "gate": {
+          "label": "dom-diagnostic-native",
+          "command": "node",
+          "args": [
+            "scripts/ui-e2e.mjs",
+            "--only",
+            "dom-capture"
+          ],
+          "started_at": "2026-10-19T18:23:55.389Z",
+          "duration_ms": 21063,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-dom-diagnostic-native.log",
+          "log_bytes": 148,
+          "log_sha256": "281ea5520eb7a8747a48e1ee60d5cd11004b0989054ee983b8d6d10b63be01db",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "aggregate": {
+          "path": "artifacts/named-views-dom-diagnostic-r3-20261019/proof.json",
+          "bytes": 869,
+          "sha256": "d8eff7b28b169255b0166da0b8b131f48853b578aec4ca5a57aaa238e7e4737b"
+        },
+        "native_dom_receipt": {
+          "path": "artifacts/named-views-dom-diagnostic-r3-20261019/dom-capture/ui-dom-live-results.json",
+          "bytes": 2558,
+          "sha256": "b1d89a964c815950887d070cc47f68031f26e446da17ce95fa8bab42c0b876e0"
+        },
+        "stdout": {
+          "path": "artifacts/named-views-dom-diagnostic-r3-20261019/dom-capture/stdout.log",
+          "bytes": 1939,
+          "sha256": "87b58c6c7a26cd3d2714d5fb1fdc59dc61d894106d4a0dd9a33f9fdb31abe6ef"
+        },
+        "stderr": {
+          "path": "artifacts/named-views-dom-diagnostic-r3-20261019/dom-capture/stderr.log",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "app_log": {
+          "path": "artifacts/named-views-dom-diagnostic-r3-20261019/app.log",
+          "bytes": 1778,
+          "sha256": "21918ef34b07e9150be9273787838f81a9ff8c4c2608c9589373ddbe2a0f2b56"
+        },
+        "launcher": {
+          "path": "artifacts/run-named-view-dom-diagnostic-r3-20261019.cjs",
+          "bytes": 1116,
+          "sha256": "fd701b6d529c67a4cc10dc198d4701b751df44a1cc600492a149dade1652684b"
+        },
+        "node_options": [
+          "--report-on-fatalerror",
+          "--report-exclude-env",
+          "--report-exclude-network",
+          "--report-directory=artifacts/named-views-dom-diagnostic-reports-r3-20261019"
+        ],
+        "diagnostic_report_directory": {
+          "path": "artifacts/named-views-dom-diagnostic-reports-r3-20261019",
+          "files": [],
+          "report_generated": false
+        },
+        "root_cause": "NOT_PROVEN",
+        "replacement_for_full_UI_acceptance": false,
+        "qualification": "The same frozen DOM driver passed separately with diagnostic flags. This does not establish the original Windows Node process failure cause or replace one complete43-suite invocation."
+      },
+      "retry_launcher": {
+        "path": "artifacts/run-named-view-full-retry1-20261019.cjs",
+        "bytes": 912,
+        "sha256": "f1b06fa58ccd7a9e14fb9defae9a97b1a4507e15ba18c82a36dbcd04578e755a"
+      },
+      "historical_receipts_modified": false
+    }
+  ],
+  "tracked_documents_written": false,
+  "tests_or_native_processes_started_by_validator": false,
+  "public_CI_for_this_dirty_source": "NOT_VERIFIED_BY_THIS_VALIDATOR",
+  "stable_release_ready": false,
+  "manufacturer_parity": "NOT_PROVEN",
+  "remaining": [
+    "OR and nested filter expressions",
+    "XLSX export",
+    "Portable/native named-view persistence",
+    "Specialist cursor/export behavior and larger corpus acceptance",
+    "Fresh public cross-platform CI for successor commit",
+    "Full original feature/filter/workflow backlog"
+  ],
+  "qualification": [
+    "Named native corpus uses real API crawl preparation; it does not prove dashboard Start-button interaction.",
+    "Browser-local definitions are complete declared views; they do not persist project IDs, captured rows, tokens, generations or native project state.",
+    "Named browser fixture directly exercises the titles table and a read-only status selection; it is not proof of every operator/section/browser or unbounded corpus/RSS.",
+    "Native CAS is cooperative Web Locks plus exact prior-byte comparison, not a universal external-process atomicity claim.",
+    "Prior published2281086 CI and prior milestones do not prove this new dirty source.",
+    "Root retains release/publication authority; this validator writes only an ignored summary with --emit."
+  ],
+  "derivative_of": {
+    "path": "artifacts/named-views-r3-20261019-finalization.json",
+    "bytes": 32720,
+    "sha256": "03913a4d6034c72041544c67ccf0b93fa4a9b118b9209f7a5eaf64aad1c608a4"
+  },
+  "derivation": "JSON copy with absolute local worktree/workspace prefixes replaced; raw_utf8 log fields retain original bytes. Original raw hashes are bindings, not hashes of this derivative.",
+  "publication_normalization": {
+    "result": "PUBLICATION_EQUIVALENCE_PROVEN_591_RAW_IDENTICAL_TWO_NODE_TEST_FINAL_EOL_ONLY_PLUS_FRESH282",
+    "recorded_at": "2026-10-19T19:08:46.864Z",
+    "validator": {
+      "path": "artifacts/verify-named-view-publication-normalization-20261019.cjs",
+      "bytes": 9429,
+      "sha256": "230c32c8f7a98b4877c53e5fce8cb90fa74a5c1a7843b26d16e70576aa7ef204"
+    },
+    "original_runtime_manifest": {
+      "path": "artifacts/named-views-r3-20261019-inputs.json",
+      "bytes": 104804,
+      "sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94"
+    },
+    "publication_manifest": {
+      "path": "artifacts/named-views-publication-lf-20261019-inputs.json",
+      "bytes": 104804,
+      "sha256": "7cef6e878b68ad7a69331674306e5672dc0fb6ecda09c46f6246f4cdba8f955b"
+    },
+    "input_count": 593,
+    "raw_identical_inputs": 591,
+    "changed_inputs": 2,
+    "changes": [
+      {
+        "path": "web/verification/table-view-library.test.cjs",
+        "before": {
+          "path": "web/verification/table-view-library.test.cjs",
+          "bytes": 17959,
+          "sha256": "21807f7473057d92941b930f9f1ae883eb72a1d580172b2a0e10361fba9d2404"
+        },
+        "after": {
+          "path": "web/verification/table-view-library.test.cjs",
+          "bytes": 17958,
+          "sha256": "8476e768d20166ffed3a7884f91998e2b7be447313e34b89885469110142c081"
+        },
+        "saved_original": {
+          "path": "artifacts/named-views-publication-lf-originals-20261019/table-view-library.test.cjs",
+          "bytes": 17959,
+          "sha256": "21807f7473057d92941b930f9f1ae883eb72a1d580172b2a0e10361fba9d2404"
+        },
+        "actual_CRLF_replaced": 1,
+        "only_final_CRLF_to_LF": true,
+        "staged_bytes_equal_current": true
+      },
+      {
+        "path": "web/verification/table-view-storage.test.cjs",
+        "before": {
+          "path": "web/verification/table-view-storage.test.cjs",
+          "bytes": 18341,
+          "sha256": "7e5752ed30c909f8dda0de7ef24e663fa78f2b160f5bb0cd6aa97f0edde3be26"
+        },
+        "after": {
+          "path": "web/verification/table-view-storage.test.cjs",
+          "bytes": 18340,
+          "sha256": "da781570afc3be5c8e9afaa1c486ede6922c58eab8806c3c3d0dce2d183d7e17"
+        },
+        "saved_original": {
+          "path": "artifacts/named-views-publication-lf-originals-20261019/table-view-storage.test.cjs",
+          "bytes": 18341,
+          "sha256": "7e5752ed30c909f8dda0de7ef24e663fa78f2b160f5bb0cd6aa97f0edde3be26"
+        },
+        "actual_CRLF_replaced": 1,
+        "only_final_CRLF_to_LF": true,
+        "staged_bytes_equal_current": true
+      }
+    ],
+    "root_normalization_metadata": {
+      "path": "artifacts/named-views-publication-lf-normalization-20261019.json",
+      "bytes": 1093,
+      "sha256": "8fa2f13721bb683913df99ff67b0154c59e4ee903f20d7ab2a10f42d53141bfb"
+    },
+    "fresh_canonical_Node": {
+      "gate": {
+        "label": "states",
+        "command": "node",
+        "args": [
+          "--test",
+          "web/verification/serp-state-race.test.cjs",
+          "web/verification/robots-input-state.test.cjs",
+          "web/verification/list-import-state.test.mjs",
+          "web/verification/api-enrichment-state.test.cjs",
+          "web/verification/accessibility-state.test.cjs",
+          "web/verification/dashboard-segments-state.test.cjs",
+          "web/verification/config-profiles-state.test.cjs",
+          "web/verification/config-profile-catalog-state.test.cjs",
+          "web/verification/screenshot-state.test.cjs",
+          "web/verification/profile-response-capture.test.cjs",
+          "web/verification/table-explorer-state.test.cjs",
+          "web/verification/table-view-library.test.cjs",
+          "web/verification/table-view-storage.test.cjs",
+          "web/verification/table-views-ui.test.cjs"
+        ],
+        "started_at": "2026-10-19T19:06:15.204Z",
+        "duration_ms": 580,
+        "code": 0,
+        "signal": null,
+        "log": "artifacts/named-views-publication-lf-20261019-states.log",
+        "log_bytes": 29330,
+        "log_sha256": "2e9c72873774c03689a4eac376ab8784cca77646516500a1a0a238e40ddaebe0",
+        "frozen_inputs_sha256": "7cef6e878b68ad7a69331674306e5672dc0fb6ecda09c46f6246f4cdba8f955b",
+        "source_inputs_unchanged": true
+      },
+      "totals": {
+        "tests": 282,
+        "pass": 282,
+        "fail": 0,
+        "cancelled": 0,
+        "skipped": 0,
+        "todo": 0
+      },
+      "executed_after_normalization": true
+    },
+    "normal_binary": {
+      "path": "target/debug/open-seo-spider.exe",
+      "bytes": 90109952,
+      "sha256": "9ae115ef2679132189b5b8c39f7c72384c5d905ed3b6942da6e176fdd0ffb4bf"
+    },
+    "original_acceptance": {
+      "finalization": {
+        "path": "artifacts/named-views-r3-20261019-finalization.json",
+        "bytes": 32720,
+        "sha256": "03913a4d6034c72041544c67ccf0b93fa4a9b118b9209f7a5eaf64aad1c608a4"
+      },
+      "full_UI_aggregate": {
+        "path": "artifacts/named-views-full-r3-retry1-20261019/proof.json",
+        "bytes": 10780,
+        "sha256": "ef3208bfaea0b61093137e5ccfff2d505c5390e7b061e9e6642e80463faef500"
+      },
+      "full_UI_gate": {
+        "label": "full-ui43-retry1",
+        "command": "node",
+        "args": [
+          "scripts/ui-e2e.mjs"
+        ],
+        "started_at": "2026-10-19T18:25:00.302Z",
+        "duration_ms": 2009134,
+        "code": 0,
+        "signal": null,
+        "log": "artifacts/named-views-r3-20261019-full-ui43-retry1.log",
+        "log_bytes": 1464,
+        "log_sha256": "a243834f40451e58faab429656794704e38201e406d639ddf581fd643e292edf",
+        "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+        "source_inputs_unchanged": true
+      },
+      "full_UI_suites": 43,
+      "one_complete_invocation": true,
+      "retained_runtime_gates": {
+        "build-normal": {
+          "label": "build-normal",
+          "command": "cargo",
+          "args": [
+            "build",
+            "--locked",
+            "--offline",
+            "-p",
+            "open-seo-spider",
+            "--bin",
+            "open-seo-spider"
+          ],
+          "started_at": "2026-10-19T17:59:52.736Z",
+          "duration_ms": 883,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-build-normal.log",
+          "log_bytes": 60,
+          "log_sha256": "35fc72bacfe065673ddba4b566b6467dc5b94a887c640891f8cbf1f5e1028448",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "states": {
+          "label": "states",
+          "command": "node",
+          "args": [
+            "--test",
+            "web/verification/serp-state-race.test.cjs",
+            "web/verification/robots-input-state.test.cjs",
+            "web/verification/list-import-state.test.mjs",
+            "web/verification/api-enrichment-state.test.cjs",
+            "web/verification/accessibility-state.test.cjs",
+            "web/verification/dashboard-segments-state.test.cjs",
+            "web/verification/config-profiles-state.test.cjs",
+            "web/verification/config-profile-catalog-state.test.cjs",
+            "web/verification/screenshot-state.test.cjs",
+            "web/verification/profile-response-capture.test.cjs",
+            "web/verification/table-explorer-state.test.cjs",
+            "web/verification/table-view-library.test.cjs",
+            "web/verification/table-view-storage.test.cjs",
+            "web/verification/table-views-ui.test.cjs"
+          ],
+          "started_at": "2026-10-19T17:59:54.246Z",
+          "duration_ms": 686,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-states.log",
+          "log_bytes": 29330,
+          "log_sha256": "d232847bd376a5733995d89b3bfb9c8b2ce0e136b5c3b34a74697dc413ea47ac",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "semantic": {
+          "label": "semantic",
+          "command": "node",
+          "args": [
+            "scripts/check-ui-fixtures.mjs"
+          ],
+          "started_at": "2026-10-19T17:59:55.236Z",
+          "duration_ms": 614,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-semantic.log",
+          "log_bytes": 1068,
+          "log_sha256": "c08978e6147eb2aae59bea98392f02d8d43d917a5d8c9bd877b314ccbb37f5f1",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "targeted-native": {
+          "label": "targeted-native",
+          "command": "node",
+          "args": [
+            "scripts/ui-e2e.mjs",
+            "--only",
+            "table-named-views"
+          ],
+          "started_at": "2026-10-19T17:59:56.139Z",
+          "duration_ms": 57788,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-targeted-native.log",
+          "log_bytes": 154,
+          "log_sha256": "e208d09c8d0913c79720bf12d9ed07e476d2412317f32609ee389de7e2f9da49",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "format": {
+          "label": "format",
+          "command": "cargo",
+          "args": [
+            "fmt",
+            "--all",
+            "--",
+            "--check"
+          ],
+          "started_at": "2026-10-19T18:01:03.523Z",
+          "duration_ms": 6802,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-format.log",
+          "log_bytes": 0,
+          "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "clippy": {
+          "label": "clippy",
+          "command": "cargo",
+          "args": [
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--all-features",
+            "--locked",
+            "--offline",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "started_at": "2026-10-19T18:01:10.545Z",
+          "duration_ms": 27733,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-clippy.log",
+          "log_bytes": 175,
+          "log_sha256": "33dcad94b435ae3aecb9a21deeb86bdd0e5fbae0a5b3b7de6d75dfaf55dd699a",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "rust-workspace": {
+          "label": "rust-workspace",
+          "command": "cargo",
+          "args": [
+            "test",
+            "--workspace",
+            "--locked",
+            "--offline",
+            "--",
+            "--test-threads=2"
+          ],
+          "started_at": "2026-10-19T18:01:38.475Z",
+          "duration_ms": 1111816,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-rust-workspace.log",
+          "log_bytes": 209613,
+          "log_sha256": "6e2a10cd36b7bb1aadba727b192478d11cb2d4b99560152b7153efbbd0a6a134",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "renderer-rust": {
+          "label": "renderer-rust",
+          "command": "node",
+          "args": [
+            "scripts/renderer-rust-e2e.mjs"
+          ],
+          "started_at": "2026-10-19T18:20:10.475Z",
+          "duration_ms": 13480,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-renderer-rust.log",
+          "log_bytes": 4279,
+          "log_sha256": "171c4dd1171acdb2f7d03d6cdc9dac238356b9c4944121a265be4b7038587c0c",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "profile-capture-browser": {
+          "label": "profile-capture-browser",
+          "command": "node",
+          "args": [
+            "--test",
+            "web/verification/profile-response-capture-browser.test.cjs"
+          ],
+          "started_at": "2026-10-19T18:20:24.158Z",
+          "duration_ms": 2379,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-profile-capture-browser.log",
+          "log_bytes": 2057,
+          "log_sha256": "4df12ef92f8cb9122c49a46de8fda3b4f1591bafcdb631ee93c914b7d0f9a54a",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        },
+        "full-ui43": {
+          "label": "full-ui43-retry1",
+          "command": "node",
+          "args": [
+            "scripts/ui-e2e.mjs"
+          ],
+          "started_at": "2026-10-19T18:25:00.302Z",
+          "duration_ms": 2009134,
+          "code": 0,
+          "signal": null,
+          "log": "artifacts/named-views-r3-20261019-full-ui43-retry1.log",
+          "log_bytes": 1464,
+          "log_sha256": "a243834f40451e58faab429656794704e38201e406d639ddf581fd643e292edf",
+          "frozen_inputs_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+          "source_inputs_unchanged": true
+        }
+      },
+      "original_full_failure_preserved": [
+        {
+          "result": "FAIL",
+          "exit_hex": "0xc0000409",
+          "aggregate": {
+            "path": "artifacts/named-views-full-r3-20261019/proof.json",
+            "bytes": 3687,
+            "sha256": "144fee5ce3e7e19f71c0f1a6a07023adaaeddffd8b4cde70b5ebcebb63908464"
+          }
+        }
+      ],
+      "qualification": "Runtime acceptance executed on original6157 raw tree. Publication7cef differs only by the final CR byte in two pure Node unit tests. All591 other source/harness files and native executable are byte-identical. Existing runtime receipts and original hashes are preserved, not rewritten."
+    },
+    "reexecution": {
+      "Node_282": true,
+      "Rust": false,
+      "Chrome": false,
+      "full_UI": false,
+      "reason": "Only two pure Node unit-test final line-ending bytes changed; all compiled product, browser/native harnesses and libraries are raw-identical. The entire282 Node command was freshly rerun on canonical bytes."
+    },
+    "public_metadata_suggestion": {
+      "preserve_original_finalization_source": true,
+      "add_separate_publication_normalization_section": true,
+      "committed_source_manifest_sha256": "7cef6e878b68ad7a69331674306e5672dc0fb6ecda09c46f6246f4cdba8f955b",
+      "actual_runtime_acceptance_manifest_sha256": "6157c16ed3dfe5ea58c022627a278fbcfebf96154082ecd395f2799ba6aa9e94",
+      "do_not_relabel_old_runtime_logs_as_new_executions": true,
+      "qualification": "593 publication inputs are verified via591 exact original raw matches and two independently proven final CRLF→LF unit-test normalizations, plus a fresh282-test Node pass. Rust, browser and full43 gates retain their original6157 provenance."
+    },
+    "tracked_writes": false,
+    "derivative_of": {
+      "path": "artifacts/named-views-publication-lf-20261019-proof.json",
+      "bytes": 14721,
+      "sha256": "179c92f772ba555f132f99a30812da7be76e5313d9a308879d016efdae24811c"
+    },
+    "derivation": "JSON metadata copy; local worktree prefixes absent or replaced in parent proof. Raw hashes retain their original meaning."
+  },
+  "publication_note": "Original runtime receipts and the original finalization remain bound to6157 before publication. For Git publication only the final CRLF of two Node unit-test files was normalized toLF;591 inputs, all compiled product sources and browser drivers remain raw-identical. All282 Node states were actually rerun against the canonical7cef publication manifest; Rust/Chrome/UI were not reissued as new runs."
+}
