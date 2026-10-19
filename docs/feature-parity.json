@@ -7159,18 +7159,19 @@
     {
       "id": "table-query-expressions-20261019",
       "priority": -16,
-      "status": "LOCAL_R6_PASS_R4_FAIL_RETAINED_PUBLIC_8D_RENDERER44_PASS_WINDOWS_PENDING_AT_CAPTURE",
-      "summary_de": "Echte verschachtelte UND/ODER-Ausdrücke und explizite browserlokale v2-Gruppenansichten sind implementiert. Drei vorab festgelegte native R6-Durchläufe bestehen mit je zwei153-Seiten-Captures,45 Tabellenbeobachtungen und9 CSV-Dateien/927 Datenzeilen. R5 besteht330 reine Tests,40 Fixturegruppen,22 Chromium-Kontrollen und den nativen Screenshotablauf. R4 besteht1831 Rust-Tests sowie4 Opt-in-Chromium-Fixtures; diese unveränderten Prüfinputs werden ausdrücklich wiederverwendet. Der R4-Gesamtlauf bleibt FAIL mit43 bestandenen Suiten und einer fehlgeschlagenen Driver-Bereitschaftsprüfung. Der exakte veröffentlichte Nachfolger8d9d7cc besteht anschließend alle44 UI-Suiten in einem öffentlichen Renderer-Aufruf; Ubuntu und Container sind ebenfalls erfolgreich, Windows war beim gesicherten Abruf noch aktiv. Die neue Portabilitätsfunktion hat getrennte lokale R2-Abnahme; deren vollständige45-Suiten-CI und Herstellerparität bleiben offen.",
+      "status": "LOCAL_R6_PASS_R4_FAIL_RETAINED_PUBLIC_8D_ALL4_JOBS_PASS44",
+      "summary_de": "Echte verschachtelte UND/ODER-Ausdrücke und explizite browserlokale v2-Gruppenansichten sind implementiert. Drei vorab festgelegte native R6-Durchläufe bestehen mit je zwei153-Seiten-Captures,45 Tabellenbeobachtungen und9 CSV-Dateien/927 Datenzeilen. R5 besteht330 reine Tests,40 Fixturegruppen,22 Chromium-Kontrollen und den nativen Screenshotablauf. R4 besteht1831 Rust-Tests sowie4 Opt-in-Chromium-Fixtures; diese unveränderten Prüfinputs werden ausdrücklich wiederverwendet. Der R4-Gesamtlauf bleibt FAIL mit43 bestandenen Suiten und einer fehlgeschlagenen Driver-Bereitschaftsprüfung. Der exakte veröffentlichte Nachfolger8d9d7cc besteht anschließend alle44 UI-Suiten in einem öffentlichen Renderer-Aufruf; Alle vier öffentlichen Jobs (Windows, Ubuntu, Renderer und Container) sind anschließend terminal erfolgreich. Die neue Portabilitätsfunktion hat getrennte lokale R2-Abnahme; deren vollständige45-Suiten-CI und Herstellerparität bleiben offen.",
       "completed_acceptance_de": [
         "Rekursive UND/ODER-Ausdrücke bis vier Gruppenebenen werden vollständig validiert; echte Verschachtelung, überlappende ODER-Zweige, leere/unbekannte/0-Werte, NFC und ursprüngliche doppelte URL-Beobachtungen sind geprüft.",
         "Explizite verlustlose Moduswechsel, atomare komplette Ansichtsübernahme, v2-CRUD/Reset, unveränderte v1-/Legacy-Bytes sowie Mode-/Query-/Group-/Owner-/Detached-DOM-Guards, Web Locks, Byte-CAS und Cross-Tab-Ereignisse sind tatsächlich geprüft.",
         "Je R6-Durchlauf45 vollständige DOM-Beobachtungen/19088 Zellen sowie9 echte CSV-Dateien/927 Zeilen/9270 Datenzellen samt Provenienz unabhängig rekonstruiert. Zwei natürliche native EOF0,24 Geometriekontrollen bei1440/320px,28 Assetprüfungen,2 positive410 und null Offline-Neuabrufe sind belegt.",
         "Die neue Screenshot-Testpolicy erfasst11 originale Browser-Clone-Antworten mit voller Anfrage-/Dokumentbindung und64KiB-Clonegrenze ohne HTTP-Replay. Fünf echte PNG-Dateien, ursprüngliche Negativ-/Late-Response- und Kaltstartprüfungen sowie330 reine und22 echte Chromium-Tests bestehen auf R5.",
         "R1 invalidierter Preflight sowie R2/R3/R4 fehlgeschlagene Versuche bleiben erhalten. R6 ändert ausschließlich den Driver: tatsächliche letzte Owner-Refresh-Antwort und Datencommit abwarten. Datenorakel, erste-Seite-Assertions und ursprüngliche Fristen bleiben erhalten. Drei vorab festgelegte Wiederholungen bestehen.",
-        "Öffentliche CI39321867953 auf exakt8d9d7cc: alle44 UI-Suiten in einem kanonischen Renderer-Aufruf PASS. Original-API-Antworten und Joblog sind im neuen Portabilitätsbeleg separat als früherer Quellstand archiviert; R4FAIL bleibt erhalten."
+        "Öffentliche CI39321867953 auf exakt8d9d7cc: alle44 UI-Suiten in einem kanonischen Renderer-Aufruf PASS. Original-API-Antworten und Joblog sind im neuen Portabilitätsbeleg separat als früherer Quellstand archiviert; R4FAIL bleibt erhalten.",
+        "Abschlussnachtrag: CI39321867953 auf8d9d7cc ist terminal SUCCESS mit vier erfolgreichen Jobs. Original-API-Antworten und Bytesindex stehen separat unter prior-ci8d-terminal; die neue45-Suiten-CI bleibt offen."
       ],
       "pending_acceptance_de": [
-        "Die übrige Cross-Platform-CI von8d9d7cc terminal abnehmen; Windows war beim gesicherten Abruf noch aktiv. Die vollständige45-Suiten-Abnahme der neuen Portabilitätsquellen bleibt davon getrennt erforderlich.",
+        "Die neue Portabilitätsimplementierung getrennt im vollständigen45-Suiten-/Cross-Platform-Lauf abnehmen. Die frühere exakte8d-CI ist mit allen vier Jobs terminal erfolgreich; diese wird nicht auf den neuen Quellstand übertragen.",
         "Weitere Tabellen-/Operator-/Browserkombinationen, gruppierten Response-Inspector, zusätzliche Quota-/Korrupt-/Oversize-/Ursprungskombinationen außerhalb der begrenzten R2-Fälle und größere Ressourcen-/Latenz-Corpora gesondert prüfen.",
         "Native Projektpräferenzen und XLSX weiter implementieren und E2E abnehmen. Portable JSON-Definitionen mit Vorschau sind nun integriert und lokal R2-geprüft; deren vollständige neue45-Suiten-/Public-CI bleibt offen.",
         "Vollständige Herstellerparität und der gesamte ui.filter-details-export-Vertrag bleiben NOT_PROVEN; der installierte Source16-Pilot wurde nicht aktualisiert."
@@ -7189,7 +7190,7 @@
         "native_browser": "PASS_R6_THREE_PRESPECIFIED_5GROUPS45VIEWS9CSV927ROWS7OWNER_READINESS_EACH",
         "full_UI44": "PUBLIC_8D_PASS44_ONE_CANONICAL_RENDERER_INVOCATION_R4_FAIL_RETAINED",
         "rust": "PASS1831_0FAIL5IGNORED_PLUS4_CHROMIUM_R4_REUSED",
-        "new_public_CI": "PUBLIC_8D_RENDERER44_UBUNTU_CONTAINER_PASS_WINDOWS_PENDING_AT_CAPTURE",
+        "new_public_CI": "PUBLIC_8D_ALL4_JOBS_TERMINAL_SUCCESS_UI44_CANONICAL",
         "manufacturer_parity": "NOT_PROVEN",
         "publication_source": "PASS597_RUNTIME_INPUTS_IDENTICAL_ONLY_RAW_PROOF_GIT_ATTRIBUTES_FRESH330_AND40",
         "portable_definitions": "SEE_TABLE_VIEW_PORTABILITY_R2_LOCAL_BOUNDED_PASS_FULL45_PENDING"
