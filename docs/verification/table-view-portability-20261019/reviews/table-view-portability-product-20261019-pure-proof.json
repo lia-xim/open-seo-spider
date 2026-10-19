@@ -1,0 +1,117 @@
+{
+  "kind": "table_view_portability_product_module_pure_proof",
+  "result": "PASS_PURE_MODULE_NOT_BROWSER_NATIVE_E2E_ACCEPTANCE",
+  "created_at": "2026-10-19T20:49:53.350Z",
+  "runtime": "v24.15.0",
+  "command": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "--test",
+    "web/verification/table-view-portability.test.cjs"
+  ],
+  "exit_code": 0,
+  "signal": null,
+  "measured": {
+    "tests": 41,
+    "suites": 0,
+    "pass": 41,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "test_scope": {
+    "authored_draft_controls": 32,
+    "independent_hand_authored_reviewer_controls": 8,
+    "browser_UMD_VM_controls": 1,
+    "real_browser": false
+  },
+  "owned_sources": [
+    {
+      "path": "web/table-view-portability.js",
+      "bytes": 11478,
+      "sha256": "7cd7a0d8184e64121efeb25e737d1984affcb2696b26bd064656ffb8e40f06c2"
+    },
+    {
+      "path": "web/verification/table-view-portability.test.cjs",
+      "bytes": 20968,
+      "sha256": "b12e0bbd314ba15437065c212b704968552a24b417c4ab5241e0b0b6741f1538"
+    }
+  ],
+  "existing_dependencies_unchanged": [
+    {
+      "path": "web/table-explorer.js",
+      "bytes": 23377,
+      "sha256": "2ad4188750606a48446033ace6627c49d619b8c2ce8aa4b91147793c7cb068ee"
+    },
+    {
+      "path": "web/table-view-library.js",
+      "bytes": 15659,
+      "sha256": "5f8d3d84c84d5a4b0945d7c5ffd8bc7dbf652c235ad6cd1b66d59b1d4ef692b4"
+    },
+    {
+      "path": "web/table-view-storage.js",
+      "bytes": 6701,
+      "sha256": "ad46c46081adedd06749c312828def890db8adb1c37892612c74cda471e2d30e"
+    }
+  ],
+  "canonical_LF_UTF8_no_trailing_whitespace": true,
+  "stdout": {
+    "path": "artifacts/table-view-portability-product-20261019-green.stdout.log",
+    "bytes": 4048,
+    "sha256": "7b223e923dbbd75ffb6f42ffba372468a8aa76dcf0112bb68985dcc5c9970e9b"
+  },
+  "stderr": {
+    "path": "artifacts/table-view-portability-product-20261019-green.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "regression_first": {
+    "stdout": {
+      "path": "artifacts/table-view-portability-product-20261019-red.stdout.log",
+      "bytes": 1540,
+      "sha256": "1c20845a4b3ca82bf8e120fd7ee18a5f338cfaa8f99a82bb6c57ae7593342ce1"
+    },
+    "stderr": {
+      "path": "artifacts/table-view-portability-product-20261019-red.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "scope": "Final test source was written before new product module and observed expected missing-module failure; then module implemented and all41 controls passed."
+  },
+  "baseline_draft": {
+    "path": "artifacts/table-view-portability-staged-20261019/table-view-portability.cjs",
+    "bytes": 9585,
+    "sha256": "217942775bedf449255e75b96fd935ce1f60bf4316ece1dc4153cf3bfad016db"
+  },
+  "independent_draft_review": {
+    "path": "artifacts/table-view-portability-independent-review-20261019.json",
+    "bytes": 4394,
+    "sha256": "73311ecc192e5e265ec9f682c4c9b608ea4fa5f64be689d616fb8a8ca2e0cd7b"
+  },
+  "API": {
+    "global": "TableViewPortability",
+    "factory": "create(1|2, overrides={})",
+    "CJS_dependencies": [
+      "./table-explorer.js",
+      "./table-view-library.js"
+    ],
+    "methods": [
+      "exportDefinitions(raw,{kind:all}|{kind:selected,id})",
+      "previewImport(expectedRaw,Uint8Array)",
+      "prepareImport(issuedPreview,resolutionsByIncomingId)"
+    ],
+    "operation_scope": "Pure complete file/definition preparation, separate mode catalogs, no automatic conversion.",
+    "no_storage_DOM_Apply": true
+  },
+  "not_proven": [
+    "Real File picker and asynchronous read revision/owner/mode guards are controller integration work.",
+    "No actual browser download, persisted import, WebLock/CAS/quota/storage-event or cold/native E2E was executed here.",
+    "No normal build, Cargo, Chrome, full regression or current publicCI claim.",
+    "Overall ui.filter-details-export, XLSX, native preferences and manufacturerparity remain open."
+  ],
+  "tracked_paths_owned_only": [
+    "web/table-view-portability.js",
+    "web/verification/table-view-portability.test.cjs"
+  ],
+  "no_commit_or_staging": true
+}

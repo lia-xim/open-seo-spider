@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "kind": "retained_R1_failure_source_diagnosis_and_scoped_driver_correction",
+  "created_at": "2026-10-19T21:18:35.422Z",
+  "result": "SOURCE_ONLY_REVIEW_COMPLETE",
+  "runtime_candidate_result": "NOT_RUN",
+  "R1_result_preserved": "FAIL; original failure and cleanup remain unchanged",
+  "scope": "No browser/native/Cargo execution. Only clearQuery in the new portability E2E driver changed. No product, data/algebra/CSV/geometry/import/platform oracle, timeout or wait bound changed.",
+  "raw": [
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/ui-table-view-portability-live.json",
+      "bytes": 106927,
+      "sha256": "9d083d6bbb98934e3f99b7fb59e02613cddb6a29e548305e068b2bf3c597da28"
+    },
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/table-view-portability-failure.html",
+      "bytes": 180752,
+      "sha256": "648ff9d689f26e69f4204844d746b9aa9765ff4e6196f0d58ba10a18d73fd472"
+    },
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/native-warm.log",
+      "bytes": 1776,
+      "sha256": "a6c82c384deae32c674f654a77112654cae158fd9e722a3497862a7f1516a9ff"
+    },
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/v2-actual-selected-original.json",
+      "bytes": 1014,
+      "sha256": "1251140e328ba8e0b4ad10e80fc0f9866567006cd2827f4872fe143590588558"
+    },
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/v2-warm-a-before-import.csv",
+      "bytes": 19616,
+      "sha256": "820e934d2b79584168f2ab9e957c47bd82278bc9968b0e5c3b9580d532f61d5f"
+    }
+  ],
+  "observations": {
+    "actual_terminal_result": "FAIL",
+    "exact_runtime_failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n3 !== 0\n\n    at clearQuery (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:155:236)\n    at async mode (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:156:99)\n    at async configureMain (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:161:57)\n    at async versionCases (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:180:28)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:290:31",
+    "simple_rule_list_empty": true,
+    "actual_clear_disabled": true,
+    "editor_hidden": true,
+    "retained_inactive_expression_nodes": 3,
+    "simple_status_hidden": true,
+    "explorer_error_empty_hidden": true,
+    "expression_error_empty_hidden": true,
+    "observed_page_label": "1–50 von 152",
+    "last_readied_owner": {
+      "id": "c226e2d3-e122-449b-bed1-3a24944bb5c7",
+      "origin": "http://127.0.0.1:53959",
+      "phase": "warm",
+      "route": "http://127.0.0.1:53959/api/crawls/c226e2d3-e122-449b-bed1-3a24944bb5c7/fragments",
+      "method": "GET",
+      "status": 200,
+      "request_finished": true,
+      "DOM_owner_completed": true,
+      "export_enabled": true,
+      "timeout_ms": 30000,
+      "source": "actual_browser_final_refresh_dependency_and_committed_data"
+    },
+    "last_successful_view": {
+      "phase": "warm",
+      "label": "v2 explicit saved Apply Café audits v2",
+      "rows": 118,
+      "columns": [
+        "url",
+        "status",
+        "title_count",
+        "title_pixels"
+      ],
+      "ordered_cells_sha256": "821672349209be81c99ae99e6a96b38600f082460477e8e990a5be9a70e14352",
+      "pages": [
+        50,
+        50,
+        18
+      ]
+    },
+    "observed_native_cleanup": [
+      {
+        "phase": "warm",
+        "origin": "http://127.0.0.1:53959",
+        "pid": 20632,
+        "natural_eof": true,
+        "forced": false,
+        "close": {
+          "code": 0,
+          "signal": null
+        }
+      }
+    ]
+  },
+  "diagnosis": {
+    "cause": "The driver counted three retained nodes inside the hidden inactive grouped editor after owner reset accepted a fresh Simple/null query. The second global-node-count assertion at old line155 column236 failed; active simple rules were already empty.",
+    "product_evidence": [
+      {
+        "path": "web/table-explorer-ui.js",
+        "lines": [
+          37,
+          41,
+          91,
+          99,
+          119,
+          124,
+          196
+        ],
+        "behavior": "Owner/schema reset clears accepted rules/expression and sets Simple; render hides the expression container and invokes editor.render only in Grouped mode."
+      },
+      {
+        "path": "web/table-expression-editor.js",
+        "lines": [
+          61
+        ],
+        "behavior": "Editor reset clears selection/focus; it does not clear inactive DOM."
+      }
+    ],
+    "product_pins": [
+      {
+        "path": "web/table-explorer-ui.js",
+        "bytes": 20899,
+        "sha256": "212df048c1b95f3d3852b3d4c9ccf397a8a1f97216e7c55ae410c83213cb8c0b"
+      },
+      {
+        "path": "web/table-expression-editor.js",
+        "bytes": 12214,
+        "sha256": "c843b3690bcc83ba72e8ae0db09ffac1834aadf3560ae31e1b7ba4d4416c018b"
+      }
+    ]
+  },
+  "correction": {
+    "path": "web/verification/ui-table-view-portability-live.cjs",
+    "before_sha256": "558ea72587fb2f109d5b9aabcf6ff871d6b54dd3178be7dccaaed3549d215a28",
+    "after_sha256": "2e23eb9c29813f79e968eae28df0c2ab48f19db4770aa025cd83f45271c44f2b",
+    "exactly_one_function_changed": true,
+    "reconstructed_previous_source_sha256": "558ea72587fb2f109d5b9aabcf6ff871d6b54dd3178be7dccaaed3549d215a28",
+    "unchanged_outside_clearQuery_sha256": "cca091d343aaaaac1b8a1dde5303c9ec7c26272e5b59b3786da15d7875378833",
+    "before_function": "async function clearQuery(){await options();const clear=page.locator('#table-rules-clear');if(await clear.isEnabled())await clear.click();else{assert.equal(await page.locator('#table-rules li[data-table-rule-index]').count(),0);assert.equal(await page.locator('#table-expression-editor [data-expression-kind]').count(),0);}await page.fill('#table-search','');await page.selectOption('#table-filter','all');}",
+    "after_function": "async function clearQuery(){\n  await options();const activeMode=await page.inputValue('#table-rule-mode'),clear=page.locator('#table-rules-clear');assert(['simple','grouped'].includes(activeMode));if(await clear.isEnabled())await clear.click();assert.equal(await clear.isDisabled(),true,'The actual Clear control confirms no active rule or rule error');assert.equal(await page.inputValue('#table-rule-mode'),activeMode);\n  assert.equal(await page.locator('#table-rules li[data-table-rule-index]').count(),0);\n  // Owner reset leaves old grouped markup hidden until the next grouped render.\n  // Count the active rule subtree; inactive markup is not an accepted expression.\n  if(activeMode==='simple')assert.equal(await page.locator('#table-expression-editor').isHidden(),true);else{assert.equal(await page.locator('#table-expression-editor').isVisible(),true);assert.equal(await page.locator('#table-expression-editor [data-expression-kind]').count(),0);}\n  for(const id of['table-explorer-error','table-expression-error']){assert.equal(await page.locator('#'+id).isHidden(),true);assert.equal((await page.locator('#'+id).textContent()).trim(),'');}\n  await page.fill('#table-search','');await page.selectOption('#table-filter','all');\n}",
+    "checks": [
+      "Actual Clear clicked only if enabled; disabled required after clearing",
+      "Simple rules DOM must be empty in both modes",
+      "Simple mode requires hidden grouped editor; Grouped requires visible editor and zero actual active expression nodes",
+      "Mode remains unchanged; both real error fields hidden and empty",
+      "All downstream full-row/CSV/catalog/import/platform oracles retained byte-for-byte"
+    ],
+    "syntax_check": "node --check PASS",
+    "format": {
+      "utf8_no_bom": true,
+      "lf_only": true,
+      "terminal_lf": 1,
+      "trailing_whitespace": false
+    }
+  },
+  "not_proven": [
+    "R2 candidate execution and all later portability gates remain NOT_RUN here",
+    "The retained hidden DOM alone does not prove arbitrary stale-control safety; existing independent controls remain necessary"
+  ]
+}

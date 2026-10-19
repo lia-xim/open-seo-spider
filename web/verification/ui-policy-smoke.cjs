@@ -163,7 +163,7 @@ const server = http.createServer(async (req, res) => {
       if (suffix === 'fragments') return send(res, { enabled: false, observations: [] });
     }
     const file = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
-    if (!['index.html', 'app.js','dashboard-segments.js','config-profiles.js','screenshots.js','table-explorer.js','table-explorer-ui.js','table-view-library.js','table-view-storage.js','table-views-ui.js','table-expression-editor.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
+    if (!['index.html', 'app.js','dashboard-segments.js','config-profiles.js','screenshots.js','table-explorer.js','table-explorer-ui.js','table-view-library.js','table-view-storage.js','table-views-ui.js','table-view-portability.js','table-expression-editor.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
     res.setHeader('content-type', file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html');
     res.end(fs.readFileSync(path.join(web, file)));
   } catch (error) { errors.push('Fixture server: ' + error.message); send(res, { error: error.message }, 500); }

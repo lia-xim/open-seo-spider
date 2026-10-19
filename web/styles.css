@@ -848,6 +848,16 @@ body.tool-page { margin: 0; padding: 0; max-width: none; background: var(--bg); 
 .dashboard-segment-exports select { width: 100%; max-width: 100%; min-width: 0; }
 @media (max-width: 640px) { .dashboard-segment-exports > label { flex-basis: 100%; max-width: 100%; } }
 
+.table-view-portable-actions{display:flex;flex-wrap:wrap;gap:.5rem;align-items:flex-end;margin-block:.75rem;min-width:0}
+.table-view-portable-actions .button{max-width:100%;white-space:normal}
+.table-view-import-file{display:flex;flex:1 1 18rem;flex-direction:column;gap:.3rem;min-width:0}
+.table-view-import-file input{width:100%;min-width:0;max-width:100%}
+.table-view-import-preview{margin-block:.75rem;padding:.75rem;border:1px solid var(--line);border-radius:8px;min-width:0}
+.table-view-import-preview ul{list-style:none;padding:0;margin:.5rem 0;min-width:0}
+.table-view-import-preview li{margin-block:.65rem;padding:.5rem;border:1px solid var(--line);border-radius:6px;min-width:0;overflow-wrap:anywhere}
+.table-view-import-preview label{display:flex;flex-direction:column;gap:.25rem;min-width:0;margin-block:.35rem}
+.table-view-import-preview input,.table-view-import-preview select{width:100%;min-width:0;max-width:100%}
+.table-view-import-preview pre{max-width:100%;max-height:18rem;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.75rem}
 .table-views { margin: 14px 0 0; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius-sm, 6px); min-width: 0; }
 .table-views legend { font-weight: 600; padding: 0 5px; }
 .table-rule-mode, .table-expression-target { display: grid; gap: 5px; margin: 10px 0; max-width: 100%; min-width: 0; }

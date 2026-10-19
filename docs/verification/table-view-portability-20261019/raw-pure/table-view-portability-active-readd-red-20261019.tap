@@ -1,0 +1,45 @@
+TAP version 13
+# Subtest: portable re-add of an externally removed active ID compares the actual working query and never applies
+not ok 1 - portable re-add of an externally removed active ID compares the actual working query and never applies
+  ---
+  duration_ms: 10.5196
+  type: 'test'
+  location: 'E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\table-views-ui.test.cjs:58:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+        id: '11111111-1111-4111-8111-111111111111',
+    +   modified: false,
+    +   name: 'Café'
+    -   modified: true,
+    -   name: 'Restored name'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    id: '11111111-1111-4111-8111-111111111111'
+    name: 'Restored name'
+    modified: true
+  actual:
+    id: '11111111-1111-4111-8111-111111111111'
+    name: 'Café'
+    modified: false
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-views-ui.test.cjs:61:251)
+    async Test.run (node:internal/test_runner/test:1208:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 112.4482

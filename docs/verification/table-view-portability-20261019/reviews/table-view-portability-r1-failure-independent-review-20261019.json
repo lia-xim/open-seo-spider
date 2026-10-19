@@ -1,0 +1,159 @@
+{
+  "result": "CONFIRMED_R1_DRIVER_INACTIVE_SUBTREE_PRECONDITION_ERROR_AND_REVIEWED_R2_ONLY_DELTA_NOT_RUN",
+  "original_failure": {
+    "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/ui-table-view-portability-live.json",
+    "bytes": 106927,
+    "sha256": "9d083d6bbb98934e3f99b7fb59e02613cddb6a29e548305e068b2bf3c597da28"
+  },
+  "raw_evidence": [
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/proof.json",
+      "bytes": 5609,
+      "sha256": "9a742a43955704df8a5217ccdd2ec8ed511e12ba24258aef31fbadde888a22dc"
+    },
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/table-view-portability-failure.html",
+      "bytes": 180752,
+      "sha256": "648ff9d689f26e69f4204844d746b9aa9765ff4e6196f0d58ba10a18d73fd472"
+    },
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/table-view-portability-failure.png",
+      "bytes": 242017,
+      "sha256": "150eed8c3caa1535399f16716396a1f321338b2e4c66c63941d0d3046870ea3b"
+    },
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/c226e2d3-e122-449b-bed1-3a24944bb5c7-original-project.json",
+      "bytes": 1299463,
+      "sha256": "ca7f076b8118a14b6776ce5d8b26547d4bde318fa786b2235ca6bcd38646671a"
+    },
+    {
+      "path": "artifacts/table-view-portability-r1-20261019-focused16/table-view-portability/table-view-portability-1792444564275-6fcb38b4/v2-actual-selected-original.json",
+      "bytes": 1014,
+      "sha256": "1251140e328ba8e0b4ad10e80fc0f9866567006cd2827f4872fe143590588558"
+    }
+  ],
+  "original_driver": {
+    "path": "artifacts/ui-table-view-portability-live-r1-558ea725-20261019.cjs",
+    "bytes": 86376,
+    "sha256": "558ea72587fb2f109d5b9aabcf6ff871d6b54dd3178be7dccaaed3549d215a28"
+  },
+  "reviewed_R2_driver": {
+    "path": "web/verification/ui-table-view-portability-live.cjs",
+    "bytes": 87206,
+    "sha256": "2e23eb9c29813f79e968eae28df0c2ab48f19db4770aa025cd83f45271c44f2b"
+  },
+  "product_pins_unchanged_from_R1": [
+    {
+      "path": "web/table-explorer-ui.js",
+      "bytes": 20899,
+      "sha256": "212df048c1b95f3d3852b3d4c9ccf397a8a1f97216e7c55ae410c83213cb8c0b"
+    },
+    {
+      "path": "web/table-expression-editor.js",
+      "bytes": 12214,
+      "sha256": "c843b3690bcc83ba72e8ae0db09ffac1834aadf3560ae31e1b7ba4d4416c018b"
+    },
+    {
+      "path": "web/app.js",
+      "bytes": 520255,
+      "sha256": "be73e0886fcee14b4f00b0c87546fd03021d6b82d74dd7385e0ce43bd3b0721a"
+    },
+    {
+      "path": "web/table-views-ui.js",
+      "bytes": 34741,
+      "sha256": "a9811ab4208379605cfd5911191bf8f248d1471c5ba5c9d5722df12722ed3884"
+    }
+  ],
+  "binary_sha256": "eef4813a7d27156066585232ae8b2ee66286c29ae521c46bc9980679c25e097d",
+  "actual_coordinator": {
+    "passing_suites": 15,
+    "failed_suite": "table-view-portability",
+    "failed_code": 1
+  },
+  "native_shutdown": [
+    {
+      "phase": "warm",
+      "origin": "http://127.0.0.1:53959",
+      "pid": 20632,
+      "natural_eof": true,
+      "forced": false,
+      "close": {
+        "code": 0,
+        "signal": null
+      }
+    }
+  ],
+  "observed": {
+    "stage": "Version2 A configured/saved/explicitly applied, actual selected JSON and CSV downloaded; B owner switch then configureMain(2)->mode(2)->clearQuery before grouped switch.",
+    "failed_assertion": "R1 clearQuery line155 column236 is second disabled-Clear-branch assertion: count ALL expression DOM nodes zero, including hidden inactive subtree.",
+    "active_simple_rules": 0,
+    "clear_disabled": true,
+    "inactive_grouped_editor_hidden": true,
+    "inactive_editor_nodes": [
+      {
+        "path": "root",
+        "kind": "any"
+      },
+      {
+        "path": "0",
+        "kind": "rule"
+      },
+      {
+        "path": "1",
+        "kind": "rule"
+      }
+    ],
+    "inactive_editor_labels": [
+      "ODER – mindestens eine folgende Bedingung",
+      "Title-Tags · mindestens 2",
+      "Seitentitel · enthält „CAFÉ“"
+    ],
+    "expression_status": "Einfache Regeln · alle Bedingungen werden mit UND verknüpft.",
+    "errors": [],
+    "page_label": "1–50 von 152",
+    "independent_original_B_HTML_population": 152,
+    "independently_rechecked_B_first_page_rows": 50,
+    "independently_rechecked_B_first_page_cells": 200,
+    "actual_and_expected_cells_sha256": "8e525a1413a481b8f766dae1b140920822c8d11cd470f2d6099a9d96770ea700"
+  },
+  "cause": [
+    {
+      "file": "web/table-explorer-ui.js",
+      "lines": [
+        41,
+        196
+      ],
+      "fact": "Owner reset/synchronize clear real rules/expression and set mode simple."
+    },
+    {
+      "file": "web/table-expression-editor.js",
+      "line": 61,
+      "fact": "Editor.reset resets selected target and focus; it does not rebuild markup."
+    },
+    {
+      "file": "web/table-explorer-ui.js",
+      "lines": [
+        119,
+        124
+      ],
+      "fact": "Simple mode hides grouped editor; only grouped mode rebuilds its subtree, so old any+2rule markup stays inactive."
+    },
+    {
+      "file": "web/verification/ui-table-view-portability-live.cjs",
+      "line": 155,
+      "fact": "R1 disabled-Clear branch wrongly required both active and inactive DOM representations empty."
+    }
+  ],
+  "R2_delta": {
+    "all_bytes_outside_clearQuery_identical": true,
+    "before": "async function clearQuery(){await options();const clear=page.locator('#table-rules-clear');if(await clear.isEnabled())await clear.click();else{assert.equal(await page.locator('#table-rules li[data-table-rule-index]').count(),0);assert.equal(await page.locator('#table-expression-editor [data-expression-kind]').count(),0);}await page.fill('#table-search','');await page.selectOption('#table-filter','all');}\n",
+    "after": "async function clearQuery(){\n  await options();const activeMode=await page.inputValue('#table-rule-mode'),clear=page.locator('#table-rules-clear');assert(['simple','grouped'].includes(activeMode));if(await clear.isEnabled())await clear.click();assert.equal(await clear.isDisabled(),true,'The actual Clear control confirms no active rule or rule error');assert.equal(await page.inputValue('#table-rule-mode'),activeMode);\n  assert.equal(await page.locator('#table-rules li[data-table-rule-index]').count(),0);\n  // Owner reset leaves old grouped markup hidden until the next grouped render.\n  // Count the active rule subtree; inactive markup is not an accepted expression.\n  if(activeMode==='simple')assert.equal(await page.locator('#table-expression-editor').isHidden(),true);else{assert.equal(await page.locator('#table-expression-editor').isVisible(),true);assert.equal(await page.locator('#table-expression-editor [data-expression-kind]').count(),0);}\n  for(const id of['table-explorer-error','table-expression-error']){assert.equal(await page.locator('#'+id).isHidden(),true);assert.equal((await page.locator('#'+id).textContent()).trim(),'');}\n  await page.fill('#table-search','');await page.selectOption('#table-filter','all');\n}\n",
+    "review": "Correct active-mode-aware baseline; still requires disabled Clear, unchanged mode, zero simple-rule nodes, hidden inactive grouped editor OR visible/empty active grouped editor, and both error fields hidden+empty. No DOM clearing, App calls, fixture membership/CSV changes, delays, timeout changes or changed product semantics."
+  },
+  "not_proven": [
+    "R2 corrected driver has not been executed by this reviewer; fresh Root run required.",
+    "Private AST is not read. Source reset path, active Simple status, disabled Clear and exact200 original B cells corroborate inactive hidden markup diagnosis.",
+    "Full portability/native45 suite completion, public CI and manufacturer parity."
+  ],
+  "scope": "Read-only original R1 raw/source correlation, independent offline200-cell reconstruction and exact R1/R2 driver-byte-delta comparison only. No tracked edits, browser/native process, HTTP or Cargo. Historical R1 failure remains immutable."
+}

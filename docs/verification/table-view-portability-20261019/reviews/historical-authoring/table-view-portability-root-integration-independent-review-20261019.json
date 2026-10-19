@@ -1,0 +1,483 @@
+{
+  "result": "PASS_SOURCE_ONLY_PORTABILITY_ROOT_INTEGRATION_REVIEW",
+  "blocking_findings": [],
+  "source_pins": [
+    {
+      "path": "web/app.js",
+      "bytes": 520255,
+      "sha256": "be73e0886fcee14b4f00b0c87546fd03021d6b82d74dd7385e0ce43bd3b0721a"
+    },
+    {
+      "path": "web/index.html",
+      "bytes": 121724,
+      "sha256": "54a6dd5795b89f55b6751fa288611ab0a3e0b7ef5d8149a334df6cba723c2432"
+    },
+    {
+      "path": "web/styles.css",
+      "bytes": 63149,
+      "sha256": "56dc207360ab0ffd8d2a52359ff375bccaf992c298febe7f5c0fd0128c6e2e4c"
+    },
+    {
+      "path": "crates/app/src/server.rs",
+      "bytes": 114239,
+      "sha256": "c822f5a016403929f960ff908a5d601353d76e41ea78e1c3524e1b25a63147ae"
+    },
+    {
+      "path": "scripts/ui-e2e.mjs",
+      "bytes": 9900,
+      "sha256": "ce54c25a7b1e40c45b4bae7730b039ea6f46ae702c6e1882b928a1003dd83840"
+    },
+    {
+      "path": "web/verification/ui-smoke.cjs",
+      "bytes": 38196,
+      "sha256": "4f3b2ad952fcf4db3c91acb3f3917103d3f85c2abd6de1b84a8b1fdb1b5a4e7e"
+    },
+    {
+      "path": "web/verification/ui-crawl-control-smoke.cjs",
+      "bytes": 15124,
+      "sha256": "ec6f5ea46201ec0e13cd0eba8c33cf6c0649f367147e4891f80b6fb1907feeab"
+    },
+    {
+      "path": "web/verification/ui-selected-recrawl-smoke.cjs",
+      "bytes": 23558,
+      "sha256": "4e32533db82bb69d8d97b95efb3c9e80accc524e79e665957b34b7d47de514bf"
+    },
+    {
+      "path": "web/verification/ui-policy-smoke.cjs",
+      "bytes": 36857,
+      "sha256": "51f91390638e7e736457f93634e6cd87ca735cf8571f41883c2e21bdaaf47bc1"
+    },
+    {
+      "path": "web/verification/ui-content-smoke.cjs",
+      "bytes": 47230,
+      "sha256": "27f8014924e66db41f43e884cbe3a56215f1eddb294359cd7d0bec2943b8f81c"
+    },
+    {
+      "path": "web/verification/ui-resource-discovery-smoke.cjs",
+      "bytes": 25529,
+      "sha256": "0204661576991b720bd2c6f287f093ef1e407e5e9740bf68b418d59211779473"
+    },
+    {
+      "path": "web/verification/ui-resource-ledger-smoke.cjs",
+      "bytes": 42019,
+      "sha256": "f7b91bd850f59d7c2faf18d8333ffc85a4f77ca73430042e22ba6e724ac86baa"
+    },
+    {
+      "path": "web/verification/ui-resource-contract-smoke.cjs",
+      "bytes": 51122,
+      "sha256": "d7944a34f73c272fe623bb5d1e5f186854ff6881828f6acc1830a06bc7131d0a"
+    },
+    {
+      "path": "web/verification/ui-saved-comparison-smoke.cjs",
+      "bytes": 25231,
+      "sha256": "e2ad70690e07d47b7f9ba273b713bddc2a9b81ee1c76c7f9750e3e1d81fff6c6"
+    },
+    {
+      "path": "scripts/sitemap-membership-e2e.mjs",
+      "bytes": 52431,
+      "sha256": "c43f723d7e378c1c389bb6fb1c2bdae5c7526aff24cf478487c096695ecbc0ac"
+    },
+    {
+      "path": "scripts/sitemap-assessment-e2e.mjs",
+      "bytes": 58828,
+      "sha256": "1527ce6d853b542d03d566a7efeda124aa515312580649814a22c1a7a8ed0452"
+    },
+    {
+      "path": "web/table-explorer.js",
+      "bytes": 23377,
+      "sha256": "2ad4188750606a48446033ace6627c49d619b8c2ce8aa4b91147793c7cb068ee"
+    },
+    {
+      "path": "web/table-expression-editor.js",
+      "bytes": 12214,
+      "sha256": "c843b3690bcc83ba72e8ae0db09ffac1834aadf3560ae31e1b7ba4d4416c018b"
+    },
+    {
+      "path": "web/table-explorer-ui.js",
+      "bytes": 20899,
+      "sha256": "212df048c1b95f3d3852b3d4c9ccf397a8a1f97216e7c55ae410c83213cb8c0b"
+    },
+    {
+      "path": "web/table-view-library.js",
+      "bytes": 15659,
+      "sha256": "5f8d3d84c84d5a4b0945d7c5ffd8bc7dbf652c235ad6cd1b66d59b1d4ef692b4"
+    },
+    {
+      "path": "web/table-view-storage.js",
+      "bytes": 6701,
+      "sha256": "ad46c46081adedd06749c312828def890db8adb1c37892612c74cda471e2d30e"
+    },
+    {
+      "path": "web/table-view-portability.js",
+      "bytes": 11478,
+      "sha256": "7cd7a0d8184e64121efeb25e737d1984affcb2696b26bd064656ffb8e40f06c2"
+    },
+    {
+      "path": "web/table-views-ui.js",
+      "bytes": 34741,
+      "sha256": "a9811ab4208379605cfd5911191bf8f248d1471c5ba5c9d5722df12722ed3884"
+    },
+    {
+      "path": "web/verification/table-views-ui.test.cjs",
+      "bytes": 46016,
+      "sha256": "60b393b80b809f329dfee247b4c9df45d75feda19beae226c0102bdd175a3ae6"
+    },
+    {
+      "path": "web/verification/ui-table-view-portability-live.cjs",
+      "bytes": 70886,
+      "sha256": "967687c4be35be5a377d58f5c3ae2a4ec31b48838f02f2b4e06f1789f912c7eb"
+    },
+    {
+      "path": "scripts/check-ui-fixtures.mjs",
+      "bytes": 4761,
+      "sha256": "122a9f40d3bea1694adc554883a7408444dfd64ccd618662e88dc6fd8c7e762b"
+    }
+  ],
+  "checks": [
+    {
+      "name": "All static IDs unique and every portable control exists in both mode-specific fieldsets",
+      "result": "PASS_SOURCE_INSPECTION",
+      "unique_static_ids": 561,
+      "versions": [
+        {
+          "prefix": "table-view",
+          "static_portable_controls": 8
+        },
+        {
+          "prefix": "table-expression-view",
+          "static_portable_controls": 8
+        }
+      ]
+    },
+    {
+      "name": "Deferred global module ordering satisfies portability and controller dependencies",
+      "result": "PASS_SOURCE_INSPECTION",
+      "scripts": [
+        "list-import.js",
+        "saved-comparison.js",
+        "dashboard-segments.js",
+        "config-profiles.js",
+        "screenshots.js",
+        "table-explorer.js",
+        "table-view-library.js",
+        "table-view-storage.js",
+        "table-view-portability.js",
+        "table-expression-editor.js",
+        "table-explorer-ui.js",
+        "table-views-ui.js",
+        "app.js"
+      ],
+      "asset_count": 15
+    },
+    {
+      "name": "Root hooks preserve distinct planner/store versions, synchronous Blob download and complete existing Apply contract",
+      "result": "PASS_SOURCE_INSPECTION",
+      "planner_instances": 2,
+      "v1_v2_separate": true,
+      "download_signature": "synchronous downloadBlob(Blob, filename)",
+      "no_new_HTTP_import_export_path": true
+    },
+    {
+      "name": "Existing owner/query/mode guards include both controllers before query edits and hide inactive fieldsets",
+      "result": "PASS_SOURCE_INSPECTION",
+      "guard_contract": "Owner+section+generation+segment, immediate query revision and mode-specific availability; controller independently reviewed/pinned",
+      "automatic_import_apply_added": false
+    },
+    {
+      "name": "Native static route embeds exact new module once with JavaScript MIME and no API change",
+      "result": "PASS_SOURCE_INSPECTION",
+      "route": "/table-view-portability.js",
+      "method": "GET",
+      "embedding": "include_str! at normal build",
+      "mime": "text/javascript; charset=utf-8"
+    },
+    {
+      "name": "Nine fixture allowlists close over all 15 index assets without altering fixture API behavior",
+      "result": "PASS_SOURCE_INSPECTION",
+      "fixture_maps": [
+        {
+          "path": "web/verification/ui-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "list-import.js",
+            "styles.css",
+            "saved-comparison.js"
+          ]
+        },
+        {
+          "path": "web/verification/ui-crawl-control-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "list-import.js",
+            "styles.css",
+            "saved-comparison.js"
+          ]
+        },
+        {
+          "path": "web/verification/ui-selected-recrawl-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "list-import.js",
+            "styles.css",
+            "saved-comparison.js"
+          ]
+        },
+        {
+          "path": "web/verification/ui-policy-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "list-import.js",
+            "styles.css",
+            "saved-comparison.js"
+          ]
+        },
+        {
+          "path": "web/verification/ui-content-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "list-import.js",
+            "styles.css",
+            "saved-comparison.js"
+          ]
+        },
+        {
+          "path": "web/verification/ui-resource-discovery-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "list-import.js",
+            "styles.css",
+            "saved-comparison.js"
+          ]
+        },
+        {
+          "path": "web/verification/ui-resource-ledger-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "list-import.js",
+            "styles.css",
+            "saved-comparison.js"
+          ]
+        },
+        {
+          "path": "web/verification/ui-resource-contract-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "list-import.js",
+            "styles.css",
+            "saved-comparison.js"
+          ]
+        },
+        {
+          "path": "web/verification/ui-saved-comparison-smoke.cjs",
+          "asset_count": 15,
+          "asset_filenames": [
+            "index.html",
+            "app.js",
+            "dashboard-segments.js",
+            "config-profiles.js",
+            "screenshots.js",
+            "table-explorer.js",
+            "table-explorer-ui.js",
+            "table-view-library.js",
+            "table-view-storage.js",
+            "table-views-ui.js",
+            "table-view-portability.js",
+            "table-expression-editor.js",
+            "styles.css",
+            "list-import.js",
+            "saved-comparison.js"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Two sitemap native asset maps include exact routes and retain source closure/hash assertions",
+      "result": "PASS_SOURCE_INSPECTION",
+      "sitemap_maps": [
+        {
+          "path": "scripts/sitemap-membership-e2e.mjs",
+          "route_count": 15,
+          "routes": {
+            "/": "web/index.html",
+            "/app.js": "web/app.js",
+            "/styles.css": "web/styles.css",
+            "/list-import.js": "web/list-import.js",
+            "/saved-comparison.js": "web/saved-comparison.js",
+            "/dashboard-segments.js": "web/dashboard-segments.js",
+            "/config-profiles.js": "web/config-profiles.js",
+            "/table-explorer.js": "web/table-explorer.js",
+            "/table-explorer-ui.js": "web/table-explorer-ui.js",
+            "/table-view-library.js": "web/table-view-library.js",
+            "/table-view-storage.js": "web/table-view-storage.js",
+            "/table-views-ui.js": "web/table-views-ui.js",
+            "/table-view-portability.js": "web/table-view-portability.js",
+            "/table-expression-editor.js": "web/table-expression-editor.js",
+            "/screenshots.js": "web/screenshots.js"
+          }
+        },
+        {
+          "path": "scripts/sitemap-assessment-e2e.mjs",
+          "route_count": 15,
+          "routes": {
+            "/": "web/index.html",
+            "/app.js": "web/app.js",
+            "/styles.css": "web/styles.css",
+            "/list-import.js": "web/list-import.js",
+            "/saved-comparison.js": "web/saved-comparison.js",
+            "/dashboard-segments.js": "web/dashboard-segments.js",
+            "/config-profiles.js": "web/config-profiles.js",
+            "/table-explorer.js": "web/table-explorer.js",
+            "/table-explorer-ui.js": "web/table-explorer-ui.js",
+            "/table-view-library.js": "web/table-view-library.js",
+            "/table-view-storage.js": "web/table-view-storage.js",
+            "/table-views-ui.js": "web/table-views-ui.js",
+            "/table-view-portability.js": "web/table-view-portability.js",
+            "/table-expression-editor.js": "web/table-expression-editor.js",
+            "/screenshots.js": "web/screenshots.js"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Portability suite registered once with owned-native lifecycle and unchanged coordinator budgets",
+      "result": "PASS_SOURCE_INSPECTION",
+      "registered_suites": 45,
+      "new_suite": {
+        "name": "table-view-portability",
+        "driver": "ui-table-view-portability-live.cjs",
+        "kind": "owned-native",
+        "timeout_ms": 240000
+      }
+    },
+    {
+      "name": "Responsive source rules constrain portable controls and expose keyboard-focusable full JSON without claiming measured layout",
+      "result": "PASS_SOURCE_INSPECTION",
+      "source_width_strategy": "Wrapping flex actions; shrinking file label/control; width-bounded inputs/selects; text wrapping and scrollable 18rem PRE; inherited narrow fieldset padding.",
+      "actual_320px_geometry": "NOT_RUN_BY_THIS_REVIEW",
+      "actual_keyboard_scrolling": "NOT_RUN_BY_THIS_REVIEW"
+    },
+    {
+      "name": "Current semantic fixture target pins match actual App/index bytes; original historical harness metadata stays separately named",
+      "result": "PASS_SOURCE_INSPECTION",
+      "actual_source_targets": [
+        {
+          "path": "web/app.js",
+          "bytes": 520255,
+          "sha256": "be73e0886fcee14b4f00b0c87546fd03021d6b82d74dd7385e0ce43bd3b0721a"
+        },
+        {
+          "path": "web/index.html",
+          "bytes": 121724,
+          "sha256": "54a6dd5795b89f55b6751fa288611ab0a3e0b7ef5d8149a334df6cba723c2432"
+        }
+      ],
+      "historical_harness_execution": "NOT_RUN_BY_THIS_REVIEW"
+    }
+  ],
+  "scope": "Read-only source inspection and independent static comparisons; no App/server/driver import or execution, native process, HTTP, Browser, Cargo, formatter, tracked edit or runtime acceptance.",
+  "not_proven": [
+    "Actual 320px geometry, focus/keyboard behavior, browser filepicker/download and browser WebLocks.",
+    "Native fixtures, screenshot/table suites, normal binary build, Rust app tests, full 45-suite regression, public CI, complete manufacturer parity."
+  ],
+  "reviewer_script": {
+    "path": "artifacts/review-table-view-portability-root-integration-20261019.cjs",
+    "bytes": 13821,
+    "sha256": "36fd75cdd05dee54acc7b3b081b8f0cc08d39b1a419f28a69149d83300f56d1e"
+  }
+}

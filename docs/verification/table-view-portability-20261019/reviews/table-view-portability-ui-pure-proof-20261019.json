@@ -1,0 +1,89 @@
+{
+  "result": "PASS_PURE_CONTROLLER_AND_DOM_STUB_CONTROLS_ONLY",
+  "owned": [
+    {
+      "path": "web/table-views-ui.js",
+      "bytes": 34741,
+      "sha256": "a9811ab4208379605cfd5911191bf8f248d1471c5ba5c9d5722df12722ed3884",
+      "CRLF": 0,
+      "ends_with_LF": true
+    },
+    {
+      "path": "web/verification/table-views-ui.test.cjs",
+      "bytes": 46016,
+      "sha256": "60b393b80b809f329dfee247b4c9df45d75feda19beae226c0102bdd175a3ae6",
+      "CRLF": 0,
+      "ends_with_LF": true
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "web/table-explorer.js",
+      "bytes": 23377,
+      "sha256": "2ad4188750606a48446033ace6627c49d619b8c2ce8aa4b91147793c7cb068ee",
+      "CRLF": 0,
+      "ends_with_LF": true
+    },
+    {
+      "path": "web/table-view-library.js",
+      "bytes": 15659,
+      "sha256": "5f8d3d84c84d5a4b0945d7c5ffd8bc7dbf652c235ad6cd1b66d59b1d4ef692b4",
+      "CRLF": 0,
+      "ends_with_LF": true
+    },
+    {
+      "path": "web/table-view-storage.js",
+      "bytes": 6701,
+      "sha256": "ad46c46081adedd06749c312828def890db8adb1c37892612c74cda471e2d30e",
+      "CRLF": 0,
+      "ends_with_LF": true
+    },
+    {
+      "path": "web/table-view-portability.js",
+      "bytes": 11478,
+      "sha256": "7cd7a0d8184e64121efeb25e737d1984affcb2696b26bd064656ffb8e40f06c2",
+      "CRLF": 0,
+      "ends_with_LF": true
+    }
+  ],
+  "pure": {
+    "tests": 75,
+    "pass": 75,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "prior_cases": 49,
+    "added_counted_cases": 26,
+    "tap": {
+      "path": "artifacts/table-view-portability-controller-pure-20261019.tap",
+      "bytes": 14796,
+      "sha256": "c5b63e591415abaed9675391b66a93cd7b0f01a73bf84df1aff2cd6ef7a2e3c6",
+      "CRLF": 0,
+      "ends_with_LF": true
+    }
+  },
+  "regression_first": {
+    "path": "artifacts/table-view-portability-active-readd-red-20261019.tap",
+    "bytes": 1392,
+    "sha256": "479f5ef3ecc358319f06c2fd0d9f62b1eb30602d5e3265c0fb6fed842dc6125c",
+    "CRLF": 0,
+    "ends_with_LF": true,
+    "expected_failure": "Externally removed then imported active ID retained old display name and modified false before the narrow after/absent-before condition correction."
+  },
+  "scope": [
+    "Actual controller with real portability planner/library/storage adapter in pure Node.",
+    "V1/V2 definition files remain separate; complete across-section preview; explicit conflict resolutions; exact raw CAS; real adapter lock contract with pure lock implementations; atomic no-op behavior.",
+    "Actual File objects in pure Node and deliberately deferred pure read controls, not native browser filepicker proof.",
+    "DOM stubs prove text-only definition rendering, stale detached-node refusal, copy-name focus/caret restoration and JSON PRE tabIndex/aria-label attributes.",
+    "Active imported replacement or re-add compares complete current working query without Apply."
+  ],
+  "not_proven": [
+    "Browser File picker, browser/navigator WebLocks, download events, geometry and keyboard scrolling behavior.",
+    "Native E2E, Rust/Cargo, other registered browser suites, public CI, all tables/operators or manufacturer parity."
+  ],
+  "tracked_edits_limited_to": [
+    "web/table-views-ui.js",
+    "web/verification/table-views-ui.test.cjs"
+  ]
+}

@@ -25,8 +25,8 @@ const historicalTargets={
   'web/spelling.html':{bytes:5690,sha256:'82bbd39d0887391801e67890a9803c6027f26ee7135fc6f7793e841be3677d71'},
 };
 const reviewedCurrentTargets={
-  'web/app.js':{bytes:520069,sha256:'ee418e01b619fdd1b962003266db9da6396f16439b270fc12bf30a79ffb3da11'},
-  'web/index.html':{bytes:119142,sha256:'2a37b2939c459e99a17b3ad89b2f12972557bedb9c3ef5f10fcf8a9eb1b8cb37'},
+  'web/app.js':{bytes:520255,sha256:'be73e0886fcee14b4f00b0c87546fd03021d6b82d74dd7385e0ce43bd3b0721a'},
+  'web/index.html':{bytes:121724,sha256:'54a6dd5795b89f55b6751fa288611ab0a3e0b7ef5d8149a334df6cba723c2432'},
   'web/spelling.js':historicalTargets['web/spelling.js'],
   'web/spelling.html':historicalTargets['web/spelling.html'],
 };

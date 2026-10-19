@@ -1058,12 +1058,12 @@
     renderTable();return {ok:true,value:checked.value};
   }
   function bindNamedTableViews() {
-    if(!window.TableViewsUI||!window.TableViewLibrary||!window.TableViewStorage||!tableExplorer){$('table-view-error').hidden=false;$('table-view-error').textContent='Benannte Tabellenansichten sind nicht geladen.';return;}
-    const common={owner:tableOwner,queryRevision:()=>tableQueryRevision};
-    tableViews=window.TableViewsUI.create({...common,available:()=>tableExplorer.queryVersion()===1,contract:()=>tableViewContract(1),snapshot:()=>tableViewSnapshot(1),apply:(prepared,guard)=>applyTableView(prepared,guard,1)});
+    if(!window.TableViewsUI||!window.TableViewLibrary||!window.TableViewStorage||!window.TableViewPortability||!tableExplorer){$('table-view-error').hidden=false;$('table-view-error').textContent='Benannte Tabellenansichten sind nicht geladen.';return;}
+    const common={owner:tableOwner,queryRevision:()=>tableQueryRevision,download:downloadBlob};
+    tableViews=window.TableViewsUI.create({...common,catalogVersion:1,portability:window.TableViewPortability.create(1),available:()=>tableExplorer.queryVersion()===1,contract:()=>tableViewContract(1),snapshot:()=>tableViewSnapshot(1),apply:(prepared,guard)=>applyTableView(prepared,guard,1)});
     const library=window.TableViewLibrary.createExpression(window.TableExplorer);
     let storage=null,locks=null;try{storage=window.localStorage;}catch(_){}try{locks=window.navigator?.locks;}catch(_){}
-    tableExpressionViews=window.TableViewsUI.create({...common,idPrefix:'table-expression-view',storageKey:window.TableViewStorage.EXPRESSION_KEY,library,store:window.TableViewStorage.createExpression({library,storage,locks}),available:()=>tableExplorer.queryVersion()===2,contract:()=>tableViewContract(2),snapshot:()=>tableViewSnapshot(2),apply:(prepared,guard)=>applyTableView(prepared,guard,2)});
+    tableExpressionViews=window.TableViewsUI.create({...common,catalogVersion:2,portability:window.TableViewPortability.create(2),idPrefix:'table-expression-view',storageKey:window.TableViewStorage.EXPRESSION_KEY,library,store:window.TableViewStorage.createExpression({library,storage,locks}),available:()=>tableExplorer.queryVersion()===2,contract:()=>tableViewContract(2),snapshot:()=>tableViewSnapshot(2),apply:(prepared,guard)=>applyTableView(prepared,guard,2)});
   }
   function bindTableExplorer() {
     if(!window.TableExplorer||!window.TableExplorerUI){$('table-options').open=true;$('table-explorer-error').hidden=false;$('table-explorer-error').textContent='Erweiterte Tabellenfunktionen sind nicht geladen.';return;}

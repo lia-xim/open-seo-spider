@@ -9,23 +9,24 @@ const columns=[{key:'url',type:'text',mandatory:true,value:row=>row.url},{key:'t
 const initialContract={section:'titles',query_semantics:definitions.QUERY_SEMANTICS,columns,sectionFilters:['all','missing']};
 const initialQuery={sectionFilter:'missing',search:'Cafe\u0301',rules:[{key:'count',op:'range',min:0,max:2}],sort:{key:'count',direction:-1},visibleKeys:['url','count']};
 const clone=value=>JSON.parse(JSON.stringify(value));
+const definitionFile=text=>new File([text],'saved-views.json',{type:'application/json'});
 function accepted(result){assert.equal(result.ok,true,JSON.stringify(result));return result.value;}
 function refused(result,code){assert.equal(result.ok,false,JSON.stringify(result));assert.equal(result.error.code,code);return result.error;}
 const entry=(id=A,name='Café',contract=initialContract,query=initialQuery)=>accepted(library.makeEntry({id,name},contract,query));
 const raw=entries=>accepted(library.encodeCatalog(entries));
-function fixture({entries=[],rawCatalog=entries.length?raw(entries):null,locks='immediate',apply}={}){
+function fixture({entries=[],rawCatalog=entries.length?raw(entries):null,locks='immediate',apply,portable=false,readFile}={}){
   const data=new Map([['legacy-columns','keep exact legacy bytes']]);if(rawCatalog!==null)data.set(KEY,rawCatalog);
-  const calls=[],pending=[];
+  const calls=[],pending=[],downloads=[];
   const storage={getItem(key){calls.push(['get',key]);return data.has(key)?data.get(key):null;},setItem(key,value){calls.push(['set',key,value]);data.set(key,value);},removeItem(key){calls.push(['remove',key]);data.delete(key);}};
   const lockAPI=locks===null?null:{request(name,options,action){calls.push(['lock',name,options]);if(locks==='held')return new Promise((resolve,reject)=>pending.push(()=>{try{resolve(action({name,mode:'exclusive'}));}catch(error){reject(error);}}));return Promise.resolve(action(locks==='busy'?null:{name,mode:'exclusive'}));}};
   const model={owner:{projectId:'crawl-a',section:'titles',generation:1,segment:null},revision:0,available:true,contract:{...initialContract},query:clone(initialQuery),snapshots:0,applies:0,notifications:0};
   const adapter=storageModule.create({library,storage,locks:lockAPI});
   let controller;
-  const hooks={library,store:adapter,available:()=>model.available,uuid:()=>[A,B,C].find(id=>!controller.status().entries.some(row=>row.id===id)),owner:()=>({...model.owner}),queryRevision:()=>model.revision,contract:()=>model.contract,
+  const hooks={library,store:adapter,...(portable?{portability:require('../table-view-portability.js').create(1),download:(blob,filename)=>downloads.push({blob,filename}),readFile}:{}),available:()=>model.available,uuid:()=>[A,B,C].find(id=>!controller.status().entries.some(row=>row.id===id)),owner:()=>({...model.owner}),queryRevision:()=>model.revision,contract:()=>model.contract,
     snapshot:()=>{model.snapshots++;return{ok:true,value:clone(model.query)};},
     apply:(prepared,guard)=>{model.applies++;if(apply)return apply(prepared,guard,model,controller);if(!guard())return{ok:false,error:{code:'stale_apply',message:'Stale apply'}};const {section,query_semantics,...query}=prepared;model.query=clone(query);model.revision++;controller.invalidate();return{ok:true,value:prepared};},notify:()=>{model.notifications++;}};
   controller=createController(hooks);
-  return{controller,model,data,calls,pending,adapter,hooks,storage,bytes:()=>data.has(KEY)?data.get(KEY):null,writes:()=>calls.filter(call=>['set','remove'].includes(call[0])),read:()=>accepted(controller.refresh()),edit:()=>{model.revision++;controller.invalidate();}};
+  return{controller,model,data,calls,pending,downloads,adapter,hooks,storage,bytes:()=>data.has(KEY)?data.get(KEY):null,writes:()=>calls.filter(call=>['set','remove'].includes(call[0])),read:()=>accepted(controller.refresh()),edit:()=>{model.revision++;controller.invalidate();}};
 }
 
 test('status and explicit read never auto-apply or write, and entries are section scoped',()=>{
@@ -34,6 +35,106 @@ test('status and explicit read never auto-apply or write, and entries are sectio
   f.read();assert.deepEqual(f.controller.status().entries.map(row=>row.id),[A]);assert.deepEqual(f.model.query,query);assert.equal(f.model.applies,0);assert.deepEqual(f.writes(),[]);
   f.model.owner={...f.model.owner,section:'meta'};f.model.contract={...initialContract,section:'meta'};
   assert.deepEqual(f.controller.status().entries.map(row=>row.id),[B]);assert.equal(f.controller.status().selectedId,'');assert.equal(f.model.applies,0);assert.deepEqual(f.writes(),[]);
+});
+
+test('portable export rereads all sections, emits exact original definition bytes and never applies or persists',async()=>{
+  const saved=[entry(),entry(B,'Metadata',{...initialContract,section:'meta'})],f=fixture({entries:saved,portable:true});f.read();f.controller.select(A);const before=f.bytes(),query=clone(f.model.query);
+  accepted(f.controller.exportDefinitions('all'));accepted(f.controller.exportDefinitions('selected'));
+  assert.equal(f.downloads.length,2);assert.equal(await f.downloads[0].blob.text(),raw(saved));assert.equal(await f.downloads[1].blob.text(),raw([saved[0]]));assert.equal(f.downloads[0].filename,'open-seo-spider-table-views-v1.json');assert.equal(f.downloads[1].filename,'open-seo-spider-table-views-v1-selected.json');assert.equal(f.bytes(),before);assert.deepEqual(f.model.query,query);assert.equal(f.model.applies,0);assert.equal(f.writes().length,0);
+});
+test('portable import stages every section, requires conflict choice, commits one locked catalog and never Apply',async()=>{
+  const f=fixture({entries:[entry()],portable:true}),incoming=entry(A,'Incoming',initialContract,{...initialQuery,search:'imported'}),other=entry(B,'Foreign',{...initialContract,section:'meta'});f.read();f.controller.select(A);accepted(f.controller.apply());const query=clone(f.model.query),before=f.bytes();
+  accepted(await f.controller.stageImportFile(definitionFile(raw([incoming,other]))));assert.equal(f.controller.status().importPreview.entries.length,2);assert.equal(f.controller.status().importPreview.valid,false);assert.equal(f.bytes(),before);refused(await f.controller.confirmImport(),'unresolved_conflict');
+  accepted(f.controller.resolveImport(A,'replace'));accepted(await f.controller.confirmImport());assert.equal(f.writes().length,1);assert(f.calls.some(call=>call[0]==='lock'));assert.equal(JSON.parse(f.bytes()).entries[0].name,'Café');assert.equal(JSON.parse(f.bytes()).entries[0].view.search,'imported');assert.equal(JSON.parse(f.bytes()).entries[1].section,'meta');assert.deepEqual(f.model.query,query);assert.equal(f.model.applies,1);assert.deepEqual(f.controller.status().active,{id:A,name:'Café',modified:true});assert.equal(f.controller.status().importPreview,null);
+});
+test('portable identical/skip no-op preserves exact whitespace without a lock or write and keeps active badge',async()=>{
+  const f=fixture({rawCatalog:'  '+raw([entry()])+'\n',portable:true,locks:null});f.read();f.controller.select(A);accepted(f.controller.apply());const before=f.bytes();
+  accepted(await f.controller.stageImportFile(definitionFile(raw([entry()]))));assert.equal(accepted(await f.controller.confirmImport()).changed,false);assert.equal(f.bytes(),before);assert.equal(f.calls.filter(call=>call[0]==='lock').length,0);assert.equal(f.writes().length,0);assert.deepEqual(f.controller.status().active,{id:A,name:'Café',modified:false});
+});
+test('portable replacement matching the already edited current query clears the active unsaved badge without Apply',async()=>{
+  const f=fixture({entries:[entry()],portable:true});f.read();f.controller.select(A);accepted(f.controller.apply());f.model.query.search='Already edited';f.edit();const changed=clone(f.model.query),applies=f.model.applies;
+  accepted(await f.controller.stageImportFile(definitionFile(raw([entry(A,'Incoming',initialContract,changed)]))));accepted(f.controller.resolveImport(A,'replace'));accepted(await f.controller.confirmImport());assert.deepEqual(f.controller.status().active,{id:A,name:'Café',modified:false});assert.deepEqual(f.model.query,changed);assert.equal(f.model.applies,applies);
+});
+test('portable re-add of an externally removed active ID compares the actual working query and never applies',async()=>{
+  for(const modified of [true,false]){
+    const f=fixture({entries:[entry()],portable:true});f.read();f.controller.select(A);accepted(f.controller.apply());const query=clone(f.model.query);f.data.set(KEY,raw([]));f.controller.externalChange();f.read();assert.equal(f.controller.status().active.id,A);
+    const restored=entry(A,'Restored name',initialContract,modified?{...query,search:'Different imported query'}:query);accepted(await f.controller.stageImportFile(definitionFile(raw([restored]))));accepted(await f.controller.confirmImport());assert.deepEqual(f.controller.status().active,{id:A,name:'Restored name',modified});assert.deepEqual(f.model.query,query);assert.equal(f.model.applies,1);assert.equal(f.writes().length,1);
+  }
+});
+test('portable grouped definitions use their own planner and locked key without migration or v1 changes',async()=>{
+  const expressionLibrary=definitions.createExpression(explorer),contract={...initialContract,query_semantics:definitions.EXPRESSION_QUERY_SEMANTICS},query={...initialQuery,expression:{kind:'any',children:[{kind:'rule',rule:{key:'count',op:'range',min:0,max:0}},{kind:'rule',rule:{key:'count',op:'unknown'}}]}};delete query.rules;
+  const saved=accepted(expressionLibrary.makeEntry({id:A,name:'Nested'},contract,query)),incoming=accepted(expressionLibrary.makeEntry({id:B,name:'Other section'},{...contract,section:'meta'},query)),initial=accepted(expressionLibrary.encodeCatalog([saved])),data=new Map([[storageModule.EXPRESSION_KEY,initial],[KEY,'v1 exact bytes'],['legacy-columns','keep']]),writes=[],downloads=[],locks=[];
+  const storage={getItem:key=>data.has(key)?data.get(key):null,setItem:(key,value)=>{writes.push([key,value]);data.set(key,value);}},store=storageModule.createExpression({library:expressionLibrary,storage,locks:{request:(key,options,action)=>{locks.push(key);return Promise.resolve(action({name:key}));}}});let applies=0;
+  const controller=createController({library:expressionLibrary,store,portability:require('../table-view-portability.js').create(2),download:(blob,filename)=>downloads.push({blob,filename}),owner:()=>({projectId:null,section:'titles'}),queryRevision:()=>0,contract:()=>contract,snapshot:()=>({ok:true,value:query}),apply:()=>{applies++;},uuid:()=>C});accepted(controller.refresh());accepted(controller.select(A));accepted(controller.exportDefinitions('selected'));assert.equal(downloads[0].filename,'open-seo-spider-table-views-v2-selected.json');assert.equal(await downloads[0].blob.text(),initial);
+  accepted(await controller.stageImportFile(definitionFile(accepted(expressionLibrary.encodeCatalog([incoming])))));assert.equal(controller.status().importPreview.entries[0].section,'meta');accepted(await controller.confirmImport());assert.deepEqual(locks,[storageModule.EXPRESSION_LOCK_NAME]);assert.equal(writes.length,1);assert.equal(writes[0][0],storageModule.EXPRESSION_KEY);assert.equal(data.get(KEY),'v1 exact bytes');assert.equal(data.get('legacy-columns'),'keep');assert.equal(applies,0);
+  const before=data.get(storageModule.EXPRESSION_KEY);refused(await controller.stageImportFile(definitionFile(raw([entry()]))),'unsupported_version');assert.equal(data.get(storageModule.EXPRESSION_KEY),before);assert.equal(writes.length,1);
+});
+test('portable copy UUID is generated once, reused while editing its name and final collisions refuse atomically',async()=>{
+  const f=fixture({entries:[entry()],portable:true});f.read();let ids=0;f.hooks.uuid=()=>{ids++;return C;};accepted(await f.controller.stageImportFile(definitionFile(raw([entry(A,'Incoming')]))));
+  refused(f.controller.resolveImport(A,'copy'),'invalid_name');accepted(f.controller.resolveImport(A,'copy','Explicit copy'));accepted(f.controller.resolveImport(A,'copy','Edited copy'));assert.equal(ids,1);accepted(await f.controller.confirmImport());assert.deepEqual(JSON.parse(f.bytes()).entries.map(row=>[row.id,row.name]),[[A,'Café'],[C,'Edited copy']]);
+  const conflict=fixture({entries:[entry()],portable:true});conflict.read();conflict.hooks.uuid=()=>B;accepted(await conflict.controller.stageImportFile(definitionFile(raw([entry(B,'Incoming')]))));const before=conflict.bytes();refused(conflict.controller.resolveImport(B,'copy','Fresh name'),'copy_id_not_fresh');refused(await conflict.controller.confirmImport(),'copy_id_not_fresh');assert.equal(conflict.bytes(),before);assert.equal(conflict.writes().length,0);
+});
+test('portable file guards refuse physical mismatch, oversized files, malformed UTF8 and read rejection before a preview/write',async()=>{
+  const f=fixture({portable:true});f.read();let reads=0;refused(await f.controller.stageImportFile({size:2097153,arrayBuffer(){reads++;throw Error('Must not read');}}),'file_byte_limit');assert.equal(reads,0);
+  refused(await f.controller.stageImportFile({size:1,arrayBuffer:async()=>new ArrayBuffer(2)}),'file_size_mismatch');refused(await f.controller.stageImportFile(new File([new Uint8Array([195,40])],'invalid.json')),'invalid_utf8');refused(await f.controller.stageImportFile({size:1,arrayBuffer:async()=>{throw Error('Owned file failure');}}),'file_read_failed');assert.equal(f.controller.status().importPreview,null);assert.equal(f.controller.status().busy,false);assert.equal(f.writes().length,0);
+});
+test('portable delayed actual file read is invalidated by query/owner/mode/selection/name/catalog/cancel without blocking its successor',async t=>{
+  for(const phase of ['query','owner','mode','selection','name','catalog','cancel'])await t.test(phase,async()=>{
+    let resolve;const wait=new Promise(done=>resolve=done),text=raw([entry(B,'Incoming')]),f=fixture({entries:[entry()],portable:true,readFile:()=>wait});f.read();const pending=f.controller.stageImportFile({size:Buffer.byteLength(text)});assert.equal(f.controller.status().activity,'file');
+    if(phase==='query')f.model.revision++;if(phase==='owner')f.model.owner={...f.model.owner,projectId:'other'};if(phase==='mode')f.model.available=false;if(phase==='selection')f.controller.select(A);if(phase==='name')f.controller.name('Changed');if(phase==='catalog')f.controller.externalChange();if(phase==='cancel')f.controller.cancelImport();
+    const bytes=new TextEncoder().encode(text);resolve(bytes.buffer);refused(await pending,'stale_operation');assert.equal(f.controller.status().importPreview,null);assert.equal(f.controller.status().busy,false);assert.equal(f.writes().length,0);
+  });
+  let release;const oldText=raw([entry(A,'Old')]),f=fixture({portable:true,readFile:file=>file.old?new Promise(done=>release=done):file.arrayBuffer()});f.read();const old=f.controller.stageImportFile({size:Buffer.byteLength(oldText),old:true});accepted(await f.controller.stageImportFile(definitionFile(raw([entry(B,'New')]))));release(new TextEncoder().encode(oldText).buffer);refused(await old,'stale_operation');assert.equal(f.controller.status().importPreview.entries[0].name,'New');assert.equal(f.controller.status().busy,false);
+});
+test('portable confirmation uses exact preview bytes under held lock and query/mode/owner/cancel changes refuse writes',async t=>{
+  for(const phase of ['bytes','query','mode','owner','cancel'])await t.test(phase,async()=>{
+    const f=fixture({entries:[entry()],portable:true,locks:'held'});f.read();accepted(await f.controller.stageImportFile(definitionFile(raw([entry(B,'Incoming')]))));const before=f.bytes(),pending=f.controller.confirmImport();assert.equal(f.pending.length,1);
+    if(phase==='bytes')f.data.set(KEY,before+' ');if(phase==='query')f.model.revision++;if(phase==='mode')f.model.available=false;if(phase==='owner')f.model.owner={...f.model.owner,projectId:'other'};if(phase==='cancel')f.controller.cancelImport();await f.pending.shift()();refused(await pending,phase==='bytes'?'stale_base':'stale_operation');assert.equal(f.bytes(),phase==='bytes'?before+' ':before);assert.equal(f.writes().length,0);
+  });
+});
+test('portable quota/lock failures keep current bytes and a resolvable preview; corrupt/unreadable catalogs refuse export/import',async()=>{
+  for(const locks of [null,'busy','immediate']){const f=fixture({entries:[entry()],portable:true,locks});f.read();accepted(await f.controller.stageImportFile(definitionFile(raw([entry(B,'Incoming')]))));const before=f.bytes();if(locks==='immediate')f.storage.setItem=()=>{throw Error('QuotaExceededError');};refused(await f.controller.confirmImport(),locks===null?'lock_unavailable':locks==='busy'?'lock_busy':'storage_write_failed');assert.equal(f.bytes(),before);assert(f.controller.status().importPreview);assert.equal(f.controller.status().busy,false);}
+  const f=fixture({entries:[entry()],portable:true});f.read();f.data.set(KEY,'{corrupt');refused(f.controller.exportDefinitions('all'),'corrupt_catalog');assert.equal(f.downloads.length,0);assert.equal(f.bytes(),'{corrupt');f.storage.getItem=()=>{throw Error('Denied');};f.controller.refresh();refused(await f.controller.stageImportFile(definitionFile(raw([entry(B,'Incoming')]))),'catalog_unavailable');assert.equal(f.writes().length,0);
+});
+test('portable export detects same-tab byte change and immediate query change while rereading before download',()=>{
+  const f=fixture({entries:[entry()],portable:true});f.read();f.data.set(KEY,f.bytes()+' ');refused(f.controller.exportDefinitions('all'),'stale_base');assert.equal(f.downloads.length,0);
+  const other=fixture({entries:[entry()],portable:true});other.read();const get=other.storage.getItem;other.storage.getItem=key=>{const value=get(key);other.model.revision++;return value;};refused(other.controller.exportDefinitions('all'),'stale_operation');assert.equal(other.downloads.length,0);assert.equal(other.writes().length,0);
+});
+
+// Minimal DOM only: these prove controller-to-control wiring and stale-node
+// refusal, not geometry, browser File chooser, accessibility or native E2E.
+function portabilityDOM(f){
+  const nodes=new Map(),created=[];let document;
+  class Element{
+    constructor(tag='input'){this.tagName=tag.toUpperCase();this.children=[];this.parent=null;this.root=false;this.dataset={};this.listeners=new Map();this.value='';this.hidden=false;this.disabled=false;this._text='';created.push(this);}
+    set id(value){this._id=value;nodes.set(value,this);}get id(){return this._id||'';}
+    get isConnected(){return this.root||Boolean(this.parent?.isConnected);}
+    set textContent(value){this._text=String(value);this.replaceChildren();}get textContent(){return this._text+this.children.map(child=>child.textContent).join('');}
+    set innerHTML(_){throw Error('Import text must never be parsed as HTML');}
+    append(...children){for(const child of children){child.parent=this;this.children.push(child);}}
+    replaceChildren(...children){for(const child of this.children)child.parent=null;this.children=[];this.append(...children);}
+    addEventListener(event,listener){if(!this.listeners.has(event))this.listeners.set(event,[]);this.listeners.get(event).push(listener);}
+    setAttribute(key,value){if(!this.attributes)this.attributes=new Map();this.attributes.set(key,String(value));}getAttribute(key){return this.attributes?.get(key)??null;}
+    dispatch(event){for(const listener of this.listeners.get(event)||[])listener({target:this,preventDefault(){}});}
+    focus(){document.activeElement=this;}setSelectionRange(start,end){this.selectionStart=start;this.selectionEnd=end;}
+  }
+  document={activeElement:null,createElement:tag=>new Element(tag),getElementById:id=>{const value=nodes.get(id);return value?.isConnected?value:null;}};
+  for(const suffix of ['select','name','status','error','active','create','replace','rename','delete','apply','reset','refresh','delete-confirmation','delete-prompt','delete-confirm','delete-cancel','reset-confirmation','reset-confirm','reset-cancel','export-selected','export-all','import-file','import-preview','import-summary','import-items','import-confirm','import-cancel']){const node=new Element(suffix==='select'?'select':'input');node.root=true;node.id='table-view-'+suffix;}
+  const env={document,Blob,crypto:{randomUUID:()=>C},addEventListener(){}};
+  const ui=require('../table-views-ui.js').create({...f.hooks,environment:env,document,library,store:f.adapter,uuid:()=>C});
+  return{document,created,ui,get:suffix=>document.getElementById('table-view-'+suffix),event:(suffix,event)=>document.getElementById('table-view-'+suffix).dispatch(event)};
+}
+test('portable DOM exposes real-read loading and Cancel before completion, clearing the file control for reselection',async()=>{
+  let release;const text=raw([entry(B,'Incoming')]),f=fixture({entries:[entry()],portable:true,readFile:()=>new Promise(done=>release=done)}),dom=portabilityDOM(f),file=dom.get('import-file');file.files=[definitionFile(text)];file.value='selected-file';file.dispatch('change');
+  assert.equal(file.value,'');assert.equal(dom.get('status').dataset.portabilityPhase,'file');assert.equal(dom.get('import-preview').hidden,false);assert.equal(dom.get('import-cancel').disabled,false);assert.equal(dom.get('import-confirm').disabled,true);assert.equal(dom.get('import-items').children.length,0);
+  dom.event('import-cancel','click');const notice=dom.get('status').textContent;release(new TextEncoder().encode(text).buffer);await new Promise(setImmediate);assert.equal(dom.get('status').textContent,notice);assert.equal(dom.get('import-preview').hidden,true);assert.equal(f.writes().length,0);assert.equal(f.model.applies,0);
+});
+test('portable DOM renders full cross-section definitions as text, preserves copy focus and refuses detached choices',async()=>{
+  const unsafe='<img src=x onerror=owned()>',incoming=entry(A,unsafe),other=entry(B,'Other section',{...initialContract,section:'meta'}),f=fixture({entries:[entry()],portable:true}),dom=portabilityDOM(f),file=dom.get('import-file');file.files=[definitionFile(raw([incoming,other]))];file.dispatch('change');await new Promise(setImmediate);
+  assert.equal(dom.get('import-items').children.length,2);assert(dom.created.some(node=>node.tagName==='PRE'&&node.textContent.includes(unsafe)));assert(!dom.created.some(node=>['IMG','SCRIPT'].includes(node.tagName)));assert.equal(dom.get('import-confirm').disabled,true);
+  for(const node of dom.created.filter(node=>node.tagName==='PRE')){const definition=JSON.parse(node.textContent);assert.equal(node.tabIndex,0);assert.equal(node.getAttribute('aria-label'),'Vollständige Ansichtsdefinition: '+definition.name+' · Bereich: '+definition.section);}
+  const old=dom.document.getElementById('table-view-import-choice-'+A);old.value='copy';old.dispatch('change');const input=dom.document.getElementById('table-view-import-name-'+A);assert(input);input.value='Explicit copy';input.selectionStart=5;input.selectionEnd=5;input.dispatch('input');const current=dom.document.getElementById(input.id);assert.equal(current.value,'Explicit copy');assert.equal(dom.document.activeElement,current);assert.equal(current.selectionStart,5);assert.equal(current.selectionEnd,5);
+  assert.equal(old.isConnected,false);old.value='replace';old.dispatch('change');assert.equal(dom.document.getElementById(old.id).value,'copy');assert.equal(dom.get('import-confirm').disabled,false);dom.event('import-confirm','click');await new Promise(setImmediate);assert.deepEqual(JSON.parse(f.bytes()).entries.map(row=>[row.id,row.name]),[[A,'Café'],[C,'Explicit copy'],[B,'Other section']]);assert.equal(f.writes().length,1);assert.equal(f.model.applies,0);
 });
 test('create saves the complete explicit query and does not apply or change the working table',async()=>{
   const f=fixture(),query=clone(f.model.query);f.read();f.controller.name('  Full Café  ');

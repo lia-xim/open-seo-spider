@@ -1,0 +1,122 @@
+[
+  {
+    "label": "build-normal",
+    "command": "cargo",
+    "args": [
+      "build",
+      "--locked",
+      "--offline",
+      "-p",
+      "open-seo-spider",
+      "--bin",
+      "open-seo-spider"
+    ],
+    "started_at": "2026-10-19T21:18:59.172Z",
+    "duration_ms": 842,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r2-20261019-build-normal.log",
+    "log_bytes": 60,
+    "log_sha256": "2a7f2bc267ab84a783d3e33a26c82086964c4f5a781be885b3a698fdde636801",
+    "frozen_inputs_sha256": "33e2356e4413c063bb3fc84048ffcf05f6f9ca1237093cddb00167e2d60be825",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "portability-native",
+    "command": "node",
+    "args": [
+      "scripts/ui-e2e.mjs",
+      "--only",
+      "table-view-portability"
+    ],
+    "started_at": "2026-10-19T21:19:09.992Z",
+    "duration_ms": 126054,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r2-20261019-portability-native.log",
+    "log_bytes": 170,
+    "log_sha256": "f4533159706d711116be91db009e409da24f9e89bf2a98a0cf301c720585b705",
+    "frozen_inputs_sha256": "33e2356e4413c063bb3fc84048ffcf05f6f9ca1237093cddb00167e2d60be825",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "format",
+    "command": "cargo",
+    "args": [
+      "fmt",
+      "--all",
+      "--check"
+    ],
+    "started_at": "2026-10-19T21:21:30.104Z",
+    "duration_ms": 3312,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r2-20261019-format.log",
+    "log_bytes": 0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "frozen_inputs_sha256": "33e2356e4413c063bb3fc84048ffcf05f6f9ca1237093cddb00167e2d60be825",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "clippy",
+    "command": "cargo",
+    "args": [
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--all-features",
+      "--locked",
+      "--offline",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "started_at": "2026-10-19T21:21:34.623Z",
+    "duration_ms": 27353,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r2-20261019-clippy.log",
+    "log_bytes": 175,
+    "log_sha256": "053ace5b39b382de130034c6fca82c6c645a71600cbc27db7bade0a551c4e9fe",
+    "frozen_inputs_sha256": "33e2356e4413c063bb3fc84048ffcf05f6f9ca1237093cddb00167e2d60be825",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "rust-app",
+    "command": "cargo",
+    "args": [
+      "test",
+      "--locked",
+      "--offline",
+      "-p",
+      "open-seo-spider",
+      "--",
+      "--test-threads=2"
+    ],
+    "started_at": "2026-10-19T21:22:21.197Z",
+    "duration_ms": 569727,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r2-20261019-rust-app.log",
+    "log_bytes": 63163,
+    "log_sha256": "72847ab1775a8ef6a2ac7af104bb0b11c3f7e4e53f6b01967c684308f9cf749a",
+    "frozen_inputs_sha256": "33e2356e4413c063bb3fc84048ffcf05f6f9ca1237093cddb00167e2d60be825",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "renderer-rust",
+    "command": "node",
+    "args": [
+      "scripts/renderer-rust-e2e.mjs"
+    ],
+    "started_at": "2026-10-19T21:31:54.375Z",
+    "duration_ms": 11188,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r2-20261019-renderer-rust.log",
+    "log_bytes": 4279,
+    "log_sha256": "a09d15faf2ffaf8edcd51236c32257de7ffea0a189e0f3a71ef6ad61123e81f7",
+    "frozen_inputs_sha256": "33e2356e4413c063bb3fc84048ffcf05f6f9ca1237093cddb00167e2d60be825",
+    "source_inputs_unchanged": true
+  }
+]

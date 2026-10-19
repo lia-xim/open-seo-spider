@@ -7104,24 +7104,75 @@
     "workflow_contracts": 32,
     "parity_status": "NOT_PROVEN"
   },
-  "last_verified_at": "2026-10-19T19:08:46.864Z",
+  "last_verified_at": "2026-10-19T21:34:57.502Z",
   "current_work": [
+    {
+      "id": "table-view-portability-20261019",
+      "title_de": "Ansichtsdefinitionen als Datei exportieren und mit Vorschau importieren",
+      "priority": -17,
+      "status": "LOCAL_R2_BOUNDED_NATIVE_PASS_SPLIT_GATES_FULL45_PUBLIC_CI_PENDING",
+      "summary_de": "Getrennte v1/v2-Definitionsdateien, vollständige ausgewählte/alle Exporte und explizite Importvorschau mit Skip/Replace/Copy sind begrenzt nativ abgenommen. R2 besteht nur die neue Suite mit vier Gruppen; R1 bleibt als fehlgeschlagener Lauf mit 16 Suiten und 15 anderen Erfolgen erhalten. Ein vollständiger aktueller Lauf mit 45 Suiten, frische öffentliche Nachfolge-CI und der gesamte ui.filter-details-export-Vertrag bleiben offen.",
+      "completed_acceptance_de": [
+        "41 reine Planertests und 75 Controllerkontrollen liegen vor; der unveränderte R1-Stand liefert insgesamt 397 Node-, 40 semantische und 22 tatsächliche Chromiumkontrollen. Diese werden ausdrücklich wiederverwendet.",
+        "R2 prüft echte ausgewählte/gesamte v1/v2-Dateien über alle enthaltenen Bereiche, unveränderliche Vorschau, explizite Skip/Replace/Copy-Konflikte, atomare Lock-/Byte-CAS-Schreibvorgänge und No-op ohne Schreiben. Import führt keine Arbeitsabfrage automatisch aus.",
+        "Vier native Gruppen: 22 JSON-Dateien, 27 tatsächliche CSV-Dateien mit 2.626 Datenzeilen und 26.260 Datenzellen, 61 vollständige DOM-Populationen, acht skriptgesteuerte echte Dateilese-Races und 36 Geometrieprüfungen bei 1440/320 px. Der unabhängige Offlineprüfer rekonstruiert sämtliche CSV-Zellen aus den Originalberichten.",
+        "Je zwei tatsächliche Quota- und fehlende-Web-Locks-Verweigerungen, unabhängige Katalogbytes, aktive Abfrage/Statusmarkierung und erhaltene Berichte; zwei natürliche native EOF0, zwei positive HTTP-410-Kontrollen und null Offline-Neuabrufe.",
+        "Frisch auf R2: normaler Build, Rustfmt, strenges Clippy und 533 App-Tests, 0 Fehler, 1 ignoriert: native_enrichment_browser_fixture wird nicht durch diese Abnahme ausgeführt. Die vier separat tatsächlich ausgeführten Renderer-Rust-Fälle sind Core-Integrationstests und führen diesen App-Opt-in nicht aus. Die 1.298 gewöhnlichen Core-Erfolge mit 0 Fehlern und 4 ignorierten Tests stammen ausdrücklich aus R4: 241 identische ausgewählte Eingaben und fünf gleiche erfasste Umgebungswerte; kein frischer vollständiger Workspace-Lauf.",
+        "Der R1-Gesamtlauf bleibt FAIL mit 15 PASS und 1 FAIL. Ausschließlich der neue Treiber wurde für die aktive Clear-Vorbedingung korrigiert; Produkt und Binary bleiben bytegleich. 15 andere E2E-Erfolge werden unverändert wiederverwendet, ohne einen gemeinsamen PASS aller 16 Suiten zu behaupten."
+      ],
+      "pending_acceptance_de": [
+        "Einen vollständigen lokalen Lauf mit 45 Suiten und die öffentliche CI des exakten Portabilitäts-Nachfolgecommits gesondert ausführen; beide sind für diesen Stand NOT_RUN.",
+        "Native portable Projektpräferenzen ergänzen; browserlokale Definitionsdateien sind keine Migration nativer Projekteinstellungen.",
+        "XLSX und verbleibende CSV-Kombinationen mit Kommas, Newlines, Formeln und vollständigen Detail-/Quell-/Zielbeziehungen E2E prüfen.",
+        "Weitere Tabellen, Operator-/Schemafälle und Spezialtabellen mit vollständigen Cursor-/Exportverträgen einzeln abnehmen.",
+        "Weitere Browser-/Quota-/Ursprungsvarianten, größere Corpora, Ressourcen-, Latenz- und Crashgrenzen sowie beliebig verzögerte Dateilesevorgänge prüfen. Kontrollierte Promise-Reihenfolgen bleiben reine Tests.",
+        "Der gesamte ui.filter-details-export-Vertrag und vollständige Herstellerparität bleiben NOT_PROVEN; der installierte Source16-Pilot wird durch diesen Beleg nicht aktualisiert."
+      ],
+      "documentation": [
+        "docs/verification/table-view-portability-20261019/README.md",
+        "docs/table-view-portability.md",
+        "docs/table-views.md",
+        "docs/table-query-expressions.md",
+        "docs/e2e-testing.md",
+        "docs/FEATURE_TODO.md"
+      ],
+      "gates": {
+        "implementation": "IMPLEMENTED_BOUNDED_V1_V2_FILE_IMPORT_EXPORT",
+        "pure_planner": "PASS41_RETAINED",
+        "controller": "PASS75_RETAINED",
+        "native_browser": "PASS_R2_ONE_SUITE4_GROUPS22_JSON27_CSV2626_ROWS26260_CELLS61_DOM8_RACES36_GEOMETRY",
+        "negative_controls": "PASS2_REAL_QUOTA2_REAL_NOLOCKS_OWNER_QUERY_MODE_CANCEL_CAS",
+        "normal_build": "PASS_FRESH_R2_BYTE_IDENTICAL",
+        "format_clippy": "PASS_FRESH_R2",
+        "App_Rust": "PASS_FRESH_R2_533_FAIL0_IGNORE1",
+        "renderer_Rust": "PASS4_FRESH_R2_SEPARATE_EXECUTION",
+        "Core_Rust": "REUSED_HISTORICAL_R4_1298_FAIL0_IGNORE4_INPUTS241_ENV5",
+        "state_semantic_browser": "REUSED_R1_397_NODE40_SEMANTIC22_CHROMIUM",
+        "prior_R1": "FAIL_ONE16_SUITE_INVOCATION15_PASS1_FAIL_RETAINED",
+        "other_E2E": "REUSED15_R1_NO_COMBINED16_PASS",
+        "full_UI45": "NOT_RUN_FOR_PORTABILITY_SUCCESSOR",
+        "new_public_CI": "NOT_RUN_FOR_THIS_SOURCE",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
     {
       "id": "table-query-expressions-20261019",
       "priority": -16,
-      "status": "LOCAL_R6_THREE_NATIVE_PASS_R4_FULL44_FAIL_PUBLIC_CI_PENDING",
-      "summary_de": "Echte verschachtelte UND/ODER-Ausdrücke und explizite browserlokale v2-Gruppenansichten sind implementiert. Drei vorab festgelegte native R6-Durchläufe bestehen mit je zwei153-Seiten-Captures,45 Tabellenbeobachtungen und9 CSV-Dateien/927 Datenzeilen. R5 besteht330 reine Tests,40 Fixturegruppen,22 Chromium-Kontrollen und den nativen Screenshotablauf. R4 besteht1831 Rust-Tests sowie4 Opt-in-Chromium-Fixtures; diese unveränderten Prüfinputs werden ausdrücklich wiederverwendet. Der R4-Gesamtlauf bleibt FAIL mit43 bestandenen Suiten und einer fehlgeschlagenen Driver-Bereitschaftsprüfung. Neue vollständige44-Suiten-CI und Herstellerparität sind offen.",
+      "status": "LOCAL_R6_PASS_R4_FAIL_RETAINED_PUBLIC_8D_RENDERER44_PASS_WINDOWS_PENDING_AT_CAPTURE",
+      "summary_de": "Echte verschachtelte UND/ODER-Ausdrücke und explizite browserlokale v2-Gruppenansichten sind implementiert. Drei vorab festgelegte native R6-Durchläufe bestehen mit je zwei153-Seiten-Captures,45 Tabellenbeobachtungen und9 CSV-Dateien/927 Datenzeilen. R5 besteht330 reine Tests,40 Fixturegruppen,22 Chromium-Kontrollen und den nativen Screenshotablauf. R4 besteht1831 Rust-Tests sowie4 Opt-in-Chromium-Fixtures; diese unveränderten Prüfinputs werden ausdrücklich wiederverwendet. Der R4-Gesamtlauf bleibt FAIL mit43 bestandenen Suiten und einer fehlgeschlagenen Driver-Bereitschaftsprüfung. Der exakte veröffentlichte Nachfolger8d9d7cc besteht anschließend alle44 UI-Suiten in einem öffentlichen Renderer-Aufruf; Ubuntu und Container sind ebenfalls erfolgreich, Windows war beim gesicherten Abruf noch aktiv. Die neue Portabilitätsfunktion hat getrennte lokale R2-Abnahme; deren vollständige45-Suiten-CI und Herstellerparität bleiben offen.",
       "completed_acceptance_de": [
         "Rekursive UND/ODER-Ausdrücke bis vier Gruppenebenen werden vollständig validiert; echte Verschachtelung, überlappende ODER-Zweige, leere/unbekannte/0-Werte, NFC und ursprüngliche doppelte URL-Beobachtungen sind geprüft.",
         "Explizite verlustlose Moduswechsel, atomare komplette Ansichtsübernahme, v2-CRUD/Reset, unveränderte v1-/Legacy-Bytes sowie Mode-/Query-/Group-/Owner-/Detached-DOM-Guards, Web Locks, Byte-CAS und Cross-Tab-Ereignisse sind tatsächlich geprüft.",
         "Je R6-Durchlauf45 vollständige DOM-Beobachtungen/19088 Zellen sowie9 echte CSV-Dateien/927 Zeilen/9270 Datenzellen samt Provenienz unabhängig rekonstruiert. Zwei natürliche native EOF0,24 Geometriekontrollen bei1440/320px,28 Assetprüfungen,2 positive410 und null Offline-Neuabrufe sind belegt.",
         "Die neue Screenshot-Testpolicy erfasst11 originale Browser-Clone-Antworten mit voller Anfrage-/Dokumentbindung und64KiB-Clonegrenze ohne HTTP-Replay. Fünf echte PNG-Dateien, ursprüngliche Negativ-/Late-Response- und Kaltstartprüfungen sowie330 reine und22 echte Chromium-Tests bestehen auf R5.",
-        "R1 invalidierter Preflight sowie R2/R3/R4 fehlgeschlagene Versuche bleiben erhalten. R6 ändert ausschließlich den Driver: tatsächliche letzte Owner-Refresh-Antwort und Datencommit abwarten. Datenorakel, erste-Seite-Assertions und ursprüngliche Fristen bleiben erhalten. Drei vorab festgelegte Wiederholungen bestehen."
+        "R1 invalidierter Preflight sowie R2/R3/R4 fehlgeschlagene Versuche bleiben erhalten. R6 ändert ausschließlich den Driver: tatsächliche letzte Owner-Refresh-Antwort und Datencommit abwarten. Datenorakel, erste-Seite-Assertions und ursprüngliche Fristen bleiben erhalten. Drei vorab festgelegte Wiederholungen bestehen.",
+        "Öffentliche CI39321867953 auf exakt8d9d7cc: alle44 UI-Suiten in einem kanonischen Renderer-Aufruf PASS. Original-API-Antworten und Joblog sind im neuen Portabilitätsbeleg separat als früherer Quellstand archiviert; R4FAIL bleibt erhalten."
       ],
       "pending_acceptance_de": [
-        "Den exakten veröffentlichten Nachfolgecommit in vollständiger44-Suiten- und Cross-Platform-CI terminal abnehmen. Drei fokussierte Durchläufe sind kein vollständiger44-Suiten-PASS.",
-        "Weitere Tabellen-/Operator-/Browserkombinationen, V2-spezifische Quota-/Korrupt-/Oversize-/NoLocks-Kombinationen, gruppierten Response-Inspector/Kaltstart und größere Ressourcen-/Latenz-Corpora gesondert prüfen.",
-        "Portable Definitionen mit Import-/Exportvorschau, native Projektpräferenzen und XLSX implementieren und E2E abnehmen. Der rein geprüfte Portabilitätsentwurf ist noch nicht in die Produktoberfläche integriert.",
+        "Die übrige Cross-Platform-CI von8d9d7cc terminal abnehmen; Windows war beim gesicherten Abruf noch aktiv. Die vollständige45-Suiten-Abnahme der neuen Portabilitätsquellen bleibt davon getrennt erforderlich.",
+        "Weitere Tabellen-/Operator-/Browserkombinationen, gruppierten Response-Inspector, zusätzliche Quota-/Korrupt-/Oversize-/Ursprungskombinationen außerhalb der begrenzten R2-Fälle und größere Ressourcen-/Latenz-Corpora gesondert prüfen.",
+        "Native Projektpräferenzen und XLSX weiter implementieren und E2E abnehmen. Portable JSON-Definitionen mit Vorschau sind nun integriert und lokal R2-geprüft; deren vollständige neue45-Suiten-/Public-CI bleibt offen.",
         "Vollständige Herstellerparität und der gesamte ui.filter-details-export-Vertrag bleiben NOT_PROVEN; der installierte Source16-Pilot wurde nicht aktualisiert."
       ],
       "documentation": [
@@ -7136,11 +7187,12 @@
         "implementation": "PASS_BOUNDED_NESTED_MAIN_TABLE_AND_SEPARATE_V2",
         "pure_tests": "PASS330_R5_REUSED_R6_UNCHANGED_INPUTS",
         "native_browser": "PASS_R6_THREE_PRESPECIFIED_5GROUPS45VIEWS9CSV927ROWS7OWNER_READINESS_EACH",
-        "full_UI44": "R4_FAIL43PASS1FAIL_RETAINED_R6_NOT_RUN_EXACT_PUBLIC_CI_REQUIRED",
+        "full_UI44": "PUBLIC_8D_PASS44_ONE_CANONICAL_RENDERER_INVOCATION_R4_FAIL_RETAINED",
         "rust": "PASS1831_0FAIL5IGNORED_PLUS4_CHROMIUM_R4_REUSED",
-        "new_public_CI": "REQUIRED_EXACT_SUCCESSOR_NOT_PROVEN",
+        "new_public_CI": "PUBLIC_8D_RENDERER44_UBUNTU_CONTAINER_PASS_WINDOWS_PENDING_AT_CAPTURE",
         "manufacturer_parity": "NOT_PROVEN",
-        "publication_source": "PASS597_RUNTIME_INPUTS_IDENTICAL_ONLY_RAW_PROOF_GIT_ATTRIBUTES_FRESH330_AND40"
+        "publication_source": "PASS597_RUNTIME_INPUTS_IDENTICAL_ONLY_RAW_PROOF_GIT_ATTRIBUTES_FRESH330_AND40",
+        "portable_definitions": "SEE_TABLE_VIEW_PORTABILITY_R2_LOCAL_BOUNDED_PASS_FULL45_PENDING"
       },
       "reference_parity": "NOT_PROVEN",
       "title_de": "Verschachtelte UND/ODER-Filter und getrennte Gruppenansichten"
@@ -10325,6 +10377,7 @@
     }
   ],
   "active_work_ids": [
+    "table-view-portability-20261019",
     "table-explorer-20261018",
     "profile-browser-response-capture-ci-20261018",
     "screenshot-viewport-artifacts-20261018",

@@ -1,0 +1,468 @@
+TAP version 13
+# Subtest: status and explicit read never auto-apply or write, and entries are section scoped
+ok 1 - status and explicit read never auto-apply or write, and entries are section scoped
+  ---
+  duration_ms: 5.2638
+  type: 'test'
+  ...
+# Subtest: portable export rereads all sections, emits exact original definition bytes and never applies or persists
+ok 2 - portable export rereads all sections, emits exact original definition bytes and never applies or persists
+  ---
+  duration_ms: 4.0008
+  type: 'test'
+  ...
+# Subtest: portable import stages every section, requires conflict choice, commits one locked catalog and never Apply
+ok 3 - portable import stages every section, requires conflict choice, commits one locked catalog and never Apply
+  ---
+  duration_ms: 7.6268
+  type: 'test'
+  ...
+# Subtest: portable identical/skip no-op preserves exact whitespace without a lock or write and keeps active badge
+ok 4 - portable identical/skip no-op preserves exact whitespace without a lock or write and keeps active badge
+  ---
+  duration_ms: 1.7532
+  type: 'test'
+  ...
+# Subtest: portable replacement matching the already edited current query clears the active unsaved badge without Apply
+ok 5 - portable replacement matching the already edited current query clears the active unsaved badge without Apply
+  ---
+  duration_ms: 2.6269
+  type: 'test'
+  ...
+# Subtest: portable re-add of an externally removed active ID compares the actual working query and never applies
+ok 6 - portable re-add of an externally removed active ID compares the actual working query and never applies
+  ---
+  duration_ms: 2.4409
+  type: 'test'
+  ...
+# Subtest: portable grouped definitions use their own planner and locked key without migration or v1 changes
+ok 7 - portable grouped definitions use their own planner and locked key without migration or v1 changes
+  ---
+  duration_ms: 8.9022
+  type: 'test'
+  ...
+# Subtest: portable copy UUID is generated once, reused while editing its name and final collisions refuse atomically
+ok 8 - portable copy UUID is generated once, reused while editing its name and final collisions refuse atomically
+  ---
+  duration_ms: 4.6493
+  type: 'test'
+  ...
+# Subtest: portable file guards refuse physical mismatch, oversized files, malformed UTF8 and read rejection before a preview/write
+ok 9 - portable file guards refuse physical mismatch, oversized files, malformed UTF8 and read rejection before a preview/write
+  ---
+  duration_ms: 0.622
+  type: 'test'
+  ...
+# Subtest: portable delayed actual file read is invalidated by query/owner/mode/selection/name/catalog/cancel without blocking its successor
+    # Subtest: query
+    ok 1 - query
+      ---
+      duration_ms: 1.0363
+      type: 'test'
+      ...
+    # Subtest: owner
+    ok 2 - owner
+      ---
+      duration_ms: 0.5233
+      type: 'test'
+      ...
+    # Subtest: mode
+    ok 3 - mode
+      ---
+      duration_ms: 0.3581
+      type: 'test'
+      ...
+    # Subtest: selection
+    ok 4 - selection
+      ---
+      duration_ms: 0.549
+      type: 'test'
+      ...
+    # Subtest: name
+    ok 5 - name
+      ---
+      duration_ms: 0.3987
+      type: 'test'
+      ...
+    # Subtest: catalog
+    ok 6 - catalog
+      ---
+      duration_ms: 0.3432
+      type: 'test'
+      ...
+    # Subtest: cancel
+    ok 7 - cancel
+      ---
+      duration_ms: 0.3673
+      type: 'test'
+      ...
+    1..7
+ok 10 - portable delayed actual file read is invalidated by query/owner/mode/selection/name/catalog/cancel without blocking its successor
+  ---
+  duration_ms: 4.7364
+  type: 'test'
+  ...
+# Subtest: portable confirmation uses exact preview bytes under held lock and query/mode/owner/cancel changes refuse writes
+    # Subtest: bytes
+    ok 1 - bytes
+      ---
+      duration_ms: 1.8951
+      type: 'test'
+      ...
+    # Subtest: query
+    ok 2 - query
+      ---
+      duration_ms: 1.3439
+      type: 'test'
+      ...
+    # Subtest: mode
+    ok 3 - mode
+      ---
+      duration_ms: 1.4971
+      type: 'test'
+      ...
+    # Subtest: owner
+    ok 4 - owner
+      ---
+      duration_ms: 1.5749
+      type: 'test'
+      ...
+    # Subtest: cancel
+    ok 5 - cancel
+      ---
+      duration_ms: 1.1913
+      type: 'test'
+      ...
+    1..5
+ok 11 - portable confirmation uses exact preview bytes under held lock and query/mode/owner/cancel changes refuse writes
+  ---
+  duration_ms: 7.8695
+  type: 'test'
+  ...
+# Subtest: portable quota/lock failures keep current bytes and a resolvable preview; corrupt/unreadable catalogs refuse export/import
+ok 12 - portable quota/lock failures keep current bytes and a resolvable preview; corrupt/unreadable catalogs refuse export/import
+  ---
+  duration_ms: 4.431
+  type: 'test'
+  ...
+# Subtest: portable export detects same-tab byte change and immediate query change while rereading before download
+ok 13 - portable export detects same-tab byte change and immediate query change while rereading before download
+  ---
+  duration_ms: 0.507
+  type: 'test'
+  ...
+# Subtest: portable DOM exposes real-read loading and Cancel before completion, clearing the file control for reselection
+ok 14 - portable DOM exposes real-read loading and Cancel before completion, clearing the file control for reselection
+  ---
+  duration_ms: 11.8254
+  type: 'test'
+  ...
+# Subtest: portable DOM renders full cross-section definitions as text, preserves copy focus and refuses detached choices
+ok 15 - portable DOM renders full cross-section definitions as text, preserves copy focus and refuses detached choices
+  ---
+  duration_ms: 5.3143
+  type: 'test'
+  ...
+# Subtest: create saves the complete explicit query and does not apply or change the working table
+ok 16 - create saves the complete explicit query and does not apply or change the working table
+  ---
+  duration_ms: 0.7782
+  type: 'test'
+  ...
+# Subtest: selection never applies; Apply commits every query field once and rebinds after intentional App invalidation
+ok 17 - selection never applies; Apply commits every query field once and rebinds after intentional App invalidation
+  ---
+  duration_ms: 0.368
+  type: 'test'
+  ...
+# Subtest: failed atomic Apply preserves the active query and exposes the concrete Result
+ok 18 - failed atomic Apply preserves the active query and exposes the concrete Result
+  ---
+  duration_ms: 0.4494
+  type: 'test'
+  ...
+# Subtest: rename and replace require explicit actions, preserve working query and never autosave edits
+ok 19 - rename and replace require explicit actions, preserve working query and never autosave edits
+  ---
+  duration_ms: 0.8422
+  type: 'test'
+  ...
+# Subtest: rename uniqueness errors preserve existing catalog bytes and working query
+ok 20 - rename uniqueness errors preserve existing catalog bytes and working query
+  ---
+  duration_ms: 0.7406
+  type: 'test'
+  ...
+# Subtest: saving the current query over its active definition clears the unsaved badge without Apply or table mutation
+ok 21 - saving the current query over its active definition clears the unsaved badge without Apply or table mutation
+  ---
+  duration_ms: 0.5835
+  type: 'test'
+  ...
+# Subtest: rename of the active definition updates its badge name without clearing unsaved query state
+ok 22 - rename of the active definition updates its badge name without clearing unsaved query state
+  ---
+  duration_ms: 0.5475
+  type: 'test'
+  ...
+# Subtest: delete of an active definition removes its badge while preserving the current working query
+ok 23 - delete of an active definition removes its badge while preserving the current working query
+  ---
+  duration_ms: 0.5058
+  type: 'test'
+  ...
+# Subtest: selection and saving, renaming or deleting another definition never rebind the active view
+ok 24 - selection and saving, renaming or deleting another definition never rebind the active view
+  ---
+  duration_ms: 2.215
+  type: 'test'
+  ...
+# Subtest: delete requires its second confirmation, removes only its selected definition and preserves query
+ok 25 - delete requires its second confirmation, removes only its selected definition and preserves query
+  ---
+  duration_ms: 0.6495
+  type: 'test'
+  ...
+# Subtest: selection, name, immediate query and owner changes invalidate delete confirmation
+    # Subtest: selection
+    ok 1 - selection
+      ---
+      duration_ms: 0.3479
+      type: 'test'
+      ...
+    # Subtest: name
+    ok 2 - name
+      ---
+      duration_ms: 0.2691
+      type: 'test'
+      ...
+    # Subtest: query
+    ok 3 - query
+      ---
+      duration_ms: 0.2721
+      type: 'test'
+      ...
+    # Subtest: owner
+    ok 4 - owner
+      ---
+      duration_ms: 0.2623
+      type: 'test'
+      ...
+    # Subtest: contract
+    ok 5 - contract
+      ---
+      duration_ms: 0.46
+      type: 'test'
+      ...
+    # Subtest: cancel
+    ok 6 - cancel
+      ---
+      duration_ms: 0.293
+      type: 'test'
+      ...
+    1..6
+ok 26 - selection, name, immediate query and owner changes invalidate delete confirmation
+  ---
+  duration_ms: 2.2322
+  type: 'test'
+  ...
+# Subtest: unread catalog and invalid/incompatible definitions refuse actions before any App commit
+ok 27 - unread catalog and invalid/incompatible definitions refuse actions before any App commit
+  ---
+  duration_ms: 0.3442
+  type: 'test'
+  ...
+# Subtest: missing crawl refuses create, replace and apply, while rename/delete/reset remain catalog actions
+ok 28 - missing crawl refuses create, replace and apply, while rename/delete/reset remain catalog actions
+  ---
+  duration_ms: 0.8345
+  type: 'test'
+  ...
+# Subtest: genuine external catalog event makes old list unusable until explicit Reload, preserving table and bytes
+ok 29 - genuine external catalog event makes old list unusable until explicit Reload, preserving table and bytes
+  ---
+  duration_ms: 0.4997
+  type: 'test'
+  ...
+# Subtest: same-tab byte conflict refuses original catalog save even without a storage event
+ok 30 - same-tab byte conflict refuses original catalog save even without a storage event
+  ---
+  duration_ms: 0.4989
+  type: 'test'
+  ...
+# Subtest: pending mutation is invalidated by immediate name, selection, query, owner or contract change before lock acquisition
+    # Subtest: name
+    ok 1 - name
+      ---
+      duration_ms: 0.5336
+      type: 'test'
+      ...
+    # Subtest: selection
+    ok 2 - selection
+      ---
+      duration_ms: 0.6878
+      type: 'test'
+      ...
+    # Subtest: query
+    ok 3 - query
+      ---
+      duration_ms: 0.4692
+      type: 'test'
+      ...
+    # Subtest: owner
+    ok 4 - owner
+      ---
+      duration_ms: 0.4334
+      type: 'test'
+      ...
+    # Subtest: contract
+    ok 5 - contract
+      ---
+      duration_ms: 0.4712
+      type: 'test'
+      ...
+    1..5
+ok 31 - pending mutation is invalidated by immediate name, selection, query, owner or contract change before lock acquisition
+  ---
+  duration_ms: 2.8681
+  type: 'test'
+  ...
+# Subtest: stale completion never clears a newer pending operation or its accepted name
+ok 32 - stale completion never clears a newer pending operation or its accepted name
+  ---
+  duration_ms: 0.5281
+  type: 'test'
+  ...
+# Subtest: missing or busy locks still allow read/Apply and visibly refuse mutations
+    # Subtest: null
+    ok 1 - null
+      ---
+      duration_ms: 0.7162
+      type: 'test'
+      ...
+    # Subtest: busy
+    ok 2 - busy
+      ---
+      duration_ms: 0.3589
+      type: 'test'
+      ...
+    1..2
+ok 33 - missing or busy locks still allow read/Apply and visibly refuse mutations
+  ---
+  duration_ms: 1.243
+  type: 'test'
+  ...
+# Subtest: corrupt or unsupported bytes stay untouched until exact observed second reset confirmation
+    # Subtest: {broken
+    ok 1 - {broken
+      ---
+      duration_ms: 0.2258
+      type: 'test'
+      ...
+    # Subtest: {"engine":"open-seo-spider/table-views-v1","version":17,"entries":[]}
+    ok 2 - {"engine":"open-seo-spider/table-views-v1","version":17,"entries":[]}
+      ---
+      duration_ms: 0.1368
+      type: 'test'
+      ...
+    1..2
+ok 34 - corrupt or unsupported bytes stay untouched until exact observed second reset confirmation
+  ---
+  duration_ms: 0.5842
+  type: 'test'
+  ...
+# Subtest: reset confirmation refuses query changes and foreign bytes without removing anything
+    # Subtest: query
+    ok 1 - query
+      ---
+      duration_ms: 0.199
+      type: 'test'
+      ...
+    # Subtest: bytes
+    ok 2 - bytes
+      ---
+      duration_ms: 0.1302
+      type: 'test'
+      ...
+    # Subtest: cancel
+    ok 3 - cancel
+      ---
+      duration_ms: 0.0993
+      type: 'test'
+      ...
+    # Subtest: name
+    ok 4 - name
+      ---
+      duration_ms: 0.102
+      type: 'test'
+      ...
+    1..4
+ok 35 - reset confirmation refuses query changes and foreign bytes without removing anything
+  ---
+  duration_ms: 0.8249
+  type: 'test'
+  ...
+# Subtest: pending reset observes immediate query revision and releases only its own ticket
+ok 36 - pending reset observes immediate query revision and releases only its own ticket
+  ---
+  duration_ms: 0.1631
+  type: 'test'
+  ...
+# Subtest: unavailable read cannot arm recovery using previously observed bytes
+ok 37 - unavailable read cannot arm recovery using previously observed bytes
+  ---
+  duration_ms: 0.2754
+  type: 'test'
+  ...
+# Subtest: inactive query mode refuses all catalog mutations and Apply before snapshots or native commits
+ok 38 - inactive query mode refuses all catalog mutations and Apply before snapshots or native commits
+  ---
+  duration_ms: 0.3468
+  type: 'test'
+  ...
+# Subtest: query mode participates in the pending lock guard even without a query revision callback
+    # Subtest: rename
+    ok 1 - rename
+      ---
+      duration_ms: 0.4634
+      type: 'test'
+      ...
+    # Subtest: reset
+    ok 2 - reset
+      ---
+      duration_ms: 0.2181
+      type: 'test'
+      ...
+    1..2
+ok 39 - query mode participates in the pending lock guard even without a query revision callback
+  ---
+  duration_ms: 0.8506
+  type: 'test'
+  ...
+# Subtest: explorer draft/install retain deep-copy ownership and do not render, notify, save or apply captured rows
+ok 40 - explorer draft/install retain deep-copy ownership and do not render, notify, save or apply captured rows
+  ---
+  duration_ms: 3.0045
+  type: 'test'
+  ...
+# Subtest: invalid explorer install rejects every partial payload before changing accepted rules or columns
+ok 41 - invalid explorer install rejects every partial payload before changing accepted rules or columns
+  ---
+  duration_ms: 2.0461
+  type: 'test'
+  ...
+# Subtest: manual rule/clear/sort callbacks invalidate the named transaction immediately before accepted query mutation
+ok 42 - manual rule/clear/sort callbacks invalidate the named transaction immediately before accepted query mutation
+  ---
+  duration_ms: 2.2234
+  type: 'test'
+  ...
+1..42
+# tests 75
+# suites 0
+# pass 75
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 191.406

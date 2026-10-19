@@ -1,0 +1,62 @@
+{
+  "kind": "independent_table_view_portability_controller_source_review",
+  "result": "NO_P1_P2_FINDING_WITHIN_TARGETED_SOURCE_SCOPE",
+  "created_at": "2026-10-19T21:01:39.324Z",
+  "inputs": [
+    {
+      "path": "web/table-views-ui.js",
+      "bytes": 34741,
+      "sha256": "a9811ab4208379605cfd5911191bf8f248d1471c5ba5c9d5722df12722ed3884"
+    },
+    {
+      "path": "web/verification/table-views-ui.test.cjs",
+      "bytes": 46016,
+      "sha256": "60b393b80b809f329dfee247b4c9df45d75feda19beae226c0102bdd175a3ae6"
+    },
+    {
+      "path": "web/table-view-portability.js",
+      "bytes": 11478,
+      "sha256": "7cd7a0d8184e64121efeb25e737d1984affcb2696b26bd064656ffb8e40f06c2"
+    },
+    {
+      "path": "web/table-view-storage.js",
+      "bytes": 6701,
+      "sha256": "ad46c46081adedd06749c312828def890db8adb1c37892612c74cda471e2d30e"
+    },
+    {
+      "path": "web/table-view-library.js",
+      "bytes": 15659,
+      "sha256": "5f8d3d84c84d5a4b0945d7c5ffd8bc7dbf652c235ad6cd1b66d59b1d4ef692b4"
+    }
+  ],
+  "author_pure_proof": {
+    "path": "artifacts/table-view-portability-ui-pure-proof-20261019.json",
+    "bytes": 3270,
+    "sha256": "4506e6fdddc8b1730943c3fd87dd2b2c62aad787d244c863d274870b50d04540"
+  },
+  "planner_pure_proof": {
+    "path": "artifacts/table-view-portability-product-20261019-pure-proof.json",
+    "bytes": 4205,
+    "sha256": "d295851e82adf533e61a4266deabb3e7889594e27f292d9cb25e523661d9d5f0"
+  },
+  "reviewed_contracts": [
+    "One planner per UI controller; V1/V2 factory/version injection and immutable issued preview remain in that planner. Null-prototype empty choices work with prepareImport.",
+    "File size is checked before arrayBuffer; file reader must return an actual ArrayBuffer of exactly the selected physical size. Guard checked before read, immediately after await/rejection and before preview acceptance; catalog raw reread after await.",
+    "New file selection/cancel/query/owner/contract/mode/catalog changes invalidate the operation; stale completions release only their own ticket and cannot overwrite a newer operation/preview.",
+    "Confirmation prepares the complete catalog again, rereads planned.expectedRaw, then changed plans call the existing store.mutate once with immutable entries and the same guarded operation. Existing version-specific lock and final byteCAS/guard remain storage-owned.",
+    "No-op confirm rereads exact observed bytes but calls no storage write/lock. Exact whitespace/null raw bytes remain untouched.",
+    "Export validates a fresh catalog snapshot, creates the Blob, and checks exact raw bytes plus operation guard again before synchronous download; no storage mutation or implicit Apply.",
+    "Imported catalog metadata never calls hooks.apply or query mutation. Existing active-ID replacement/re-add compares a complete library.makeEntry of the actual working snapshot, including section/schema/filter/semantics/search/predicate/sort/projection; modified badge is derived from complete equality.",
+    "Dynamic conflict controls require connected DOM, current availability, exact import token and stamp; new controls replace old nodes. Copy UUID is stable while editing its name. File input clears for reselection; static binds check connected/current element and mode availability."
+  ],
+  "findings": [],
+  "limitations": [
+    "Source-only independent review; author75pure count is referenced by its existing raw-bound proof, not rerun by this reviewer.",
+    "No real browser Filechooser/read/download/DOM focus or native E2E execution is established here.",
+    "No real WebLock/quota/CAS/storage-event/cold/runtime result is established by this source review; those remain Root/native gates.",
+    "Own-data/file contracts are reviewed, not a sandbox against arbitrary JavaScript Proxy traps or malicious hook implementations.",
+    "No full regression, current publicCI, manufacturerparity or overall ui.filter-details-export completion claim."
+  ],
+  "source_edits": false,
+  "browser_native_cargo_execution": false
+}

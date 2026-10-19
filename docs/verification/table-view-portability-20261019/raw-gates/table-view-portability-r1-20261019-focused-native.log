@@ -1,0 +1,35 @@
+PASS dashboard (fixture)
+PASS pause-controls (fixture)
+PASS recrawl-controls (fixture)
+PASS policy-controls (fixture)
+PASS content-controls (fixture)
+PASS resource-controls (fixture)
+PASS resource-ledger (fixture)
+PASS resource-contract (fixture)
+PASS comparison-controls (fixture)
+PASS configuration-profiles (owned-native)
+PASS configuration-profile-catalog (owned-native)
+PASS screenshot-viewport (owned-native)
+PASS table-explorer (owned-native)
+PASS table-named-views (owned-native)
+PASS table-expressions (owned-native)
+FAIL table-view-portability (owned-native)
+Evidence: E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\artifacts\table-view-portability-r1-20261019-focused16
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: table-view-portability: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+3 !== 0
+
+    at clearQuery (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\ui-table-view-portability-live.cjs:155:236)
+    at async mode (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\ui-table-view-portability-live.cjs:156:99)
+    at async configureMain (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\ui-table-view-portability-live.cjs:161:57)
+    at async versionCases (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\ui-table-view-portability-live.cjs:180:28)
+    at async E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\ui-table-view-portability-live.cjs:290:31
+
+    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:125:53
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.15.0

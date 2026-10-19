@@ -1,0 +1,90 @@
+{
+  "result": "PASS_BOUNDED_INDEPENDENT_PURE_AUTHORING_DRAFT_REVIEW",
+  "reviewed_at": "2026-10-19T20:26:10.808Z",
+  "source": {
+    "path": "artifacts/table-view-portability-staged-20261019/table-view-portability.cjs",
+    "bytes": 9585,
+    "sha256": "217942775bedf449255e75b96fd935ce1f60bf4316ece1dc4153cf3bfad016db"
+  },
+  "author_proof": {
+    "path": "artifacts/table-view-portability-staged-20261019/pure-proof.json",
+    "bytes": 5308,
+    "sha256": "6de3347c519821f3cfa08c7628e15d6ac4c7ed22bc509056623eb0525d2606a7"
+  },
+  "independent_controls": {
+    "count": 8,
+    "pass": 8,
+    "fail": 0,
+    "cases": [
+      {
+        "name": "v1 two independent copy choices cannot share one fresh ID",
+        "result": "PASS"
+      },
+      {
+        "name": "v1 skipped incoming ID remains reserved against a different copy",
+        "result": "PASS"
+      },
+      {
+        "name": "v1 copy-name and export-selection getters are refused without execution",
+        "result": "PASS"
+      },
+      {
+        "name": "v1 physical byte budget includes accepted initial BOM",
+        "result": "PASS"
+      },
+      {
+        "name": "v2 two independent copy choices cannot share one fresh ID",
+        "result": "PASS"
+      },
+      {
+        "name": "v2 skipped incoming ID remains reserved against a different copy",
+        "result": "PASS"
+      },
+      {
+        "name": "v2 copy-name and export-selection getters are refused without execution",
+        "result": "PASS"
+      },
+      {
+        "name": "v2 physical byte budget includes accepted initial BOM",
+        "result": "PASS"
+      }
+    ]
+  },
+  "dependency_pins": [
+    {
+      "path": "web/table-explorer.js",
+      "bytes": 23377,
+      "sha256": "2ad4188750606a48446033ace6627c49d619b8c2ce8aa4b91147793c7cb068ee"
+    },
+    {
+      "path": "web/table-view-library.js",
+      "bytes": 15659,
+      "sha256": "5f8d3d84c84d5a4b0945d7c5ffd8bc7dbf652c235ad6cd1b66d59b1d4ef692b4"
+    },
+    {
+      "path": "web/table-view-storage.js",
+      "bytes": 6701,
+      "sha256": "ad46c46081adedd06749c312828def890db8adb1c37892612c74cda471e2d30e"
+    }
+  ],
+  "findings": [],
+  "review_conclusions": [
+    "Input is copied from actual typed-array internal slots before fatal UTF8 decoding; one leading BOM is counted physically and stripped explicitly; no automatic mode/version conversion.",
+    "Whole catalogs are decoded/validated before preview and again before preparation; malformed later entries, duplicate incoming IDs/NFC names, 32-entry/entry-byte/catalog-byte violations never return a partial plan.",
+    "Opaque planner-local WeakMap previews plus immutable complete metadata retain exact expectedRaw; caller resolutions are snapshotted as own data, and the final merged catalog is revalidated.",
+    "Explicit skip/replace/copy semantics are consistent: replacements retain destination ID/display name, foreign/ambiguous targets refuse, duplicate replacement target refuses, and copy IDs are reserved across both full catalogs and earlier copies.",
+    "No side-effect API, fetch, browser storage, cooperative lock, CAS, native mutation, implied Apply or replay exists in this module."
+  ],
+  "boundaries": [
+    "The author32pure proof was inspected and its exact module pin checked; these8additionalcontrols are independently executed, not an E2E or full-regression run.",
+    "Duplicate JSON object property names follow existing library JSON.parse last-key semantics; the draft explicitly reuses that parser. No separate duplicate-key rejection was promised or added. Duplicate catalog identities/names are refused.",
+    "Reflective JavaScript Proxy traps can run while inspecting caller objects; the supported contract is own data from ordinary/null-prototype objects. The reviewed getter controls do not imply arbitrary Proxy trap sandboxing.",
+    "A reusable prepared preview is data only. Future controller must still bind file/owner/query/mode generation, reread exact current storage bytes, show confirmation, and pass expectedRaw through the existing lock/CAS adapter.",
+    "No real File picker, downloads, browser integration, lock/quota/storage-event races, cold reopen, native runtime, CI or manufacturer parity is established."
+  ],
+  "source_edits": false,
+  "author_draft_modified": false,
+  "product_integration": "NOT_IMPLEMENTED",
+  "E2E": "NOT_PROVEN",
+  "manufacturer_parity": "NOT_PROVEN"
+}

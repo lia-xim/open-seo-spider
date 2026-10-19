@@ -1,0 +1,178 @@
+{
+  "kind": "redesign_UI_E2E",
+  "results": [
+    {
+      "name": "dashboard",
+      "script": "ui-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 9253
+    },
+    {
+      "name": "pause-controls",
+      "script": "ui-crawl-control-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 7397
+    },
+    {
+      "name": "recrawl-controls",
+      "script": "ui-selected-recrawl-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 6556
+    },
+    {
+      "name": "policy-controls",
+      "script": "ui-policy-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 9168
+    },
+    {
+      "name": "content-controls",
+      "script": "ui-content-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 24212
+    },
+    {
+      "name": "resource-controls",
+      "script": "ui-resource-discovery-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 14854
+    },
+    {
+      "name": "resource-ledger",
+      "script": "ui-resource-ledger-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 9729
+    },
+    {
+      "name": "resource-contract",
+      "script": "ui-resource-contract-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 11508
+    },
+    {
+      "name": "comparison-controls",
+      "script": "ui-saved-comparison-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 4400
+    },
+    {
+      "name": "configuration-profiles",
+      "script": "ui-config-profiles-live.cjs",
+      "kind": "owned-native",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 9475
+    },
+    {
+      "name": "configuration-profile-catalog",
+      "script": "ui-config-profile-catalog-live.cjs",
+      "kind": "owned-native",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 9969
+    },
+    {
+      "name": "screenshot-viewport",
+      "script": "ui-screenshot-viewport-live.cjs",
+      "kind": "owned-native",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 15523
+    },
+    {
+      "name": "table-explorer",
+      "script": "ui-table-explorer-live.cjs",
+      "kind": "owned-native",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 20312
+    },
+    {
+      "name": "table-named-views",
+      "script": "ui-table-views-live.cjs",
+      "kind": "owned-native",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 53571
+    },
+    {
+      "name": "table-expressions",
+      "script": "ui-table-expressions-live.cjs",
+      "kind": "owned-native",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 28941
+    },
+    {
+      "name": "table-view-portability",
+      "script": "ui-table-view-portability-live.cjs",
+      "kind": "owned-native",
+      "code": 1,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 15348
+    }
+  ],
+  "app_origin": "http://127.0.0.1:55858",
+  "shutdown": {
+    "code": 0,
+    "signal": null
+  },
+  "binary": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+  "binary_sha256": "eef4813a7d27156066585232ae8b2ee66286c29ae521c46bc9980679c25e097d",
+  "binary_unchanged": true,
+  "tracked_sources_unchanged": true,
+  "changed": [],
+  "failure": "Error: table-view-portability: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n3 !== 0\n\n    at clearQuery (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:155:236)\n    at async mode (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:156:99)\n    at async configureMain (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:161:57)\n    at async versionCases (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:180:28)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-view-portability-live.cjs:290:31\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:125:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "complete": false,
+  "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+}

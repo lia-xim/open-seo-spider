@@ -1,0 +1,204 @@
+[
+  {
+    "label": "build-normal",
+    "command": "cargo",
+    "args": [
+      "build",
+      "--locked",
+      "--offline",
+      "-p",
+      "open-seo-spider",
+      "--bin",
+      "open-seo-spider"
+    ],
+    "started_at": "2026-10-19T19:33:24.392Z",
+    "duration_ms": 779,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-build-normal.log",
+    "log_bytes": 60,
+    "log_sha256": "35fc72bacfe065673ddba4b566b6467dc5b94a887c640891f8cbf1f5e1028448",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "states",
+    "command": "node",
+    "args": [
+      "--test",
+      "web/verification/serp-state-race.test.cjs",
+      "web/verification/robots-input-state.test.cjs",
+      "web/verification/list-import-state.test.mjs",
+      "web/verification/api-enrichment-state.test.cjs",
+      "web/verification/accessibility-state.test.cjs",
+      "web/verification/dashboard-segments-state.test.cjs",
+      "web/verification/config-profiles-state.test.cjs",
+      "web/verification/config-profile-catalog-state.test.cjs",
+      "web/verification/screenshot-state.test.cjs",
+      "web/verification/profile-response-capture.test.cjs",
+      "web/verification/table-explorer-state.test.cjs",
+      "web/verification/table-view-library.test.cjs",
+      "web/verification/table-view-storage.test.cjs",
+      "web/verification/table-views-ui.test.cjs",
+      "web/verification/table-expression-state.test.cjs",
+      "web/verification/expression-view-state.test.cjs",
+      "web/verification/table-expression-ui.test.cjs"
+    ],
+    "started_at": "2026-10-19T19:33:25.586Z",
+    "duration_ms": 614,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-states.log",
+    "log_bytes": 33787,
+    "log_sha256": "d0522d0c7c13c10383275b8fad03c83b1910981fbfd16d6a108974287f6ebbcc",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "semantic",
+    "command": "node",
+    "args": [
+      "scripts/check-ui-fixtures.mjs"
+    ],
+    "started_at": "2026-10-19T19:33:26.380Z",
+    "duration_ms": 533,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-semantic.log",
+    "log_bytes": 1068,
+    "log_sha256": "499c31e1e863a6af1e3633f7176b2de8307d91d99265462a3d14be8539d82ce8",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "targeted-native",
+    "command": "node",
+    "args": [
+      "scripts/ui-e2e.mjs",
+      "--only",
+      "table-expressions"
+    ],
+    "started_at": "2026-10-19T19:33:27.079Z",
+    "duration_ms": 34095,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-targeted-native.log",
+    "log_bytes": 161,
+    "log_sha256": "ae747377937ed23efd7e8e869875897353f41a544d81bebe954bc827ebe973c6",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "format",
+    "command": "cargo",
+    "args": [
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "started_at": "2026-10-19T19:34:34.213Z",
+    "duration_ms": 2739,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-format.log",
+    "log_bytes": 0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "clippy",
+    "command": "cargo",
+    "args": [
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--all-features",
+      "--locked",
+      "--offline",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "started_at": "2026-10-19T19:34:37.130Z",
+    "duration_ms": 23593,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-clippy.log",
+    "log_bytes": 175,
+    "log_sha256": "7c36f469637b286c040fee5d090e08edb54c985fb4abe1cb91819d3f2670d68a",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "rust-workspace",
+    "command": "cargo",
+    "args": [
+      "test",
+      "--workspace",
+      "--locked",
+      "--offline",
+      "--",
+      "--test-threads=2"
+    ],
+    "started_at": "2026-10-19T19:35:00.901Z",
+    "duration_ms": 1046107,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-rust-workspace.log",
+    "log_bytes": 209614,
+    "log_sha256": "3d25b40e6a4790d4eb7ca37d1c6d13db6067f11372bc3555e00da0958cfaa977",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "renderer-rust",
+    "command": "node",
+    "args": [
+      "scripts/renderer-rust-e2e.mjs"
+    ],
+    "started_at": "2026-10-19T19:52:27.256Z",
+    "duration_ms": 8973,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-renderer-rust.log",
+    "log_bytes": 4279,
+    "log_sha256": "510bff694f68148cb5205548bb11642e508e910bb3bb5bfde7ef92099217bd15",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "profile-capture-browser",
+    "command": "node",
+    "args": [
+      "--test",
+      "web/verification/profile-response-capture-browser.test.cjs"
+    ],
+    "started_at": "2026-10-19T19:52:36.477Z",
+    "duration_ms": 3229,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-profile-capture-browser.log",
+    "log_bytes": 2057,
+    "log_sha256": "ef493afc52830161444ccb45610778042434573e6280b2bf9f52ee41b1cb6c56",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "full-ui44",
+    "command": "node",
+    "args": [
+      "scripts/ui-e2e.mjs"
+    ],
+    "started_at": "2026-10-19T19:52:39.967Z",
+    "duration_ms": 2083580,
+    "code": 1,
+    "signal": null,
+    "log": "artifacts/table-expressions-r4-20261019-full-ui44.log",
+    "log_bytes": 2233,
+    "log_sha256": "d8491b1aa69301a6e102584918d2d666026105ced0731b3399e662cb0949be58",
+    "frozen_inputs_sha256": "832af3b3a682344e245f4af606434a9fb6845ddf5885b59b9edd7a9b4d351fd2",
+    "source_inputs_unchanged": true
+  }
+]

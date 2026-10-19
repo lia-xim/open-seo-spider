@@ -1,0 +1,109 @@
+[
+  {
+    "label": "build-normal",
+    "command": "cargo",
+    "args": [
+      "build",
+      "--locked",
+      "--offline",
+      "-p",
+      "open-seo-spider",
+      "--bin",
+      "open-seo-spider"
+    ],
+    "started_at": "2026-10-19T21:10:53.690Z",
+    "duration_ms": 50435,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r1-20261019-build-normal.log",
+    "log_bytes": 175,
+    "log_sha256": "14bc8b29f34ce579bf8e54911c6ce36f149f781e51104e9c7fad0b6803e8bd10",
+    "frozen_inputs_sha256": "ec02a5f26d8163b71e60ece846520b823181fd926f4a17ae5094745e051df5c1",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "states",
+    "command": "node",
+    "args": [
+      "--test",
+      "web/verification/serp-state-race.test.cjs",
+      "web/verification/robots-input-state.test.cjs",
+      "web/verification/list-import-state.test.mjs",
+      "web/verification/api-enrichment-state.test.cjs",
+      "web/verification/accessibility-state.test.cjs",
+      "web/verification/dashboard-segments-state.test.cjs",
+      "web/verification/config-profiles-state.test.cjs",
+      "web/verification/config-profile-catalog-state.test.cjs",
+      "web/verification/screenshot-state.test.cjs",
+      "web/verification/profile-response-capture.test.cjs",
+      "web/verification/table-explorer-state.test.cjs",
+      "web/verification/table-view-library.test.cjs",
+      "web/verification/table-view-storage.test.cjs",
+      "web/verification/table-views-ui.test.cjs",
+      "web/verification/table-expression-state.test.cjs",
+      "web/verification/expression-view-state.test.cjs",
+      "web/verification/table-expression-ui.test.cjs",
+      "web/verification/table-view-portability.test.cjs"
+    ],
+    "started_at": "2026-10-19T21:11:49.004Z",
+    "duration_ms": 733,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r1-20261019-states.log",
+    "log_bytes": 40708,
+    "log_sha256": "91ac7d3866bd41f9959262ec65824cd1d3f70eec9464cdacc711f64172804d22",
+    "frozen_inputs_sha256": "ec02a5f26d8163b71e60ece846520b823181fd926f4a17ae5094745e051df5c1",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "semantic",
+    "command": "node",
+    "args": [
+      "scripts/check-ui-fixtures.mjs"
+    ],
+    "started_at": "2026-10-19T21:11:53.614Z",
+    "duration_ms": 499,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r1-20261019-semantic.log",
+    "log_bytes": 1068,
+    "log_sha256": "e12015a393e6fb5902454aa1225c28ad61498446df0be7b736a579e40b0c3fb6",
+    "frozen_inputs_sha256": "ec02a5f26d8163b71e60ece846520b823181fd926f4a17ae5094745e051df5c1",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "profile-capture-browser",
+    "command": "node",
+    "args": [
+      "--test",
+      "web/verification/profile-response-capture-browser.test.cjs"
+    ],
+    "started_at": "2026-10-19T21:11:55.264Z",
+    "duration_ms": 5052,
+    "code": 0,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r1-20261019-profile-capture-browser.log",
+    "log_bytes": 2823,
+    "log_sha256": "345673a28df781eb0a670b2d3c06924154e9641e8fda3a6aced723a70c70cee1",
+    "frozen_inputs_sha256": "ec02a5f26d8163b71e60ece846520b823181fd926f4a17ae5094745e051df5c1",
+    "source_inputs_unchanged": true
+  },
+  {
+    "label": "focused-native",
+    "command": "node",
+    "args": [
+      "scripts/ui-e2e.mjs",
+      "--only",
+      "dashboard,pause-controls,recrawl-controls,policy-controls,content-controls,resource-controls,resource-ledger,resource-contract,comparison-controls,table-explorer,table-named-views,table-expressions,table-view-portability,configuration-profiles,configuration-profile-catalog,screenshot-viewport"
+    ],
+    "started_at": "2026-10-19T21:12:04.237Z",
+    "duration_ms": 258080,
+    "code": 1,
+    "signal": null,
+    "log": "artifacts/table-view-portability-r1-20261019-focused-native.log",
+    "log_bytes": 1839,
+    "log_sha256": "d85359bedbfa07e3ab3846d7275a7049056a4d2de72a43a353b8d7a842320886",
+    "frozen_inputs_sha256": "ec02a5f26d8163b71e60ece846520b823181fd926f4a17ae5094745e051df5c1",
+    "source_inputs_unchanged": true
+  }
+]
