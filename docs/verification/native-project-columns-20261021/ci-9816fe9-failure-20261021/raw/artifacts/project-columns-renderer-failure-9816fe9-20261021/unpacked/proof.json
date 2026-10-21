@@ -1,0 +1,108 @@
+{
+  "kind": "redesign_UI_E2E",
+  "results": [
+    {
+      "name": "dashboard",
+      "script": "ui-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 9724
+    },
+    {
+      "name": "pause-controls",
+      "script": "ui-crawl-control-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 7240
+    },
+    {
+      "name": "recrawl-controls",
+      "script": "ui-selected-recrawl-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 6288
+    },
+    {
+      "name": "policy-controls",
+      "script": "ui-policy-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 8280
+    },
+    {
+      "name": "content-controls",
+      "script": "ui-content-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 27038
+    },
+    {
+      "name": "resource-controls",
+      "script": "ui-resource-discovery-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 19900
+    },
+    {
+      "name": "resource-ledger",
+      "script": "ui-resource-ledger-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 11217
+    },
+    {
+      "name": "resource-contract",
+      "script": "ui-resource-contract-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 14493
+    },
+    {
+      "name": "comparison-controls",
+      "script": "ui-saved-comparison-smoke.cjs",
+      "kind": "fixture",
+      "code": 1,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 3171
+    }
+  ],
+  "app_origin": "http://127.0.0.1:46567",
+  "shutdown": {
+    "code": 0,
+    "signal": null
+  },
+  "binary": "/home/runner/work/open-seo-spider/open-seo-spider/target/debug/open-seo-spider",
+  "binary_sha256": "65fa5f4333c36d77847fe262f040770bc11239ce08ffeeedbaee3435325644ff",
+  "binary_unchanged": true,
+  "tracked_sources_unchanged": true,
+  "changed": [],
+  "failure": "Error: comparison-controls: AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'Unexpected GET /project-columns.js'\n+ ]\n- []\n\n    at /home/runner/work/open-seo-spider/open-seo-spider/web/verification/ui-saved-comparison-smoke.cjs:65:70\n\n    at file:///home/runner/work/open-seo-spider/open-seo-spider/scripts/ui-e2e.mjs:130:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "complete": false,
+  "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+}

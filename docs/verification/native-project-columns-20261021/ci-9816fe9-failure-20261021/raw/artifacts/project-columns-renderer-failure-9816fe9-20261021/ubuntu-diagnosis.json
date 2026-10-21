@@ -1,0 +1,23 @@
+{
+  "kind": "exact9816_Ubuntu_unix_fixture_cleanup_failure",
+  "result": "ORIGINAL_UBUNTU_APP_TEST_FAIL_RETAINED",
+  "commit": "9816fe9c9f77ea93ec6346eb46cbc8ff91458848",
+  "run": 39654844791,
+  "job": 119412267330,
+  "test": "server::table_preferences::tests::nofollow_refuses_sidecar_and_parent_symlinks_without_touching_target",
+  "source_line": 751,
+  "App": {
+    "passed": 551,
+    "failed": 1,
+    "ignored": 1
+  },
+  "actual_error": "remove_dir unwrap: DirectoryNotEmpty OS39",
+  "source_contract_inference": "mutate creates the intentionally persistent id.lock before read_snapshot rejects the symlink. The Unix negative fixture removes its doc symlink but then removes the nonempty directory while that test-owned lock remains. This is fixture cleanup, not evidence that nofollow allowed touching the external target.",
+  "source": {
+    "path": "committed-table_preferences_tests.rs",
+    "bytes": 31359,
+    "sha256": "81cca1ce4c54af8e8d51e73f28b24091ab6a576b940b2f96fcd572ddbc7519fa"
+  },
+  "ubuntu_log_sha256": "09004d331988865e5adae07d26c235fb87d916c4b0531467085cf0a4748f5dfb",
+  "scope": "Original public Ubuntu failure only. No local Unix execution, repair acceptance, native50 suite, or whole-run terminal result inferred here."
+}

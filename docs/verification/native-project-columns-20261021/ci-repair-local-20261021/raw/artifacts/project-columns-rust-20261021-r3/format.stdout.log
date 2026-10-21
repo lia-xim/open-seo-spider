@@ -1,0 +1,12 @@
+Diff in \\?\E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\crates\app\src\server\table_preferences_tests.rs:752:
+         .unwrap()
+         .map(|entry| entry.unwrap().file_name())
+         .collect::<Vec<_>>();
+-    assert_eq!(remaining, vec![std::ffi::OsString::from(format!("{id}.lock"))]);
++    assert_eq!(
++        remaining,
++        vec![std::ffi::OsString::from(format!("{id}.lock"))]
++    );
+     std::fs::remove_file(directory.path().join(DIRECTORY).join(format!("{id}.lock"))).unwrap();
+     std::fs::remove_dir(directory.path().join(DIRECTORY)).unwrap();
+     symlink(outside.path(), directory.path().join(DIRECTORY)).unwrap();

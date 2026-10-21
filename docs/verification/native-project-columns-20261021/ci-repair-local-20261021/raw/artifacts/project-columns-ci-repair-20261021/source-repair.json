@@ -1,0 +1,15 @@
+{
+  "kind": "exact_test_only_cleanup_insertion_not_executed",
+  "before_sha256": "81cca1ce4c54af8e8d51e73f28b24091ab6a576b940b2f96fcd572ddbc7519fa",
+  "after_sha256": "ccc4fd0d66f7ddc96b997d2b1cbcc5f34a37dd9e997d683692139d29f7b34f72",
+  "original_bytes": 31359,
+  "modified_bytes": 31705,
+  "only_test": "fn nofollow_refuses_sidecar_and_parent_symlinks_without_touching_target()",
+  "added_lines": 6,
+  "preserved_original_test_bytes_in_order": true,
+  "product_code_changes": 0,
+  "tests_run": 0,
+  "cargo_runs": 0,
+  "native_runs": 0,
+  "scope": "After refusing the sidecar symlink, the test removes its own symlink, proves the only remaining directory entry is its stable UUID lock, removes that exact owned lock, then continues the unchanged parent-symlink refusal and outside-target assertions."
+}

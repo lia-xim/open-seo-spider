@@ -1,0 +1,181 @@
+{
+  "kind": "finite_local_project_columns_CI_repair_receipt",
+  "result": "PASS_LOCAL_COMPARISON_R2_AND_WINDOWS_APP_R4_ONLY",
+  "source_commit_before_repairs": "9816fe9c9f77ea93ec6346eb46cbc8ff91458848",
+  "comparison_attempts": [
+    {
+      "attempt": "R1",
+      "wrapper_complete": false,
+      "wrapper_exit": {
+        "code": 1,
+        "signal": null
+      },
+      "coordinator_complete": false,
+      "coordinator_changed": [
+        "crates/app/src/server/table_preferences_tests.rs"
+      ],
+      "coordinator_shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "inner_fixture_result": "PASS",
+      "inner_checks": 34,
+      "fixture_scope": "isolated Work-overlay browser/API fixture; no actual Rust comparison, SQL persistence, CI, installed runtime or vendor-parity proof",
+      "binary_sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9"
+    },
+    {
+      "attempt": "R2",
+      "wrapper_complete": true,
+      "wrapper_exit": {
+        "code": 0,
+        "signal": null
+      },
+      "coordinator_complete": true,
+      "coordinator_changed": [],
+      "coordinator_shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "inner_fixture_result": "PASS",
+      "inner_checks": 34,
+      "fixture_scope": "isolated Work-overlay browser/API fixture; no actual Rust comparison, SQL persistence, CI, installed runtime or vendor-parity proof",
+      "binary_sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9"
+    }
+  ],
+  "rust_R3": {
+    "result": "FAIL_FORMAT_APP_BUILD_CLIPPY_NOT_REACHED",
+    "original_complete": false,
+    "original_results": [
+      {
+        "name": "format",
+        "args": [
+          "fmt",
+          "--all",
+          "--check"
+        ],
+        "code": 1,
+        "signal": null,
+        "duration_ms": 3115
+      }
+    ]
+  },
+  "rust_R4": {
+    "result": "PASS_FOUR_ORDINARY_LOCAL_GATES",
+    "original_complete": true,
+    "original_results": [
+      {
+        "name": "format",
+        "args": [
+          "fmt",
+          "--all",
+          "--check"
+        ],
+        "code": 0,
+        "signal": null,
+        "duration_ms": 3696
+      },
+      {
+        "name": "app-tests",
+        "args": [
+          "test",
+          "-p",
+          "open-seo-spider",
+          "--locked",
+          "--",
+          "--test-threads=2"
+        ],
+        "code": 0,
+        "signal": null,
+        "duration_ms": 626360
+      },
+      {
+        "name": "build",
+        "args": [
+          "build",
+          "--locked",
+          "-p",
+          "open-seo-spider"
+        ],
+        "code": 0,
+        "signal": null,
+        "duration_ms": 817
+      },
+      {
+        "name": "clippy",
+        "args": [
+          "clippy",
+          "--workspace",
+          "--all-targets",
+          "--all-features",
+          "--locked",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        "code": 0,
+        "signal": null,
+        "duration_ms": 32654
+      }
+    ],
+    "app_test_summary": {
+      "passed": 550,
+      "failed": 0,
+      "ignored": 1,
+      "measured": 0,
+      "filtered_out": 0
+    },
+    "host_environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_PROFILE_DEV_DEBUG": "0",
+      "CARGO_PROFILE_TEST_DEBUG": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "OPEN_SEO_BROWSER_PATH": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-runtime\\chrome-155.0.8059.80-36a30716-source12-v1\\chrome.exe"
+    },
+    "original_scope": "Ordinary App tests on this source; unchanged Core has separate exact725 full-workspace CI proof. Ignored opt-ins are not executed here. Source list is selected compiler/product inputs, not transitive dependency attestation."
+  },
+  "binary": {
+    "bytes": 91236352,
+    "sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9",
+    "copied": false
+  },
+  "selected_compiler_inputs": {
+    "count": 426,
+    "all_current_bytes_equal": true,
+    "scope": "Explicit selected compiler/product files, not transitive dependency/toolchain closure."
+  },
+  "repairs": {
+    "fixture": {
+      "path": "web/verification/ui-saved-comparison-smoke.cjs",
+      "before_sha256": "5e37e8cf0e6069113590c8ef4fe123a169f520919c551c1e3e72379186fb9d49",
+      "after_sha256": "f1bc2824adbb5460d39e6ddca9b2c3e15dafb6bde92c30ae7b41b03aac6e1020",
+      "change": "Allow exactly the already embedded project-columns.js asset GET in the fixture; all comparison/mutation assertions unchanged."
+    },
+    "Unix_test": {
+      "path": "crates/app/src/server/table_preferences_tests.rs",
+      "before_sha256": "81cca1ce4c54af8e8d51e73f28b24091ab6a576b940b2f96fcd572ddbc7519fa",
+      "after_sha256": "b4e2ae5a394c173e6b4e92478847771e1772b6df3350c69c63024cba3e7cf4b7",
+      "change": "Assert sole remaining entry is this owned UUID lock, remove precisely it, then continue unchanged parent-symlink refusal checks.",
+      "runtime": "NOT_PROVEN_ON_UNIX_BY_THIS_WINDOWS_RUN",
+      "intermediate_record": {
+        "path": "raw/artifacts/project-columns-ci-repair-20261021/source-repair.json",
+        "bytes": 803,
+        "sha256": "85c8e2f5ac5efb948e527987570e714b40a9166c3557ec823a729900d7861d1c",
+        "before_sha256": "81cca1ce4c54af8e8d51e73f28b24091ab6a576b940b2f96fcd572ddbc7519fa",
+        "intermediate_after_sha256": "ccc4fd0d66f7ddc96b997d2b1cbcc5f34a37dd9e997d683692139d29f7b34f72",
+        "scope": "Original record is byte-preserved and describes the six-line insertion before Root formatted the assertion. It is not the final current-source SHA. Final nine-line source is bound separately above and by the R4 manifest; original RustR3 format failure is retained."
+      }
+    },
+    "diff": "raw/artifacts/project-columns-ci-repair-20261021/final-reviewed.diff"
+  },
+  "scope": "R1 inner comparison fixture passed but its coordinator/wrapper failed because the separately authorized Unix test source changed concurrently. R1 stays FAIL. R2 passes only that selected browser/API fixture; it is not a genuine Rust comparison or native-column rerun. RustR3 stays format FAIL; R4 is an ordinary Windows App/format/build/Clippy run, which does not execute cfg(unix). Exact9816 public CI remains historical FAIL; no new public/full50 acceptance is inferred.",
+  "raw_scope": "Only37 explicit original sources, wrappers, stdout/stderr, coordinator/browser receipts, runners and input manifest are copied. Both redundant coordinator app.log files and the R3 input manifest remain local; relevant EOF0/results and original failure logs are retained. No native executable, SQLite/store, screenshot, downloaded report or runtime corpus is copied; original inner JSON screenshot/path declarations remain unchanged.",
+  "not_proven": [
+    "Actual Unix execution of the repaired test requires a successor Linux gate.",
+    "Successor public CI, combined full50 UI invocation, native-column rerun, native views/workspace bundles and manufacturer parity remain open."
+  ],
+  "publisher_source": {
+    "path": "artifacts/materialize-project-columns-ci-repair-local-20261021.cjs",
+    "sha256": "1ee48ba41a54844dafe86da0d1178573efb790568d03d43e6fbd80c1f322912f",
+    "copied": false
+  }
+}

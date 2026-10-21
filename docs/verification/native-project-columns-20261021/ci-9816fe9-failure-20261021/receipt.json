@@ -1,0 +1,71 @@
+{
+  "kind": "bounded_early_exact9816_public_ci_failure_snapshots",
+  "result": "EARLY_RENDERER_AND_UBUNTU_FAIL_OVERALL_RUN_NONTERMINAL",
+  "commit": "9816fe9c9f77ea93ec6346eb46cbc8ff91458848",
+  "run": 39654844791,
+  "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/39654844791",
+  "bounded_snapshot": {
+    "status": "in_progress",
+    "conclusion": null,
+    "whole_run_terminal": false,
+    "jobs": [
+      {
+        "id": 119412266665,
+        "name": "renderer",
+        "status": "completed",
+        "conclusion": "failure",
+        "started_at": "2026-10-21T18:40:34Z",
+        "completed_at": "2026-10-21T18:48:10Z"
+      },
+      {
+        "id": 119412267203,
+        "name": "container",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-21T18:40:34Z",
+        "completed_at": "2026-10-21T18:52:44Z"
+      },
+      {
+        "id": 119412267330,
+        "name": "test (ubuntu-latest)",
+        "status": "completed",
+        "conclusion": "failure",
+        "started_at": "2026-10-21T18:40:34Z",
+        "completed_at": "2026-10-21T18:50:26Z"
+      },
+      {
+        "id": 119412267503,
+        "name": "test (windows-latest)",
+        "status": "in_progress",
+        "conclusion": null,
+        "started_at": "2026-10-21T18:40:34Z",
+        "completed_at": null,
+        "current_step": "Rust workspace tests within the Windows fixture resource budget"
+      }
+    ]
+  },
+  "original_earlier_snapshot": {
+    "status": "in_progress",
+    "scope": "Preserved original metadata collected immediately after Renderer failure; it is not rewritten to the later bounded snapshot."
+  },
+  "UI": {
+    "passed_fixture_suites": 8,
+    "failed_fixture_suite": "comparison-controls",
+    "failure": "Exact new /project-columns.js asset absent from the fixture allowlist; unexpected GET is retained, not ignored.",
+    "native_suites_not_reached": 41,
+    "coordinator_EOF0": true
+  },
+  "Ubuntu": {
+    "App": {
+      "passed": 551,
+      "failed": 1,
+      "ignored": 1
+    },
+    "test": "server::table_preferences::tests::nofollow_refuses_sidecar_and_parent_symlinks_without_touching_target",
+    "actual_error": "remove_dir unwrap: DirectoryNotEmpty OS39",
+    "source_contract_inference": "mutate creates the intentionally persistent id.lock before read_snapshot rejects the symlink. The Unix negative fixture removes its doc symlink but then removes the nonempty directory while that test-owned lock remains. This is fixture cleanup, not evidence that nofollow allowed touching the external target."
+  },
+  "remaining_Windows": "IN_PROGRESS_AT_SNAPSHOT_NOT_CANCELLED_NOT_SUCCESS_NOT_TERMINAL_HERE",
+  "later_terminal_addendum": "NOT_PROVEN_HERE. A later separate collection may record terminal job/run states and any configured new-push cancellation; this early snapshot will remain unchanged.",
+  "scope": "Immutable main9816 has two actual failed jobs at this bounded snapshot. Container is terminalSUCCESS; Windows and the overall run remain in_progress with null conclusion. No combined whole-run terminal result, Windows cancellation, repaired local fixture/Unix test, full50 or successor publicCI PASS is inferred. Earlier bounded local R2/selected9R3 and immutable725 public49 remain separate. The original ZIP has fixture logs/receipts/PNGs/CSV and no runtime-store/executable members. Full144/416/32 backlog,39/68/37 states and manufacturer parity remain open."
+}

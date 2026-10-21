@@ -1,0 +1,20 @@
+PASS open reads only history, disables unstable jobs and preserves crawl draft
+PASS POST uses saved UUIDs and captured precise expected generations
+PASS four counts, unknown count and incomplete mixed-age coverage shown
+PASS URL pagination reaches all 55 received rows
+PASS all four change-class filters preserve full-result counts
+PASS old/new, partial vs empty vs unknown, incompatible profiles and hostile JSON-LD remain escaped
+PASS field pagination and unknown filter reach all fields
+PASS JSON downloads exact raw API body without API or website fetch
+PASS CSV includes all URL and field pages with source and provenance, no follow-up fetch
+PASS filtered CSV exports full fields for filtered URLs regardless of field display filter
+PASS empty filter shows zero and prevents misleading filtered download
+PASS 320px outer width contained and bottom/detail/close controls reachable
+PASS Escape preserves comparison options, job selection and existing crawl draft
+PASS invalid config rejected before comparison request
+PASS 409 generation conflict preserves structured context and blocks exports
+PASS 400 collision exposes original occurrences without lossy strings or markup execution
+PASS malformed result counts rejected without usable partial result
+PASS late comparison completion after config edit ignored even when fetch abort is bypassed
+PASS late completion after close/reopen ignored and draft retained
+PASS keyboard URL selection moves focus to details

@@ -1,0 +1,282 @@
+{
+  "status": "PASS",
+  "scope": "isolated Work-overlay browser/API fixture; no actual Rust comparison, SQL persistence, CI, installed runtime or vendor-parity proof",
+  "node": "v24.15.0",
+  "browser_version": "155.0.8059.80",
+  "source_sha256": {
+    "web/app.js": "c792a1d805f5cd3c18aa33da09c6f1cf763b4a8d570b5b9b3ca97248c09503db",
+    "web/index.html": "f8ed4d6d1705600efb7bf3bc775c60b1c9ddcc75cb10fff6be28e265ef8705f9",
+    "web/styles.css": "42a07636745d33796d8706295bb05fd7ab566a9969ebc7cf9de9df5e8cd3ba6d",
+    "web/list-import.js": "cd8702fd31122eccfefaf5ed7404bb47cc65223efa5394d3e687f329cfbf47ba",
+    "web/saved-comparison.js": "9178b0da6e494ca3570df61c67101b031af161a34038394d759a8f1971a556c2",
+    "web/config-profiles.js": "add70b14f6f0f6bc2e7e2b565f675fad06bc613d2aca56975e3ab1ff01212796",
+    "web/screenshots.js": "0ca1c112ba0fc7d1857fc05db41807ef7d16558db34dbd8a88795355ad5fbd25",
+    "web/verification/saved-comparison-fixtures.cjs": "80fbffbaa2789d4c01a9174c7774dcec93a69ee4e45df442a5b50fff00e4232e",
+    "web/verification/ui-saved-comparison-smoke.cjs": "f1bc2824adbb5460d39e6ddca9b2c3e15dafb6bde92c30ae7b41b03aac6e1020"
+  },
+  "checks": [
+    "open reads only history, disables unstable jobs and preserves crawl draft",
+    "POST uses saved UUIDs and captured precise expected generations",
+    "four counts, unknown count and incomplete mixed-age coverage shown",
+    "URL pagination reaches all 55 received rows",
+    "all four change-class filters preserve full-result counts",
+    "old/new, partial vs empty vs unknown, incompatible profiles and hostile JSON-LD remain escaped",
+    "field pagination and unknown filter reach all fields",
+    "JSON downloads exact raw API body without API or website fetch",
+    "CSV includes all URL and field pages with source and provenance, no follow-up fetch",
+    "filtered CSV exports full fields for filtered URLs regardless of field display filter",
+    "empty filter shows zero and prevents misleading filtered download",
+    "320px outer width contained and bottom/detail/close controls reachable",
+    "Escape preserves comparison options, job selection and existing crawl draft",
+    "invalid config rejected before comparison request",
+    "409 generation conflict preserves structured context and blocks exports",
+    "400 collision exposes original occurrences without lossy strings or markup execution",
+    "malformed result counts rejected without usable partial result",
+    "late comparison completion after config edit ignored even when fetch abort is bypassed",
+    "late completion after close/reopen ignored and draft retained",
+    "keyboard URL selection moves focus to details",
+    "zero external requests, zero crawl/import/control mutations and no JS runtime errors",
+    "unsafe snapshot/reference/provenance metadata hidden behind precision guard while JSON keeps exact original integer",
+    "unsafe generation-conflict metadata also protected by the same display helper",
+    "optional report bundle starts off and existing default request contract remains unchanged",
+    "opt-in sends only explicit true and shows compact report scope without rendering original bodies",
+    "bundle JSON retains exact u64 original body lexemes and CSV stays compared facts without extra fetch",
+    "bundle option and long export label remain reachable and contained at 320px",
+    "Escape and reopen retain bundle preference and crawl draft without automatic comparison",
+    "strict opt-in rejects bundle_missing with no usable partial export",
+    "strict opt-in rejects bundle_invalid with no usable partial export",
+    "opt-in structured budget failure blocks export without projection fallback",
+    "option flip invalidates held request and ignores late opted result even when abort is bypassed after a newer comparison",
+    "opt-out returns original projection-only request and comparison JSON labels",
+    "all optional bundle flows preserve zero external requests and only allowed read-only comparison mutations"
+  ],
+  "calls": [
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {},
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "include_original_reports": true,
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "include_original_reports": true,
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "include_original_reports": true,
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "include_original_reports": true,
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "include_original_reports": true,
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/compare/saved",
+      "body": {
+        "before": "b1111111-1111-4111-8111-111111111111",
+        "after": "b2222222-2222-4222-8222-222222222222",
+        "config": {
+          "include_selected_text": true
+        },
+        "expected_before_generation": 2,
+        "expected_after_generation": 3
+      }
+    }
+  ],
+  "unexpected_external_requests": [],
+  "forbidden_mutation_requests": [],
+  "javascript_runtime_errors": [],
+  "fixture_server_errors": [],
+  "failure": null,
+  "fixture_port": 56115,
+  "screenshots": [
+    "comparison-wide.png",
+    "comparison-320.png",
+    "original-bundle-320.png"
+  ],
+  "no_user_ports_contacted": true
+}

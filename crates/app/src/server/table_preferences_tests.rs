@@ -748,6 +748,15 @@ fn nofollow_refuses_sidecar_and_parent_symlinks_without_touching_target() {
         b"untouched"
     );
     std::fs::remove_file(doc_path(directory.path(), id)).unwrap();
+    let remaining = std::fs::read_dir(directory.path().join(DIRECTORY))
+        .unwrap()
+        .map(|entry| entry.unwrap().file_name())
+        .collect::<Vec<_>>();
+    assert_eq!(
+        remaining,
+        vec![std::ffi::OsString::from(format!("{id}.lock"))]
+    );
+    std::fs::remove_file(directory.path().join(DIRECTORY).join(format!("{id}.lock"))).unwrap();
     std::fs::remove_dir(directory.path().join(DIRECTORY)).unwrap();
     symlink(outside.path(), directory.path().join(DIRECTORY)).unwrap();
     assert!(load(directory.path(), id).is_err());

@@ -1,0 +1,14 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{spawn}=require('node:child_process'),{createHash}=require('node:crypto');
+const root=path.resolve(__dirname,'..'),out=path.join(__dirname,'project-columns-comparison-repair-20261021-r1');
+const hash=file=>createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const gate=JSON.parse(fs.readFileSync(path.join(__dirname,'project-columns-rust-20261021-r2/proof.json'))),inputs=JSON.parse(fs.readFileSync(path.join(__dirname,'project-columns-rust-20261021-r2/inputs.json')));
+assert(gate.complete);const binary=path.join(root,'target/debug/open-seo-spider.exe');assert.equal(hash(binary),gate.binary.sha256);assert(!fs.existsSync(out));
+// A separate Unix-only test-fixture repair can be authored concurrently; the
+// tested product remains the already-built binary and every non-test input.
+const excluded='crates/app/src/server/table_preferences_tests.rs';
+const changed=()=>inputs.filter(pin=>pin.file!==excluded&&hash(path.join(root,pin.file))!==pin.sha256).map(pin=>pin.file);assert.deepEqual(changed(),[]);
+const driver=path.join(root,'web/verification/ui-saved-comparison-smoke.cjs'),driverBytes=fs.readFileSync(driver),driverHash=hash(driver);fs.writeFileSync(out+'.driver-source.cjs',driverBytes,{flag:'wx'});
+const stdout=fs.createWriteStream(out+'.stdout.log'),stderr=fs.createWriteStream(out+'.stderr.log'),started=Date.now();
+const child=spawn(process.execPath,['scripts/ui-e2e.mjs','--only','comparison-controls'],{cwd:root,windowsHide:true,stdio:['ignore','pipe','pipe'],env:{...process.env,SPIDER_BINARY:binary,SPIDER_BINARY_SHA256:gate.binary.sha256,OPEN_SEO_BROWSER_PATH:gate.environment.OPEN_SEO_BROWSER_PATH,SPIDER_CHROME:gate.environment.OPEN_SEO_BROWSER_PATH,SPIDER_E2E_OUTPUT:out}});
+child.stdout.pipe(stdout);child.stdout.on('data',b=>process.stdout.write(b));child.stderr.pipe(stderr);let launchError;child.once('error',e=>launchError=String(e));
+child.once('close',async(code,signal)=>{await Promise.all([new Promise(r=>stdout.closed?r():stdout.once('close',r)),new Promise(r=>stderr.closed?r():stderr.once('close',r))]);const proof={kind:'comparison_fixture_static_asset_correction',code,signal,launchError,duration_ms:Date.now()-started,binary:{...gate.binary,unchanged:hash(binary)===gate.binary.sha256},selected_product_inputs:inputs.length-1,excluded_unix_test_fixture:excluded,changed_product_inputs:changed(),driver_sha256:driverHash,driver_unchanged:hash(driver)===driverHash,scope:'One real browser comparison fixture through the normal coordinator; no full50, native-column or Unix-test claim'};proof.complete=code===0&&!signal&&!launchError&&proof.binary.unchanged&&proof.driver_unchanged&&!proof.changed_product_inputs.length;fs.writeFileSync(out+'.wrapper.json',JSON.stringify(proof,null,2)+'\n');console.log(JSON.stringify(proof));if(!proof.complete)process.exitCode=1;});

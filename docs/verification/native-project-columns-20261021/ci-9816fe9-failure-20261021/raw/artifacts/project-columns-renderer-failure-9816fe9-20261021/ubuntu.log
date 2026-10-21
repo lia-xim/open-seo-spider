@@ -1,0 +1,1073 @@
+﻿2026-10-21T18:40:35.1707369Z Current runner version: '2.338.0'
+2026-10-21T18:40:35.1734266Z ##[group]Runner Image Provisioner
+2026-10-21T18:40:35.1735297Z Hosted Compute Agent
+2026-10-21T18:40:35.1735970Z Version: 20261015.610
+2026-10-21T18:40:35.1736668Z Commit: 267fdb4e8bbec4ab5ea31367f3a00d5c480c7656
+2026-10-21T18:40:35.1737414Z Build Date: 2026-10-14T17:06:54Z
+2026-10-21T18:40:35.1738113Z Worker ID: {939a3db7-2475-4e72-9b68-7507b52fdeeb}
+2026-10-21T18:40:35.1738888Z Region: eastus2
+2026-10-21T18:40:35.1739478Z Cloud: Azure
+2026-10-21T18:40:35.1740049Z ##[endgroup]
+2026-10-21T18:40:35.1742552Z ##[group]Operating System
+2026-10-21T18:40:35.1743203Z Ubuntu
+2026-10-21T18:40:35.1743877Z 24.04.5
+2026-10-21T18:40:35.1744472Z LTS
+2026-10-21T18:40:35.1745026Z ##[endgroup]
+2026-10-21T18:40:35.1745595Z ##[group]Runner Image
+2026-10-21T18:40:35.1746250Z Image: ubuntu-24.04
+2026-10-21T18:40:35.1746875Z Version: 20261018.339.1
+2026-10-21T18:40:35.1748169Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261018.339/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T18:40:35.1749781Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261018.339
+2026-10-21T18:40:35.1751065Z ##[endgroup]
+2026-10-21T18:40:35.1752300Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T18:40:35.1754777Z Contents: read
+2026-10-21T18:40:35.1755820Z Metadata: read
+2026-10-21T18:40:35.1756493Z ##[endgroup]
+2026-10-21T18:40:35.1758574Z Secret source: Actions
+2026-10-21T18:40:35.1759707Z Cache mode: write
+2026-10-21T18:40:35.1760952Z Prepare workflow directory
+2026-10-21T18:40:35.2088239Z Prepare all required actions
+2026-10-21T18:40:35.2136637Z Getting action download info
+2026-10-21T18:40:35.4667681Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-21T18:40:35.5636514Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:b725eda525362e7cf34af9a7243cac1e3f01a7ec)
+2026-10-21T18:40:35.6798627Z Download action repository 'Swatinem/rust-cache@v2' (SHA:d1527c8f67ef9af357290475d4af4b0fab8f12e0)
+2026-10-21T18:40:35.9051448Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-21T18:40:36.0094839Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-21T18:40:36.2988393Z Complete job name: test (ubuntu-latest)
+2026-10-21T18:40:36.3976416Z ##[group]Run actions/checkout@v4
+2026-10-21T18:40:36.3977313Z with:
+2026-10-21T18:40:36.3977776Z   repository: lia-xim/open-seo-spider
+2026-10-21T18:40:36.3981888Z   token: ***
+2026-10-21T18:40:36.3982332Z   ssh-strict: true
+2026-10-21T18:40:36.3982760Z   ssh-user: git
+2026-10-21T18:40:36.3983197Z   persist-credentials: true
+2026-10-21T18:40:36.3983685Z   clean: true
+2026-10-21T18:40:36.3984135Z   sparse-checkout-cone-mode: true
+2026-10-21T18:40:36.3984652Z   fetch-depth: 1
+2026-10-21T18:40:36.3985077Z   fetch-tags: false
+2026-10-21T18:40:36.3985515Z   show-progress: true
+2026-10-21T18:40:36.3985956Z   lfs: false
+2026-10-21T18:40:36.3986397Z   submodules: false
+2026-10-21T18:40:36.3986841Z   set-safe-directory: true
+2026-10-21T18:40:36.3987340Z   allow-unsafe-pr-checkout: false
+2026-10-21T18:40:36.3988139Z ##[endgroup]
+2026-10-21T18:40:36.5021296Z Syncing repository: lia-xim/open-seo-spider
+2026-10-21T18:40:36.5024600Z ##[group]Getting Git version info
+2026-10-21T18:40:36.5026005Z Working directory is '/home/runner/work/open-seo-spider/open-seo-spider'
+2026-10-21T18:40:36.5028021Z [command]/usr/bin/git version
+2026-10-21T18:40:36.5082958Z git version 2.55.0
+2026-10-21T18:40:36.5112937Z ##[endgroup]
+2026-10-21T18:40:36.5119388Z Temporarily overriding HOME='/home/runner/work/_temp/0257fd4a-0b2f-4c8f-96be-f9154aed3ed9' before making global git config changes
+2026-10-21T18:40:36.5122024Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T18:40:36.5124765Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T18:40:36.5191844Z Deleting the contents of '/home/runner/work/open-seo-spider/open-seo-spider'
+2026-10-21T18:40:36.5196368Z ##[group]Initializing the repository
+2026-10-21T18:40:36.5200878Z [command]/usr/bin/git init /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T18:40:36.5315997Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-21T18:40:36.5317840Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-21T18:40:36.5319403Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-21T18:40:36.5320887Z hint: call:
+2026-10-21T18:40:36.5321637Z hint:
+2026-10-21T18:40:36.5322460Z hint: 	git config --global init.defaultBranch <name>
+2026-10-21T18:40:36.5323449Z hint:
+2026-10-21T18:40:36.5324418Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-21T18:40:36.5325958Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-21T18:40:36.5327172Z hint:
+2026-10-21T18:40:36.5327940Z hint: 	git branch -m <name>
+2026-10-21T18:40:36.5328764Z hint:
+2026-10-21T18:40:36.5329779Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-21T18:40:36.5331800Z Initialized empty Git repository in /home/runner/work/open-seo-spider/open-seo-spider/.git/
+2026-10-21T18:40:36.5350839Z [command]/usr/bin/git remote add origin https://github.com/lia-xim/open-seo-spider
+2026-10-21T18:40:36.5405829Z ##[endgroup]
+2026-10-21T18:40:36.5407073Z ##[group]Disabling automatic garbage collection
+2026-10-21T18:40:36.5409081Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-21T18:40:36.5444072Z ##[endgroup]
+2026-10-21T18:40:36.5445240Z ##[group]Setting up auth
+2026-10-21T18:40:36.5451340Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T18:40:36.5487461Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T18:40:36.5881267Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T18:40:36.5927784Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T18:40:36.6177729Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T18:40:36.6224842Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T18:40:36.6467035Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-21T18:40:36.6518182Z ##[endgroup]
+2026-10-21T18:40:36.6519624Z ##[group]Fetching the repository
+2026-10-21T18:40:36.6530048Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9816fe9c9f77ea93ec6346eb46cbc8ff91458848:refs/remotes/origin/main
+2026-10-21T18:40:39.5997480Z From https://github.com/lia-xim/open-seo-spider
+2026-10-21T18:40:39.5998131Z  * [new ref]         9816fe9c9f77ea93ec6346eb46cbc8ff91458848 -> origin/main
+2026-10-21T18:40:39.6002150Z ##[endgroup]
+2026-10-21T18:40:39.6002653Z ##[group]Determining the checkout info
+2026-10-21T18:40:39.6004551Z ##[endgroup]
+2026-10-21T18:40:39.6038442Z [command]/usr/bin/git sparse-checkout disable
+2026-10-21T18:40:39.6078685Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-21T18:40:39.6118099Z ##[group]Checking out the ref
+2026-10-21T18:40:39.6123234Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-21T18:40:40.6385600Z Updating files:  82% (7203/8767)
+2026-10-21T18:40:40.6510075Z Updating files:  83% (7277/8767)
+2026-10-21T18:40:40.6639360Z Updating files:  84% (7365/8767)
+2026-10-21T18:40:40.6709436Z Updating files:  85% (7452/8767)
+2026-10-21T18:40:40.6774233Z Updating files:  86% (7540/8767)
+2026-10-21T18:40:40.6886496Z Updating files:  87% (7628/8767)
+2026-10-21T18:40:40.6983992Z Updating files:  88% (7715/8767)
+2026-10-21T18:40:40.7092491Z Updating files:  89% (7803/8767)
+2026-10-21T18:40:40.7181215Z Updating files:  90% (7891/8767)
+2026-10-21T18:40:40.7298313Z Updating files:  91% (7978/8767)
+2026-10-21T18:40:40.7374943Z Updating files:  92% (8066/8767)
+2026-10-21T18:40:40.7520728Z Updating files:  93% (8154/8767)
+2026-10-21T18:40:40.7621657Z Updating files:  94% (8241/8767)
+2026-10-21T18:40:40.7766100Z Updating files:  95% (8329/8767)
+2026-10-21T18:40:40.7808195Z Updating files:  96% (8417/8767)
+2026-10-21T18:40:40.7890712Z Updating files:  97% (8504/8767)
+2026-10-21T18:40:40.7991983Z Updating files:  98% (8592/8767)
+2026-10-21T18:40:40.8091902Z Updating files:  99% (8680/8767)
+2026-10-21T18:40:40.8092678Z Updating files: 100% (8767/8767)
+2026-10-21T18:40:40.8093237Z Updating files: 100% (8767/8767), done.
+2026-10-21T18:40:40.8203564Z Switched to a new branch 'main'
+2026-10-21T18:40:40.8209669Z branch 'main' set up to track 'origin/main'.
+2026-10-21T18:40:40.8320315Z ##[endgroup]
+2026-10-21T18:40:40.8387801Z [command]/usr/bin/git log -1 --format=%H
+2026-10-21T18:40:40.8420933Z 9816fe9c9f77ea93ec6346eb46cbc8ff91458848
+2026-10-21T18:40:40.9131307Z ##[group]Run dtolnay/rust-toolchain@stable
+2026-10-21T18:40:40.9131679Z with:
+2026-10-21T18:40:40.9131902Z   components: rustfmt, clippy
+2026-10-21T18:40:40.9132161Z   toolchain: stable
+2026-10-21T18:40:40.9132384Z ##[endgroup]
+2026-10-21T18:40:40.9201233Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+2026-10-21T18:40:40.9533662Z ##[group]Run if [[ -z $toolchain ]]; then
+2026-10-21T18:40:40.9534080Z [36;1mif [[ -z $toolchain ]]; then[0m
+2026-10-21T18:40:40.9534646Z [36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070[0m
+2026-10-21T18:40:40.9535216Z [36;1m  echo "'toolchain' is a required input" >&2[0m
+2026-10-21T18:40:40.9535548Z [36;1m  exit 1[0m
+2026-10-21T18:40:40.9535887Z [36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then[0m
+2026-10-21T18:40:40.9536319Z [36;1m  if [[ Linux == macOS ]]; then[0m
+2026-10-21T18:40:40.9536907Z [36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-10-21T18:40:40.9537445Z [36;1m  else[0m
+2026-10-21T18:40:40.9537875Z [36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-10-21T18:40:40.9538347Z [36;1m  fi[0m
+2026-10-21T18:40:40.9538654Z [36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then[0m
+2026-10-21T18:40:40.9539200Z [36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT[0m
+2026-10-21T18:40:40.9539675Z [36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then[0m
+2026-10-21T18:40:40.9540216Z [36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT[0m
+2026-10-21T18:40:40.9540924Z [36;1melse[0m
+2026-10-21T18:40:40.9541134Z [36;1m  delimiter=EOF[0m
+2026-10-21T18:40:40.9541454Z [36;1m  while [[ $toolchain == *$delimiter* ]]; do delimiter+=_; done[0m
+2026-10-21T18:40:40.9541964Z [36;1m  printf 'toolchain<<%s\n%s\n%s\n' "$delimiter" "$toolchain" "$delimiter" >> $GITHUB_OUTPUT[0m
+2026-10-21T18:40:40.9542390Z [36;1mfi[0m
+2026-10-21T18:40:41.0211258Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:41.0211692Z env:
+2026-10-21T18:40:41.0211926Z   toolchain: stable
+2026-10-21T18:40:41.0212166Z ##[endgroup]
+2026-10-21T18:40:41.0344842Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=114]
+2026-10-21T18:40:41.0349493Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+2026-10-21T18:40:41.0384143Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV
+2026-10-21T18:40:41.0384877Z [36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV[0m
+2026-10-21T18:40:41.0436346Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:41.0436707Z ##[endgroup]
+2026-10-21T18:40:41.0518045Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=16]
+2026-10-21T18:40:41.0520786Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+2026-10-21T18:40:41.0547741Z ##[group]Run if ! command -v rustup &>/dev/null; then
+2026-10-21T18:40:41.0548126Z [36;1mif ! command -v rustup &>/dev/null; then[0m
+2026-10-21T18:40:41.0548891Z [36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y[0m
+2026-10-21T18:40:41.0549621Z [36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH[0m
+2026-10-21T18:40:41.0549900Z [36;1mfi[0m
+2026-10-21T18:40:41.0602409Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:41.0602789Z env:
+2026-10-21T18:40:41.0602996Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:41.0603255Z ##[endgroup]
+2026-10-21T18:40:41.0687203Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=success;conclusion=success;duration_ms=16]
+2026-10-21T18:40:41.0689871Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+2026-10-21T18:40:41.0698166Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-21T18:40:41.0713322Z ##[start-action display=rustup toolchain install stable;id=__dtolnay_rust-toolchain.__run_4]
+2026-10-21T18:40:41.0733344Z ##[group]Run set -f  # split targets and components on commas and whitespace, without glob expansion
+2026-10-21T18:40:41.0734044Z [36;1mset -f  # split targets and components on commas and whitespace, without glob expansion[0m
+2026-10-21T18:40:41.0734489Z [36;1mflags=()[0m
+2026-10-21T18:40:41.0734787Z [36;1mfor t in ${targets//,/ }; do flags+=(--target "$t"); done[0m
+2026-10-21T18:40:41.0735205Z [36;1mfor c in ${components//,/ }; do flags+=(--component "$c"); done[0m
+2026-10-21T18:40:41.0735718Z [36;1mif [[ $toolchain == nightly && -n $components ]]; then flags+=(--allow-downgrade); fi[0m
+2026-10-21T18:40:41.0736155Z [36;1mlog=$(mktemp)[0m
+2026-10-21T18:40:41.0736391Z [36;1mtrap 'rm -f "$log"' EXIT[0m
+2026-10-21T18:40:41.0736650Z [36;1mfor attempt in 1 2 3 4 5; do[0m
+2026-10-21T18:40:41.0737220Z [36;1m  if rustup toolchain install "$toolchain" "${flags[@]}" --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then[0m
+2026-10-21T18:40:41.0737804Z [36;1m    break[0m
+2026-10-21T18:40:41.0738010Z [36;1m  else[0m
+2026-10-21T18:40:41.0738213Z [36;1m    status=$?[0m
+2026-10-21T18:40:41.0738428Z [36;1m  fi[0m
+2026-10-21T18:40:41.0738798Z [36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \[0m
+2026-10-21T18:40:41.0739387Z [36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then[0m
+2026-10-21T18:40:41.0739866Z [36;1m    exit "$status"[0m
+2026-10-21T18:40:41.0740093Z [36;1m  fi[0m
+2026-10-21T18:40:41.0740701Z [36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2[0m
+2026-10-21T18:40:41.0741137Z [36;1m  sleep 30[0m
+2026-10-21T18:40:41.0741344Z [36;1mdone[0m
+2026-10-21T18:40:41.0794294Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:41.0794649Z env:
+2026-10-21T18:40:41.0794857Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:41.0795121Z   toolchain: stable
+2026-10-21T18:40:41.0795330Z   targets: 
+2026-10-21T18:40:41.0795531Z   components: rustfmt, clippy
+2026-10-21T18:40:41.0795800Z   RUSTUP_PERMIT_COPY_RENAME: 1
+2026-10-21T18:40:41.0796040Z ##[endgroup]
+2026-10-21T18:40:42.6723613Z info: syncing channel updates for stable-x86_64-unknown-linux-gnu
+2026-10-21T18:40:42.9548691Z info: latest update on 2026-10-15 for version 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-21T18:40:42.9793162Z info: component clippy is up to date
+2026-10-21T18:40:42.9793646Z info: component rustfmt is up to date
+2026-10-21T18:40:42.9805363Z 
+2026-10-21T18:40:42.9893425Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-21T18:40:42.9893936Z 
+2026-10-21T18:40:42.9957904Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=1924]
+2026-10-21T18:40:42.9965426Z ##[start-action display=rustup default stable;id=__dtolnay_rust-toolchain.__run_5]
+2026-10-21T18:40:42.9984790Z ##[group]Run rustup default "$toolchain" --force-non-host
+2026-10-21T18:40:42.9985219Z [36;1mrustup default "$toolchain" --force-non-host[0m
+2026-10-21T18:40:43.0036526Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:43.0036912Z env:
+2026-10-21T18:40:43.0037128Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:43.0037407Z   toolchain: stable
+2026-10-21T18:40:43.0037641Z ##[endgroup]
+2026-10-21T18:40:43.0155408Z info: using existing install for stable-x86_64-unknown-linux-gnu
+2026-10-21T18:40:43.0166627Z info: default toolchain set to stable-x86_64-unknown-linux-gnu
+2026-10-21T18:40:43.0167018Z 
+2026-10-21T18:40:43.0253061Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-21T18:40:43.0253587Z 
+2026-10-21T18:40:43.0271490Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=30]
+2026-10-21T18:40:43.0275681Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+2026-10-21T18:40:43.0302695Z ##[group]Run DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+2026-10-21T18:40:43.0303650Z [36;1mDATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')[0m
+2026-10-21T18:40:43.0304535Z [36;1mHASH=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-hash: //p')[0m
+2026-10-21T18:40:43.0305114Z [36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT[0m
+2026-10-21T18:40:43.0355431Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:43.0355823Z env:
+2026-10-21T18:40:43.0356044Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:43.0356322Z   toolchain: stable
+2026-10-21T18:40:43.0356548Z ##[endgroup]
+2026-10-21T18:40:43.1063839Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=78]
+2026-10-21T18:40:43.1082216Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+2026-10-21T18:40:43.1102645Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+2026-10-21T18:40:43.1103062Z [36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then[0m
+2026-10-21T18:40:43.1103425Z [36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV[0m
+2026-10-21T18:40:43.1103725Z [36;1mfi[0m
+2026-10-21T18:40:43.1155090Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:43.1155473Z env:
+2026-10-21T18:40:43.1155689Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:43.1155957Z ##[endgroup]
+2026-10-21T18:40:43.1232985Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=14]
+2026-10-21T18:40:43.1235597Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+2026-10-21T18:40:43.1254377Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+2026-10-21T18:40:43.1254763Z [36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then[0m
+2026-10-21T18:40:43.1255119Z [36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV[0m
+2026-10-21T18:40:43.1255436Z [36;1mfi[0m
+2026-10-21T18:40:43.1301017Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:43.1301380Z env:
+2026-10-21T18:40:43.1301591Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:43.1301859Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:40:43.1302088Z ##[endgroup]
+2026-10-21T18:40:43.1374525Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=13]
+2026-10-21T18:40:43.1378281Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+2026-10-21T18:40:43.1412835Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+2026-10-21T18:40:43.1413368Z [36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70[0m
+2026-10-21T18:40:43.1414091Z [36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then[0m
+2026-10-21T18:40:43.1414848Z [36;1m  if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[89]\.'; then[0m
+2026-10-21T18:40:43.1415466Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-10-21T18:40:43.1416027Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV[0m
+2026-10-21T18:40:43.1416556Z [36;1m  elif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[67]\.'; then[0m
+2026-10-21T18:40:43.1417169Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-10-21T18:40:43.1418050Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV[0m
+2026-10-21T18:40:43.1418429Z [36;1m  fi[0m
+2026-10-21T18:40:43.1418628Z [36;1mfi[0m
+2026-10-21T18:40:43.1468272Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:43.1468812Z env:
+2026-10-21T18:40:43.1469127Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:43.1469551Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:40:43.1469914Z   CARGO_TERM_COLOR: always
+2026-10-21T18:40:43.1470163Z   toolchain: stable
+2026-10-21T18:40:43.1470712Z ##[endgroup]
+2026-10-21T18:40:43.1827099Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=44]
+2026-10-21T18:40:43.1831550Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+2026-10-21T18:40:43.1850037Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+2026-10-21T18:40:43.1851129Z [36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation[0m
+2026-10-21T18:40:43.1851786Z [36;1mif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.7[01]\.'; then[0m
+2026-10-21T18:40:43.1852300Z [36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV[0m
+2026-10-21T18:40:43.1852624Z [36;1mfi[0m
+2026-10-21T18:40:43.1902924Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:43.1903262Z env:
+2026-10-21T18:40:43.1903460Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:43.1903708Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:40:43.1903925Z   CARGO_TERM_COLOR: always
+2026-10-21T18:40:43.1904145Z   toolchain: stable
+2026-10-21T18:40:43.1904348Z ##[endgroup]
+2026-10-21T18:40:43.2112066Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=27]
+2026-10-21T18:40:43.2117065Z ##[start-action display=rustc +stable --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+2026-10-21T18:40:43.2135476Z ##[group]Run rustc +"$toolchain" --version --verbose
+2026-10-21T18:40:43.2135885Z [36;1mrustc +"$toolchain" --version --verbose[0m
+2026-10-21T18:40:43.2186035Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T18:40:43.2186389Z env:
+2026-10-21T18:40:43.2186599Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:43.2186861Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:40:43.2187094Z   CARGO_TERM_COLOR: always
+2026-10-21T18:40:43.2187322Z   toolchain: stable
+2026-10-21T18:40:43.2187525Z ##[endgroup]
+2026-10-21T18:40:43.2367835Z rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-21T18:40:43.2368367Z binary: rustc
+2026-10-21T18:40:43.2368812Z commit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67
+2026-10-21T18:40:43.2369347Z commit-date: 2026-10-13
+2026-10-21T18:40:43.2369738Z host: x86_64-unknown-linux-gnu
+2026-10-21T18:40:43.2370783Z release: 1.99.1
+2026-10-21T18:40:43.2371184Z LLVM version: 23.1.1
+2026-10-21T18:40:43.2392797Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=27]
+2026-10-21T18:40:43.2507222Z ##[group]Run Swatinem/rust-cache@v2
+2026-10-21T18:40:43.2507529Z with:
+2026-10-21T18:40:43.2507731Z   prefix-key: v0-rust
+2026-10-21T18:40:43.2507968Z   add-job-id-key: true
+2026-10-21T18:40:43.2508215Z   add-rust-environment-hash-key: true
+2026-10-21T18:40:43.2508495Z   cache-targets: true
+2026-10-21T18:40:43.2508722Z   cache-all-crates: false
+2026-10-21T18:40:43.2508972Z   cache-workspace-crates: false
+2026-10-21T18:40:43.2509221Z   save-if: true
+2026-10-21T18:40:43.2509440Z   cache-provider: github
+2026-10-21T18:40:43.2509676Z   cache-bin: true
+2026-10-21T18:40:43.2509886Z   lookup-only: false
+2026-10-21T18:40:43.2510102Z   cmd-format: {0}
+2026-10-21T18:40:43.2510294Z env:
+2026-10-21T18:40:43.2510770Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:43.2511038Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:40:43.2511260Z   CARGO_TERM_COLOR: always
+2026-10-21T18:40:43.2511486Z ##[endgroup]
+2026-10-21T18:40:45.0166764Z ##[group]Cache Configuration
+2026-10-21T18:40:45.0167407Z Cache Provider:
+2026-10-21T18:40:45.0167914Z     github
+2026-10-21T18:40:45.0168237Z Workspaces:
+2026-10-21T18:40:45.0168895Z     /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T18:40:45.0169798Z Cache Paths:
+2026-10-21T18:40:45.0170656Z     /home/runner/.cargo/bin
+2026-10-21T18:40:45.0171715Z     /home/runner/.cargo/.crates.toml
+2026-10-21T18:40:45.0172439Z     /home/runner/.cargo/.crates2.json
+2026-10-21T18:40:45.0173162Z     /home/runner/.cargo/registry
+2026-10-21T18:40:45.0173818Z     /home/runner/.cargo/git
+2026-10-21T18:40:45.0174571Z     /home/runner/work/open-seo-spider/open-seo-spider/target
+2026-10-21T18:40:45.0175383Z Restore Key:
+2026-10-21T18:40:45.0175957Z     v0-rust-test-Linux-x64-01b81e85
+2026-10-21T18:40:45.0176624Z Cache Key:
+2026-10-21T18:40:45.0177220Z     v0-rust-test-Linux-x64-01b81e85-c3965fa5
+2026-10-21T18:40:45.0177966Z .. Prefix:
+2026-10-21T18:40:45.0178523Z   - v0-rust-test-Linux-x64
+2026-10-21T18:40:45.0179174Z .. Environment considered:
+2026-10-21T18:40:45.0179783Z   - Rust Versions:
+2026-10-21T18:40:45.0180745Z     - 1.99.1 x86_64-unknown-linux-gnu 58cf8f9c35b355199727627d07ae34a4e2846d67
+2026-10-21T18:40:45.0181681Z   - CARGO_HOME
+2026-10-21T18:40:45.0182233Z   - CARGO_INCREMENTAL
+2026-10-21T18:40:45.0182812Z   - CARGO_TERM_COLOR
+2026-10-21T18:40:45.0183397Z .. Lockfiles considered:
+2026-10-21T18:40:45.0184202Z   - /home/runner/work/open-seo-spider/open-seo-spider/Cargo.lock
+2026-10-21T18:40:45.0185399Z   - /home/runner/work/open-seo-spider/open-seo-spider/crates/app/Cargo.toml
+2026-10-21T18:40:45.0186484Z   - /home/runner/work/open-seo-spider/open-seo-spider/crates/core/Cargo.toml
+2026-10-21T18:40:45.0187744Z ##[endgroup]
+2026-10-21T18:40:45.0188151Z 
+2026-10-21T18:40:45.0188496Z ... Restoring cache ...
+2026-10-21T18:40:45.1181434Z Cache hit for: v0-rust-test-Linux-x64-01b81e85-c3965fa5
+2026-10-21T18:40:46.1769154Z Received 188743680 of 388913626 (48.5%), 178.2 MBs/sec
+2026-10-21T18:40:46.9095003Z Received 388913626 of 388913626 (100.0%), 212.8 MBs/sec
+2026-10-21T18:40:46.9096287Z Cache Size: ~371 MB (388913626 B)
+2026-10-21T18:40:46.9302183Z [command]/usr/bin/tar -xf /home/runner/work/_temp/ac6c006d-ee89-4454-8185-6bb91f8d4236/cache.tzst -P -C /home/runner/work/open-seo-spider/open-seo-spider --use-compress-program unzstd
+2026-10-21T18:40:50.1001956Z Cache restored successfully
+2026-10-21T18:40:50.3539277Z Restored from cache key "v0-rust-test-Linux-x64-01b81e85-c3965fa5" full match: true.
+2026-10-21T18:40:50.3804279Z ##[group]Run actions/setup-node@v4
+2026-10-21T18:40:50.3804588Z with:
+2026-10-21T18:40:50.3805131Z   node-version: 24
+2026-10-21T18:40:50.3805515Z   always-auth: false
+2026-10-21T18:40:50.3805888Z   check-latest: false
+2026-10-21T18:40:50.3815209Z   token: ***
+2026-10-21T18:40:50.3815572Z env:
+2026-10-21T18:40:50.3815912Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:50.3816655Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:40:50.3817048Z   CARGO_TERM_COLOR: always
+2026-10-21T18:40:50.3817465Z   CACHE_ON_FAILURE: false
+2026-10-21T18:40:50.3817839Z ##[endgroup]
+2026-10-21T18:40:50.5301783Z Found in cache @ /opt/hostedtoolcache/node/24.22.0/x64
+2026-10-21T18:40:50.5309431Z ##[group]Environment details
+2026-10-21T18:40:50.5310630Z (node:2453) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T18:40:50.5311881Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T18:40:53.0994743Z node: v24.22.0
+2026-10-21T18:40:53.0995189Z npm: 11.19.1
+2026-10-21T18:40:53.0995485Z yarn: 1.22.22
+2026-10-21T18:40:53.0996459Z ##[endgroup]
+2026-10-21T18:40:53.1121998Z ##[group]Run cargo fmt --all --check
+2026-10-21T18:40:53.1122361Z [36;1mcargo fmt --all --check[0m
+2026-10-21T18:40:53.1289730Z shell: /usr/bin/bash -e {0}
+2026-10-21T18:40:53.1289998Z env:
+2026-10-21T18:40:53.1290223Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:53.1290624Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:40:53.1290861Z   CARGO_TERM_COLOR: always
+2026-10-21T18:40:53.1291108Z   CACHE_ON_FAILURE: false
+2026-10-21T18:40:53.1291334Z ##[endgroup]
+2026-10-21T18:40:58.0516651Z ##[group]Run cargo test --workspace --locked
+2026-10-21T18:40:58.0517040Z [36;1mcargo test --workspace --locked[0m
+2026-10-21T18:40:58.0567782Z shell: /usr/bin/bash -e {0}
+2026-10-21T18:40:58.0568046Z env:
+2026-10-21T18:40:58.0568250Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:40:58.0568519Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:40:58.0568753Z   CARGO_TERM_COLOR: always
+2026-10-21T18:40:58.0568989Z   CACHE_ON_FAILURE: false
+2026-10-21T18:40:58.0569214Z ##[endgroup]
+2026-10-21T18:40:58.3433587Z [1m[92m    Updating[0m crates.io index
+2026-10-21T18:40:59.8107351Z [1m[92m   Compiling[0m open-seo-spider-core v0.1.0 (/home/runner/work/open-seo-spider/open-seo-spider/crates/core)
+2026-10-21T18:40:59.8133678Z [1m[92m   Compiling[0m open-seo-spider v0.1.0 (/home/runner/work/open-seo-spider/open-seo-spider/crates/app)
+2026-10-21T18:43:30.1232919Z [1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 2m 32s
+2026-10-21T18:43:30.1451895Z [1m[92m     Running[0m unittests src/main.rs (target/debug/deps/open_seo_spider-b10dc88a0acd0a62)
+2026-10-21T18:43:30.1492482Z 
+2026-10-21T18:43:30.1495098Z running 553 tests
+2026-10-21T18:43:30.1532894Z test analysis::tests::complete_reciprocal_pagination_with_anchors_has_no_pagination_diagnostics ... ok
+2026-10-21T18:43:30.1546234Z test analysis::tests::canonical_cycles_and_unobserved_targets_have_distinct_evidence ... ok
+2026-10-21T18:43:30.1559148Z test analysis::tests::canonical_language_review_requires_self_hreflang_facts_on_both_documents ... ok
+2026-10-21T18:43:30.1561356Z test analysis::tests::bookmark_findings_require_captured_target_absence_and_remain_deduplicated ... ok
+2026-10-21T18:43:30.1563759Z test analysis::tests::deduplication_preserves_additional_relationship_target_evidence ... ok
+2026-10-21T18:43:30.1565706Z test analysis::tests::directive_analysis_keeps_visible_duplicates_and_complete_mixed_cycles ... ok
+2026-10-21T18:43:30.1587890Z test analysis::tests::disabled_legacy_and_incomplete_bookmark_targets_never_become_missing ... ok
+2026-10-21T18:43:30.1589789Z test analysis::tests::existing_report_issues_are_not_emitted_twice_and_partial_scope_is_explicit ... ok
+2026-10-21T18:43:30.1591812Z test analysis::tests::dom_review_issues_use_shared_core_rules_and_do_not_invent_legacy_absence ... ok
+2026-10-21T18:43:30.1593601Z test analysis::tests::existing_relationship_sets_preserve_order_duplicates_subset_and_empty_wildcard_rules ... ok
+2026-10-21T18:43:30.1597788Z test analysis::tests::graph_self_links_do_not_disqualify_crawl_bounded_orphan_candidates ... ok
+2026-10-21T18:43:30.1606148Z test analysis::tests::graph_separates_occurrences_resources_and_followable_rank ... ok
+2026-10-21T18:43:30.1607945Z test analysis::tests::header_relationships_on_pdf_documents_receive_target_and_return_checks ... ok
+2026-10-21T18:43:30.1612534Z test analysis::tests::graph_resolves_final_alias_prefers_direct_fetch_and_excludes_failed_sources ... ok
+2026-10-21T18:43:30.1621632Z test analysis::tests::hreflang_checks_conflicts_self_and_fetched_return_links ... ok
+2026-10-21T18:43:30.1635224Z test analysis::tests::html_and_http_conflicts_are_distinct_from_same_target_declarations ... ok
+2026-10-21T18:43:30.1643786Z test analysis::tests::hreflang_profile_accepts_registered_language_script_region_and_default ... ok
+2026-10-21T18:43:30.1645682Z test analysis::tests::hreflang_cluster_and_return_labels_compare_declarations_not_html_language ... ok
+2026-10-21T18:43:30.1652335Z test analysis::tests::incomplete_capture_never_proves_absent_return_or_anchor_declarations ... ok
+2026-10-21T18:43:30.1657413Z test analysis::tests::jsonld_reports_nested_type_facts_without_claiming_validation ... ok
+2026-10-21T18:43:30.1669512Z test analysis::tests::metadata_self_identity_uses_final_and_rendered_document_addresses ... ok
+2026-10-21T18:43:30.1674152Z test analysis::tests::pagerank_handles_empty_dangling_and_nofollow_graphs ... ok
+2026-10-21T18:43:30.1676522Z test analysis::tests::pagination_self_canonicalization_anchor_and_reciprocity_have_clear_severities ... ok
+2026-10-21T18:43:30.1678568Z test analysis::tests::pagination_distinguishes_bad_captured_targets_from_unknown_targets ... ok
+2026-10-21T18:43:30.1680888Z test analysis::tests::redirected_relationship_target_keeps_initial_and_failed_final_response_distinct ... ok
+2026-10-21T18:43:30.1685078Z test analysis::tests::relationship_targets_keep_initial_redirect_and_noindex_facts ... ok
+2026-10-21T18:43:30.1689242Z test analysis::tests::security_distinguishes_http_navigation_and_resources ... ok
+2026-10-21T18:43:30.1696944Z test analysis::tests::target_failed_blocked_and_status_unknown_are_separate_states ... ok
+2026-10-21T18:43:30.1708659Z test analysis::tests::target_scoped_robots_and_graph_nofollow_use_the_selected_agent ... ok
+2026-10-21T18:43:30.1710248Z test analysis::tests::unknown_rendered_response_never_proves_absent_return_declarations ... ok
+2026-10-21T18:43:30.1745139Z test analysis::tests::x_default_is_optional_and_conflicting_fallbacks_have_explicit_evidence ... ok
+2026-10-21T18:43:30.1811805Z test analysis::tests::directive_analysis_projects_eight_profiles_without_recalculating_captured_metrics ... ok
+2026-10-21T18:43:30.1932443Z test broken_sources::tests::broken_source_reporting_all_hidden_and_cursor_profile_edit_refuse_stale_without_classification_rewrite ... ok
+2026-10-21T18:43:30.1992054Z test broken_sources::tests::broken_sources_csv_exports_every_filtered_occurrence_formula_safe_exact_utf8_and_refuses_overcap ... ok
+2026-10-21T18:43:30.2023405Z test broken_sources::tests::broken_sources_cursor_and_export_require_exact_snapshot_filter_generation_and_page_limit ... ok
+2026-10-21T18:43:30.2052324Z test broken_sources::tests::broken_source_reporting_legacy_null_all_false_json_csv_token_exact_and_equalcount_view_tokens_differ ... ok
+2026-10-21T18:43:30.2079447Z test broken_sources::tests::broken_sources_preserves_repeated_occurrences_dom_absence_and_exact_requested_redirect_identity ... ok
+2026-10-21T18:43:30.2162034Z test broken_sources::tests::broken_sources_selected_inherited_and_imported_age_cannot_turn_old_404_into_a_current_observed_failure ... ok
+2026-10-21T18:43:30.2175154Z test broken_sources::tests::broken_sources_unknowns_keep_ambiguous_robots_errors_proposed_locations_old_and_incoherent_observations ... ok
+2026-10-21T18:43:30.2193735Z test cdn_cli_tests::cdn_cli_actual_config_file_parser_preserves_declarations_and_input_bytes ... ok
+2026-10-21T18:43:30.2209272Z test cdn_directory_cli_tests::cdn_directory_cli_actual_config_input_keeps_raw_rules_and_cannot_grant_network_permissions ... ok
+2026-10-21T18:43:30.2383775Z test comparison_app::reporting_tests::reporting_empty_view_csv_retains_typed_metadata_and_default_csv_has_no_new_columns ... ok
+2026-10-21T18:43:30.2561362Z test broken_sources::tests::broken_source_reporting_eight_profiles_keep_hidden_target404_full_facts_raw_ordinals_and_raw_report ... ok
+2026-10-21T18:43:30.2792196Z test comparison_app::reporting_tests::reporting_equal_population_profiles_and_raw_report_changes_have_distinct_bindings ... ok
+2026-10-21T18:43:30.2811968Z test comparison_app::reporting_tests::reporting_hidden_only_absent_membership_is_excluded_after_raw_classification ... ok
+2026-10-21T18:43:30.3021772Z test comparison_app::reporting_tests::reporting_hidden_to_visible_and_reverse_never_manufacture_added_or_removed ... ok
+2026-10-21T18:43:30.3171716Z test comparison_app::reporting_tests::reporting_missing_auto_identity_invalid_profile_and_tampered_index_refuse ... ok
+2026-10-21T18:43:30.3261886Z test comparison_app::reporting_tests::reporting_inactive_none_null_and_allfalse_keep_exact_legacy_json_csv_and_hashes ... ok
+2026-10-21T18:43:30.3321869Z test comparison_app::reporting_tests::reporting_original_bundle_stays_complete_and_raw_side_metadata_is_immutable ... ok
+2026-10-21T18:43:30.3323946Z test comparison_app::reporting_tests::reporting_raw_duplicate_and_mapping_collision_refusals_cannot_be_hidden ... ok
+2026-10-21T18:43:30.3332320Z test comparison_app::reporting_tests::reporting_request_is_strict_and_modes_and_guards_are_advertised ... ok
+2026-10-21T18:43:30.3334318Z test comparison_app::tests::bounded_reader_refuses_plus_one_without_unbounded_read ... ok
+2026-10-21T18:43:30.3441672Z test comparison_app::reporting_tests::reporting_raw_keeps_hidden_rows_and_full_target_fields ... ok
+2026-10-21T18:43:30.3531502Z test comparison_app::tests::bundle_wrapper_metadata_and_tampered_typed_report_are_validated ... ok
+2026-10-21T18:43:30.3771778Z test comparison_app::tests::cli_bundle_overflow_happens_before_either_destination_is_reserved ... ok
+2026-10-21T18:43:30.3831755Z test comparison_app::tests::cli_csv_budget_overflow_also_happens_before_json_or_csv_reservation ... ok
+2026-10-21T18:43:30.4031690Z test comparison_app::tests::cli_json_csv_roundtrip_retains_unknown_states_and_declared_file_origin ... ok
+2026-10-21T18:43:30.4054031Z test comparison_app::tests::cli_opt_in_refuses_existing_destination_without_changing_its_bytes ... ok
+2026-10-21T18:43:30.4073127Z test comparison_app::tests::csv_escapes_formulas_quotes_commas_newlines_and_preserves_original_values ... ok
+2026-10-21T18:43:30.4082431Z test comparison_app::tests::default_request_serialization_is_byte_identical_for_existing_mcp_normalization ... ok
+2026-10-21T18:43:30.4152060Z test comparison_app::tests::cli_opt_in_exports_complete_typed_reports_and_compared_fact_csv ... ok
+2026-10-21T18:43:30.4171722Z test comparison_app::tests::exact_output_budget_allows_boundary_and_refuses_next_byte ... ok
+2026-10-21T18:43:30.4191941Z test comparison_app::tests::existing_destination_is_refused_and_original_bytes_survive ... ok
+2026-10-21T18:43:30.4231702Z test comparison_app::tests::explicit_zero_generation_and_optional_null_are_retained_without_invention ... ok
+2026-10-21T18:43:30.4251932Z test comparison_app::tests::default_response_is_byte_identical_to_prior_two_field_contract ... ok
+2026-10-21T18:43:30.4341655Z test comparison_app::tests::imported_typed_report_is_not_promoted_to_raw_file_fidelity_or_known_capture ... ok
+2026-10-21T18:43:30.4441780Z test comparison_app::tests::incomplete_capture_is_retained_even_when_selected_text_projection_is_disabled ... ok
+2026-10-21T18:43:30.4501640Z test comparison_app::tests::mappings_preserve_original_report_urls_and_do_not_project_the_complete_bundle ... ok
+2026-10-21T18:43:30.4531538Z test comparison_app::tests::original_option_is_strict_boolean_and_default_stays_false ... ok
+2026-10-21T18:43:30.4551897Z test comparison_app::tests::oversized_structured_failure_becomes_explicit_budget_error_and_small_errors_keep_all_details ... ok
+2026-10-21T18:43:30.4553907Z test comparison_app::tests::strict_saved_request_rejects_unknown_and_invalid_nested_arguments ... ok
+2026-10-21T18:43:30.4555586Z test comparison_app::tests::structured_error_retains_every_collision_occurrence ... ok
+2026-10-21T18:43:30.4563435Z test comparison_app::tests::mutated_report_or_descriptor_cannot_be_bound_as_the_compared_original ... ok
+2026-10-21T18:43:30.4641563Z test comparison_app::tests::timestamp_only_does_not_change_compared_page_but_complete_report_hash_changes ... ok
+2026-10-21T18:43:30.4752120Z test comparison_app::tests::whole_envelope_fits_exact_boundary_and_refuses_one_byte_less_without_partial_success ... ok
+2026-10-21T18:43:30.4815916Z test comparison_app::tests::whole_reports_retain_all_loaded_fields_and_independent_hash_byte_binding ... ok
+2026-10-21T18:43:30.4912040Z test content_cohort::reporting_tests::content_reporting_all_hidden_is_explicit_known_exclusion_unknown_url_still_refuses ... ok
+2026-10-21T18:43:30.5131796Z test content_cohort::reporting_tests::content_reporting_equal_counts_still_bind_mode_profile_and_analysis_identity_separately ... ok
+2026-10-21T18:43:30.5151919Z test broken_sources::tests::broken_sources_caps_reject_rows_and_ambiguous_selected_join_expansion_without_truncation ... ok
+2026-10-21T18:43:30.5173018Z test content_cohort::reporting_tests::content_reporting_generation_raw_snapshot_and_view_guards_refuse_stale_all_frontdoors ... ok
+2026-10-21T18:43:30.5282568Z test content_cohort::reporting_tests::content_reporting_modes_strict_explicit128_limit_and_duplicate_known_identity_are_preserved ... ok
+2026-10-21T18:43:30.5322046Z test content_cohort::reporting_tests::content_reporting_raw_ordinal_paging_can_be_empty_without_faking_complete_report ... ok
+2026-10-21T18:43:30.5529062Z test content_cohort::reporting_tests::content_reporting_inactive_absent_null_and_all_false_keep_legacy_json_bytes ... ok
+2026-10-21T18:43:30.5540039Z test content_cohort::reporting_tests::content_reporting_real_capture_saved_reopen_no_hidden_text_analysis_leak_or_binding_repair ... ok
+2026-10-21T18:43:30.5611652Z test content_cohort::tests::filtering_all_rows_is_explicit_and_preserves_excluded_identities ... ok
+2026-10-21T18:43:30.5621673Z test content_cohort::tests::exact_selection_identity_and_generation_are_not_silently_repaired ... ok
+2026-10-21T18:43:30.5641844Z test content_cohort::tests::pending_selected_rows_never_supply_parent_capture_text ... ok
+2026-10-21T18:43:30.5644093Z test content_cohort::reporting_tests::content_reporting_all_eight_saved_profiles_filter_before_selection_and_pair_corpus_keep_raw_ordinals ... ok
+2026-10-21T18:43:30.5646405Z test content_cohort::tests::legacy_absence_remains_missing_with_unknown_pairs_and_metadata_only_inventory ... ok
+2026-10-21T18:43:30.5650795Z test crawl_config_file::tests::deep_ignored_values_do_not_change_legacy_parsing_or_hide_profile_markers ... ok
+2026-10-21T18:43:30.5653439Z test crawl_config_file::tests::duplicate_known_fields_and_original_typed_errors_are_not_collapsed ... ok
+2026-10-21T18:43:30.5655668Z test crawl_config_file::tests::raw_native_options_and_free_nested_markers_keep_the_legacy_contract ... ok
+2026-10-21T18:43:30.5657514Z test crawl_config_file::tests::recognizable_v1_v2_wrong_shapes_and_partial_profiles_are_explicitly_refused ... ok
+2026-10-21T18:43:30.5664012Z test crawl_quotas_app::tests::malformed_quota_store_is_not_converted_or_replaced_by_readonly_service ... ok
+2026-10-21T18:43:30.5669351Z test content_cohort::tests::request_unknown_fields_are_rejected_and_typed_snapshot_hash_is_stable ... ok
+2026-10-21T18:43:30.5673975Z test crawl_admission_cli_tests::static_limits_cli_accepts_zero_only_for_folder_query_and_exposes_explicit_units ... ok
+2026-10-21T18:43:30.5675976Z test crawl_resume::tests::cli_resume_endpoint_accepts_only_canonical_literal_loopback_origins ... ok
+2026-10-21T18:43:30.5693484Z test crawl_quotas_app::tests::missing_quota_store_is_never_created_by_readonly_service ... ok
+2026-10-21T18:43:30.5697064Z test crawl_quotas_app::tests::quota_cli_accepts_only_explicit_store_and_has_no_mutating_or_fake_export_options ... ok
+2026-10-21T18:43:30.5699326Z test crawl_resume::tests::cli_resume_options_preserve_zero_and_exact_generation_revision_hash_authority ... ok
+2026-10-21T18:43:30.7203320Z test crawl_resume::tests::cli_resume_invalid_options_refuse_before_any_local_connection ... ok
+2026-10-21T18:43:30.7205837Z test crawl_resume::tests::cli_resume_options_reject_unknown_and_duplicate_authority_fields ... ok
+2026-10-21T18:43:30.7232690Z test crawl_resume::tests::cli_resume_posts_exact_authority_and_reports_acceptance_without_completion ... ok
+2026-10-21T18:43:30.7258659Z test crawl_resume::tests::cli_resume_options_read_is_capped_during_growth_and_oversize_refuses_before_connection ... ok
+2026-10-21T18:43:30.7288479Z test crawl_resume::tests::cli_resume_propagates_stale_or_nonmonotone_refusal_without_claiming_success ... ok
+2026-10-21T18:43:30.7300802Z test crawl_resume::tests::cli_resume_rejects_other_job_or_completed_response_as_accepted_running ... ok
+2026-10-21T18:43:30.7327150Z test crawl_resume::tests::cli_resume_requires_job_uuid_and_keeps_store_paths_out_of_its_syntax ... ok
+2026-10-21T18:43:30.7680227Z test enrichment_app::tests::api_enrichment_cli_protects_existing_inputs_outputs_and_returns_complete_json_csv_from_same_service ... ok
+2026-10-21T18:43:30.7761877Z test enrichment_app::tests::api_enrichment_close_cancels_and_actually_joins_owned_inflight_work_before_return ... ok
+2026-10-21T18:43:30.7828193Z test enrichment_app::tests::api_enrichment_normalized_overcap_plan_is_refused_before_store_owner_or_provider_admission ... ok
+2026-10-21T18:43:30.7903273Z test enrichment_app::tests::api_enrichment_original_input_config_and_completed_report_hashes_refuse_tamper ... ok
+2026-10-21T18:43:30.7943455Z test enrichment_app::tests::api_enrichment_owner_panic_is_reported_and_retained_join_is_not_lost ... ok
+2026-10-21T18:43:30.8722772Z test crawl_resume::tests::cli_resume_never_follows_redirect_to_another_owned_listener ... ok
+2026-10-21T18:43:30.8730640Z test enrichment_app::tests::api_enrichment_ui_first_csv_column_one_matches_real_import_consumer ... ok
+2026-10-21T18:43:30.8809695Z test enrichment_app::tests::injected_provider_is_selected_by_real_start_and_saves_same_completed_report ... ok
+2026-10-21T18:43:30.8828693Z test enrichment_app::tests::injected_provider_start_keeps_loopback_input_and_admission_guards_before_transport ... ok
+2026-10-21T18:43:30.8906722Z test generation_export::tests::generation_atomic_concurrent_publication_has_one_whole_winner_and_cleans_links ... ok
+2026-10-21T18:43:30.8914432Z test generation_export::tests::generation_bounded_reader_rejects_exact_plus_one_and_nonregular_input ... ok
+2026-10-21T18:43:30.9027571Z test generation_export::tests::generation_cli_reporting_shared_options_receipt_raw_hash_and_inputs_unchanged ... ok
+2026-10-21T18:43:30.9066319Z test generation_export::tests::generation_cli_requires_all_explicit_paths_and_rejects_unknown_flags ... ok
+2026-10-21T18:43:30.9115274Z test generation_export::tests::generation_cli_saved_inputs_unchanged_complete_zip_and_no_overwrite ... ok
+2026-10-21T18:43:30.9125273Z test generation_export::tests::generation_invalid_options_precede_report_io_and_leave_no_output ... ok
+2026-10-21T18:43:30.9282094Z test mcp::broken_sources::tests::broken_sources_complete_csv_requires_eof_length_digest_and_resource_snapshot_header ... ok
+2026-10-21T18:43:30.9290183Z test mcp::broken_sources::tests::broken_sources_explicit_scope_strict_typed_union_and_csv_authority_before_http ... ok
+2026-10-21T18:43:30.9341595Z test crawl_resume::tests::cli_resume_reply_limit_and_deadline_are_real_refusals ... ok
+2026-10-21T18:43:30.9401894Z test mcp::broken_sources::tests::broken_sources_posts_both_existing_routes_preserves_modes_and_snapshot_refusal_without_fetches ... ok
+2026-10-21T18:43:30.9411643Z test mcp::cdn_classification_tests::cdn_mcp_inventory_describes_exact_origin_reporting_and_no_network_grant ... ok
+2026-10-21T18:43:30.9461899Z test mcp::cdn_classification_tests::cdn_mcp_real_bridge_posts_exact_optional_config_and_propagates_validation_error ... ok
+2026-10-21T18:43:30.9471654Z test mcp::cdn_directory_reporting_tests::cdn_directory_mcp_inventory_is_separate_bounded_reporting_without_network_authority ... ok
+2026-10-21T18:43:30.9501657Z test mcp::cdn_directory_reporting_tests::cdn_directory_mcp_real_bridge_posts_same_config_and_propagates_typed_rule_refusal ... ok
+2026-10-21T18:43:30.9521966Z test mcp::crawl_admission_limits_tests::static_limits_mcp_bridge_posts_exact_config_and_propagates_validation_refusal ... ok
+2026-10-21T18:43:30.9552017Z test mcp::crawl_admission_limits_tests::static_limits_mcp_inventory_documents_version_units_zero_and_renderer_boundary ... ok
+2026-10-21T18:43:30.9561539Z test mcp::crawl_quotas::tests::quotas_mcp_actual_get_adapter_preserves_legacy_unknown_and_closes_server ... ok
+2026-10-21T18:43:30.9574695Z test mcp::crawl_quotas::tests::quotas_mcp_has_only_strict_readonly_summary_and_refuses_other_actions_before_io ... ok
+2026-10-21T18:43:30.9576677Z test mcp::custom_search_tests::custom_search_mcp_configuration_schema_is_the_same_bounded_api_contract ... ok
+2026-10-21T18:43:30.9578821Z test mcp::broken_sources::tests::broken_sources_preview_rejects_cross_scope_generation_foreign_crawl_and_incomplete_json_or_hash ... ok
+2026-10-21T18:43:30.9621531Z test mcp::enrichment::tests::api_enrichment_mcp_action_shapes_reject_without_api_or_provider_requests ... ok
+2026-10-21T18:43:30.9641847Z test mcp::enrichment::tests::api_enrichment_mcp_uses_the_same_real_loopback_api_and_verifies_csv_bytes ... ok
+2026-10-21T18:43:30.9644307Z test mcp::custom_search_tests::custom_search_mcp_posts_exact_profile_and_surfaces_typed_validation_refusal ... ok
+2026-10-21T18:43:30.9851785Z test mcp::file_wiring_tests::file_tools_actual_stdio_frames_share_opt_in_and_drain_on_eof ... ok
+2026-10-21T18:43:31.0021827Z test mcp::file_wiring_tests::file_tools_all_five_execute_locally_with_no_api_calls ... ok
+2026-10-21T18:43:31.0034382Z test mcp::file_wiring_tests::file_tools_api_address_retains_exact_loopback_and_default_fallback ... ok
+2026-10-21T18:43:31.0081523Z test mcp::file_wiring_tests::file_tools_cli_opt_in_is_shared_by_serve_and_mcp ... ok
+2026-10-21T18:43:31.0111752Z test mcp::file_wiring_tests::file_tools_cli_requires_an_explicit_value_and_preserves_other_commands ... ok
+2026-10-21T18:43:31.0201248Z test mcp::file_wiring_tests::file_tools_disabled_requests_never_reach_the_api ... ok
+2026-10-21T18:43:31.1427855Z test mcp::file_wiring_tests::file_tools_http_opt_in_capabilities_inventory_and_dispatch_share_module ... ok
+2026-10-21T18:43:31.1435933Z test mcp::file_wiring_tests::file_tools_actual_text_response_is_single_copy_and_whole_wire_bounded ... ok
+2026-10-21T18:43:31.1573605Z test mcp::file_wiring_tests::file_tools_inventory_is_disabled_by_default_and_declares_exact_five_when_enabled ... ok
+2026-10-21T18:43:31.1621738Z test mcp::file_wiring_tests::file_tools_rpc_id_is_bounded_before_version_errors_or_any_write ... ok
+2026-10-21T18:43:31.1642004Z test mcp::file_wiring_tests::file_tools_server_rejects_bad_root_and_nonloopback_before_data_directory ... ok
+2026-10-21T18:43:31.1655870Z test mcp::file_wiring_tests::file_tools_invalid_shapes_and_oversized_text_never_mutate ... ok
+2026-10-21T18:43:31.1698032Z test mcp::file_wiring_tests::file_tools_stdio_output_error_still_awaits_registry_drain ... ok
+2026-10-21T18:43:31.2196384Z test mcp::files::tests::file_tools_atomic_replacement_keeps_hardlink_inode_and_cleans_own_stage ... ok
+2026-10-21T18:43:31.2739434Z test mcp::files::tests::file_tools_cancelled_drain_does_not_lose_join_handle ... ok
+2026-10-21T18:43:31.3512367Z test enrichment_app::tests::api_enrichment_snapshot_pages_preserve_all_occurrences_filters_and_cold_no_provider_resume ... ok
+2026-10-21T18:43:31.3541737Z test mcp::files::tests::file_tools_existing_root_and_no_implicit_outside_creation ... ok
+2026-10-21T18:43:31.3543403Z test mcp::files::tests::file_tools_four_workers_bound_and_panics_are_joined_and_reported ... ok
+2026-10-21T18:43:31.3601664Z test mcp::files::tests::file_tools_listing_has_exact_sorted_pages_and_stale_instance_anchor_checks ... ok
+2026-10-21T18:43:31.3801642Z test mcp::files::tests::file_tools_dropped_request_and_concurrent_drain_wait_actual_worker_return ... ok
+2026-10-21T18:43:31.3821560Z test mcp::files::tests::file_tools_native_unicode_and_platform_filename_boundaries ... ok
+2026-10-21T18:43:31.3881677Z test mcp::files::tests::file_tools_read_empty_invalid_utf8_and_sparse_overbudget_are_explicit ... ok
+2026-10-21T18:43:31.3911400Z test mcp::files::tests::file_tools_recursive_create_long_unicode_and_partial_effects ... ok
+2026-10-21T18:43:31.3971487Z test mcp::files::tests::file_tools_root_handle_cannot_be_rebound_by_replacing_configured_path ... ok
+2026-10-21T18:43:31.4006180Z test mcp::files::tests::file_tools_schema_and_native_path_preflight_are_strict ... ok
+2026-10-21T18:43:31.4007650Z test mcp::files::tests::file_tools_stage_guard_cleans_owned_failure_but_preserves_replaced_entry ... ok
+2026-10-21T18:43:31.4542262Z test mcp::files::tests::file_tools_supervisor_abort_and_caller_drop_recover_actual_join_slots ... ok
+2026-10-21T18:43:31.4631790Z test mcp::files::tests::file_tools_symlink_intermediate_final_and_root_are_never_followed ... ok
+2026-10-21T18:43:31.4771971Z test mcp::files::tests::file_tools_unix_fifo_is_rejected_before_read_and_invalid_names_are_lossless_errors ... ok
+2026-10-21T18:43:31.4851893Z test mcp::files::tests::file_tools_utf8_chunks_reconstruct_exact_bytes_and_detect_content_changes ... ok
+2026-10-21T18:43:31.5012301Z test mcp::generation::tests::generation_mcp_actual_binary_roundtrip_is_single_encoded_hash_bound_and_readonly ... ok
+2026-10-21T18:43:31.5172512Z test mcp::generation::tests::generation_mcp_api_error_body_is_bounded_and_explicit ... ok
+2026-10-21T18:43:31.7714273Z test mcp::generation::tests::generation_mcp_corrupt_or_over_budget_responses_never_return_binary ... ok
+2026-10-21T18:43:32.2811894Z test mcp::files::tests::file_tools_listing_over_entry_budget_is_error_not_partial_page ... ok
+2026-10-21T18:43:33.3782697Z test mcp::generation::tests::generation_mcp_over_budget_result_preserves_ordinary_request_id ... ok
+2026-10-21T18:43:33.3882855Z test mcp::generation::tests::generation_mcp_reporting_existing_tool_forwards_mode_and_returns_actual_bounded_metadata ... ok
+2026-10-21T18:43:33.3982134Z test mcp::generation::tests::generation_mcp_reporting_rejects_missing_explicit_mode_or_inconsistent_identity_header ... ok
+2026-10-21T18:43:33.4055020Z test mcp::generation::tests::generation_mcp_maximum_binary_single_encoding_fits_complete_transport_budget ... ok
+2026-10-21T18:43:33.4201571Z test mcp::generation::tests::generation_mcp_strict_preflight_makes_zero_api_requests ... ok
+2026-10-21T18:43:33.4241755Z test mcp::file_wiring_tests::file_tools_wire_guard_accepts_exact_physical_frame_and_rejects_plus_one ... ok
+2026-10-21T18:43:33.4251675Z test mcp::ngrams::tests::ngram_mcp_reporting_strict_request_and_exact_inventory_extension_without_api_contact ... ok
+2026-10-21T18:43:33.4321574Z test mcp::saved_comparison::tests::bundle_depth_preflight_ignores_container_glyphs_inside_quoted_values ... ok
+2026-10-21T18:43:33.4323346Z test mcp::saved_comparison::tests::bundle_depth_preflight_refuses_unclosed_strings_and_wrong_or_unclosed_containers ... ok
+2026-10-21T18:43:33.4349919Z test mcp::saved_comparison::tests::bundle_depth_preflight_tracks_escaped_quotes_and_backslashes ... ok
+2026-10-21T18:43:33.4351832Z test mcp::ngrams::tests::ngram_mcp_reporting_shared_service_modes_csv_digest_and_stale_refusal_with_actual_eof ... ok
+2026-10-21T18:43:33.4381417Z test mcp::saved_comparison::tests::default_api_parser_retains_its_existing_recursion_limit ... ok
+2026-10-21T18:43:33.4411630Z test mcp::saved_comparison::tests::api_body_can_fit_while_opt_in_complete_rpc_is_refused_without_a_first_n_success ... ok
+2026-10-21T18:43:33.4413265Z test mcp::saved_comparison::tests::default_rpc_envelope_is_exactly_preserved_without_opt_in ... ok
+2026-10-21T18:43:33.4451796Z test mcp::saved_comparison::tests::descriptor_is_read_only_strict_and_additional_to_existing_tools ... ok
+2026-10-21T18:43:33.4611669Z test mcp::saved_comparison::tests::mcp_bundle_native_f64_fact_preserves_original_bits_and_core_hash ... ok
+2026-10-21T18:43:33.4696837Z test mcp::saved_comparison::tests::bundle_missing_unrequested_or_tampered_report_is_an_explicit_mcp_error ... ok
+2026-10-21T18:43:33.4731558Z test mcp::saved_comparison::tests::nonstructured_api_error_is_explicit_adapter_failure ... ok
+2026-10-21T18:43:33.4791535Z test mcp::saved_comparison::tests::opt_in_bundle_depth_256_fits_and_257_is_refused_before_deserialization ... ok
+2026-10-21T18:43:33.4971698Z test mcp::saved_comparison::tests::mcp_bundle_wrappers_do_not_reject_an_accepted_standalone_report_depth ... ok
+2026-10-21T18:43:33.4991713Z test mcp::saved_comparison::tests::opt_in_parser_still_validates_json_grammar_and_requires_document_end ... ok
+2026-10-21T18:43:33.5031474Z test mcp::saved_comparison::tests::opt_in_mcp_returns_complete_validated_reports_and_retains_read_only_descriptor ... ok
+2026-10-21T18:43:33.5091389Z test mcp::saved_comparison::tests::mcp_bundle_worker_pipeline_accepts_api_depth256_and_refuses257_on_small_caller_stack ... ok
+2026-10-21T18:43:33.5108307Z test mcp::saved_comparison::tests::opt_in_wrong_boolean_and_extra_argument_fail_before_loopback_io ... ok
+2026-10-21T18:43:33.5161770Z test comparison_app::reporting_tests::reporting_all64_saved_profile_pairs_use_each_side_without_touching_raw_facts ... ok
+2026-10-21T18:43:33.5442112Z test mcp::saved_comparison::tests::reporting_mcp_internally_valid_wrong_mode_is_not_promoted_to_success ... ok
+2026-10-21T18:43:33.5472675Z test mcp::saved_comparison::tests::reporting_mcp_equal_count_wrong_profile_identity_is_refused_for_raw_and_reported ... ok
+2026-10-21T18:43:33.5742001Z test mcp::saved_comparison::tests::reporting_mcp_wrong_snapshot_view_guard_is_refused_even_when_profile_identity_matches ... ok
+2026-10-21T18:43:33.5761546Z test mcp::saved_comparison::tests::structured_api_collision_failure_is_retained_in_mcp_result ... ok
+2026-10-21T18:43:33.5891990Z test mcp::saved_comparison::tests::unrepresentable_request_id_returns_bounded_null_id_protocol_failure ... ok
+2026-10-21T18:43:33.5894157Z test mcp::saved_comparison::tests::reporting_mcp_missing_view_refuses_explicit_mode_and_each_guard_in_both_bundle_paths ... ok
+2026-10-21T18:43:33.5945999Z test mcp::segments::tests::segments_mcp_actual_http_adapter_preserves_request_digest_and_normal_server_close ... ok
+2026-10-21T18:43:33.5987804Z test mcp::segments::tests::segments_mcp_rejects_invalid_authority_shapes_before_loopback_and_keeps_readonly_inventory ... ok
+2026-10-21T18:43:33.5994519Z test mcp::segments::tests::segments_mcp_shared_request_reporting_mode_is_strict_and_survives_transport_serialization ... ok
+2026-10-21T18:43:33.6172092Z test mcp::saved_comparison::tests::whole_rpc_budget_counts_actual_id_text_duplication_and_json_escaping ... ok
+2026-10-21T18:43:33.6233710Z test mcp::sitemap_argument_tests::sitemap_tool_transports_both_cursor_roles_and_page_limit_in_actual_local_get ... ok
+2026-10-21T18:43:33.6282286Z test mcp::sitemap_argument_tests::sitemap_tool_is_readonly_and_wrong_argument_types_fail_before_api_io ... ok
+2026-10-21T18:43:33.6309506Z test mcp::sitemap_argument_tests::sitemap_tool_validates_separate_cursor_roles_before_api_io ... ok
+2026-10-21T18:43:33.6410198Z test mcp::saved_comparison::tests::reporting_mcp_matching_guards_accept_complete_reply_and_inactive_default_keeps_legacy_shape ... ok
+2026-10-21T18:43:33.6912651Z test mcp::saved_comparison::tests::reporting_mcp_acceptance_never_filters_raw_mapping_or_original_target_facts ... ok
+2026-10-21T18:43:33.9982581Z test mcp::sitemap_findings::tests::findings_mcp_actual_stale_api_error_preserves_status_and_typed_error_once ... ok
+2026-10-21T18:43:34.2442374Z test mcp::sitemap_findings::tests::findings_mcp_actual_http_body_inclusive_budget_and_bounded_error_status ... ok
+2026-10-21T18:43:34.2630657Z test mcp::sitemap_findings::tests::findings_stdio_actual_active_oversize_open_producer_closes_without_suffix_dispatch ... ok
+2026-10-21T18:43:34.2683508Z test mcp::sitemap_findings::tests::findings_stdio_cancel_after_pending_and_busy_still_drops_actual_http_future ... ok
+2026-10-21T18:43:34.3592220Z test mcp::sitemap_findings::tests::findings_mcp_strict_schema_types_domains_cursor_and_rpc_id_fail_before_io ... ok
+2026-10-21T18:43:34.3681616Z test mcp::sitemap_findings::tests::findings_stdio_eof_cancels_actual_http_request_without_result_or_detached_worker ... ok
+2026-10-21T18:43:34.3851571Z test mcp::sitemap_findings::tests::findings_stdio_partial_following_frame_survives_actual_response_and_replays_once ... ok
+2026-10-21T18:43:34.4095240Z test mcp::sitemap_findings::tests::findings_stdio_cancelled_frame_read_preserves_actual_prefix_and_remaining_sentinel_cap ... ok
+2026-10-21T18:43:34.6982602Z test mcp::sitemap_findings::tests::postfix_tests::findings_postfix_stdio_exact_utf8_rpc_id_and_plus_one_preserve_following_frame ... ok
+2026-10-21T18:43:34.7011700Z test mcp::spelling::tests::spelling_mcp_binds_exact_request_snapshot_mode_dictionary_and_crawl ... ok
+2026-10-21T18:43:34.7101775Z test mcp::spelling::tests::spelling_mcp_rejects_disabled_and_empty_checked_zero_but_accepts_unknown_states ... ok
+2026-10-21T18:43:34.7131785Z test mcp::sitemap_findings::tests::findings_mcp_actual_store_http_page_export_descriptor_and_all_seven_filters ... ok
+2026-10-21T18:43:34.7161627Z test mcp::spelling::tests::spelling_mcp_rejects_spoofed_request_with_missing_projection_and_fabricated_zero ... ok
+2026-10-21T18:43:34.7191675Z test mcp::spelling::tests::spelling_mcp_schema_has_explicit_mutating_local_analysis_and_no_engine_launch ... ok
+2026-10-21T18:43:34.7221962Z test mcp::stdio_tests::stdio_empty_input_and_final_eof_notification_emit_no_response ... ok
+2026-10-21T18:43:34.7242005Z test mcp::spelling::tests::spelling_mcp_rejects_omitted_duplicate_unknown_and_raw_excluded_selected_work ... ok
+2026-10-21T18:43:34.7291876Z test mcp::stdio_tests::stdio_fragmented_crlf_notification_invalid_json_and_final_eof_are_preserved ... ok
+2026-10-21T18:43:34.8132342Z test mcp::stdio_tests::stdio_oversized_terminated_frame_never_dispatches_prefix_or_following_frame ... ok
+2026-10-21T18:43:34.8912264Z test mcp::stdio_tests::stdio_plus_one_without_delimiter_rejects_with_open_producer_and_closes ... ok
+2026-10-21T18:43:34.8971357Z test mcp::tests::advertised_resource_argument_shapes_reject_before_api_io ... ok
+2026-10-21T18:43:34.9001246Z test mcp::tests::only_loopback_bridge ... ok
+2026-10-21T18:43:34.9002161Z test mcp::tests::protocol_negotiation_and_errors ... ok
+2026-10-21T18:43:34.9031534Z test mcp::tests::saved_content_reporting_query_forwards_exact_mode_and_stale_guards_without_a_new_tool ... ok
+2026-10-21T18:43:34.9540826Z test mcp::stdio_tests::stdio_exact_eight_mib_line_and_following_request_are_dispatched ... ok
+2026-10-21T18:43:34.9582382Z test migration_app::tests::migration_workflow_complete_exports_preserve_unknown_and_formula_safe_originals ... ok
+2026-10-21T18:43:34.9602281Z test migration_app::tests::migration_cli_new_outputs_keep_mismatch_success_and_never_overwrite_inputs ... ok
+2026-10-21T18:43:34.9631743Z test migration_app::tests::migration_workflow_strict_request_and_independent_budgets_reject_before_evaluation ... ok
+2026-10-21T18:43:34.9702443Z test ngram_app::channel_tests::saved_html_channel_none_and_null_keep_old_request_snapshot_and_body_csv_bytes ... ok
+2026-10-21T18:43:34.9717344Z test ngram_app::channel_tests::saved_html_channel_request_rejects_unknown_versions_fields_and_non_object_profiles ... ok
+2026-10-21T18:43:34.9737322Z test migration_app::tests::migration_workflow_cursor_binds_actual_snapshot_csv_options_filter_and_limit ... ok
+2026-10-21T18:43:35.0682625Z test ngram_app::channel_tests::saved_html_channels_legacy_incomplete_wrong_source_and_missing_raw_never_fall_back_or_count_zero ... ok
+2026-10-21T18:43:35.0851633Z test ngram_app::channel_tests::saved_html_channel_snapshot_filters_full_csv_and_cli_reopen_bind_the_explicit_channel ... ok
+2026-10-21T18:43:35.1362822Z test ngram_app::channel_tests::saved_html_channels_pending_selected_and_changed_metadata_invalidate_the_saved_channel_snapshot ... ok
+2026-10-21T18:43:35.1842452Z test ngram_app::channel_tests::saved_html_channels_real_raw_capture_and_renderer_stub_metadata_stay_separate_and_element_bounded ... ok
+2026-10-21T18:43:35.2945072Z test mcp::sitemap_findings::tests::findings_mcp_entire_wire_wrapper_accepts_exact_eight_mib_and_rejects_plus_one ... ok
+2026-10-21T18:43:35.3585541Z test ngram_app::channel_tests::saved_ngram_reporting_dom_and_optional_metadata_channels_keep_separate_raw_source_authority ... ok
+2026-10-21T18:43:35.8638510Z test ngram_app::channel_tests::saved_ngram_reporting_all_three_channels_preserve_legacy_options_tokens_full_json_csv_bytes ... ok
+2026-10-21T18:43:35.8878433Z test ngram_app::channel_tests::saved_ngram_reporting_limits_apply_to_visible_corpus_but_hidden_capture_errors_are_retained ... ok
+2026-10-21T18:43:36.2110895Z test ngram_app::channel_tests::saved_ngram_reporting_eight_profiles_apply_before_all_three_channel_corpora ... ok
+2026-10-21T18:43:36.2983038Z test ngram_app::channel_tests::saved_retained_metadata_body_budget_only_foreign_capture_and_snapshot_never_change_authority ... ok
+2026-10-21T18:43:36.3762110Z test ngram_app::channel_tests::saved_ngram_reporting_mixed_duplicate_observations_select_individually_not_by_url ... ok
+2026-10-21T18:43:36.3893736Z test ngram_app::tests::saved_ngram_cli_reopen_missing_source_never_overwrites_report_options_or_existing_output ... ok
+2026-10-21T18:43:36.3955628Z test ngram_app::channel_tests::saved_ngram_reporting_raw_ordinals_capture_bindings_and_dense_memberships_survive_selection ... ok
+2026-10-21T18:43:36.4002284Z test ngram_app::tests::saved_ngram_extended_filter_csv_and_snapshot_range_are_bound_and_strict ... ok
+2026-10-21T18:43:36.4122072Z test ngram_app::tests::saved_ngram_projection_token_binds_every_filter_limit_source_and_snapshot_with_complete_csv ... ok
+2026-10-21T18:43:36.4172562Z test ngram_app::channel_tests::saved_retained_metadata_real_raw_and_render_stub_without_capture_reopen_with_complete_csv ... ok
+2026-10-21T18:43:36.4295479Z test ngram_app::tests::saved_ngram_reporting_equal_rows_still_bind_mode_profile_and_aggregate_basis ... ok
+2026-10-21T18:43:36.4471705Z test ngram_app::tests::saved_ngram_reporting_request_serde_strict_and_default_legacy_bytes_token_csv ... ok
+2026-10-21T18:43:36.4574154Z test ngram_app::tests::saved_ngram_reporting_source_paging_csv_keeps_dense_and_raw_ordinals_distinct ... ok
+2026-10-21T18:43:36.4595673Z test ngram_app::tests::saved_ngram_reporting_offline_cli_modes_and_stale_token_preserve_raw_inputs ... ok
+2026-10-21T18:43:36.4598059Z test resource_broken_sources_app::tests::resource_source_reporting_request_http_core_mode_serialization_is_strict_without_uploading_visibility ... ok
+2026-10-21T18:43:36.8562356Z test ngram_app::tests::saved_ngram_reporting_wholly_hidden_retains_counts_and_raw_global_ceiling ... ok
+2026-10-21T18:43:36.8824127Z test resource_broken_sources_app::tests::resource_sources_cli_cannot_overwrite_database_request_sidecars_or_existing_outputs ... ok
+2026-10-21T18:43:36.8834038Z test resource_broken_sources_app::tests::resource_sources_request_rejects_paths_observations_unknown_fields_and_wrong_job_generation ... ok
+2026-10-21T18:43:36.8842492Z test resource_export::tests::csv_retains_quotes_newlines_unicode_and_empty_fields ... ok
+2026-10-21T18:43:36.8865515Z test resource_export::tests::observed_formula_text_is_protected_without_changing_original_json ... ok
+2026-10-21T18:43:36.8902044Z test ngram_app::tests::saved_ngram_missing_and_pending_sources_remain_unknown_strict_options_and_json_caps_fail ... ok
+2026-10-21T18:43:36.8933326Z test segments_app::tests::segments_cli_depth_predicate_refuses_before_opening_a_report_or_output ... ok
+2026-10-21T18:43:36.9261805Z test resource_broken_sources_app::tests::resource_sources_app_json_rejects_envelope_over_budget_and_retains_unknown_null ... ok
+2026-10-21T18:43:37.2483419Z test segments_app::tests::segments_service_cursor_binds_generation_rules_selection_view_and_report_bytes ... ok
+2026-10-21T18:43:37.3292474Z test segments_app::tests::segments_service_full_exports_include_tail_issues_and_counts_without_page_truncation ... ok
+2026-10-21T18:43:37.3822364Z test segments_app::tests::segments_cli_cold_report_export_and_no_overwrite_inputs_or_existing_outputs ... ok
+2026-10-21T18:43:37.5202503Z test segments_app::tests::segments_cli_shared_reporting_modes_export_and_refuse_cross_view_token_without_raw_writes ... ok
+2026-10-21T18:43:37.5222202Z test segments_app::tests::segments_service_reporting_mode_serde_is_strict_and_legacy_request_omits_new_field ... ok
+2026-10-21T18:43:37.5282183Z test segments_app::tests::segments_service_reporting_tokens_bind_mode_profile_and_raw_snapshot_without_relabelling ... ok
+2026-10-21T18:43:37.5331687Z test segments_cli_tests::segments_cli_uses_explicit_report_request_output_and_never_creates_crawl_config ... ok
+2026-10-21T18:43:37.5334152Z test server::accessibility::tests::accessibility_complete_csv_preserves_saved_details_unknowns_profile_external_pages_and_atomic_budgets ... ok
+2026-10-21T18:43:37.5361588Z test segments_app::tests::segments_service_inactive_profile_keeps_old_token_formula_full_json_and_csv ... ok
+2026-10-21T18:43:37.5902605Z test segments_app::tests::segments_service_reported_paging_keeps_raw_ordinals_and_full_json_csv_population ... ok
+2026-10-21T18:43:37.5922203Z test server::accessibility::tests::accessibility_unknown_is_not_zero_and_needs_review_is_not_a_violation_or_compliance_claim ... ok
+2026-10-21T18:43:37.7142417Z test server::broken_sources::tests::broken_sources_api_full_csv_keeps_duplicate_sources_and_exact_length_sha_without_website_requests ... ok
+2026-10-21T18:43:37.7212095Z test server::broken_sources::tests::broken_sources_api_refuses_active_and_generation_changes_and_marks_imported_age_unknown ... ok
+2026-10-21T18:43:37.7271633Z test server::cdn_classification_tests::cdn_api_config_roundtrip_requires_versioned_exact_origins_and_never_creates_resource_grants ... ok
+2026-10-21T18:43:37.7291062Z test server::cdn_classification_tests::cdn_api_null_and_omission_keep_old_effective_config_without_backfilling_observations ... ok
+2026-10-21T18:43:37.7331512Z test server::cdn_directory_reporting_tests::cdn_directory_api_absence_null_and_legacy_page_link_provenance_remain_unknown ... ok
+2026-10-21T18:43:37.7361611Z test server::cdn_directory_reporting_tests::cdn_directory_api_preserves_both_declared_profiles_and_refuses_unsupported_before_launch ... ok
+2026-10-21T18:43:37.7391377Z test server::comparison::tests::active_statuses_refuse_retained_report_with_structured_conflict ... ok
+2026-10-21T18:43:37.7421408Z test server::comparison::tests::bundle_flag_does_not_bypass_active_status_or_expected_generation_conflicts ... ok
+2026-10-21T18:43:37.7481446Z test server::comparison::tests::bundle_uses_same_stable_pair_after_both_sources_resume_and_change ... ok
+2026-10-21T18:43:37.7492562Z test server::comparison::tests::endpoint_default_omits_bundle_and_explicit_same_job_bundle_uses_one_revision ... ok
+2026-10-21T18:43:37.7511650Z test server::comparison::tests::imported_detached_bundle_retains_values_without_inventing_sql_or_generation_attestation ... ok
+2026-10-21T18:43:37.7541388Z test server::comparison::tests::imported_or_detached_report_is_declared_and_job_generation_not_sql_attested ... ok
+2026-10-21T18:43:37.7561698Z test server::comparison::tests::mismatched_generation_retains_expected_observed_and_side ... ok
+2026-10-21T18:43:37.7563202Z test server::comparison::tests::missing_report_is_conflict_and_not_empty_cohort ... ok
+2026-10-21T18:43:37.7564759Z test server::comparison::tests::same_job_pair_cannot_observe_two_different_expected_generations ... ok
+2026-10-21T18:43:37.7566516Z test server::comparison::tests::stable_native_and_imported_bindings_satisfy_actual_core_contract ... ok
+2026-10-21T18:43:37.7568223Z test server::comparison::tests::stable_partial_terminal_statuses_remain_comparable_saved_cohorts ... ok
+2026-10-21T18:43:37.7569969Z test server::config_profile_catalog::tests::catalog_api_absent_and_validation_rejections_have_no_files ... ok
+2026-10-21T18:43:37.7801652Z test server::config_profile_catalog::tests::catalog_api_cold_preview_exactness_and_cas_lifecycle ... ok
+2026-10-21T18:43:37.7906458Z test server::config_profile_catalog::tests::catalog_api_corrupt_and_unsupported_stores_are_unavailable_not_reset ... ok
+2026-10-21T18:43:37.7922936Z test server::config_profile_catalog::tests::catalog_api_count_and_encode_budget_exact_boundary_is_atomic ... ok
+2026-10-21T18:43:37.7934917Z test server::config_profile_catalog::tests::catalog_api_shared_slots_and_shutdown_admission_precede_writes ... ok
+2026-10-21T18:43:37.8061581Z test server::config_profiles::tests::config_profile_app_handlers_are_pure_and_export_only_header_requirements ... ok
+2026-10-21T18:43:37.8063578Z test server::config_profiles::tests::config_profile_app_media_and_slot_refusals_do_not_consume_request_bodies ... ok
+2026-10-21T18:43:37.8091523Z test server::config_profiles::tests::config_profile_app_patches_keep_native_uint64_and_untouched_nested_options ... ok
+2026-10-21T18:43:37.8151631Z test server::config_profiles::tests::config_profile_app_start_refuses_missing_targets_headers_and_invalid_patches_before_reservation ... ok
+2026-10-21T18:43:37.8181526Z test server::config_profiles::tests::config_profile_app_strict_envelopes_and_bad_patches_never_accept_partial_changes ... ok
+2026-10-21T18:43:37.8211521Z test server::crawl_admission_limits_tests::static_limits_api_dto_absent_null_and_legacy_zero_aliases_preserve_effective_bytes ... ok
+2026-10-21T18:43:37.8236401Z test server::crawl_admission_limits_tests::static_limits_api_dto_roundtrip_keeps_real_zero_bounds_and_rejects_before_launch ... ok
+2026-10-21T18:43:37.8241929Z test server::crawl_quotas::tests::quotas_api_preserves_absence_and_rejects_invalid_or_unsupported_config ... ok
+2026-10-21T18:43:37.8243496Z test server::crawl_quotas::tests::quotas_api_resume_requires_full_core_authority_and_summary_has_no_actions ... ok
+2026-10-21T18:43:37.8281842Z test server::accessibility::tests::accessibility_saved_handler_rejects_active_stale_oversize_and_returns_verified_full_csv ... ok
+2026-10-21T18:43:37.8351756Z test server::custom_search_tests::custom_search_api_configuration_is_strict_and_preserves_optional_absence ... ok
+2026-10-21T18:43:37.9431950Z test server::directory_tree::tests::directory_api_full_csv_binds_actual_length_sha_token_and_never_contacts_website ... ok
+2026-10-21T18:43:37.9561776Z test server::directory_tree::tests::directory_api_generation_report_config_and_status_mutation_stale_all_old_tokens ... ok
+2026-10-21T18:43:37.9591474Z test server::directory_tree::tests::directory_api_inactive_profiles_preserve_legacy_snapshot_token_and_csv_bytes ... ok
+2026-10-21T18:43:37.9711526Z test server::directory_tree::tests::directory_api_preview_and_csv_reject_cross_view_tokens_even_when_rows_match ... ok
+2026-10-21T18:43:38.0932313Z test server::custom_search_tests::custom_search_saved_http_export_preserves_unknowns_exact_zero_and_recovered_bytes ... ok
+2026-10-21T18:43:38.4092236Z test server::directory_tree::tests::directory_api_real_tree_navigation_keeps_synthetic_nodes_and_token_bound_paging ... ok
+2026-10-21T18:43:38.4201626Z test server::directory_tree::tests::directory_api_reported_csv_matches_preview_counts_and_profile_change_refuses_old_token ... ok
+2026-10-21T18:43:38.4231599Z test server::directory_tree::tests::directory_api_reporting_view_keeps_raw_snapshot_hashes_and_saved_source_bytes ... ok
+2026-10-21T18:43:38.4291754Z test server::directory_tree::tests::directory_api_reuses_unmodified_saved_authority_and_declares_imported_scope ... ok
+2026-10-21T18:43:38.4293660Z test server::directory_tree::tests::directory_api_strict_requests_refuse_forged_paths_missing_snapshot_and_bad_windows ... ok
+2026-10-21T18:43:38.4295528Z test server::directory_tree::tests::directory_api_view_request_serde_keeps_legacy_absence_and_rejects_unknown_modes ... ok
+2026-10-21T18:43:38.4382658Z test server::enrichment::tests::api_enrichment_http_preview_and_unacknowledged_start_never_fetch_supplied_website ... ok
+2026-10-21T18:43:38.5032267Z test server::enrichment::tests::api_enrichment_http_reads_full_csv_exact_length_sha_registry_completion_and_cold_config ... ok
+2026-10-21T18:43:38.5050218Z test server::enrichment_browser_fixture::native_enrichment_browser_fixture ... ignored, owned browser coordinator supplies an isolated store and local HTTP provider
+2026-10-21T18:43:38.5071775Z test server::enrichment_browser_fixture::test_provider_transport_refuses_non_fixture_origins_credentials_and_paths ... ok
+2026-10-21T18:43:38.5087286Z test server::explicit_sitemap_dto_regressions::create_dto_captures_original_explicit_duplicates_before_imported_sitemaps ... ok
+2026-10-21T18:43:38.5122045Z test server::explicit_sitemap_dto_regressions::create_import_only_dto_is_known_empty_while_saved_validation_remains_unknown ... ok
+2026-10-21T18:43:38.6999759Z test server::lifecycle::tests::failed_shutdown_signal_is_returned_only_after_actual_crawl_checkpoint_and_job_write ... ok
+2026-10-21T18:43:38.7002330Z test server::lifecycle::tests::one_global_lifecycle_admission_closes_request_blocking_and_crawl_registries ... ok
+2026-10-21T18:43:38.7316723Z test server::lifecycle::tests::owned_eof_reader_does_not_finish_on_nonempty_input_and_closes_only_at_actual_eof ... ok
+2026-10-21T18:43:38.9186700Z test server::lifecycle::tests::owned_shutdown_pauses_actual_crawl_and_waits_terminal_checkpoint_and_job_file ... ok
+2026-10-21T18:43:38.9422722Z test server::lifecycle::tests::owned_shutdown_stops_actual_http_listener_after_exact_legacy_inventory ... ok
+2026-10-21T18:43:41.9862202Z test server::directory_tree::tests::directory_api_real_oversized_saved_report_refuses_before_authority_clone_and_keeps_job ... ok
+2026-10-21T18:43:42.1583002Z test server::lifecycle::tests::shutdown_before_job_insert_keeps_admitted_initialization_owned_and_late_launch_paused ... ok
+2026-10-21T18:43:42.1621528Z test server::lifecycle::tests::typed_owned_core_failure_is_sticky_in_app_drain_but_domain_error_is_not ... ok
+2026-10-21T18:43:42.2812543Z test server::migration::tests::migration_api_pages_exports_and_stale_reports_do_not_contact_observed_website ... ok
+2026-10-21T18:43:42.2867856Z test server::migration::tests::migration_api_reuses_stable_readlock_authority_and_exposes_declared_import_scope ... ok
+2026-10-21T18:43:42.2907619Z test server::ngram_corpus::tests::saved_ngram_api_active_unknown_generation_and_owner_close_refuse_without_crawl ... ok
+2026-10-21T18:43:42.5352575Z test server::ngram_corpus::tests::saved_ngram_api_actual_saved_capture_over200_pages_full_csv_stale_and_zero_read_website_requests ... ok
+2026-10-21T18:43:42.6197569Z test server::ngram_corpus::tests::saved_ngram_api_genuine_six_word_capture_csv_and_option_staleness_without_read_requests ... ok
+2026-10-21T18:43:42.6655128Z test server::ngram_corpus::tests::saved_ngram_reporting_http_preview_continuation_csv_share_profile_and_raw_snapshot ... ok
+2026-10-21T18:43:42.6953117Z test server::ngram_corpus::tests::saved_ngram_reporting_http_same_job_equal_visible_count_profile_change_refuses_old_token ... ok
+2026-10-21T18:43:47.1942890Z test server::lifecycle::tests::policy_and_resource_http_exports_start_eagerly_and_stream_beyond_channel_capacity ... ok
+2026-10-21T18:43:47.1945355Z test server::resource_broken_sources::tests::resource_sources_api_unavailable_active_config_and_snapshot_generation_authority_are_explicit ... ok
+2026-10-21T18:43:47.1947484Z test server::response_stream::tests::response_actual_cancellation_is_terminal_to_standard_write_all_and_flush ... ok
+2026-10-21T18:43:47.2253474Z test server::response_stream::tests::response_actual_eight_enqueues_and_ninth_full_reservation_survive_cancelled_drain_until_body_drop ... ok
+2026-10-21T18:43:56.2362349Z test server::response_stream::tests::response_actual_sqlite_policy_resource_handlers_reach_eight_chunks_then_drop_and_recover_exact_full_exports ... ok
+2026-10-21T18:43:56.2401746Z test server::response_stream::tests::response_actual_worker_panic_before_ready_is_sticky_after_all_actual_joins ... ok
+2026-10-21T18:43:56.2431588Z test server::response_stream::tests::response_channel_cancel_and_closed_before_enqueue_return_zero_progress_errors ... ok
+2026-10-21T18:43:56.2451957Z test server::response_stream::tests::response_channel_default_write_all_preserves_exact_bytes_and_empty_writes_enqueue_nothing ... ok
+2026-10-21T18:43:56.2472937Z test server::response_stream::tests::response_channel_write_returns_exact_one_chunk_prefix_and_leaves_tail_unaccepted ... ok
+2026-10-21T18:43:56.2962533Z test server::response_stream::tests::response_completed_slots_are_reaped_before_repeated_download_registration ... ok
+2026-10-21T18:43:56.3102318Z test server::response_stream::tests::response_exact_length_commits_joined_final_frame_without_a_following_eof_poll ... ok
+2026-10-21T18:43:56.3135576Z test server::response_stream::tests::response_exact_length_holds_only_final_frame_and_rejects_late_error_panic_and_cancel ... ok
+2026-10-21T18:43:56.3192537Z test server::response_stream::tests::response_exact_length_real_hyper_http1_commits_nonzero_and_unpolled_zero_bodies ... ok
+2026-10-21T18:43:56.3229309Z test server::response_stream::tests::response_exact_length_zero_waits_before_headers_and_short_extra_producers_never_deadlock ... ok
+2026-10-21T18:43:56.3248331Z test server::response_stream::tests::response_explicit_cancel_wakes_full_reserve_but_unpolled_body_still_requires_actual_terminal ... ok
+2026-10-21T18:43:56.3563122Z test server::response_stream::tests::response_http10_refusal_is_only_four_actual_routes_and_head_starts_no_export ... ok
+2026-10-21T18:43:56.3582851Z test server::response_stream::tests::response_missing_metadata_or_joined_completion_is_failure_and_never_empty_success ... ok
+2026-10-21T18:43:56.3908309Z test server::response_stream::tests::response_pending_caller_drop_keeps_actual_preparation_owned_until_worker_and_supervisor_join ... ok
+2026-10-21T18:43:56.3950279Z test server::response_stream::tests::response_positive_eof_commit_is_not_rewritten_by_late_cancel_and_closed_admission_starts_nothing ... ok
+2026-10-21T18:43:56.3973893Z test server::response_stream::tests::response_post_ready_panic_or_error_after_valid_json_never_becomes_successful_eof ... ok
+2026-10-21T18:43:56.3993250Z test server::response_stream::tests::response_registry_uses_the_same_global_admission_before_any_worker_registration ... ok
+2026-10-21T18:43:56.4501741Z test server::response_stream::tests::response_single_large_write_preserves_all_bytes_in_bounded_chunks_and_joined_eof ... ok
+2026-10-21T18:43:56.4641539Z test server::screenshots::tests::screenshot_duplicate_urls_require_ordinal_and_preserve_selected_actual_image ... ok
+2026-10-21T18:43:56.4701439Z test server::screenshots::tests::screenshot_handlers_return_original_png_integrity_and_bound_identity_without_files ... ok
+2026-10-21T18:43:56.4841345Z test server::screenshots::tests::screenshot_metadata_byte_limit_does_not_emit_truncated_success ... ok
+2026-10-21T18:43:56.5051491Z test server::screenshots::tests::screenshot_missing_disabled_failed_corrupt_and_legacy_viewport_are_distinct ... ok
+2026-10-21T18:43:56.5881935Z test server::screenshots::tests::screenshot_png_crc_framing_order_and_decoded_limits_are_explicit ... ok
+2026-10-21T18:43:56.5911354Z test server::screenshots::tests::screenshot_png_idat_must_be_contiguous_and_palette_color_must_be_valid ... ok
+2026-10-21T18:43:56.5971519Z test server::screenshots::tests::screenshot_query_stability_capacity_and_unavailable_downloads_fail_explicitly ... ok
+2026-10-21T18:43:56.6261531Z test server::screenshots::tests::screenshot_tokens_refuse_stale_image_report_generation_and_identical_foreign_job ... ok
+2026-10-21T18:43:58.1592489Z test server::segment_dashboard::tests::segment_dashboard_csv_writers_share_original_rows_context_and_profile_mode ... ok
+2026-10-21T18:43:58.1752112Z test server::segment_dashboard::tests::segment_dashboard_graph_and_fragments_keep_outside_captured_target_facts ... ok
+2026-10-21T18:43:58.7372583Z test server::resource_broken_sources::tests::resource_sources_api_real_saved_css_over200_full_csv_stale_and_cli_reopen_do_no_new_website_io ... ok
+2026-10-21T18:43:58.9783363Z test server::segment_dashboard::tests::segment_dashboard_output_boundaries_and_analysis_preflight_are_atomic ... ok
+2026-10-21T18:43:59.5952191Z test server::segment_dashboard::tests::segment_dashboard_pages_are_original_ordinals_and_full_cohort_not_first_page ... ok
+2026-10-21T18:44:16.8062572Z test server::accessibility::tests::accessibility_native_handler_actual_64mib_exact_and_plus_one_refuse_atomically ... ok
+2026-10-21T18:44:18.4984669Z test server::segment_dashboard::tests::segment_dashboard_preflight_refuses_fragment_and_quadratic_groups_before_derivation ... ok
+2026-10-21T18:44:19.3942796Z test server::segment_dashboard::tests::segment_dashboard_profile_unknown_and_snapshot_controls_are_strict ... ok
+2026-10-21T18:44:19.3972271Z test server::segments::tests::segments_borrowed_authority_binding_preserves_owned_comparison_facts_and_refusals ... ok
+2026-10-21T18:44:19.4018157Z test server::segments::tests::segments_saved_api_full_export_requires_token_and_detects_report_tail_change ... ok
+2026-10-21T18:44:19.4166640Z test server::segments::tests::segments_saved_api_profile_preview_json_csv_share_view_bound_token_and_raw_authority ... ok
+2026-10-21T18:44:19.4218281Z test server::segments::tests::segments_saved_api_rejects_active_and_stale_generation_and_preserves_declared_authority ... ok
+2026-10-21T18:44:19.4294084Z test server::segments::tests::segments_saved_api_same_job_profile_change_refuses_prior_preview_and_exports ... ok
+2026-10-21T18:44:19.7772137Z test server::sitemap_csv_stream::lifecycle_tests::actual_csv_cancelled_and_concurrent_drains_observe_both_retained_joins ... ok
+2026-10-21T18:44:20.0773250Z test server::sitemap_csv_stream::lifecycle_tests::actual_csv_supervisor_abort_and_body_drop_recover_actual_join_slots ... ok
+2026-10-21T18:44:20.0775490Z test server::sitemap_csv_stream::sink_tests::cancelled_sink_retains_typed_cause_despite_unchanged_formatter_budget_label ... ok
+2026-10-21T18:44:20.1146981Z test server::sitemap_csv_stream::sink_tests::chunk_sink_keeps_positive_tail_for_exact_multiples_and_flush ... ok
+2026-10-21T18:44:25.8428663Z test server::sitemap_csv_stream::sink_tests::counting_hash_sink_counts_actual_sixty_four_mib_and_refuses_next_byte ... ok
+2026-10-21T18:44:28.6928982Z test server::sitemap_csv_stream::sink_tests::csv_first_count_pass_restores_actual_budget_cause_when_formatter_erases_io_source ... ok
+2026-10-21T18:44:29.0133855Z test server::sitemap_findings::tests::findings_actual_http_detached_report_is_explicitly_unavailable_without_fabricated_core_proof ... ok
+2026-10-21T18:44:29.4392913Z test server::sitemap_findings::tests::findings_actual_http_get_post_cursor_and_full_csv_share_saved_context_without_site_requests ... ok
+2026-10-21T18:44:29.7631631Z test server::sitemap_findings::tests::findings_actual_http_rejects_wrong_roles_changed_queries_unknown_fields_and_stale_app_generation ... ok
+2026-10-21T18:44:29.7641375Z test server::sitemap_findings_reads::tests::owned_read_actual_operation_errors_keep_shared_typed_failure_instead_of_generic_timeout ... ok
+2026-10-21T18:44:29.7649760Z test server::sitemap_findings_reads::tests::owned_read_actual_worker_panic_is_joined_and_classified_without_leaking_active ... ok
+2026-10-21T18:44:29.7663636Z test server::sitemap_findings_reads::tests::owned_read_completed_supervisors_are_actually_reaped_before_later_admission ... ok
+2026-10-21T18:44:29.7881818Z test server::sitemap_findings_reads::tests::owned_read_concurrent_drain_closes_admission_and_cancelling_one_drain_does_not_detach_worker ... ok
+2026-10-21T18:44:29.7890581Z test server::sitemap_findings_reads::tests::owned_read_default_success_is_delivered_after_actual_worker_drop_and_drain_joins_supervisor ... ok
+2026-10-21T18:44:29.7901698Z test server::sitemap_findings_reads::tests::owned_read_past_completion_notify_and_repeated_concurrent_drains_do_not_lose_wakeup ... ok
+2026-10-21T18:44:29.8121616Z test server::sitemap_findings_reads::tests::owned_read_request_drop_cancels_actual_control_and_drain_waits_until_blocking_worker_join ... ok
+2026-10-21T18:44:29.8471791Z test server::sitemap_findings_reads::tests::owned_read_supervisor_deadline_actually_expires_control_but_never_returns_before_worker_join ... ok
+2026-10-21T18:44:29.9540811Z test server::sitemap_findings_reads::tests::owned_read_worker_and_timer_ready_together_cannot_skip_immutable_deadline ... ok
+2026-10-21T18:44:29.9594229Z test server::sitemap_generation::tests::actual_saved_import_export_is_stable_hash_bound_and_readonly ... ok
+2026-10-21T18:44:29.9636484Z test server::sitemap_generation::tests::invalid_options_dates_empty_eligibility_and_bounds_have_exact_status_without_files ... ok
+2026-10-21T18:44:29.9732189Z test server::sitemap_generation::tests::sitemap_bundle_http_reporting_uses_same_raw_report_and_actual_profile_metadata_without_saved_writes ... ok
+2026-10-21T18:44:29.9762386Z test server::sitemap_processing_config_tests::create_dto_membership_capacity_absent_null_and_source_profile_are_independent ... ok
+2026-10-21T18:44:29.9772293Z test server::sitemap_processing_config_tests::create_dto_missing_or_null_source_profile_keeps_historical_configuration ... ok
+2026-10-21T18:44:29.9828953Z test server::sitemap_processing_config_tests::create_dto_preserves_explicit_membership_capacity_through_saved_config_and_mcp_dispatch_shape ... ok
+2026-10-21T18:44:29.9849586Z test server::sitemap_processing_config_tests::create_dto_preserves_source_work_limits_without_widening_page_bodies ... ok
+2026-10-21T18:44:29.9884488Z test server::sitemap_processing_config_tests::create_dto_rejects_invalid_membership_capacity_before_any_job_admission ... ok
+2026-10-21T18:44:29.9921281Z test server::sitemap_processing_config_tests::create_dto_rejects_invalid_or_unknown_source_profile_fields ... ok
+2026-10-21T18:44:30.2415093Z test server::sitemaps::tests::actual_legacy_and_detached_report_catalogs_remain_unavailable ... ok
+2026-10-21T18:44:30.4982637Z test server::sitemaps::tests::full_csv_uses_same_snapshot_filter_safe_cells_and_exact_original_typed_rows ... ok
+2026-10-21T18:44:30.5785578Z test server::sitemaps::tests::known_empty_is_available_without_claiming_complete_source_cohort ... ok
+2026-10-21T18:44:30.8383923Z test server::sitemaps::tests::matching_original_memberships_are_filtered_before_bounded_cursor_paging ... ok
+2026-10-21T18:44:31.0696491Z test server::sitemaps::tests::native_inventory_is_full_validated_readonly_original_source_data ... ok
+2026-10-21T18:44:31.4172812Z test server::sitemaps::tests::rich_read_window_tests::actual_rich_handler_raw_and_saved_page_cursors_remain_independent_and_role_checked ... ok
+2026-10-21T18:44:32.0144230Z test server::sitemaps::tests::rich_read_window_tests::actual_rich_inventory_handler_matches_full_oracle_and_fresh_token_exports_csv ... ok
+2026-10-21T18:44:32.0163162Z test server::sitemaps::tests::rich_read_window_tests::rich_core_typed_errors_preserve_existing_http_codes_and_corruption_remains_failure ... ok
+2026-10-21T18:44:32.5571226Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_error_priority_preserves_existing_statuses_and_token_roles ... ok
+2026-10-21T18:44:34.3834689Z test mcp::sitemap_findings::tests::postfix_tests::findings_postfix_actual_sixty_one_second_http_response_succeeds_while_legacy_times_out has been running for over 60 seconds
+2026-10-21T18:44:35.6832077Z test mcp::sitemap_findings::tests::postfix_tests::findings_postfix_actual_sixty_one_second_http_response_succeeds_while_legacy_times_out ... ok
+2026-10-21T18:44:36.3053729Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_pins_original_tx_while_later_writer_changes_generation ... ok
+2026-10-21T18:44:37.8643190Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_rejects_full_tail_source_report_and_inventory_corruption_before_ready ... ok
+2026-10-21T18:44:46.5509727Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_second_pass_failure_and_response_build_failure_drain ... ok
+2026-10-21T18:44:50.5888472Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_selected_presence_and_exact_parent_guards ... ok
+2026-10-21T18:44:52.6574164Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_matches_buffered_oracle_all_stored_exact_filters ... ok
+2026-10-21T18:44:55.4902312Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_stales_a_marker_pending_and_terminal_generation_context ... ok
+2026-10-21T18:44:57.4162244Z test server::segment_dashboard::tests::segment_dashboard_physical_64mib_complete_csv_and_plus_one_refusal ... ok
+2026-10-21T18:44:58.1752539Z test server::segment_dashboard::tests::segment_dashboard_large_original_issues_page_and_export_without_projection_clones has been running for over 60 seconds
+2026-10-21T18:45:50.5889419Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_shutdown_cancels_and_drains_active_exports has been running for over 60 seconds
+2026-10-21T18:45:55.4893822Z test server::sitemaps::tests::streaming_tests::actual_http_csv_client_disconnect_cancels_and_joins_producer has been running for over 60 seconds
+2026-10-21T18:45:57.4172351Z test server::sitemaps::tests::streaming_tests::actual_http_csv_idle_and_absolute_deadline_close_body_and_drain has been running for over 60 seconds
+2026-10-21T18:46:57.1772396Z test server::segment_dashboard::tests::segment_dashboard_large_original_issues_page_and_export_without_projection_clones ... ok
+2026-10-21T18:47:57.1762375Z test server::sitemaps::tests::streaming_tests::actual_http_csv_large_body_uses_bounded_chunks_and_backpressure has been running for over 60 seconds
+2026-10-21T18:48:41.0284587Z test server::sitemaps::tests::streaming_tests::actual_csv_stream_shutdown_cancels_and_drains_active_exports ... ok
+2026-10-21T18:48:47.1001114Z test server::sitemaps::tests::streaming_tests::actual_http_csv_tail_is_withheld_until_worker_join_and_tx_close ... ok
+2026-10-21T18:48:47.4713514Z test server::sitemaps::tests::streaming_tests::actual_inventory_snapshot_token_opens_same_tx_two_pass_csv ... ok
+2026-10-21T18:48:47.4782269Z test server::source_bodies::tests::source_body_api_config_absent_null_defaults_disable_and_strict_limits ... ok
+2026-10-21T18:48:47.4802515Z test server::source_bodies::tests::source_body_cursor_embedded_source_filter_cannot_change_when_outer_cursor_and_query_agree ... ok
+2026-10-21T18:48:47.8489157Z test server::source_bodies::tests::source_body_http_original_bytes_reopen_and_corruption_keep_descriptor_availability_separate ... ok
+2026-10-21T18:48:47.9132097Z test server::source_bodies::tests::source_body_metadata_json_and_cursor_keep_independent_bounds_and_job_binding ... ok
+2026-10-21T18:48:47.9240835Z test server::source_body_stream::tests::source_body_post_spool_snapshot_recheck_can_refuse_before_headers ... ok
+2026-10-21T18:48:47.9273444Z test server::source_body_stream::tests::source_body_preheader_caller_drop_keeps_actual_worker_until_cancelled_and_joined ... ok
+2026-10-21T18:49:02.9072203Z test server::source_body_stream::tests::source_body_private_spool_accepts_actual_64mib_and_rejects_one_extra_byte ... ok
+2026-10-21T18:49:03.0480956Z test server::source_body_stream::tests::source_body_shutdown_emits_error_instead_of_silent_truncated_success_eof ... ok
+2026-10-21T18:49:03.0552956Z test server::source_body_stream::tests::source_body_spool_fifo_substitution_refuses_without_blocking_and_keeps_uncertain_lease ... ok
+2026-10-21T18:49:03.0623067Z test server::source_body_stream::tests::source_body_spool_ready_waits_full_verification_and_success_eof_waits_real_join ... ok
+2026-10-21T18:49:03.0666055Z test server::source_body_stream::tests::source_body_spool_worker_panic_is_joined_cleaned_and_sticky ... ok
+2026-10-21T18:49:03.0742020Z test server::source_body_stream::tests::source_body_spool_wrong_hash_fails_before_ready_and_releases_owned_files ... ok
+2026-10-21T18:49:03.2655113Z test server::source_body_stream::tests::source_body_unpolled_response_drop_cancels_full_queue_and_actual_drain_joins ... ok
+2026-10-21T18:49:03.3002886Z test server::table_preferences::tests::accepted_owned_write_survives_receiver_abort_and_shutdown_drains_lock_and_publication ... ok
+2026-10-21T18:49:03.3024054Z test server::table_preferences::tests::cooperating_race_accepts_one_missing_cas_and_never_loses_the_winner ... ok
+2026-10-21T18:49:03.3038207Z test server::table_preferences::tests::failed_rename_cleans_owned_temp_and_temp_collision_never_deletes_foreign_bytes ... ok
+2026-10-21T18:49:03.3078933Z test server::table_preferences::tests::handlers_gate_job_content_type_limits_and_strict_body_before_files ... ok
+2026-10-21T18:49:03.3133741Z test server::table_preferences::tests::invalid_bytes_are_preserved_with_exact_sha_and_only_explicit_reset_recovers ... ok
+2026-10-21T18:49:03.3149133Z test server::table_preferences::tests::lock_contention_is_bounded_and_drop_releases_for_a_separate_handle ... ok
+2026-10-21T18:49:03.3166744Z test server::table_preferences::tests::missing_read_is_nonmutating_and_save_is_raw_bound_not_report_metadata ... ok
+2026-10-21T18:49:03.3394663Z test server::table_preferences::tests::native_file_locks_coordinate_an_actual_second_process ... ok
+2026-10-21T18:49:03.3406427Z test server::table_preferences::tests::nofollow_refuses_sidecar_and_parent_symlinks_without_touching_target ... FAILED
+2026-10-21T18:49:03.5754684Z test server::table_preferences::tests::oversized_file_has_no_partial_fingerprint_and_mutation_limits_precede_publication ... ok
+2026-10-21T18:49:03.5763056Z test server::table_preferences::tests::parent_traversal_is_never_used_as_a_preferences_root ... ok
+2026-10-21T18:49:03.5806995Z test server::table_preferences::tests::project_and_section_isolation_and_foreign_owner_validation_preserve_bytes ... ok
+2026-10-21T18:49:03.5838392Z test server::table_preferences::tests::raw_byte_cas_rejects_valid_whitespace_edits_and_invalid_reset_stale_hash ... ok
+2026-10-21T18:49:03.5907782Z test server::table_preferences::tests::reset_is_a_present_empty_new_revision_and_prevents_missing_and_old_present_aba ... ok
+2026-10-21T18:49:03.5943719Z test server::table_preferences::tests::typed_boundary_refuses_unknown_duplicate_and_unrepresentable_projection_data ... ok
+2026-10-21T18:49:03.9196898Z test server::table_preferences::tests::valid_preferences_at_full_512kib_encode_save_and_load_but_one_more_byte_refuses_atomically ... ok
+2026-10-21T18:49:03.9210158Z test server::tests::direct_seed_raw_controls_cannot_create_ambiguous_import_targets ... ok
+2026-10-21T18:49:03.9213338Z test server::tests::encoded_upload_limits_are_checked_before_decode ... ok
+2026-10-21T18:49:03.9224767Z test server::tests::ui_config_aliases_do_not_introduce_a_url_limit ... ok
+2026-10-21T18:49:03.9254044Z test server::tests::uploaded_list_config_retains_occurrences_and_rejects_forged_targets ... ok
+2026-10-21T18:49:03.9257576Z test server::tests::xml_index_entries_prepare_sitemap_discovery_without_page_seeds ... ok
+2026-10-21T18:49:03.9264478Z test server::transport::tests::incoming_binding_exhaustion_never_wraps_or_discards_an_existing_lease ... ok
+2026-10-21T18:49:03.9321455Z test server::transport::tests::incoming_consuming_response_finishes_inside_shared_grace_with_complete_tail_and_eof ... ok
+2026-10-21T18:49:08.9425032Z test server::transport::tests::incoming_dropped_drain_waiter_retains_actual_coordinator_connection_and_producer_joins ... ok
+2026-10-21T18:49:08.9503454Z test server::transport::tests::incoming_http1_protocol_shapes_match_same_locked_axum_for_http10_http11_h2_upgrade_and_connect ... ok
+2026-10-21T18:49:08.9854884Z test server::transport::tests::incoming_idle_reaper_joins_completed_connections_without_next_accept_or_shutdown ... ok
+2026-10-21T18:49:08.9887722Z test server::transport::tests::incoming_live_private_control_observes_actual_socket_drop_without_global_abort_and_joins_owned_work ... ok
+2026-10-21T18:49:10.1826980Z test server::sitemaps::tests::streaming_tests::actual_http_csv_client_disconnect_cancels_and_joins_producer ... ok
+2026-10-21T18:49:13.8740269Z test server::sitemaps::tests::streaming_tests::actual_http_csv_idle_and_absolute_deadline_close_body_and_drain ... ok
+2026-10-21T18:49:13.9967991Z test server::transport::tests::incoming_nonreader_reaches_real_full_queue_and_tcp_pending_then_self_aborts_and_joins ... ok
+2026-10-21T18:49:13.9975291Z test server::transport::tests::incoming_private_task_scope_copies_binding_to_owned_work_and_lease_drop_prunes_keepalive ... ok
+2026-10-21T18:49:14.0115020Z test server::transport::tests::incoming_protocol_errors_and_post_quiesce_connect_do_not_admit_a_late_handler ... ok
+2026-10-21T18:49:15.1927164Z test server::transport::tests::incoming_original_preheader_connection_drop_cancels_checkpoint_and_removes_unadvertised_spool ... ok
+2026-10-21T18:49:15.5009458Z test server::transport::tests::incoming_verified_original_consumes_exact_bom_nonascii_crlf_before_complete_positive_drain ... ok
+2026-10-21T18:49:18.8786337Z test server::transport::tests::incoming_preheaders_io_drop_cancels_lease_but_still_awaits_actual_held_blocking_producer ... ok
+2026-10-21T18:49:19.0394922Z test server::transport::tests::incoming_two_nonreaders_share_one_absolute_grace_and_repeated_quiesce_cannot_extend_it ... ok
+2026-10-21T18:49:19.1107511Z test sitemap_findings::tests::finding_actual_csv_header_and_data_json_io_budget_words_keep_real_error_types ... ok
+2026-10-21T18:49:19.3202166Z test sitemap_findings::tests::finding_actual_csv_preserves_typed_writer_causes_and_cancel_not_all_io_is_413 ... ok
+2026-10-21T18:49:19.4328394Z test sitemap_findings::tests::finding_actual_page_export_raw_roles_and_job_offline_target_are_distinct ... ok
+2026-10-21T18:49:19.6361907Z test sitemap_findings::tests::finding_actual_shared_csv_two_pass_schema_full_payload_and_readonly_receipts_match ... ok
+2026-10-21T18:49:19.8095710Z test sitemap_findings::tests::finding_actual_sparse_page_continuations_keep_query_hash_while_limits_change ... ok
+2026-10-21T18:49:19.9532041Z test sitemap_findings::tests::finding_actual_stale_context_and_app_sql_mismatch_fail_without_writer_output ... ok
+2026-10-21T18:49:20.0258962Z test sitemap_findings::tests::finding_actual_unavailable_core_omits_export_and_rejects_csv_before_header ... ok
+2026-10-21T18:49:20.0271255Z test sitemap_findings::tests::finding_csv_human_formula_prefix_does_not_rewrite_full_typed_machine_payload ... ok
+2026-10-21T18:49:20.0282234Z test sitemap_findings::tests::finding_queries_strict_shape_domains_and_large_literal_selectors_preserve_core_contract ... ok
+2026-10-21T18:49:20.0284279Z test sitemap_findings::tests::finding_streaming_json_and_csv_resource_boundaries_are_inclusive_without_materialized_rows ... ok
+2026-10-21T18:49:20.2161819Z test sitemap_findings::tests::finding_actual_unknown_history_zero_selected_rows_exports_one_scope_record_without_fake_finding ... ok
+2026-10-21T18:49:21.7339622Z test sitemap_findings_cli::tests::findings_cli_actual_handle_request_exact_sixty_four_mib_and_sentinel ... ok
+2026-10-21T18:49:22.0905495Z test sitemap_findings_cli::tests::findings_cli_continuation_still_exports_full_selection_and_changed_context_refuses_all_outputs ... ok
+2026-10-21T18:49:22.0922511Z test sitemap_findings_cli::tests::findings_cli_invalid_query_precedes_database_and_preserves_existing_outputs ... ok
+2026-10-21T18:49:22.0955131Z test sitemap_findings_cli::tests::findings_cli_parser_requires_request_and_one_new_destination ... ok
+2026-10-21T18:49:22.0971636Z test sitemap_findings_cli::tests::findings_cli_second_publication_race_retains_complete_first_and_concurrent_winner ... ok
+2026-10-21T18:49:22.4627113Z test sitemap_findings_cli::tests::findings_cli_stage_cancel_and_json_budget_leave_no_final_or_temp_output ... ok
+2026-10-21T18:49:22.4928900Z test sitemap_findings_cli::tests::findings_cli_unknown_zero_source_keeps_context_and_unavailable_csv_publishes_nothing ... ok
+2026-10-21T18:49:22.7583481Z test sitemap_membership::tests::actual_context_only_task_change_stales_json_and_csv_tokens_without_rewriting_raw_catalog ... ok
+2026-10-21T18:49:24.5643125Z test server::transport::tests::incoming_verified_original_nonreader_drops_tcp_then_joins_spool_and_preserves_short_length_failure ... ok
+2026-10-21T18:49:24.5760027Z test sitemap_findings_cli::tests::findings_cli_actual_crawler_page_and_full_csv_are_same_context_beyond_two_hundred ... ok
+2026-10-21T18:49:24.8763372Z test sitemap_membership::tests::actual_empty_legacy_and_incomplete_sources_keep_unknown_and_optional_cases_honest ... ok
+2026-10-21T18:49:25.0023179Z test sitemap_membership::tests::actual_saved_report_analysis_pages_are_independent_and_raw_csv_remains_exact ... ok
+2026-10-21T18:49:25.4057425Z test sitemap_membership::tests::actual_stored_report_context_only_change_invalidates_raw_page_and_csv_tokens ... ok
+2026-10-21T18:49:25.4061108Z test sitemap_membership::tests::budget_calibration_json_and_csv_original_quote_amplification ... ok
+2026-10-21T18:49:25.4081764Z test sitemap_membership::tests::canonical_cursor_rejects_malformed_tampered_unknown_and_noncanonical_bytes ... ok
+2026-10-21T18:49:25.4101786Z test sitemap_membership::tests::csv_writer_is_exact_at_cap_rejects_plus_one_and_escapes_original_text ... ok
+2026-10-21T18:49:25.4121841Z test sitemap_membership::tests::cursor_pins_job_generation_config_revision_rolling_inheritance_and_filter ... ok
+2026-10-21T18:49:25.4127850Z test sitemap_membership::tests::export_and_continuation_roles_and_zero_sequence_are_not_interchangeable ... ok
+2026-10-21T18:49:25.4129499Z test sitemap_membership::tests::original_membership_filter_never_matches_policy_fetch_alias ... ok
+2026-10-21T18:49:25.4131317Z test sitemap_membership::tests::query_bounds_reject_without_clamping_or_alias_normalization ... ok
+2026-10-21T18:49:25.5064936Z test sitemap_membership::tests::actual_stored_lastmod_assessments_are_visible_entry_only_raw_preserving_and_read_only ... ok
+2026-10-21T18:49:25.7702355Z test sitemap_membership::tests::rich_read_window_tests::actual_compact_lastmod_rows_and_context_match_full_oracle_and_csv_bytes ... ok
+2026-10-21T18:49:25.7769601Z test sitemap_membership::tests::rich_read_window_tests::actual_expected_state_precedes_invalid_row_and_token_job_filter_context_prechecks ... ok
+2026-10-21T18:49:26.1263748Z test sitemap_membership::tests::rich_read_window_tests::actual_old_profile_raw_page_and_export_tokens_parse_then_become_stale ... ok
+2026-10-21T18:49:26.1893444Z test sitemap_membership::tests::rich_read_window_tests::actual_rich_unknown_empty_and_incomplete_match_full_optional_evidence ... ok
+2026-10-21T18:49:26.1941937Z test sitemap_membership::tests::saved_page_cursor_has_a_distinct_bounded_role_and_ordinal_zero_is_valid ... ok
+2026-10-21T18:49:28.2603372Z test sitemap_membership::tests::source_context::actual_capture_unavailable_marker_restoration_stales_tokens_without_fake_empty_source ... ok
+2026-10-21T18:49:28.7252627Z test sitemap_membership::tests::source_context::actual_historical_source_none_remains_explicit_stable_and_readonly ... ok
+2026-10-21T18:49:31.0318989Z test sitemap_membership::tests::source_context::actual_selected_parent_source_context_keeps_records_links_and_historical_none_separate ... ok
+2026-10-21T18:49:31.6182517Z test sitemap_membership::tests::source_context::actual_source_a_only_restoration_stales_raw_page_and_csv_with_legacy_rows_unchanged ... ok
+2026-10-21T18:49:32.2533122Z test sitemap_membership::tests::source_context::actual_source_association_only_restoration_stales_raw_page_and_csv_without_new_capture ... ok
+2026-10-21T18:49:32.2883243Z test sitemap_raw_cli::tests::actual_raw_sitemap_cli_reads_unknown_history_and_refuses_existing_destination ... ok
+2026-10-21T18:49:32.2978268Z test sitemap_raw_cli::tests::actual_raw_sitemap_cli_rejects_invalid_request_before_database_or_output_creation ... ok
+2026-10-21T18:49:32.3041617Z test sitemap_raw_cli::tests::actual_raw_sitemap_cli_request_file_accepts_exact_cap_and_refuses_sentinel_byte ... ok
+2026-10-21T18:49:32.3062108Z test sitemap_raw_cli::tests::raw_sitemap_cli_parser_accepts_only_the_explicit_read_command_arguments ... ok
+2026-10-21T18:49:34.1751769Z test spelling_app::tests::spelling_aggregate_budget_caps_chunked_failure_prefix_before_append ... ok
+2026-10-21T18:49:35.7710290Z test spelling_app::tests::spelling_aggregate_budget_rejects_declared_second_body_before_retaining_it ... ok
+2026-10-21T18:49:35.7741474Z test spelling_app::tests::spelling_csv_retains_failure_rows_and_formula_safe_cells ... ok
+2026-10-21T18:49:35.7921674Z test spelling_app::tests::spelling_disabled_missing_empty_and_large_saved_text_never_claim_checked_zero ... ok
+2026-10-21T18:49:35.7991895Z test spelling_app::tests::spelling_exact_partition_allows_reported_all_excluded_but_not_unknown_raw_or_missing_capture_filters ... ok
+2026-10-21T18:49:35.8071940Z test spelling_app::tests::spelling_exact_partition_rejects_omitted_duplicate_and_reordered_selected_rows ... ok
+2026-10-21T18:49:35.9098654Z test spelling_app::tests::spelling_mock_timeout_and_truncated_wire_remain_explicit_incomplete_evidence ... ok
+2026-10-21T18:49:35.9140873Z test spelling_app::tests::spelling_persistent_dictionary_and_crawl_preferences_are_separate_and_revision_bound ... ok
+2026-10-21T18:49:35.9236878Z test spelling_app::tests::spelling_reporting_projection_excludes_owner_before_any_engine_check ... ok
+2026-10-21T18:49:35.9238734Z test spelling_app::tests::spelling_request_does_not_change_default_crawl_serialization_or_fingerprint ... ok
+2026-10-21T18:49:35.9281785Z test spelling_app::tests::spelling_requests_refuse_unknowns_version_oversize_and_wrong_dictionary_revision ... ok
+2026-10-21T18:49:35.9341588Z test spelling_app::tests::spelling_saved_missing_capture_stays_unknown_and_raw_report_is_unchanged ... ok
+2026-10-21T18:49:35.9371752Z test spelling_app::tests::spelling_saved_selection_refuses_duplicate_unknown_generation_snapshot_and_dictionary ... ok
+2026-10-21T18:49:35.9411724Z test spelling_app::tests::spelling_saved_success_cannot_be_forged_for_disabled_or_empty_text ... ok
+2026-10-21T18:49:35.9469276Z test spelling_app::tests::spelling_simulated_incomplete_and_http_error_are_not_successful_empty_results ... ok
+2026-10-21T18:49:35.9519900Z test spelling_app::tests::spelling_simulated_loopback_post_retains_exact_body_and_utf16_and_rechecks_dictionary ... ok
+2026-10-21T18:49:52.5618594Z test sitemap_membership::tests::rich_read_window_tests::actual_rich_visible_lastmod_copy_hits_real_json_cap_and_smaller_page_recovers ... ok
+2026-10-21T18:50:09.5832586Z test sitemap_membership::tests::actual_derived_json_byte_cap_fails_atomically_and_smaller_visible_page_recovers ... ok
+2026-10-21T18:50:24.2165773Z test server::sitemaps::tests::streaming_tests::actual_http_csv_large_body_uses_bounded_chunks_and_backpressure ... ok
+2026-10-21T18:50:24.2166315Z 
+2026-10-21T18:50:24.2166423Z failures:
+2026-10-21T18:50:24.2166545Z 
+2026-10-21T18:50:24.2167062Z ---- server::table_preferences::tests::nofollow_refuses_sidecar_and_parent_symlinks_without_touching_target stdout ----
+2026-10-21T18:50:24.2167565Z 
+2026-10-21T18:50:24.2168387Z thread 'server::table_preferences::tests::nofollow_refuses_sidecar_and_parent_symlinks_without_touching_target' (4191) panicked at crates/app/src/server/table_preferences_tests.rs:751:59:
+2026-10-21T18:50:24.2169577Z called `Result::unwrap()` on an `Err` value: Os { code: 39, kind: DirectoryNotEmpty, message: "Directory not empty" }
+2026-10-21T18:50:24.2170004Z 
+2026-10-21T18:50:24.2170010Z 
+2026-10-21T18:50:24.2170094Z failures:
+2026-10-21T18:50:24.2171283Z     server::table_preferences::tests::nofollow_refuses_sidecar_and_parent_symlinks_without_touching_target
+2026-10-21T18:50:24.2171724Z 
+2026-10-21T18:50:24.2172128Z test result: FAILED. 551 passed; 1 failed; 1 ignored; 0 measured; 0 filtered out; finished in 414.07s
+2026-10-21T18:50:24.2172517Z 
+2026-10-21T18:50:24.2743237Z [1m[91merror[0m: test failed, to rerun pass `-p open-seo-spider --bin open-seo-spider`
+2026-10-21T18:50:24.2829714Z ##[error]Process completed with exit code 101.
+2026-10-21T18:50:24.2944866Z ##[group]Run actions/upload-artifact@v4
+2026-10-21T18:50:24.2945174Z with:
+2026-10-21T18:50:24.2945511Z   name: crawl-config-cli-Linux-9816fe9c9f77ea93ec6346eb46cbc8ff91458848
+2026-10-21T18:50:24.2945921Z   retention-days: 14
+2026-10-21T18:50:24.2946148Z   if-no-files-found: warn
+2026-10-21T18:50:24.2946432Z   path: /home/runner/work/_temp/crawl-config-cli/**
+2026-10-21T18:50:24.2946746Z   compression-level: 6
+2026-10-21T18:50:24.2946969Z   overwrite: false
+2026-10-21T18:50:24.2947188Z   include-hidden-files: false
+2026-10-21T18:50:24.2947421Z env:
+2026-10-21T18:50:24.2947613Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:50:24.2947871Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:50:24.2948091Z   CARGO_TERM_COLOR: always
+2026-10-21T18:50:24.2948321Z   CACHE_ON_FAILURE: false
+2026-10-21T18:50:24.2948541Z ##[endgroup]
+2026-10-21T18:50:24.4847462Z (node:4377) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T18:50:24.4849209Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T18:50:24.4879885Z ##[warning]No files were found with the provided path: /home/runner/work/_temp/crawl-config-cli/**. No artifacts will be uploaded.
+2026-10-21T18:50:24.5387238Z ##[group]Run actions/upload-artifact@v4
+2026-10-21T18:50:24.5387749Z with:
+2026-10-21T18:50:24.5388413Z   name: sitemap-transport-witnesses-Linux-9816fe9c9f77ea93ec6346eb46cbc8ff91458848
+2026-10-21T18:50:24.5389239Z   retention-days: 14
+2026-10-21T18:50:24.5389629Z   if-no-files-found: warn
+2026-10-21T18:50:24.5391789Z   path: /home/runner/work/_temp/sitemap-transport-debug-e2e.json*
+/home/runner/work/_temp/sitemap-transport-release-e2e.json*
+/home/runner/work/_temp/sitemap-transport-debug-validation.json
+/home/runner/work/_temp/sitemap-transport-release-validation.json
+
+2026-10-21T18:50:24.5393853Z   compression-level: 6
+2026-10-21T18:50:24.5394345Z   overwrite: false
+2026-10-21T18:50:24.5394864Z   include-hidden-files: false
+2026-10-21T18:50:24.5395429Z env:
+2026-10-21T18:50:24.5395935Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:50:24.5396558Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:50:24.5396956Z   CARGO_TERM_COLOR: always
+2026-10-21T18:50:24.5397522Z   CACHE_ON_FAILURE: false
+2026-10-21T18:50:24.5397996Z ##[endgroup]
+2026-10-21T18:50:24.7257335Z (node:4390) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T18:50:24.7258911Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T18:50:24.7332796Z ##[warning]No files were found with the provided path: /home/runner/work/_temp/sitemap-transport-debug-e2e.json*
+/home/runner/work/_temp/sitemap-transport-release-e2e.json*
+/home/runner/work/_temp/sitemap-transport-debug-validation.json
+/home/runner/work/_temp/sitemap-transport-release-validation.json. No artifacts will be uploaded.
+2026-10-21T18:50:24.7527568Z ##[group]Run actions/upload-artifact@v4
+2026-10-21T18:50:24.7528054Z with:
+2026-10-21T18:50:24.7528647Z   name: sitemap-ledger-witnesses-Linux-9816fe9c9f77ea93ec6346eb46cbc8ff91458848
+2026-10-21T18:50:24.7529413Z   retention-days: 14
+2026-10-21T18:50:24.7529773Z   if-no-files-found: warn
+2026-10-21T18:50:24.7530769Z   path: /home/runner/work/_temp/sitemap-ledger-debug/**
+/home/runner/work/_temp/sitemap-ledger-release/**
+
+2026-10-21T18:50:24.7531632Z   compression-level: 6
+2026-10-21T18:50:24.7531991Z   overwrite: false
+2026-10-21T18:50:24.7532343Z   include-hidden-files: false
+2026-10-21T18:50:24.7532736Z env:
+2026-10-21T18:50:24.7533048Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T18:50:24.7550634Z   CARGO_INCREMENTAL: 0
+2026-10-21T18:50:24.7551076Z   CARGO_TERM_COLOR: always
+2026-10-21T18:50:24.7551477Z   CACHE_ON_FAILURE: false
+2026-10-21T18:50:24.7551849Z ##[endgroup]
+2026-10-21T18:50:24.9578366Z (node:4402) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T18:50:24.9579898Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T18:50:24.9630247Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-21T18:50:24.9633688Z The least common ancestor is /home/runner/work/_temp. This will be the root directory of the artifact
+2026-10-21T18:50:24.9637560Z ##[warning]No files were found with the provided path: /home/runner/work/_temp/sitemap-ledger-debug/**
+/home/runner/work/_temp/sitemap-ledger-release/**. No artifacts will be uploaded.
+2026-10-21T18:50:24.9912422Z Post job cleanup.
+2026-10-21T18:50:25.0860452Z [command]/usr/bin/git version
+2026-10-21T18:50:25.0911358Z git version 2.55.0
+2026-10-21T18:50:25.0951867Z Temporarily overriding HOME='/home/runner/work/_temp/05ed778b-46ff-41ff-886a-81e9cefdc72c' before making global git config changes
+2026-10-21T18:50:25.0953475Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T18:50:25.0958308Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T18:50:25.1005453Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T18:50:25.1061784Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T18:50:25.1478402Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T18:50:25.1521411Z http.https://github.com/.extraheader
+2026-10-21T18:50:25.1542244Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-21T18:50:25.1585684Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T18:50:25.1904833Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T18:50:25.1972450Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T18:50:25.2466116Z Cleaning up orphan processes
+2026-10-21T18:50:25.2847198Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

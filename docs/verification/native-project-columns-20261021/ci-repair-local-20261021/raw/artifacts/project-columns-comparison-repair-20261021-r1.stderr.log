@@ -1,0 +1,23 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: E2E mutated tracked source
++ actual - expected
+
++ [
++   'crates/app/src/server/table_preferences_tests.rs'
++ ]
+- []
+
+    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:153:12
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 'crates/app/src/server/table_preferences_tests.rs' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.15.0
