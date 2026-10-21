@@ -1,0 +1,202 @@
+{
+  "result": "PASS_SELECTED_ORIGINAL_AVAILABILITY_8_PAIRS",
+  "run": "artifacts\\xlsx-source-followup-native-20261021-r4",
+  "requested_family": "availability",
+  "auditor_sha256": "444a849ecf485fbd00aaf72084847a745a2a386ee1785266c0ae1e657fc58855",
+  "scope": "Offline original-file audit only; no product/test-oracle/compiler/writer imports or runtime activity.",
+  "original_native_binary_sha256": "72ee2e6b46064467080624305258aa56761e438635b947a2ce11666b17845571",
+  "original_outer_complete": true,
+  "original_outer_failure": null,
+  "original_inner_results": [
+    {
+      "family": "table-xlsx-availability",
+      "result": "PASS",
+      "failure": null,
+      "audited": true
+    }
+  ],
+  "audited_pairs": 8,
+  "unique_family_label_pairs": 8,
+  "unique_actual_original_paths": 16,
+  "reconstructed_data_rows": 12,
+  "physical_cells": 258,
+  "distinct_bound_segment_tokens": 0,
+  "native_segment_reads_independently_checked": 0,
+  "source_bindings": [
+    {
+      "kind": "deliberate_legacy_missing_input_provenance",
+      "source_sha256": "e6f2341e04ea2f4ecc416ea5ae4c5c82188d3cb533bd49e4b7e1e151839ae454",
+      "derived_request_sha256": "a8fab9ece4eefbca1c81420115abe1ab6b17b5d440f50025c50b2beff2075244",
+      "native_defaulted_output_sha256": "cb231e910523a16421194edcc25767bda54c56e746664ba46ee5f8547eb23669",
+      "raw_page_array_sha256": "834ee2aea9c0ffd0f8267a4dd82e898ccf856bf572f05aaff358feef430c6d30",
+      "native_evidence_page_field_sha256": "825dce68c1dc03fbab17d2b890ac43e6306ac15bffe51ef90b9b59050216c4c2",
+      "removed_bytes": 2694,
+      "qualification": "Negative legacy metadata omission from actual fresh native capture, then one actual native import request recorded by original receipt. Positive PageRecords are unchanged; fresh input capture was not absent. Zero website requests during import is an original native receipt assertion, not a new runtime observation by this offline auditor."
+    }
+  ],
+  "files": [
+    {
+      "label": "warm-titles-under-analysis-fault",
+      "family": "table-xlsx-availability",
+      "original_native_result": "PASS",
+      "rows": 3,
+      "columns": 13,
+      "physical_cells": 52,
+      "xlsx_sha256": "6e55f5e4203aca90aa1a80a97ecdd337d9fbd8857ee7b4d69af6f63c0279e7ad",
+      "csv_sha256": "5084361366fa6119967b8dfc90cdc08c293b6a26a1c691a18c32971bf50edc34",
+      "scalar_types": {
+        "string": 37,
+        "number": 15
+      },
+      "source": "legacy-missing-inputs-original-project.json native-defaulted omission case, byte-exact genuine fresh PageRecords"
+    },
+    {
+      "label": "warm-loaded-empty-structured",
+      "family": "table-xlsx-availability",
+      "original_native_result": "PASS",
+      "rows": 0,
+      "columns": 12,
+      "physical_cells": 12,
+      "xlsx_sha256": "0623911d5bdcf6bb833fe705eef64c758b3c030ec70cc0b93bf4f1340c954d28",
+      "csv_sha256": "20f6d846aefbc35dcc1e835ad74ca7e86c435a197fbfa9a587a4037562b8118b",
+      "scalar_types": {
+        "string": 12
+      },
+      "source": "legacy-missing-inputs-original-project.json native-defaulted omission case, byte-exact genuine fresh PageRecords; each native PageRecord carries structured_data[]/invalid_structured_data0; genuine loaded-empty analysis journey"
+    },
+    {
+      "label": "warm-known-inputs",
+      "family": "table-xlsx-availability",
+      "original_native_result": "PASS",
+      "rows": 3,
+      "columns": 13,
+      "physical_cells": 52,
+      "xlsx_sha256": "619fe413080db4301949b117fe831a73d29d1effa8edabaf6c89b2f72ceaad40",
+      "csv_sha256": "d35f776a8c78b5b734e2279957249fa089f7d57b4f9e22bd01fc4ec2a17bac14",
+      "scalar_types": {
+        "string": 41,
+        "number": 9,
+        "null": 2
+      },
+      "source": "Actual native saved input inventory plus independently reconstructed original owned TXT bytes/rows; zero output only from declared unmatched query"
+    },
+    {
+      "label": "warm-known-input-empty-query",
+      "family": "table-xlsx-availability",
+      "original_native_result": "PASS",
+      "rows": 0,
+      "columns": 13,
+      "physical_cells": 13,
+      "xlsx_sha256": "9328f56d5b0e0a0b3cd8172052ef260d3321ebaea01220f4e557b850837850d0",
+      "csv_sha256": "daf61820fd0f53bbc43e9fb3d2cc1c6f3b7bf2f761f68754fd203d10c75e8d86",
+      "scalar_types": {
+        "string": 13
+      },
+      "source": "Actual native saved input inventory plus independently reconstructed original owned TXT bytes/rows; zero output only from declared unmatched query"
+    },
+    {
+      "label": "cold-titles-healthy",
+      "family": "table-xlsx-availability",
+      "original_native_result": "PASS",
+      "rows": 3,
+      "columns": 13,
+      "physical_cells": 52,
+      "xlsx_sha256": "6e55f5e4203aca90aa1a80a97ecdd337d9fbd8857ee7b4d69af6f63c0279e7ad",
+      "csv_sha256": "5084361366fa6119967b8dfc90cdc08c293b6a26a1c691a18c32971bf50edc34",
+      "scalar_types": {
+        "string": 37,
+        "number": 15
+      },
+      "source": "legacy-missing-inputs-original-project.json native-defaulted omission case, byte-exact genuine fresh PageRecords"
+    },
+    {
+      "label": "cold-loaded-empty-structured",
+      "family": "table-xlsx-availability",
+      "original_native_result": "PASS",
+      "rows": 0,
+      "columns": 12,
+      "physical_cells": 12,
+      "xlsx_sha256": "0623911d5bdcf6bb833fe705eef64c758b3c030ec70cc0b93bf4f1340c954d28",
+      "csv_sha256": "20f6d846aefbc35dcc1e835ad74ca7e86c435a197fbfa9a587a4037562b8118b",
+      "scalar_types": {
+        "string": 12
+      },
+      "source": "legacy-missing-inputs-original-project.json native-defaulted omission case, byte-exact genuine fresh PageRecords; each native PageRecord carries structured_data[]/invalid_structured_data0; genuine loaded-empty analysis journey"
+    },
+    {
+      "label": "cold-known-inputs",
+      "family": "table-xlsx-availability",
+      "original_native_result": "PASS",
+      "rows": 3,
+      "columns": 13,
+      "physical_cells": 52,
+      "xlsx_sha256": "619fe413080db4301949b117fe831a73d29d1effa8edabaf6c89b2f72ceaad40",
+      "csv_sha256": "d35f776a8c78b5b734e2279957249fa089f7d57b4f9e22bd01fc4ec2a17bac14",
+      "scalar_types": {
+        "string": 41,
+        "number": 9,
+        "null": 2
+      },
+      "source": "Actual native saved input inventory plus independently reconstructed original owned TXT bytes/rows; zero output only from declared unmatched query"
+    },
+    {
+      "label": "cold-known-input-empty-query",
+      "family": "table-xlsx-availability",
+      "original_native_result": "PASS",
+      "rows": 0,
+      "columns": 13,
+      "physical_cells": 13,
+      "xlsx_sha256": "9328f56d5b0e0a0b3cd8172052ef260d3321ebaea01220f4e557b850837850d0",
+      "csv_sha256": "daf61820fd0f53bbc43e9fb3d2cc1c6f3b7bf2f761f68754fd203d10c75e8d86",
+      "scalar_types": {
+        "string": 13
+      },
+      "source": "Actual native saved input inventory plus independently reconstructed original owned TXT bytes/rows; zero output only from declared unmatched query"
+    }
+  ],
+  "pinned_original_inputs": {
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\proof.json": "270ecf04c4035346469aa472da4adf917c0f567efb22efa88ceab3703410f892",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\ui-table-xlsx-availability-live.json": "0a7c465e4fffab77fb3e58e8a1032a898b8ad3a28caa00a6644528c037586d73",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\fresh-auto-inputs-original-project.json": "e6f2341e04ea2f4ecc416ea5ae4c5c82188d3cb533bd49e4b7e1e151839ae454",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\legacy-missing-inputs-original-project.json": "cb231e910523a16421194edcc25767bda54c56e746664ba46ee5f8547eb23669",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\actual-list-import-original-project.json": "84cf0d9283850d581d7b5546972967fe9f66ad844a5971fd23cd6ca1222e868d",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\legacy-missing-input-provenance-request.json": "a8fab9ece4eefbca1c81420115abe1ab6b17b5d440f50025c50b2beff2075244",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\legacy-input-provenance-omission-proof.json": "9d36a0180153521e912440544291aa3c3ae9eae01139f6537bb75bcf39303144",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-titles-under-analysis-fault.xlsx": "6e55f5e4203aca90aa1a80a97ecdd337d9fbd8857ee7b4d69af6f63c0279e7ad",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-titles-under-analysis-fault.csv": "5084361366fa6119967b8dfc90cdc08c293b6a26a1c691a18c32971bf50edc34",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-titles-under-analysis-fault.independent-expected.json": "11241e37d7865b3a3e7c6fafe67324ce86f0a6fe9a44f273e150b4923bffb753",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-loaded-empty-structured.xlsx": "0623911d5bdcf6bb833fe705eef64c758b3c030ec70cc0b93bf4f1340c954d28",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-loaded-empty-structured.csv": "20f6d846aefbc35dcc1e835ad74ca7e86c435a197fbfa9a587a4037562b8118b",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-loaded-empty-structured.independent-expected.json": "fbfa71db1343c75c3d7b4704f1da63e769f03aedceeb94302dd22a2a33b53b60",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-known-inputs.xlsx": "619fe413080db4301949b117fe831a73d29d1effa8edabaf6c89b2f72ceaad40",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-known-inputs.csv": "d35f776a8c78b5b734e2279957249fa089f7d57b4f9e22bd01fc4ec2a17bac14",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-known-inputs.independent-expected.json": "a34eb2424f8a3238368b6544c9357e988de79c7da795cb254fb9814a3f829061",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-known-input-empty-query.xlsx": "9328f56d5b0e0a0b3cd8172052ef260d3321ebaea01220f4e557b850837850d0",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-known-input-empty-query.csv": "daf61820fd0f53bbc43e9fb3d2cc1c6f3b7bf2f761f68754fd203d10c75e8d86",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\warm-known-input-empty-query.independent-expected.json": "f7be3ab7bdd4970ea22c9edc5ce1d3e42d07b8794f223179c53a90fa26d53707",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-titles-healthy.xlsx": "6e55f5e4203aca90aa1a80a97ecdd337d9fbd8857ee7b4d69af6f63c0279e7ad",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-titles-healthy.csv": "5084361366fa6119967b8dfc90cdc08c293b6a26a1c691a18c32971bf50edc34",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-titles-healthy.independent-expected.json": "11241e37d7865b3a3e7c6fafe67324ce86f0a6fe9a44f273e150b4923bffb753",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-loaded-empty-structured.xlsx": "0623911d5bdcf6bb833fe705eef64c758b3c030ec70cc0b93bf4f1340c954d28",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-loaded-empty-structured.csv": "20f6d846aefbc35dcc1e835ad74ca7e86c435a197fbfa9a587a4037562b8118b",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-loaded-empty-structured.independent-expected.json": "fbfa71db1343c75c3d7b4704f1da63e769f03aedceeb94302dd22a2a33b53b60",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-known-inputs.xlsx": "619fe413080db4301949b117fe831a73d29d1effa8edabaf6c89b2f72ceaad40",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-known-inputs.csv": "d35f776a8c78b5b734e2279957249fa089f7d57b4f9e22bd01fc4ec2a17bac14",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-known-inputs.independent-expected.json": "a34eb2424f8a3238368b6544c9357e988de79c7da795cb254fb9814a3f829061",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-known-input-empty-query.xlsx": "9328f56d5b0e0a0b3cd8172052ef260d3321ebaea01220f4e557b850837850d0",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-known-input-empty-query.csv": "daf61820fd0f53bbc43e9fb3d2cc1c6f3b7bf2f761f68754fd203d10c75e8d86",
+    "artifacts\\xlsx-source-followup-native-20261021-r4\\table-xlsx-availability\\table-xlsx-availability-1792588642099-1f05ae15\\cold-known-input-empty-query.independent-expected.json": "f7be3ab7bdd4970ea22c9edc5ce1d3e42d07b8794f223179c53a90fa26d53707"
+  },
+  "negative_controls": [
+    "Declared own-memory CRC corruption rejected by standard Python ZIP reader; original file unchanged"
+  ],
+  "boundaries": [
+    "Original FAIL/missing final receipt is not relabelled PASS even when its partial files decode correctly.",
+    "Expected matrices are only redundant cross-checks after separate reconstruction; membership/scalars/context/rules derive from genuine original reports, declared fixture predicates and native context receipts.",
+    "Segment API contexts are exact independently repeated read-only POST data, not original captured browser bodies. App-declared origin and false SQL/report-generation-attestation flags remain qualified.",
+    "Pending retained cells derive from immutable genuine parent minus exact selected requested targets, plus invariant stable-child parent/hash/coverage. No full running report or positive pending PageRecord is invented.",
+    "Archived limited generation and later completed generation are separate canonical native outputs; no mutation/ancestry attestation beyond original bytes and native operation fields.",
+    "The five ZIP parts and XML cell structures/values are checked. This reader alone is not full OPC relationship/content-type schema validation or an interoperability certification.",
+    "This does not establish Excel/LibreOffice GUI roundtrip, every schema/operator/browser/renderer, specialist bulk formats or manufacturer parity."
+  ]
+}

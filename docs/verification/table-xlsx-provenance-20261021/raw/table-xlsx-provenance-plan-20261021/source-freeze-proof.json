@@ -1,0 +1,132 @@
+{
+  "result": "PASS_PURE_EXTRACTED_APP",
+  "inputs": [
+    {
+      "path": "web/app.js",
+      "bytes": 526608,
+      "sha256": "56fa94a65fac6040b4fa81537880681e8aa39d60b20737c791c539f941354b74"
+    },
+    {
+      "path": "web/verification/table-source-availability.test.cjs",
+      "bytes": 15044,
+      "sha256": "32c3249f81bd2b34a8b9ed31ebf873f51d2c19c32fc36f17398f4fd1f2fd3ba8"
+    },
+    {
+      "path": "web/table-xlsx.js",
+      "bytes": 15122,
+      "sha256": "b609d3dd5ce5b8c3e3d67c81f56556e9ba09f9265805cbff71900fb438fa46b5"
+    },
+    {
+      "path": "web/table-export-ui.js",
+      "bytes": 9763,
+      "sha256": "9b778ecbf936e6510c609ade5279965d6d7b6f8e9d20a6a62747d0e2f5189d1c"
+    },
+    {
+      "path": "web/table-explorer.js",
+      "bytes": 23377,
+      "sha256": "2ad4188750606a48446033ace6627c49d619b8c2ce8aa4b91147793c7cb068ee"
+    },
+    {
+      "path": "crates/core/tests/fixtures/list-import/serialized-contracts.json",
+      "bytes": 29116,
+      "sha256": "28b1c835d8bc6292aeedc36a38dd31987b7f260af0242568a03942dcb6a0ff93"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/source-availability-before.log",
+      "bytes": 35426,
+      "sha256": "cb0ceb6f4dc44be7b361f442879c0c3f6e86d9845c36c1fa07a9edcc9ca69c76"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/source-availability-after-r1.log",
+      "bytes": 4323,
+      "sha256": "815c36fb888315509e9550212dbc532eb31f51a7ba352b0bb5f1caa1e7c87e10"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/source-availability-after-r2.log",
+      "bytes": 3295,
+      "sha256": "70c9f69ceabd4b61bb13d589d3aba8431e67031144db9370a368e40a1749a769"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/boolean-matrix-before.log",
+      "bytes": 18714,
+      "sha256": "baed23c6479b24976d8e62200ed6e3fbd503160ac945fdf3dff999d77517480d"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/boolean-matrix-after-r1.log",
+      "bytes": 6636,
+      "sha256": "597315d33ea52a5693460003a845444df0cbc2aa22cf466d7e4773314ec111ae"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/boolean-matrix-after-r2.log",
+      "bytes": 4810,
+      "sha256": "44687fd1c309bdf0e94520c235118a5d9a82441cfb0d8c523101dee7fa0b83c8"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/final-targeted-pure.log",
+      "bytes": 10307,
+      "sha256": "189b347a311c88a9e5bcbe417798af75f872fee4e3fd58770f2e4e64e6661342"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/csv-baseline.cjs",
+      "bytes": 4284,
+      "sha256": "e5ca8fc2f2506ff46cc7543f8ed57f170cf929aca3e5344f35b600ad9ba72c41"
+    },
+    {
+      "path": "artifacts/table-xlsx-provenance-plan-20261021/csv-baseline-proof.json",
+      "bytes": 7759,
+      "sha256": "5d814aa66948565072513afcc2d2a343551db256108bdc82368873b1d08b49dd"
+    }
+  ],
+  "regression_first": [
+    {
+      "log": "artifacts/table-xlsx-provenance-plan-20261021/source-availability-before.log",
+      "tests": 33,
+      "pass": 5,
+      "fail": 28,
+      "meaning": "Actual CSV downloads falsely succeed with unavailable sources; actual typed capture returns localized indexability labels. Existing functions are invoked, no missing-helper expectation."
+    },
+    {
+      "log": "artifacts/table-xlsx-provenance-plan-20261021/boolean-matrix-before.log",
+      "tests": 47,
+      "pass": 33,
+      "fail": 14,
+      "meaning": "Additional real column getters return localized strings for boolean facts and derived header-known state."
+    }
+  ],
+  "retained_harness_corrections": [
+    {
+      "log": "artifacts/table-xlsx-provenance-plan-20261021/source-availability-after-r1.log",
+      "reason": "New recovery expectation forgot actual URL sort order. Corrected test to explicit source_index sort; no product failure claimed."
+    },
+    {
+      "log": "artifacts/table-xlsx-provenance-plan-20261021/boolean-matrix-after-r1.log",
+      "reason": "Harness lacked actual canonicalCount helper. Added exact extracted App helper; no product failure claimed."
+    }
+  ],
+  "final": {
+    "new_tests": 47,
+    "targeted_tests": 109,
+    "pass": 109,
+    "fail": 0,
+    "csv_baseline_comparisons": 32,
+    "baseline_revision": "22fc522"
+  },
+  "implementation": {
+    "availability": [
+      "linkmetrics",
+      "structured",
+      "inputs"
+    ],
+    "cost": "O(import result envelopes), without per-row/per-analysis-record validation on render. Native validators remain authoritative for row/algorithm integrity.",
+    "booleans": "Export-only getters for indexable +13 direct boolean columns and headers_known/self_reference; existing text query rawValue, display value and CSV paths preserved.",
+    "empty_sources": "Loaded native analysis arrays[] valid. input_imports[] means uncaptured; captured rows[] forbidden by native validator, not a positive fixture. Querying genuine nonempty captured imports to0 is valid.",
+    "reason": "table_source_unavailable is capture Result code; both button titles share precise cause, XLSX controller retains unavailable code. Normal and section-specific CSV titles restore on valid source."
+  },
+  "boundaries": [
+    "No Cargo/build/browser/native/transport run by this agent. Parent owns those gates.",
+    "Actual App functions plus real query/writer/controller are evaluated with declared source-state fixtures and fake DOM/download sinks.",
+    "Boolean matrix uses actual schema export getters and existing text predicates; complete actual capture tests cover indexability. Other native schemas are not proven by writer acceptance.",
+    "CSV baseline compares four changed families under32 declared projection/query/metadata contexts; not a new all29-native-schema claim.",
+    "No manufacturer feature parity claim."
+  ]
+}

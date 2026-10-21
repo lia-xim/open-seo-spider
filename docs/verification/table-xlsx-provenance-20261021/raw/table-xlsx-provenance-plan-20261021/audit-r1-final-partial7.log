@@ -1,0 +1,29 @@
+{
+  "result": "PARTIAL_AUDIT_ORIGINAL_FAILED_OR_INCOMPLETE",
+  "run": "artifacts\\xlsx-source-followup-native-20261021-r1",
+  "requested_family": "provenance",
+  "auditor_sha256": "444a849ecf485fbd00aaf72084847a745a2a386ee1785266c0ae1e657fc58855",
+  "scope": "Offline original-file audit only; no product/test-oracle/compiler/writer imports or runtime activity.",
+  "original_native_binary_sha256": "d4a26dbdcc0cf607b75275f7c79056d08f0f6980fac3e911a056d4986ceb5f62",
+  "original_outer_complete": false,
+  "original_outer_failure": "Error: table-xlsx-provenance: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at stableCases (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:169:606)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:229:212\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:128:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "original_inner_results": [
+    {
+      "family": "table-xlsx-provenance",
+      "result": "FAIL",
+      "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at stableCases (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:169:606)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:229:212",
+      "audited": true
+    }
+  ],
+  "audited_pairs": 7,
+  "unique_family_label_pairs": 7,
+  "unique_actual_original_paths": 14,
+  "reconstructed_data_rows": 678,
+  "physical_cells": 13578,
+  "distinct_bound_segment_tokens": 2,
+  "native_segment_reads_independently_checked": 22,
+  "source_bindings": [],
+  "negative_controls": [
+    "Declared own-memory CRC corruption rejected by standard Python ZIP reader; original file unchanged"
+  ]
+}

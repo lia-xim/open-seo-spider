@@ -1,0 +1,47 @@
+[
+  {
+    "name": "format",
+    "program": "cargo",
+    "args": [
+      "fmt",
+      "--all",
+      "--check"
+    ],
+    "code": 0,
+    "signal": null,
+    "timed_out": false,
+    "duration_ms": 2567
+  },
+  {
+    "name": "build",
+    "program": "cargo",
+    "args": [
+      "build",
+      "--locked",
+      "-p",
+      "open-seo-spider"
+    ],
+    "code": 0,
+    "signal": null,
+    "timed_out": false,
+    "duration_ms": 31744
+  },
+  {
+    "name": "clippy",
+    "program": "cargo",
+    "args": [
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--all-features",
+      "--locked",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "code": 0,
+    "signal": null,
+    "timed_out": false,
+    "duration_ms": 20871
+  }
+]

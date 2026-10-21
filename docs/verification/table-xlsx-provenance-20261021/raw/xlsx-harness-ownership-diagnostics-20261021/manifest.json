@@ -1,0 +1,54 @@
+{
+  "status": "FROZEN_IGNORED_CANDIDATE_NO_NATIVE_CHROME_RUN",
+  "approval": "Root explicitly approved ignored harness-only implementation after read-only R2 diagnosis",
+  "changes": [
+    {
+      "target": "web/verification/ui-table-xlsx-provenance-live.cjs",
+      "before": {
+        "bytes": 49022,
+        "sha256": "4ba2a68b6a7d10e27a5ec6153860d9f9bd492e66b31433d51fa4a1e08697cb9f"
+      },
+      "after": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\xlsx-harness-ownership-diagnostics-20261021\\ui-table-xlsx-provenance-live.cjs",
+        "bytes": 49291,
+        "sha256": "6be01ffba0ab81ed570c5677f6bbea2c2712a9d6f6543cf1fde3f04339c1625f"
+      }
+    },
+    {
+      "target": "web/verification/ui-table-xlsx-availability-live.cjs",
+      "before": {
+        "bytes": 29303,
+        "sha256": "2927e4082c9855c1c768be84193d343180bcb5929b49e210d686be3376fd11a8"
+      },
+      "after": {
+        "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\xlsx-harness-ownership-diagnostics-20261021\\ui-table-xlsx-availability-live.cjs",
+        "bytes": 29626,
+        "sha256": "4987bd84d3ff30619cabc346a40427ba3aeb52f17106af582748f6bcd08962f0"
+      }
+    }
+  ],
+  "patch": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\xlsx-harness-ownership-diagnostics-20261021\\minimal-ownership.patch",
+    "bytes": 16700,
+    "sha256": "b054946ec81db26291f8e83e0589e37ab4bb7f603754cfdbd7b7d658b41a9233"
+  },
+  "R2": {
+    "proof_sha256": "d757587aaa08787ae78adc98f7fc0497d1663a18c9fd0b5e1b723832e452676b",
+    "stderr_sha256": "0bc1d36e20520ece8c3f0bcdaed354b6f063924f3087f1e7d3c593fa66c05b7b",
+    "failure": "CSV wait on line147, no empty-segment CSV, unhandled download timeout; driver receipt/screenshot/native log absent",
+    "wrapper_duration_ms": 56565,
+    "suite_timeout_ms": 240000,
+    "wrapper_shutdown_is_not_driver_native_receipt": true
+  },
+  "preserved": [
+    "Known-empty segment is still mandatory positive",
+    "All selectors, file/matrix/count/provenance assertions",
+    "30s default operation waits and240000ms suite deadline",
+    "Real clicks, no disabled-state overrides, no global rejection suppression"
+  ],
+  "validation": {
+    "both_syntax": "PASS",
+    "pure_failure_ownership": "PASS async-error-ownership-proof.json; exact candidate helper used with failure-only declared promises",
+    "actual_native_or_browser": "NOT_RUN"
+  }
+}

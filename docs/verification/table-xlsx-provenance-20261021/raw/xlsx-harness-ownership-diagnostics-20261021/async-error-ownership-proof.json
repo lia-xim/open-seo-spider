@@ -1,0 +1,36 @@
+{
+  "result": "PASS_PURE_ERROR_OWNERSHIP_NEGATIVE_CONTROLS",
+  "node": "v24.19.0",
+  "helper_sha256": "a7846b3b91b3755460c724d2474d3a013dd00b06ff66f4c7c6e8f49bbfff075f",
+  "controls": [
+    {
+      "kind": "original-unowned",
+      "status": 1,
+      "signal": null,
+      "stdout": "START\nEVENT-TIMEOUT\n",
+      "stderr": "[eval]:3\r\nconst rejectAfter=(delay,message)=>new Promise((_,reject)=>setTimeout(()=>{log(message.toUpperCase());reject(Error(message));},delay));\r\n                                                                                                             ^\r\n\r\nError: event-timeout\r\n    at Timeout._onTimeout ([eval]:3:110)\r\n    at listOnTimeout (node:internal/timers:635:17)\r\n    at process.processTimers (node:internal/timers:571:7)\r\n\r\nNode.js v24.19.0\r\n"
+    },
+    {
+      "kind": "event-first",
+      "status": 2,
+      "signal": null,
+      "stdout": "START\nEVENT-TIMEOUT\nOUTER_FINALLY\nOWNED_FAILURE:event-timeout\nARMS:1 CLICKS:1\nCLICK-TIMEOUT\n",
+      "stderr": ""
+    },
+    {
+      "kind": "click-first",
+      "status": 2,
+      "signal": null,
+      "stdout": "START\nCLICK-TIMEOUT\nOUTER_FINALLY\nOWNED_FAILURE:click-timeout\nARMS:1 CLICKS:1\nEVENT-TIMEOUT\n",
+      "stderr": ""
+    },
+    {
+      "kind": "disabled",
+      "status": 2,
+      "signal": null,
+      "stdout": "START\nOUTER_FINALLY\nOWNED_FAILURE:declared negative only validated export must be enabled: #export-csv\n\nfalse !== true\n\nARMS:0 CLICKS:0\n",
+      "stderr": ""
+    }
+  ],
+  "scope": "Exact ignored candidate helper evaluated only with declared rejecting promises/disabled control. Original unowned promise reproduces abrupt exit before outer finally; corrected helper propagates every failure through finally with nonzero operation exit. No success event/HTTP/native/browser proof claimed."
+}

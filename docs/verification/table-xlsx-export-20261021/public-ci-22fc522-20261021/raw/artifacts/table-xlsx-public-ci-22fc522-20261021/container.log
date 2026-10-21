@@ -1,0 +1,902 @@
+﻿2026-10-21T12:24:20.5471601Z Current runner version: '2.338.0'
+2026-10-21T12:24:20.5497785Z ##[group]Runner Image Provisioner
+2026-10-21T12:24:20.5498713Z Hosted Compute Agent
+2026-10-21T12:24:20.5499392Z Version: 20261012.601
+2026-10-21T12:24:20.5500070Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-21T12:24:20.5500833Z Build Date: 2026-10-12T17:48:21Z
+2026-10-21T12:24:20.5501518Z Worker ID: {9beeeee8-9a7a-472b-84a2-bf490c439452}
+2026-10-21T12:24:20.5502278Z Region: eastus
+2026-10-21T12:24:20.5502860Z Cloud: Azure
+2026-10-21T12:24:20.5503597Z ##[endgroup]
+2026-10-21T12:24:20.5505166Z ##[group]Operating System
+2026-10-21T12:24:20.5505812Z Ubuntu
+2026-10-21T12:24:20.5506400Z 24.04.5
+2026-10-21T12:24:20.5506967Z LTS
+2026-10-21T12:24:20.5507501Z ##[endgroup]
+2026-10-21T12:24:20.5508116Z ##[group]Runner Image
+2026-10-21T12:24:20.5508721Z Image: ubuntu-24.04
+2026-10-21T12:24:20.5509315Z Version: 20261012.334.1
+2026-10-21T12:24:20.5510629Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T12:24:20.5512240Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-21T12:24:20.5513444Z ##[endgroup]
+2026-10-21T12:24:20.5514699Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T12:24:20.5516586Z Contents: read
+2026-10-21T12:24:20.5517679Z Metadata: read
+2026-10-21T12:24:20.5518300Z ##[endgroup]
+2026-10-21T12:24:20.5520407Z Secret source: Actions
+2026-10-21T12:24:20.5521494Z Cache mode: write
+2026-10-21T12:24:20.5522487Z Prepare workflow directory
+2026-10-21T12:24:20.5869660Z Prepare all required actions
+2026-10-21T12:24:20.5918232Z Getting action download info
+2026-10-21T12:24:20.8615273Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-21T12:24:21.4235168Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-21T12:24:22.0168257Z Complete job name: container
+2026-10-21T12:24:22.1110962Z ##[group]Run actions/checkout@v4
+2026-10-21T12:24:22.1112477Z with:
+2026-10-21T12:24:22.1113624Z   repository: lia-xim/open-seo-spider
+2026-10-21T12:24:22.1123009Z   token: ***
+2026-10-21T12:24:22.1124126Z   ssh-strict: true
+2026-10-21T12:24:22.1125076Z   ssh-user: git
+2026-10-21T12:24:22.1126013Z   persist-credentials: true
+2026-10-21T12:24:22.1127062Z   clean: true
+2026-10-21T12:24:22.1128032Z   sparse-checkout-cone-mode: true
+2026-10-21T12:24:22.1129168Z   fetch-depth: 1
+2026-10-21T12:24:22.1130085Z   fetch-tags: false
+2026-10-21T12:24:22.1131013Z   show-progress: true
+2026-10-21T12:24:22.1131970Z   lfs: false
+2026-10-21T12:24:22.1132852Z   submodules: false
+2026-10-21T12:24:22.1133996Z   set-safe-directory: true
+2026-10-21T12:24:22.1135084Z   allow-unsafe-pr-checkout: false
+2026-10-21T12:24:22.1136504Z ##[endgroup]
+2026-10-21T12:24:22.2174698Z Syncing repository: lia-xim/open-seo-spider
+2026-10-21T12:24:22.2179131Z ##[group]Getting Git version info
+2026-10-21T12:24:22.2181823Z Working directory is '/home/runner/work/open-seo-spider/open-seo-spider'
+2026-10-21T12:24:22.2185811Z [command]/usr/bin/git version
+2026-10-21T12:24:22.2245491Z git version 2.55.0
+2026-10-21T12:24:22.2288625Z ##[endgroup]
+2026-10-21T12:24:22.2299898Z Temporarily overriding HOME='/home/runner/work/_temp/80afbb1d-9774-4b5a-a547-72adcd743f4d' before making global git config changes
+2026-10-21T12:24:22.2305577Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T12:24:22.2310151Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T12:24:22.2347926Z Deleting the contents of '/home/runner/work/open-seo-spider/open-seo-spider'
+2026-10-21T12:24:22.2352815Z ##[group]Initializing the repository
+2026-10-21T12:24:22.2357595Z [command]/usr/bin/git init /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T12:24:22.2477593Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-21T12:24:22.2481490Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-21T12:24:22.2485795Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-21T12:24:22.2488629Z hint: call:
+2026-10-21T12:24:22.2490367Z hint:
+2026-10-21T12:24:22.2492265Z hint: 	git config --global init.defaultBranch <name>
+2026-10-21T12:24:22.2494755Z hint:
+2026-10-21T12:24:22.2496814Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-21T12:24:22.2500144Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-21T12:24:22.2502327Z hint:
+2026-10-21T12:24:22.2503477Z hint: 	git branch -m <name>
+2026-10-21T12:24:22.2504509Z hint:
+2026-10-21T12:24:22.2505831Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-21T12:24:22.2508149Z Initialized empty Git repository in /home/runner/work/open-seo-spider/open-seo-spider/.git/
+2026-10-21T12:24:22.2514726Z [command]/usr/bin/git remote add origin https://github.com/lia-xim/open-seo-spider
+2026-10-21T12:24:22.2552839Z ##[endgroup]
+2026-10-21T12:24:22.2557412Z ##[group]Disabling automatic garbage collection
+2026-10-21T12:24:22.2560270Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-21T12:24:22.2592015Z ##[endgroup]
+2026-10-21T12:24:22.2594710Z ##[group]Setting up auth
+2026-10-21T12:24:22.2597934Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T12:24:22.2632628Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T12:24:22.3024848Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T12:24:22.3075777Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T12:24:22.3306189Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T12:24:22.3346041Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T12:24:22.3571954Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-21T12:24:22.3613340Z ##[endgroup]
+2026-10-21T12:24:22.3615045Z ##[group]Fetching the repository
+2026-10-21T12:24:22.3624161Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +22fc5220333c7a1e5a1204ad11692a8d1b62ac76:refs/remotes/origin/main
+2026-10-21T12:24:24.7511027Z From https://github.com/lia-xim/open-seo-spider
+2026-10-21T12:24:24.7511675Z  * [new ref]         22fc5220333c7a1e5a1204ad11692a8d1b62ac76 -> origin/main
+2026-10-21T12:24:24.7515293Z ##[endgroup]
+2026-10-21T12:24:24.7516116Z ##[group]Determining the checkout info
+2026-10-21T12:24:24.7518130Z ##[endgroup]
+2026-10-21T12:24:24.7524239Z [command]/usr/bin/git sparse-checkout disable
+2026-10-21T12:24:24.7576373Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-21T12:24:24.7608148Z ##[group]Checking out the ref
+2026-10-21T12:24:24.7613367Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-21T12:24:25.7787564Z Updating files:  98% (7345/7467)
+2026-10-21T12:24:25.7871721Z Updating files:  99% (7393/7467)
+2026-10-21T12:24:25.7872250Z Updating files: 100% (7467/7467)
+2026-10-21T12:24:25.7872611Z Updating files: 100% (7467/7467), done.
+2026-10-21T12:24:25.7968154Z Switched to a new branch 'main'
+2026-10-21T12:24:25.7974292Z branch 'main' set up to track 'origin/main'.
+2026-10-21T12:24:25.8040902Z ##[endgroup]
+2026-10-21T12:24:25.8092263Z [command]/usr/bin/git log -1 --format=%H
+2026-10-21T12:24:25.8119124Z 22fc5220333c7a1e5a1204ad11692a8d1b62ac76
+2026-10-21T12:24:25.8401841Z ##[group]Run actions/setup-node@v4
+2026-10-21T12:24:25.8402154Z with:
+2026-10-21T12:24:25.8402548Z   node-version: 24
+2026-10-21T12:24:25.8402758Z   always-auth: false
+2026-10-21T12:24:25.8402985Z   check-latest: false
+2026-10-21T12:24:25.8405902Z   token: ***
+2026-10-21T12:24:25.8406118Z ##[endgroup]
+2026-10-21T12:24:25.9818780Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-21T12:24:25.9824586Z (node:2284) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T12:24:25.9826118Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T12:24:25.9827507Z ##[group]Environment details
+2026-10-21T12:24:26.3895449Z node: v24.21.0
+2026-10-21T12:24:26.3895876Z npm: 11.19.0
+2026-10-21T12:24:26.3896101Z yarn: 1.22.22
+2026-10-21T12:24:26.3897071Z ##[endgroup]
+2026-10-21T12:24:26.4030299Z ##[group]Run node scripts/container-e2e.mjs
+2026-10-21T12:24:26.4030730Z [36;1mnode scripts/container-e2e.mjs[0m
+2026-10-21T12:24:26.4296050Z shell: /usr/bin/bash -e {0}
+2026-10-21T12:24:26.4296467Z ##[endgroup]
+2026-10-21T12:24:27.0582550Z #0 building with "default" instance using docker driver
+2026-10-21T12:24:27.0582926Z 
+2026-10-21T12:24:27.0583541Z #1 [internal] load build definition from Dockerfile
+2026-10-21T12:24:27.0584066Z #1 transferring dockerfile: 684B done
+2026-10-21T12:24:27.0584411Z #1 DONE 0.0s
+2026-10-21T12:24:27.0584574Z 
+2026-10-21T12:24:27.0584860Z #2 [auth] library/debian:pull token for registry-1.docker.io
+2026-10-21T12:24:27.0585280Z #2 DONE 0.0s
+2026-10-21T12:24:27.0585417Z 
+2026-10-21T12:24:27.0585691Z #3 [auth] library/rust:pull token for registry-1.docker.io
+2026-10-21T12:24:27.0586095Z #3 DONE 0.0s
+2026-10-21T12:24:27.0586234Z 
+2026-10-21T12:24:27.0586554Z #4 [internal] load metadata for docker.io/library/rust:1.95-bookworm
+2026-10-21T12:24:27.2220467Z #4 DONE 0.4s
+2026-10-21T12:24:27.2220710Z 
+2026-10-21T12:24:27.2221208Z #5 [internal] load metadata for docker.io/library/debian:bookworm-slim
+2026-10-21T12:24:27.3445064Z #5 DONE 0.4s
+2026-10-21T12:24:27.3445751Z 
+2026-10-21T12:24:27.3469895Z #6 [internal] load .dockerignore
+2026-10-21T12:24:27.3498118Z #6 transferring context: 99B done
+2026-10-21T12:24:27.3499403Z #6 DONE 0.0s
+2026-10-21T12:24:27.3500287Z 
+2026-10-21T12:24:27.3501997Z #7 [build 1/7] FROM docker.io/library/rust:1.95-bookworm@sha256:6258907abe69656e41cd992e0b705cdcfabcbbe3db374f92ed2d47121282d4a1
+2026-10-21T12:24:27.3505126Z #7 resolve docker.io/library/rust:1.95-bookworm@sha256:6258907abe69656e41cd992e0b705cdcfabcbbe3db374f92ed2d47121282d4a1 done
+2026-10-21T12:24:27.3507852Z #7 sha256:d617f1b5c2a18778ba357ba0528e973bd24992b0dd18000dfbca059f4a15ebda 4.72kB / 4.72kB done
+2026-10-21T12:24:27.3509437Z #7 sha256:4887723d153cfd7fd9e356c8730311c36a64e4f9329f9d3ae1929e05715f2e73 4.19MB / 48.50MB 0.1s
+2026-10-21T12:24:27.3511848Z #7 sha256:2e51c50554dce9c9549d76c40bfea45780a8342aea81ba8b270ba1bf46a2aec5 1.05MB / 24.04MB 0.1s
+2026-10-21T12:24:27.3513485Z #7 sha256:6258907abe69656e41cd992e0b705cdcfabcbbe3db374f92ed2d47121282d4a1 7.75kB / 7.75kB done
+2026-10-21T12:24:27.3516478Z #7 sha256:4c2fd73ef19c5ef9d54bee03b06b2839a392604fbfcd578ed948b71b37c1d7fb 1.94kB / 1.94kB done
+2026-10-21T12:24:27.4463477Z #7 sha256:4887723d153cfd7fd9e356c8730311c36a64e4f9329f9d3ae1929e05715f2e73 19.92MB / 48.50MB 0.2s
+2026-10-21T12:24:27.4476546Z #7 sha256:2e51c50554dce9c9549d76c40bfea45780a8342aea81ba8b270ba1bf46a2aec5 9.44MB / 24.04MB 0.2s
+2026-10-21T12:24:27.5597440Z #7 ...
+2026-10-21T12:24:27.5598107Z 
+2026-10-21T12:24:27.5598456Z #8 [internal] load build context
+2026-10-21T12:24:27.5599571Z #8 transferring context: 11.57MB 0.2s done
+2026-10-21T12:24:27.5600413Z #8 DONE 0.2s
+2026-10-21T12:24:27.5600659Z 
+2026-10-21T12:24:27.5602079Z #7 [build 1/7] FROM docker.io/library/rust:1.95-bookworm@sha256:6258907abe69656e41cd992e0b705cdcfabcbbe3db374f92ed2d47121282d4a1
+2026-10-21T12:24:27.5605349Z #7 sha256:4887723d153cfd7fd9e356c8730311c36a64e4f9329f9d3ae1929e05715f2e73 47.19MB / 48.50MB 0.3s
+2026-10-21T12:24:27.5608717Z #7 sha256:2e51c50554dce9c9549d76c40bfea45780a8342aea81ba8b270ba1bf46a2aec5 24.04MB / 24.04MB 0.3s done
+2026-10-21T12:24:27.5613947Z #7 sha256:a234579dfb0d2a4c7e869bc6c39c06f306aa019f90ec3e79f682671badaeb4f3 4.19MB / 64.40MB 0.3s
+2026-10-21T12:24:27.5615434Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 0B / 211.59MB 0.3s
+2026-10-21T12:24:27.6656229Z #7 sha256:4887723d153cfd7fd9e356c8730311c36a64e4f9329f9d3ae1929e05715f2e73 48.50MB / 48.50MB 0.3s done
+2026-10-21T12:24:27.6658418Z #7 sha256:a234579dfb0d2a4c7e869bc6c39c06f306aa019f90ec3e79f682671badaeb4f3 28.31MB / 64.40MB 0.4s
+2026-10-21T12:24:27.6664194Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 28.31MB / 211.59MB 0.4s
+2026-10-21T12:24:27.6665943Z #7 sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 15.73MB / 215.22MB 0.4s
+2026-10-21T12:24:27.7740786Z #7 sha256:a234579dfb0d2a4c7e869bc6c39c06f306aa019f90ec3e79f682671badaeb4f3 57.67MB / 64.40MB 0.5s
+2026-10-21T12:24:27.7742721Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 55.57MB / 211.59MB 0.5s
+2026-10-21T12:24:27.7744721Z #7 sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 49.28MB / 215.22MB 0.5s
+2026-10-21T12:24:27.7746454Z #7 extracting sha256:4887723d153cfd7fd9e356c8730311c36a64e4f9329f9d3ae1929e05715f2e73
+2026-10-21T12:24:27.8760505Z #7 sha256:a234579dfb0d2a4c7e869bc6c39c06f306aa019f90ec3e79f682671badaeb4f3 64.40MB / 64.40MB 0.5s done
+2026-10-21T12:24:27.8762256Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 67.11MB / 211.59MB 0.6s
+2026-10-21T12:24:27.8766028Z #7 sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 90.18MB / 215.22MB 0.6s
+2026-10-21T12:24:27.9884743Z #7 sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 128.97MB / 215.22MB 0.7s
+2026-10-21T12:24:28.0985657Z #7 sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 165.68MB / 215.22MB 0.8s
+2026-10-21T12:24:28.2324875Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 106.95MB / 211.59MB 0.9s
+2026-10-21T12:24:28.2327162Z #7 sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 197.13MB / 215.22MB 0.9s
+2026-10-21T12:24:28.3362221Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 145.75MB / 211.59MB 1.0s
+2026-10-21T12:24:28.3364319Z #7 sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 215.22MB / 215.22MB 1.0s
+2026-10-21T12:24:28.4364325Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 197.13MB / 211.59MB 1.1s
+2026-10-21T12:24:28.5438565Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 211.59MB / 211.59MB 1.3s
+2026-10-21T12:24:28.7437001Z #7 sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 215.22MB / 215.22MB 1.3s done
+2026-10-21T12:24:29.1611893Z #7 sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 211.59MB / 211.59MB 1.9s done
+2026-10-21T12:24:29.7989105Z #7 ...
+2026-10-21T12:24:29.7989578Z 
+2026-10-21T12:24:29.7991198Z #9 [stage-1 1/3] FROM docker.io/library/debian:bookworm-slim@sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8
+2026-10-21T12:24:29.7993750Z #9 resolve docker.io/library/debian:bookworm-slim@sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8 done
+2026-10-21T12:24:29.7995531Z #9 sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8 5.65kB / 5.65kB done
+2026-10-21T12:24:29.7996813Z #9 sha256:ec31d744f83f4a73447ba045aaab9409997efe5cc706eca4890c1be36cc1606a 1.02kB / 1.02kB done
+2026-10-21T12:24:29.7997964Z #9 sha256:8da84df25d28176be84164040cd45e128c6b4c6a80b7d7cbe17fe2b9f198efc2 453B / 453B done
+2026-10-21T12:24:29.7999391Z #9 sha256:11422d7ca1a44390a32bd8d8d9dc5946b4d053b3bbd9507d682e35584ba84a26 28.25MB / 28.25MB 0.2s done
+2026-10-21T12:24:29.8000739Z #9 extracting sha256:11422d7ca1a44390a32bd8d8d9dc5946b4d053b3bbd9507d682e35584ba84a26 2.2s done
+2026-10-21T12:24:29.8001552Z #9 DONE 2.6s
+2026-10-21T12:24:29.9931205Z 
+2026-10-21T12:24:29.9935633Z #7 [build 1/7] FROM docker.io/library/rust:1.95-bookworm@sha256:6258907abe69656e41cd992e0b705cdcfabcbbe3db374f92ed2d47121282d4a1
+2026-10-21T12:24:30.4797182Z #7 extracting sha256:4887723d153cfd7fd9e356c8730311c36a64e4f9329f9d3ae1929e05715f2e73 2.8s done
+2026-10-21T12:24:30.6542135Z #7 extracting sha256:2e51c50554dce9c9549d76c40bfea45780a8342aea81ba8b270ba1bf46a2aec5 0.1s
+2026-10-21T12:24:31.3342409Z #7 extracting sha256:2e51c50554dce9c9549d76c40bfea45780a8342aea81ba8b270ba1bf46a2aec5 0.6s done
+2026-10-21T12:24:33.9325208Z #7 extracting sha256:a234579dfb0d2a4c7e869bc6c39c06f306aa019f90ec3e79f682671badaeb4f3
+2026-10-21T12:24:36.2354386Z #7 ...
+2026-10-21T12:24:36.2357400Z 
+2026-10-21T12:24:36.2360588Z #10 [stage-1 2/3] RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/* && useradd --system --uid 10001 --create-home spider && mkdir /data && chown spider:spider /data
+2026-10-21T12:24:36.2363567Z #10 0.211 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+2026-10-21T12:24:36.2364710Z #10 0.224 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+2026-10-21T12:24:36.2365918Z #10 0.224 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [34.8 kB]
+2026-10-21T12:24:36.2366922Z #10 0.296 Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8790 kB]
+2026-10-21T12:24:36.2368118Z #10 0.366 Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [6924 B]
+2026-10-21T12:24:36.2369227Z #10 0.427 Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [355 kB]
+2026-10-21T12:24:36.2369929Z #10 1.383 Fetched 9394 kB in 1s (7903 kB/s)
+2026-10-21T12:24:36.2370274Z #10 1.383 Reading package lists...
+2026-10-21T12:24:36.2370855Z #10 2.092 Reading package lists...
+2026-10-21T12:24:36.2371406Z #10 2.529 Building dependency tree...
+2026-10-21T12:24:36.2372046Z #10 2.661 Reading state information...
+2026-10-21T12:24:36.2372819Z #10 2.763 The following additional packages will be installed:
+2026-10-21T12:24:36.2373690Z #10 2.763   libssl3 openssl
+2026-10-21T12:24:36.2374358Z #10 2.871 The following NEW packages will be installed:
+2026-10-21T12:24:36.2376021Z #10 2.872   ca-certificates libssl3 openssl
+2026-10-21T12:24:36.2376846Z #10 2.890 0 upgraded, 3 newly installed, 0 to remove and 0 not upgraded.
+2026-10-21T12:24:36.2377289Z #10 2.890 Need to get 3642 kB of archives.
+2026-10-21T12:24:36.2377756Z #10 2.890 After this operation, 8953 kB of additional disk space will be used.
+2026-10-21T12:24:36.2378539Z #10 2.890 Get:1 http://deb.debian.org/debian-security bookworm-security/main amd64 libssl3 amd64 3.0.22-1~deb12u1 [2039 kB]
+2026-10-21T12:24:36.2379480Z #10 2.946 Get:2 http://deb.debian.org/debian-security bookworm-security/main amd64 openssl amd64 3.0.22-1~deb12u1 [1442 kB]
+2026-10-21T12:24:36.2380442Z #10 2.993 Get:3 http://deb.debian.org/debian-security bookworm-security/main amd64 ca-certificates all 20250419~deb12u2 [161 kB]
+2026-10-21T12:24:36.2381218Z #10 3.415 debconf: delaying package configuration, since apt-utils is not installed
+2026-10-21T12:24:36.2381696Z #10 3.434 Fetched 3642 kB in 0s (31.4 MB/s)
+2026-10-21T12:24:36.2382115Z #10 3.693 Selecting previously unselected package libssl3:amd64.
+2026-10-21T12:24:36.2382503Z #10 3.693 (Reading database ... 
+2026-10-21T12:24:36.2382770Z (Reading database ... 5%
+2026-10-21T12:24:36.2383019Z (Reading database ... 10%
+2026-10-21T12:24:36.2383768Z (Reading database ... 15%
+2026-10-21T12:24:36.2384228Z (Reading database ... 20%
+2026-10-21T12:24:36.2384676Z (Reading database ... 25%
+2026-10-21T12:24:36.2385278Z (Reading database ... 30%
+2026-10-21T12:24:36.2385769Z (Reading database ... 35%
+2026-10-21T12:24:36.2386191Z (Reading database ... 40%
+2026-10-21T12:24:36.2386646Z (Reading database ... 45%
+2026-10-21T12:24:36.2387144Z (Reading database ... 50%
+2026-10-21T12:24:36.2387590Z (Reading database ... 55%
+2026-10-21T12:24:36.2388001Z (Reading database ... 60%
+2026-10-21T12:24:36.2388458Z (Reading database ... 65%
+2026-10-21T12:24:36.2388876Z (Reading database ... 70%
+2026-10-21T12:24:36.2389755Z (Reading database ... 75%
+2026-10-21T12:24:36.2390151Z (Reading database ... 80%
+2026-10-21T12:24:36.2390662Z (Reading database ... 85%
+2026-10-21T12:24:36.2391087Z (Reading database ... 90%
+2026-10-21T12:24:36.2391549Z (Reading database ... 95%
+2026-10-21T12:24:36.2392037Z (Reading database ... 100%
+2026-10-21T12:24:36.2392848Z (Reading database ... 6096 files and directories currently installed.)
+2026-10-21T12:24:36.2394102Z #10 3.705 Preparing to unpack .../libssl3_3.0.22-1~deb12u1_amd64.deb ...
+2026-10-21T12:24:36.2394960Z #10 3.754 Unpacking libssl3:amd64 (3.0.22-1~deb12u1) ...
+2026-10-21T12:24:36.2395730Z #10 3.957 Selecting previously unselected package openssl.
+2026-10-21T12:24:36.2396804Z #10 3.959 Preparing to unpack .../openssl_3.0.22-1~deb12u1_amd64.deb ...
+2026-10-21T12:24:36.2397633Z #10 4.005 Unpacking openssl (3.0.22-1~deb12u1) ...
+2026-10-21T12:24:36.2398437Z #10 4.131 Selecting previously unselected package ca-certificates.
+2026-10-21T12:24:36.2399403Z #10 4.133 Preparing to unpack .../ca-certificates_20250419~deb12u2_all.deb ...
+2026-10-21T12:24:36.2400309Z #10 4.134 Unpacking ca-certificates (20250419~deb12u2) ...
+2026-10-21T12:24:36.2401076Z #10 4.206 Setting up libssl3:amd64 (3.0.22-1~deb12u1) ...
+2026-10-21T12:24:36.2401764Z #10 4.209 Setting up openssl (3.0.22-1~deb12u1) ...
+2026-10-21T12:24:36.2402471Z #10 4.214 Setting up ca-certificates (20250419~deb12u2) ...
+2026-10-21T12:24:36.2403502Z #10 4.303 debconf: unable to initialize frontend: Dialog
+2026-10-21T12:24:36.2404424Z #10 4.303 debconf: (TERM is not set, so the dialog frontend is not usable.)
+2026-10-21T12:24:36.2405245Z #10 4.303 debconf: falling back to frontend: Readline
+2026-10-21T12:24:36.2405997Z #10 4.303 debconf: unable to initialize frontend: Readline
+2026-10-21T12:24:36.2409443Z #10 4.303 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+2026-10-21T12:24:36.2412361Z #10 4.303 debconf: falling back to frontend: Teletype
+2026-10-21T12:24:36.2413317Z #10 4.806 Updating certificates in /etc/ssl/certs...
+2026-10-21T12:24:36.2414118Z #10 5.536 148 added, 0 removed; done.
+2026-10-21T12:24:36.2414798Z #10 5.554 Processing triggers for libc-bin (2.36-9+deb12u14) ...
+2026-10-21T12:24:36.2415718Z #10 5.566 Processing triggers for ca-certificates (20250419~deb12u2) ...
+2026-10-21T12:24:36.2416458Z #10 5.570 Updating certificates in /etc/ssl/certs...
+2026-10-21T12:24:36.2416963Z #10 6.117 0 added, 0 removed; done.
+2026-10-21T12:24:36.2417437Z #10 6.117 Running hooks in /etc/ca-certificates/update.d...
+2026-10-21T12:24:36.2417998Z #10 6.118 done.
+2026-10-21T12:24:36.2418572Z #10 6.143 useradd warning: spider's uid 10001 is greater than SYS_UID_MAX 999
+2026-10-21T12:24:36.2419117Z #10 DONE 6.4s
+2026-10-21T12:24:36.2419340Z 
+2026-10-21T12:24:36.2420049Z #7 [build 1/7] FROM docker.io/library/rust:1.95-bookworm@sha256:6258907abe69656e41cd992e0b705cdcfabcbbe3db374f92ed2d47121282d4a1
+2026-10-21T12:24:36.5724925Z #7 extracting sha256:a234579dfb0d2a4c7e869bc6c39c06f306aa019f90ec3e79f682671badaeb4f3 2.6s done
+2026-10-21T12:24:36.5726902Z #7 extracting sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498
+2026-10-21T12:24:41.6540053Z #7 extracting sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 5.1s
+2026-10-21T12:24:41.8165081Z #7 extracting sha256:0ce041001b8968f31ff00bb8f9dbd68f72d4bdc378a1309e38eb3dfe97cc1498 5.2s done
+2026-10-21T12:24:43.1339971Z #7 extracting sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89
+2026-10-21T12:24:45.9735896Z #7 extracting sha256:84b63b001b79624dce7fce0cce36bf41c353c8b72bcfaffeec9c724aaea3bf89 2.7s done
+2026-10-21T12:24:47.1179245Z #7 DONE 19.9s
+2026-10-21T12:24:47.2223593Z 
+2026-10-21T12:24:47.2224401Z #11 [build 2/7] WORKDIR /build
+2026-10-21T12:24:47.2224998Z #11 DONE 0.0s
+2026-10-21T12:24:47.2225174Z 
+2026-10-21T12:24:47.2225424Z #12 [build 3/7] COPY Cargo.toml Cargo.lock ./
+2026-10-21T12:24:47.2225837Z #12 DONE 0.0s
+2026-10-21T12:24:47.2226083Z 
+2026-10-21T12:24:47.2226418Z #13 [build 4/7] COPY crates ./crates
+2026-10-21T12:24:47.2227053Z #13 DONE 0.1s
+2026-10-21T12:24:47.4142105Z 
+2026-10-21T12:24:47.4142791Z #14 [build 5/7] COPY web ./web
+2026-10-21T12:24:47.4143526Z #14 DONE 0.0s
+2026-10-21T12:24:47.4143748Z 
+2026-10-21T12:24:47.4143992Z #15 [build 6/7] COPY assets ./assets
+2026-10-21T12:24:47.4144399Z #15 DONE 0.0s
+2026-10-21T12:24:47.4144587Z 
+2026-10-21T12:24:47.4145502Z #16 [build 7/7] RUN cargo build --locked --release -p open-seo-spider
+2026-10-21T12:24:47.4168549Z #16 0.153     Updating crates.io index
+2026-10-21T12:24:48.2788777Z #16 1.015  Downloading crates ...
+2026-10-21T12:24:48.3825739Z #16 1.060   Downloaded adler2 v2.0.1
+2026-10-21T12:24:48.3826806Z #16 1.065   Downloaded ambient-authority v0.0.2
+2026-10-21T12:24:48.3827721Z #16 1.069   Downloaded alloc-stdlib v0.2.4
+2026-10-21T12:24:48.3834105Z #16 1.074   Downloaded cfg-if v1.0.5
+2026-10-21T12:24:48.3835027Z #16 1.077   Downloaded anstyle-query v1.1.5
+2026-10-21T12:24:48.3835862Z #16 1.081   Downloaded block-padding v0.4.2
+2026-10-21T12:24:48.3836734Z #16 1.084   Downloaded block-buffer v0.12.1
+2026-10-21T12:24:48.3837430Z #16 1.090   Downloaded httpdate v1.0.3
+2026-10-21T12:24:48.3837902Z #16 1.095   Downloaded rand_pcg v0.10.2
+2026-10-21T12:24:48.3838415Z #16 1.100   Downloaded rustc_version v0.4.1
+2026-10-21T12:24:48.3838937Z #16 1.104   Downloaded hyper-rustls v0.27.10
+2026-10-21T12:24:48.3839453Z #16 1.108   Downloaded idna_adapter v1.2.2
+2026-10-21T12:24:48.3839823Z #16 1.112   Downloaded robotstxt v0.3.0
+2026-10-21T12:24:48.3840194Z #16 1.115   Downloaded serde_path_to_error v0.1.20
+2026-10-21T12:24:48.3840560Z #16 1.119   Downloaded futures-io v0.3.34
+2026-10-21T12:24:48.4844674Z #16 1.122   Downloaded litemap v0.8.3
+2026-10-21T12:24:48.4845362Z #16 1.127   Downloaded lru-slab v0.1.3
+2026-10-21T12:24:48.4845848Z #16 1.130   Downloaded once_cell v1.21.4
+2026-10-21T12:24:48.4846375Z #16 1.136   Downloaded serde_urlencoded v0.7.1
+2026-10-21T12:24:48.4846876Z #16 1.139   Downloaded scopeguard v1.2.0
+2026-10-21T12:24:48.4847330Z #16 1.142   Downloaded subtle v2.6.1
+2026-10-21T12:24:48.4847811Z #16 1.145   Downloaded thread_local v1.1.10
+2026-10-21T12:24:48.4848485Z #16 1.149   Downloaded crc32fast v1.5.2
+2026-10-21T12:24:48.4849113Z #16 1.153   Downloaded new_debug_unreachable v1.0.6
+2026-10-21T12:24:48.4849645Z #16 1.155   Downloaded tokio-macros v2.7.2
+2026-10-21T12:24:48.4850108Z #16 1.158   Downloaded try-lock v0.2.5
+2026-10-21T12:24:48.4850575Z #16 1.161   Downloaded futures v0.3.34
+2026-10-21T12:24:48.4851032Z #16 1.169   Downloaded bitflags v2.13.2
+2026-10-21T12:24:48.4851656Z #16 1.177   Downloaded tracing-log v0.2.0
+2026-10-21T12:24:48.4852033Z #16 1.180   Downloaded version_check v0.9.5
+2026-10-21T12:24:48.4852656Z #16 1.183   Downloaded tower-service v0.3.3
+2026-10-21T12:24:48.4853614Z #16 1.185   Downloaded typed-arena v1.7.0
+2026-10-21T12:24:48.4853977Z #16 1.188   Downloaded want v0.3.2
+2026-10-21T12:24:48.4854452Z #16 1.191   Downloaded zerovec-derive v0.11.6
+2026-10-21T12:24:48.4854812Z #16 1.195   Downloaded zmij v1.0.23
+2026-10-21T12:24:48.4855163Z #16 1.198   Downloaded zerofrom-derive v0.1.8
+2026-10-21T12:24:48.4855911Z #16 1.201   Downloaded unicode-bidi v0.3.18
+2026-10-21T12:24:48.4856256Z #16 1.205   Downloaded tinyvec v1.13.3
+2026-10-21T12:24:48.4856957Z #16 1.211   Downloaded bumpalo v3.20.3
+2026-10-21T12:24:48.4857297Z #16 1.216   Downloaded zopfli v0.8.4
+2026-10-21T12:24:48.4857622Z #16 1.221   Downloaded zerotrie v0.2.5
+2026-10-21T12:24:48.5911210Z #16 1.228   Downloaded semver v1.0.28
+2026-10-21T12:24:48.5912030Z #16 1.233   Downloaded unicode-normalization v0.1.25
+2026-10-21T12:24:48.5912606Z #16 1.238   Downloaded zerovec v0.11.8
+2026-10-21T12:24:48.5914186Z #16 1.248   Downloaded zip v8.6.0
+2026-10-21T12:24:48.5914769Z #16 1.255   Downloaded serde_core v1.0.229
+2026-10-21T12:24:48.5915264Z #16 1.260   Downloaded sxd-document v0.3.2
+2026-10-21T12:24:48.5915745Z #16 1.264   Downloaded ttf-parser v0.25.1
+2026-10-21T12:24:48.5916385Z #16 1.279   Downloaded zlib-rs v0.6.8
+2026-10-21T12:24:48.5917114Z #16 1.287   Downloaded weezl v0.2.1
+2026-10-21T12:24:48.5917835Z #16 1.293   Downloaded serde v1.0.229
+2026-10-21T12:24:48.5918622Z #16 1.299   Downloaded unicode-width v0.2.2
+2026-10-21T12:24:48.5919391Z #16 1.306   Downloaded rand v0.10.3
+2026-10-21T12:24:48.5919930Z #16 1.312   Downloaded syn v3.0.7
+2026-10-21T12:24:48.5920354Z #16 1.327   Downloaded nom v8.0.0
+2026-10-21T12:24:48.7331394Z #16 1.336   Downloaded tokio-util v0.7.20
+2026-10-21T12:24:48.7331984Z #16 1.348   Downloaded serde_json v1.0.152
+2026-10-21T12:24:48.7332485Z #16 1.359   Downloaded rusqlite v0.39.0
+2026-10-21T12:24:48.7332958Z #16 1.369   Downloaded quick-xml v0.42.0
+2026-10-21T12:24:48.7334003Z #16 1.378   Downloaded webpki-roots v1.0.9
+2026-10-21T12:24:48.7334491Z #16 1.383   Downloaded vcpkg v0.2.15
+2026-10-21T12:24:48.7334967Z #16 1.470   Downloaded quinn-proto v0.11.19
+2026-10-21T12:24:48.8341544Z #16 1.480   Downloaded lopdf v0.45.0
+2026-10-21T12:24:48.8342599Z #16 1.494   Downloaded encoding_rs v0.8.42
+2026-10-21T12:24:48.8343762Z #16 1.505   Downloaded quick-xml v0.41.0
+2026-10-21T12:24:48.8344770Z #16 1.514   Downloaded icu_properties_data v2.3.0
+2026-10-21T12:24:48.8345717Z #16 1.530   Downloaded reqwest v0.12.28
+2026-10-21T12:24:48.8346622Z #16 1.537   Downloaded regex-syntax v0.8.11
+2026-10-21T12:24:48.8347682Z #16 1.546   Downloaded rustls v0.23.45
+2026-10-21T12:24:48.8348500Z #16 1.563   Downloaded regex v1.13.1
+2026-10-21T12:24:48.8349305Z #16 1.571   Downloaded rustix v1.1.5
+2026-10-21T12:24:48.9357795Z #16 1.612   Downloaded idna v1.1.0
+2026-10-21T12:24:48.9359008Z #16 1.616   Downloaded tracing v0.1.44
+2026-10-21T12:24:48.9359858Z #16 1.637   Downloaded syn v2.0.119
+2026-10-21T12:24:48.9360944Z #16 1.652   Downloaded hyper v1.12.0
+2026-10-21T12:24:48.9361891Z #16 1.662   Downloaded typed-path v0.12.3
+2026-10-21T12:24:48.9362863Z #16 1.672   Downloaded icu_normalizer v2.3.0
+2026-10-21T12:24:49.0400554Z #16 1.684   Downloaded brotli v9.0.0
+2026-10-21T12:24:49.0401284Z #16 1.702   Downloaded miniz_oxide v0.9.1
+2026-10-21T12:24:49.0401930Z #16 1.705   Downloaded icu_properties v2.3.0
+2026-10-21T12:24:49.0402535Z #16 1.710   Downloaded tokio v1.53.2
+2026-10-21T12:24:49.0403551Z #16 1.776   Downloaded regex-automata v0.4.18
+2026-10-21T12:24:49.2010866Z #16 1.795   Downloaded csv v1.4.0
+2026-10-21T12:24:49.2011731Z #16 1.816   Downloaded uuid v1.28.0
+2026-10-21T12:24:49.2013408Z #16 1.820   Downloaded tracing-attributes v0.1.31
+2026-10-21T12:24:49.2014325Z #16 1.824   Downloaded quinn v0.11.12
+2026-10-21T12:24:49.2015225Z #16 1.828   Downloaded memchr v2.8.3
+2026-10-21T12:24:49.2016130Z #16 1.836   Downloaded rustls-webpki v0.103.15
+2026-10-21T12:24:49.2016817Z #16 1.841   Downloaded proc-macro2 v1.0.107
+2026-10-21T12:24:49.2017481Z #16 1.845   Downloaded hyper-util v0.1.21
+2026-10-21T12:24:49.2018122Z #16 1.854   Downloaded tracing-subscriber v0.3.23
+2026-10-21T12:24:49.2018728Z #16 1.866   Downloaded libc v0.2.190
+2026-10-21T12:24:49.2019373Z #16 1.937   Downloaded icu_locale_core v2.3.0
+2026-10-21T12:24:49.3126676Z #16 1.949   Downloaded brotli-decompressor v6.0.1
+2026-10-21T12:24:49.3127681Z #16 1.958   Downloaded socket2 v0.6.5
+2026-10-21T12:24:49.3128488Z #16 1.960   Downloaded mio v1.2.4
+2026-10-21T12:24:49.3128992Z #16 1.969   Downloaded rangemap v1.8.0
+2026-10-21T12:24:49.3129491Z #16 1.973   Downloaded log v0.4.34
+2026-10-21T12:24:49.3129992Z #16 1.976   Downloaded tower-http v0.6.11
+2026-10-21T12:24:49.3130552Z #16 1.990   Downloaded chrono v0.4.45
+2026-10-21T12:24:49.3131078Z #16 1.999   Downloaded synstructure v0.14.0
+2026-10-21T12:24:49.3131617Z #16 2.001   Downloaded smallvec v1.16.3
+2026-10-21T12:24:49.3132159Z #16 2.003   Downloaded serde_derive v1.0.229
+2026-10-21T12:24:49.3132952Z #16 2.008   Downloaded ryu v1.0.23
+2026-10-21T12:24:49.3133853Z #16 2.012   Downloaded indexmap v2.14.2
+2026-10-21T12:24:49.3134422Z #16 2.019   Downloaded icu_normalizer_data v2.3.0
+2026-10-21T12:24:49.3134986Z #16 2.022   Downloaded hashbrown v0.17.1
+2026-10-21T12:24:49.3135528Z #16 2.029   Downloaded futures-util v0.3.34
+2026-10-21T12:24:49.3136073Z #16 2.049   Downloaded clap_builder v4.6.7
+2026-10-21T12:24:49.4188222Z #16 2.058   Downloaded typenum v1.20.1
+2026-10-21T12:24:49.4189301Z #16 2.063   Downloaded rustls-pki-types v1.15.1
+2026-10-21T12:24:49.4190010Z #16 2.067   Downloaded parking_lot v0.12.5
+2026-10-21T12:24:49.4190620Z #16 2.071   Downloaded num-traits v0.2.19
+2026-10-21T12:24:49.4191243Z #16 2.074   Downloaded icu_provider v2.3.1
+2026-10-21T12:24:49.4192167Z #16 2.078   Downloaded hashbrown v0.16.1
+2026-10-21T12:24:49.4192765Z #16 2.085   Downloaded axum v0.8.9
+2026-10-21T12:24:49.4193579Z #16 2.097   Downloaded quinn-udp v0.5.16
+2026-10-21T12:24:49.4194236Z #16 2.100   Downloaded parking_lot_core v0.9.12
+2026-10-21T12:24:49.4194889Z #16 2.103   Downloaded io-extras v0.19.0
+2026-10-21T12:24:49.4195488Z #16 2.106   Downloaded calamine v0.36.1
+2026-10-21T12:24:49.4196068Z #16 2.113   Downloaded tower v0.5.3
+2026-10-21T12:24:49.4196648Z #16 2.129   Downloaded nu-ansi-term v0.50.3
+2026-10-21T12:24:49.4197233Z #16 2.132   Downloaded url v2.5.8
+2026-10-21T12:24:49.4197768Z #16 2.136   Downloaded cc v1.7.0
+2026-10-21T12:24:49.4198375Z #16 2.141   Downloaded brotli-decompressor v5.0.3
+2026-10-21T12:24:49.4199048Z #16 2.148   Downloaded aho-corasick v1.1.5
+2026-10-21T12:24:49.4199638Z #16 2.155   Downloaded base64 v0.22.1
+2026-10-21T12:24:49.5244921Z #16 2.161   Downloaded ring v0.17.14
+2026-10-21T12:24:49.5245824Z #16 2.218   Downloaded tendril v0.5.1
+2026-10-21T12:24:49.5246437Z #16 2.220   Downloaded http v1.5.0
+2026-10-21T12:24:49.5247025Z #16 2.225   Downloaded tracing-core v0.1.36
+2026-10-21T12:24:49.5247652Z #16 2.229   Downloaded pkg-config v0.3.34
+2026-10-21T12:24:49.5248259Z #16 2.232   Downloaded phf_macros v0.13.1
+2026-10-21T12:24:49.5248912Z #16 2.233   Downloaded derive_more-impl v2.1.1
+2026-10-21T12:24:49.5249531Z #16 2.241   Downloaded derive_more v2.1.1
+2026-10-21T12:24:49.5250094Z #16 2.261   Downloaded zerofrom v0.1.8
+2026-10-21T12:24:49.6275359Z #16 2.263   Downloaded yoke-derive v0.8.4
+2026-10-21T12:24:49.6276148Z #16 2.264   Downloaded yoke v0.8.3
+2026-10-21T12:24:49.6276657Z #16 2.267   Downloaded unicode-ident v1.0.26
+2026-10-21T12:24:49.6277153Z #16 2.271   Downloaded simdutf8 v0.1.5
+2026-10-21T12:24:49.6277655Z #16 2.275   Downloaded pin-project-lite v0.2.17
+2026-10-21T12:24:49.6278153Z #16 2.284   Downloaded zeroize v1.9.1
+2026-10-21T12:24:49.6278771Z #16 2.286   Downloaded writeable v0.6.4
+2026-10-21T12:24:49.6279301Z #16 2.289   Downloaded unicode-properties v0.1.4
+2026-10-21T12:24:49.6279806Z #16 2.292   Downloaded rand_core v0.10.1
+2026-10-21T12:24:49.6280273Z #16 2.294   Downloaded io-lifetimes v2.0.4
+2026-10-21T12:24:49.6280778Z #16 2.297   Downloaded cap-primitives v4.0.3
+2026-10-21T12:24:49.6281265Z #16 2.314   Downloaded web_atoms v0.2.6
+2026-10-21T12:24:49.6281702Z #16 2.316   Downloaded md-5 v0.11.0
+2026-10-21T12:24:49.6282139Z #16 2.319   Downloaded ipnet v2.12.2
+2026-10-21T12:24:49.6282590Z #16 2.321   Downloaded getrandom v0.4.3
+2026-10-21T12:24:49.6283069Z #16 2.327   Downloaded async-compression v0.4.50
+2026-10-21T12:24:49.6283750Z #16 2.338   Downloaded rustix-linux-procfs v0.1.1
+2026-10-21T12:24:49.6284166Z #16 2.339   Downloaded phf v0.13.1
+2026-10-21T12:24:49.6284571Z #16 2.341   Downloaded icu_collections v2.3.0
+2026-10-21T12:24:49.6284990Z #16 2.350   Downloaded html5ever v0.39.0
+2026-10-21T12:24:49.6285368Z #16 2.357   Downloaded flate2 v1.1.10
+2026-10-21T12:24:49.6285747Z #16 2.364   Downloaded const-oid v0.10.2
+2026-10-21T12:24:49.7301473Z #16 2.367   Downloaded tower-layer v0.3.3
+2026-10-21T12:24:49.7302340Z #16 2.369   Downloaded quote v1.0.47
+2026-10-21T12:24:49.7302834Z #16 2.373   Downloaded markup5ever v0.39.0
+2026-10-21T12:24:49.7303567Z #16 2.375   Downloaded lock_api v0.4.14
+2026-10-21T12:24:49.7304385Z #16 2.377   Downloaded imagesize v0.15.0
+2026-10-21T12:24:49.7304878Z #16 2.381   Downloaded hybrid-array v0.4.15
+2026-10-21T12:24:49.7305350Z #16 2.384   Downloaded bytes v1.12.1
+2026-10-21T12:24:49.7305790Z #16 2.390   Downloaded utf8parse v0.2.2
+2026-10-21T12:24:49.7306240Z #16 2.391   Downloaded utf8_iter v1.0.4
+2026-10-21T12:24:49.7306690Z #16 2.393   Downloaded untrusted v0.9.0
+2026-10-21T12:24:49.7307134Z #16 2.395   Downloaded sxd-xpath v0.4.2
+2026-10-21T12:24:49.7307591Z #16 2.398   Downloaded sharded-slab v0.1.7
+2026-10-21T12:24:49.7308063Z #16 2.403   Downloaded selectors v0.38.0
+2026-10-21T12:24:49.7308531Z #16 2.406   Downloaded rustversion v1.0.23
+2026-10-21T12:24:49.7309330Z #16 2.411   Downloaded tinystr v0.8.4
+2026-10-21T12:24:49.7309946Z #16 2.414   Downloaded thiserror-impl v2.0.21
+2026-10-21T12:24:49.7310534Z #16 2.416   Downloaded thiserror v2.0.21
+2026-10-21T12:24:49.7311131Z #16 2.426   Downloaded sync_wrapper v1.0.2
+2026-10-21T12:24:49.7311883Z #16 2.427   Downloaded stable_deref_trait v1.2.1
+2026-10-21T12:24:49.7312517Z #16 2.429   Downloaded siphasher v1.0.4
+2026-10-21T12:24:49.7313342Z #16 2.431   Downloaded base64 v0.23.1
+2026-10-21T12:24:49.7314076Z #16 2.437   Downloaded tokio-rustls v0.26.6
+2026-10-21T12:24:49.7314765Z #16 2.439   Downloaded stringprep v0.1.5
+2026-10-21T12:24:49.7315141Z #16 2.441   Downloaded string_cache v0.9.0
+2026-10-21T12:24:49.7315475Z #16 2.444   Downloaded sha2 v0.11.0
+2026-10-21T12:24:49.7315785Z #16 2.449   Downloaded rustc-hash v2.1.3
+2026-10-21T12:24:49.7316107Z #16 2.451   Downloaded quick-error v1.2.3
+2026-10-21T12:24:49.7316451Z #16 2.453   Downloaded phf_generator v0.13.1
+2026-10-21T12:24:49.7316796Z #16 2.455   Downloaded cssparser v0.37.0
+2026-10-21T12:24:49.7317111Z #16 2.458   Downloaded aes v0.9.3
+2026-10-21T12:24:49.7317450Z #16 2.464   Downloaded futures-channel v0.3.34
+2026-10-21T12:24:49.7317788Z #16 2.467   Downloaded fast-float2 v0.2.4
+2026-10-21T12:24:49.8649366Z #16 2.470   Downloaded clap v4.6.7
+2026-10-21T12:24:49.8650015Z #16 2.484   Downloaded simd-adler32 v0.3.10
+2026-10-21T12:24:49.8650659Z #16 2.487   Downloaded signal-hook-registry v1.4.8
+2026-10-21T12:24:49.8651229Z #16 2.489   Downloaded shlex v2.0.1
+2026-10-21T12:24:49.8651701Z #16 2.491   Downloaded sha2 v0.10.9
+2026-10-21T12:24:49.8652185Z #16 2.495   Downloaded scraper v0.27.0
+2026-10-21T12:24:49.8652710Z #16 2.498   Downloaded potential_utf v0.1.6
+2026-10-21T12:24:49.8653413Z #16 2.499   Downloaded dtoa v1.0.11
+2026-10-21T12:24:49.8653968Z #16 2.502   Downloaded compression-codecs v0.4.45
+2026-10-21T12:24:49.8655074Z #16 2.508   Downloaded clap_derive v4.6.7
+2026-10-21T12:24:49.8656223Z #16 2.511   Downloaded cap-std v4.0.3
+2026-10-21T12:24:49.8657454Z #16 2.516   Downloaded strsim v0.11.1
+2026-10-21T12:24:49.8658100Z #16 2.518   Downloaded string_cache_codegen v0.6.1
+2026-10-21T12:24:49.8658635Z #16 2.519   Downloaded slab v0.4.12
+2026-10-21T12:24:49.8659028Z #16 2.521   Downloaded servo_arc v0.4.3
+2026-10-21T12:24:49.8659442Z #16 2.522   Downloaded linux-raw-sys v0.12.1
+2026-10-21T12:24:49.8659876Z #16 2.601   Downloaded precomputed-hash v0.1.1
+2026-10-21T12:24:49.9661989Z #16 2.602   Downloaded peresil v0.3.0
+2026-10-21T12:24:49.9662961Z #16 2.604   Downloaded inout v0.2.2
+2026-10-21T12:24:49.9664468Z #16 2.606   Downloaded hashlink v0.11.1
+2026-10-21T12:24:49.9665333Z #16 2.609   Downloaded multiversion_no_op v1.0.0
+2026-10-21T12:24:49.9666088Z #16 2.610   Downloaded mime v0.3.17
+2026-10-21T12:24:49.9666620Z #16 2.612   Downloaded is_terminal_polyfill v1.70.2
+2026-10-21T12:24:49.9667181Z #16 2.614   Downloaded http-body-util v0.1.5
+2026-10-21T12:24:49.9667717Z #16 2.617   Downloaded find-msvc-tools v0.1.14
+2026-10-21T12:24:49.9668226Z #16 2.619   Downloaded fastrand v2.5.0
+2026-10-21T12:24:49.9668768Z #16 2.621   Downloaded ecb v0.2.1
+2026-10-21T12:24:49.9669226Z #16 2.623   Downloaded chacha20 v0.10.2
+2026-10-21T12:24:49.9669677Z #16 2.627   Downloaded getopts v0.2.24
+2026-10-21T12:24:49.9670180Z #16 2.629   Downloaded futures-executor v0.3.34
+2026-10-21T12:24:49.9671312Z #16 2.631   Downloaded ego-tree v0.11.0
+2026-10-21T12:24:49.9671781Z #16 2.634   Downloaded displaydoc v0.2.7
+2026-10-21T12:24:49.9672271Z #16 2.637   Downloaded csv-core v0.1.13
+2026-10-21T12:24:49.9672735Z #16 2.639   Downloaded cpufeatures v0.3.1
+2026-10-21T12:24:49.9673369Z #16 2.641   Downloaded autocfg v1.5.1
+2026-10-21T12:24:49.9674228Z #16 2.644   Downloaded maybe-owned v0.3.4
+2026-10-21T12:24:49.9674869Z #16 2.646   Downloaded matchit v0.8.4
+2026-10-21T12:24:49.9675554Z #16 2.649   Downloaded fallible-iterator v0.3.0
+2026-10-21T12:24:49.9676055Z #16 2.651   Downloaded core_detect v1.0.0
+2026-10-21T12:24:49.9676514Z #16 2.653   Downloaded lazy_static v1.5.1
+2026-10-21T12:24:49.9677145Z #16 2.656   Downloaded foldhash v0.2.0
+2026-10-21T12:24:49.9677625Z #16 2.658   Downloaded digest v0.11.3
+2026-10-21T12:24:49.9678056Z #16 2.661   Downloaded digest v0.10.7
+2026-10-21T12:24:49.9678490Z #16 2.664   Downloaded itoa v1.0.18
+2026-10-21T12:24:49.9678955Z #16 2.666   Downloaded futures-core v0.3.34
+2026-10-21T12:24:49.9679422Z #16 2.668   Downloaded axum-core v0.5.6
+2026-10-21T12:24:49.9679801Z #16 2.672   Downloaded anstyle v1.0.14
+2026-10-21T12:24:49.9680130Z #16 2.674   Downloaded errno v0.3.14
+2026-10-21T12:24:49.9680449Z #16 2.676   Downloaded codepage v0.1.3
+2026-10-21T12:24:49.9680770Z #16 2.678   Downloaded cipher v0.5.2
+2026-10-21T12:24:49.9681103Z #16 2.681   Downloaded cap-fs-ext v4.0.3
+2026-10-21T12:24:49.9681457Z #16 2.683   Downloaded byteorder v1.5.0
+2026-10-21T12:24:49.9681800Z #16 2.686   Downloaded anyhow v1.0.104
+2026-10-21T12:24:49.9682140Z #16 2.692   Downloaded phf_shared v0.13.1
+2026-10-21T12:24:49.9682483Z #16 2.693   Downloaded http-body v1.1.0
+2026-10-21T12:24:49.9682840Z #16 2.695   Downloaded futures-sink v0.3.34
+2026-10-21T12:24:49.9683556Z #16 2.696   Downloaded fs-set-times v0.20.3
+2026-10-21T12:24:49.9684042Z #16 2.698   Downloaded cpubits v0.1.1
+2026-10-21T12:24:49.9684697Z #16 2.699   Downloaded clap_lex v1.1.1
+2026-10-21T12:24:49.9685360Z #16 2.701   Downloaded matchers v0.2.0
+2026-10-21T12:24:49.9686000Z #16 2.703   Downloaded io-lifetimes v3.0.1
+2026-10-21T12:24:50.1868158Z #16 2.705   Downloaded iana-time-zone v0.1.65
+2026-10-21T12:24:50.1869373Z #16 2.709   Downloaded fallible-streaming-iterator v0.1.9
+2026-10-21T12:24:50.1870399Z #16 2.711   Downloaded dtoa-short v0.3.5
+2026-10-21T12:24:50.1870942Z #16 2.712   Downloaded generic-array v0.14.7
+2026-10-21T12:24:50.1871505Z #16 2.714   Downloaded futures-task v0.3.34
+2026-10-21T12:24:50.1872007Z #16 2.716   Downloaded futures-macro v0.3.34
+2026-10-21T12:24:50.1872515Z #16 2.718   Downloaded form_urlencoded v1.2.2
+2026-10-21T12:24:50.1872993Z #16 2.719   Downloaded equivalent v1.0.2
+2026-10-21T12:24:50.1874784Z #16 2.720   Downloaded debug_unsafe v0.1.4
+2026-10-21T12:24:50.1875263Z #16 2.722   Downloaded crypto-common v0.2.2
+2026-10-21T12:24:50.1875726Z #16 2.723   Downloaded cpufeatures v0.2.17
+2026-10-21T12:24:50.1876170Z #16 2.726   Downloaded colorchoice v1.0.5
+2026-10-21T12:24:50.1876626Z #16 2.727   Downloaded httparse v1.10.1
+2026-10-21T12:24:50.1877079Z #16 2.731   Downloaded cssparser-macros v0.7.1
+2026-10-21T12:24:50.1877559Z #16 2.732   Downloaded compression-core v0.4.33
+2026-10-21T12:24:50.1878028Z #16 2.733   Downloaded atomic-waker v1.1.2
+2026-10-21T12:24:50.1878466Z #16 2.735   Downloaded getrandom v0.2.17
+2026-10-21T12:24:50.1878907Z #16 2.739   Downloaded crypto-common v0.1.7
+2026-10-21T12:24:50.1879348Z #16 2.741   Downloaded cfg_aliases v0.2.2
+2026-10-21T12:24:50.1879766Z #16 2.742   Downloaded cbc v0.2.1
+2026-10-21T12:24:50.1880191Z #16 2.745   Downloaded atoi_simd v0.18.1
+2026-10-21T12:24:50.1880630Z #16 2.748   Downloaded phf_codegen v0.13.1
+2026-10-21T12:24:50.1881090Z #16 2.749   Downloaded percent-encoding v2.3.2
+2026-10-21T12:24:50.1881561Z #16 2.752   Downloaded anstyle-parse v1.0.0
+2026-10-21T12:24:50.1882000Z #16 2.754   Downloaded heck v0.5.0
+2026-10-21T12:24:50.1882431Z #16 2.756   Downloaded block-buffer v0.10.4
+2026-10-21T12:24:50.1883436Z #16 2.758   Downloaded anstream v1.0.0
+2026-10-21T12:24:50.1883931Z #16 2.761   Downloaded alloc-no-stdlib v2.0.4
+2026-10-21T12:24:50.1884390Z #16 2.763   Downloaded alloc-stdlib v0.3.0
+2026-10-21T12:24:50.1884846Z #16 2.765   Downloaded alloc-no-stdlib v3.0.0
+2026-10-21T12:24:50.1885303Z #16 2.773   Downloaded libsqlite3-sys v0.37.0
+2026-10-21T12:24:50.1885756Z #16 2.923    Compiling proc-macro2 v1.0.107
+2026-10-21T12:24:50.1886334Z #16 2.923    Compiling quote v1.0.47
+2026-10-21T12:24:50.3560243Z #16 2.923    Compiling unicode-ident v1.0.26
+2026-10-21T12:24:50.3561289Z #16 2.923    Compiling cfg-if v1.0.5
+2026-10-21T12:24:50.3562095Z #16 2.961    Compiling libc v0.2.190
+2026-10-21T12:24:50.3562942Z #16 2.993    Compiling smallvec v1.16.3
+2026-10-21T12:24:50.3564352Z #16 3.092    Compiling memchr v2.8.3
+2026-10-21T12:24:50.4563505Z #16 3.192    Compiling scopeguard v1.2.0
+2026-10-21T12:24:50.6491995Z #16 3.245    Compiling parking_lot_core v0.9.12
+2026-10-21T12:24:50.6492981Z #16 3.385    Compiling typenum v1.20.1
+2026-10-21T12:24:51.3398125Z #16 3.942    Compiling itoa v1.0.18
+2026-10-21T12:24:51.5108534Z #16 4.076    Compiling syn v3.0.7
+2026-10-21T12:24:51.5109460Z #16 4.096    Compiling syn v2.0.119
+2026-10-21T12:24:51.8317638Z #16 4.369    Compiling stable_deref_trait v1.2.1
+2026-10-21T12:24:51.8318570Z #16 4.413    Compiling log v0.4.34
+2026-10-21T12:24:51.8319327Z #16 4.422    Compiling pin-project-lite v0.2.17
+2026-10-21T12:24:51.8320084Z #16 4.568    Compiling lock_api v0.4.14
+2026-10-21T12:24:52.1486252Z #16 4.701    Compiling once_cell v1.21.4
+2026-10-21T12:24:52.1487463Z #16 4.770    Compiling parking_lot v0.12.5
+2026-10-21T12:24:52.2913894Z #16 4.885    Compiling siphasher v1.0.4
+2026-10-21T12:24:52.4452466Z #16 5.027    Compiling phf_shared v0.13.1
+2026-10-21T12:24:52.6450304Z #16 5.268    Compiling futures-core v0.3.34
+2026-10-21T12:24:52.6451032Z #16 5.352    Compiling bytes v1.12.1
+2026-10-21T12:24:52.7496681Z #16 5.381    Compiling fastrand v2.5.0
+2026-10-21T12:24:52.8856538Z #16 5.486    Compiling phf_generator v0.13.1
+2026-10-21T12:24:53.0367088Z #16 5.622    Compiling find-msvc-tools v0.1.14
+2026-10-21T12:24:53.1942621Z #16 5.805    Compiling shlex v2.0.1
+2026-10-21T12:24:53.3332394Z #16 5.930    Compiling serde_core v1.0.229
+2026-10-21T12:24:53.4840675Z #16 6.069    Compiling cc v1.7.0
+2026-10-21T12:24:55.2282248Z #16 7.813    Compiling synstructure v0.14.0
+2026-10-21T12:24:55.8501538Z #16 8.342    Compiling errno v0.3.14
+2026-10-21T12:24:55.8502206Z #16 8.435    Compiling hybrid-array v0.4.15
+2026-10-21T12:24:56.0752258Z #16 8.660    Compiling bitflags v2.13.2
+2026-10-21T12:24:56.3655844Z #16 8.917    Compiling signal-hook-registry v1.4.8
+2026-10-21T12:24:56.3656930Z #16 9.005    Compiling socket2 v0.6.5
+2026-10-21T12:24:56.5257883Z #16 9.102    Compiling mio v1.2.4
+2026-10-21T12:24:56.5258956Z #16 9.194    Compiling futures-sink v0.3.34
+2026-10-21T12:24:56.6746775Z #16 9.262    Compiling crc32fast v1.5.2
+2026-10-21T12:24:56.6747807Z #16 9.291    Compiling zerofrom-derive v0.1.8
+2026-10-21T12:24:56.8262148Z #16 9.411    Compiling yoke-derive v0.8.4
+2026-10-21T12:24:57.0296195Z #16 9.575    Compiling zerovec-derive v0.11.6
+2026-10-21T12:24:57.0304486Z #16 9.615    Compiling displaydoc v0.2.7
+2026-10-21T12:24:57.4603904Z #16 10.20    Compiling tokio-macros v2.7.2
+2026-10-21T12:24:57.8894111Z #16 10.50    Compiling tracing-core v0.1.36
+2026-10-21T12:24:57.8894795Z #16 10.54    Compiling zerofrom v0.1.8
+2026-10-21T12:24:58.0156012Z #16 10.63    Compiling yoke v0.8.3
+2026-10-21T12:24:58.0156957Z #16 10.67    Compiling rustversion v1.0.23
+2026-10-21T12:24:58.1461216Z #16 10.75    Compiling tokio v1.53.2
+2026-10-21T12:24:58.1462665Z #16 10.81    Compiling zerovec v0.11.8
+2026-10-21T12:24:58.1463725Z #16 10.88    Compiling simd-adler32 v0.3.10
+2026-10-21T12:24:58.5055344Z #16 11.24    Compiling futures-macro v0.3.34
+2026-10-21T12:24:58.7047036Z #16 11.44    Compiling futures-channel v0.3.34
+2026-10-21T12:24:58.9107278Z #16 11.52    Compiling tinystr v0.8.4
+2026-10-21T12:24:58.9108898Z #16 11.65    Compiling tracing-attributes v0.1.31
+2026-10-21T12:24:59.1084047Z #16 11.69    Compiling http v1.5.0
+2026-10-21T12:24:59.1649262Z #16 11.90    Compiling phf_codegen v0.13.1
+2026-10-21T12:24:59.3307988Z #16 11.98    Compiling adler2 v2.0.1
+2026-10-21T12:24:59.3309348Z #16 12.07    Compiling litemap v0.8.3
+2026-10-21T12:24:59.6113925Z #16 12.24    Compiling futures-io v0.3.34
+2026-10-21T12:24:59.7208670Z #16 12.35    Compiling futures-task v0.3.34
+2026-10-21T12:24:59.7209997Z #16 12.46    Compiling slab v0.4.12
+2026-10-21T12:24:59.8817621Z #16 12.62    Compiling writeable v0.6.4
+2026-10-21T12:25:00.1016577Z #16 12.84    Compiling serde v1.0.229
+2026-10-21T12:25:00.2932399Z #16 13.03    Compiling tracing v0.1.44
+2026-10-21T12:25:00.4262645Z #16 13.16    Compiling icu_locale_core v2.3.0
+2026-10-21T12:25:00.5391149Z #16 13.28    Compiling futures-util v0.3.34
+2026-10-21T12:25:00.6674428Z #16 13.31    Compiling http-body v1.1.0
+2026-10-21T12:25:00.8185064Z #16 13.40    Compiling miniz_oxide v0.9.1
+2026-10-21T12:25:01.7842538Z #16 14.52    Compiling potential_utf v0.1.6
+2026-10-21T12:25:02.3297266Z #16 15.07    Compiling zerotrie v0.2.5
+2026-10-21T12:25:02.6617351Z #16 15.25    Compiling serde_derive v1.0.229
+2026-10-21T12:25:02.6735525Z #16 15.41    Compiling crypto-common v0.2.2
+2026-10-21T12:25:03.7336362Z #16 16.47    Compiling ring v0.17.14
+2026-10-21T12:25:03.9784740Z #16 16.56    Compiling percent-encoding v2.3.2
+2026-10-21T12:25:03.9852476Z #16 16.72    Compiling zlib-rs v0.6.8
+2026-10-21T12:25:04.0869668Z #16 16.82    Compiling icu_properties_data v2.3.0
+2026-10-21T12:25:04.2781530Z #16 16.92    Compiling utf8_iter v1.0.4
+2026-10-21T12:25:04.4012225Z #16 17.01    Compiling icu_normalizer_data v2.3.0
+2026-10-21T12:25:04.5530059Z #16 17.14    Compiling icu_collections v2.3.0
+2026-10-21T12:25:06.5242695Z #16 19.26    Compiling icu_provider v2.3.1
+2026-10-21T12:25:06.9543641Z #16 19.69    Compiling flate2 v1.1.10
+2026-10-21T12:25:07.4246414Z #16 20.16    Compiling phf_macros v0.13.1
+2026-10-21T12:25:07.6239421Z #16 20.36    Compiling alloc-no-stdlib v3.0.0
+2026-10-21T12:25:07.7370651Z #16 20.43    Compiling tower-service v0.3.3
+2026-10-21T12:25:07.7371814Z #16 20.47    Compiling zeroize v1.9.1
+2026-10-21T12:25:07.8587481Z #16 20.59    Compiling rustix v1.1.5
+2026-10-21T12:25:08.0264447Z #16 20.76    Compiling ipnet v2.12.2
+2026-10-21T12:25:08.2387340Z #16 20.77    Compiling httparse v1.10.1
+2026-10-21T12:25:08.2388099Z #16 20.82    Compiling version_check v0.9.5
+2026-10-21T12:25:08.3674995Z #16 20.98    Compiling new_debug_unreachable v1.0.6
+2026-10-21T12:25:08.3702358Z #16 21.06    Compiling generic-array v0.14.7
+2026-10-21T12:25:08.5105344Z #16 21.10    Compiling phf v0.13.1
+2026-10-21T12:25:08.5112162Z #16 21.14    Compiling rustls-pki-types v1.15.1
+2026-10-21T12:25:08.6615394Z #16 21.25    Compiling alloc-stdlib v0.3.0
+2026-10-21T12:25:08.9268378Z #16 21.53    Compiling encoding_rs v0.8.42
+2026-10-21T12:25:08.9269309Z #16 21.60    Compiling block-padding v0.4.2
+2026-10-21T12:25:09.0626268Z #16 21.66    Compiling string_cache_codegen v0.6.1
+2026-10-21T12:25:09.0627344Z #16 21.70    Compiling getrandom v0.2.17
+2026-10-21T12:25:09.2987816Z #16 21.80    Compiling linux-raw-sys v0.12.1
+2026-10-21T12:25:09.2989087Z #16 21.88    Compiling io-lifetimes v2.0.4
+2026-10-21T12:25:09.4909342Z #16 22.08    Compiling io-lifetimes v3.0.1
+2026-10-21T12:25:09.4910446Z #16 22.18    Compiling precomputed-hash v0.1.1
+2026-10-21T12:25:09.6091867Z #16 22.23    Compiling try-lock v0.2.5
+2026-10-21T12:25:09.6092984Z #16 22.26    Compiling untrusted v0.9.0
+2026-10-21T12:25:09.6093963Z #16 22.29    Compiling want v0.3.2
+2026-10-21T12:25:09.6094651Z #16 22.35    Compiling web_atoms v0.2.6
+2026-10-21T12:25:09.8369227Z #16 22.42    Compiling inout v0.2.2
+2026-10-21T12:25:09.8617744Z #16 22.60    Compiling icu_normalizer v2.3.0
+2026-10-21T12:25:10.2908545Z #16 22.88    Compiling icu_properties v2.3.0
+2026-10-21T12:25:10.9095243Z #16 23.49    Compiling brotli-decompressor v6.0.1
+2026-10-21T12:25:12.2062131Z #16 24.79    Compiling form_urlencoded v1.2.2
+2026-10-21T12:25:12.4146498Z #16 24.94    Compiling sync_wrapper v1.0.2
+2026-10-21T12:25:12.4148280Z #16 25.00    Compiling httpdate v1.0.3
+2026-10-21T12:25:12.5140453Z #16 25.25    Compiling atomic-waker v1.1.2
+2026-10-21T12:25:12.7225202Z #16 25.31    Compiling tower-layer v0.3.3
+2026-10-21T12:25:12.8750759Z #16 25.49    Compiling multiversion_no_op v1.0.0
+2026-10-21T12:25:12.9964965Z #16 25.61    Compiling getrandom v0.4.3
+2026-10-21T12:25:13.1378482Z #16 25.73    Compiling zmij v1.0.23
+2026-10-21T12:25:13.3208231Z #16 25.87    Compiling rustls v0.23.45
+2026-10-21T12:25:13.3209431Z #16 25.96    Compiling core_detect v1.0.0
+2026-10-21T12:25:13.4699006Z #16 26.06    Compiling io-extras v0.19.0
+2026-10-21T12:25:13.5706837Z #16 26.21    Compiling cpufeatures v0.3.1
+2026-10-21T12:25:13.5708545Z #16 26.24    Compiling rand_core v0.10.1
+2026-10-21T12:25:13.5709512Z #16 26.31    Compiling simdutf8 v0.1.5
+2026-10-21T12:25:13.8408973Z #16 26.43    Compiling hyper v1.12.0
+2026-10-21T12:25:14.7014713Z #16 27.29    Compiling brotli v9.0.0
+2026-10-21T12:25:16.2869020Z #16 28.79    Compiling idna_adapter v1.2.2
+2026-10-21T12:25:17.4785920Z #16 28.87    Compiling rustls-webpki v0.103.15
+2026-10-21T12:25:17.4786640Z #16 30.06    Compiling cipher v0.5.2
+2026-10-21T12:25:17.8049358Z #16 30.37    Compiling string_cache v0.9.0
+2026-10-21T12:25:17.8050621Z #16 30.39    Compiling http-body-util v0.1.5
+2026-10-21T12:25:17.9540809Z #16 30.56    Compiling block-buffer v0.12.1
+2026-10-21T12:25:17.9543541Z #16 30.66    Compiling aho-corasick v1.1.5
+2026-10-21T12:25:18.0894815Z #16 30.69    Compiling base64 v0.23.1
+2026-10-21T12:25:18.2407562Z #16 30.83    Compiling pkg-config v0.3.34
+2026-10-21T12:25:18.5247599Z #16 31.15    Compiling vcpkg v0.2.15
+2026-10-21T12:25:18.7405956Z #16 31.26    Compiling regex-syntax v0.8.11
+2026-10-21T12:25:18.7407367Z #16 31.32    Compiling hashbrown v0.17.1
+2026-10-21T12:25:19.2034631Z #16 31.79    Compiling ryu v1.0.23
+2026-10-21T12:25:19.4267956Z #16 31.97    Compiling const-oid v0.10.2
+2026-10-21T12:25:19.4269492Z #16 32.06    Compiling dtoa v1.0.11
+2026-10-21T12:25:19.5762650Z #16 32.16    Compiling serde_json v1.0.152
+2026-10-21T12:25:19.5763869Z #16 32.18    Compiling autocfg v1.5.1
+2026-10-21T12:25:19.5764801Z #16 32.26    Compiling equivalent v1.0.2
+2026-10-21T12:25:19.6857947Z #16 32.31    Compiling subtle v2.6.1
+2026-10-21T12:25:19.8767092Z #16 32.42    Compiling cap-primitives v4.0.3
+2026-10-21T12:25:19.8768672Z #16 32.51    Compiling compression-core v0.4.33
+2026-10-21T12:25:20.0056356Z #16 32.61    Compiling compression-codecs v0.4.45
+2026-10-21T12:25:20.1570378Z #16 32.74    Compiling num-traits v0.2.19
+2026-10-21T12:25:21.6899288Z #16 34.27    Compiling regex-automata v0.4.18
+2026-10-21T12:25:23.6180416Z #16 36.20    Compiling indexmap v2.14.2
+2026-10-21T12:25:24.0355518Z #16 36.77    Compiling dtoa-short v0.3.5
+2026-10-21T12:25:24.2417745Z #16 36.85    Compiling digest v0.11.3
+2026-10-21T12:25:24.3557808Z #16 36.98    Compiling libsqlite3-sys v0.37.0
+2026-10-21T12:25:24.5066929Z #16 37.09    Compiling hyper-util v0.1.21
+2026-10-21T12:25:25.4039703Z #16 38.03    Compiling fs-set-times v0.20.3
+2026-10-21T12:25:25.5551071Z #16 38.14    Compiling idna v1.1.0
+2026-10-21T12:25:26.9701407Z #16 39.55    Compiling rustix-linux-procfs v0.1.1
+2026-10-21T12:25:27.0875501Z #16 39.82    Compiling tower v0.5.3
+2026-10-21T12:25:27.2552908Z #16 39.84    Compiling tendril v0.5.1
+2026-10-21T12:25:27.5717889Z #16 40.16    Compiling selectors v0.38.0
+2026-10-21T12:25:27.6772695Z #16 40.41    Compiling cssparser-macros v0.7.1
+2026-10-21T12:25:27.8956327Z #16 40.48    Compiling derive_more-impl v2.1.1
+2026-10-21T12:25:27.9449184Z #16 40.68    Compiling bumpalo v3.20.3
+2026-10-21T12:25:28.3784761Z #16 40.92    Compiling ambient-authority v0.0.2
+2026-10-21T12:25:28.3786040Z #16 40.96    Compiling maybe-owned v0.3.4
+2026-10-21T12:25:28.5317062Z #16 41.12    Compiling thiserror v2.0.21
+2026-10-21T12:25:28.7394913Z #16 41.32    Compiling utf8parse v0.2.2
+2026-10-21T12:25:28.7395876Z #16 41.37    Compiling tinyvec v1.13.3
+2026-10-21T12:25:28.7397158Z #16 41.38    Compiling alloc-no-stdlib v2.0.4
+2026-10-21T12:25:28.8886675Z #16 41.47    Compiling cap-std v4.0.3
+2026-10-21T12:25:29.0407845Z #16 41.64    Compiling foldhash v0.2.0
+2026-10-21T12:25:29.2482019Z #16 41.78    Compiling hashbrown v0.16.1
+2026-10-21T12:25:29.2482819Z #16 41.83    Compiling unicode-normalization v0.1.25
+2026-10-21T12:25:29.7061661Z #16 42.44    Compiling alloc-stdlib v0.2.4
+2026-10-21T12:25:29.8119063Z #16 42.52    Compiling derive_more v2.1.1
+2026-10-21T12:25:29.8119798Z #16 42.55    Compiling anstyle-parse v1.0.0
+2026-10-21T12:25:30.1135491Z #16 42.70    Compiling zopfli v0.8.4
+2026-10-21T12:25:30.9374480Z #16 43.67    Compiling cssparser v0.37.0
+2026-10-21T12:25:31.3094442Z #16 43.89    Compiling markup5ever v0.39.0
+2026-10-21T12:25:31.3887915Z #16 44.12    Compiling url v2.5.8
+2026-10-21T12:25:32.2427936Z #16 44.83    Compiling tokio-rustls v0.26.6
+2026-10-21T12:25:32.3589589Z #16 45.10    Compiling async-compression v0.4.50
+2026-10-21T12:25:32.8962939Z #16 45.63    Compiling serde_urlencoded v0.7.1
+2026-10-21T12:25:33.0676436Z #16 45.80    Compiling crypto-common v0.1.7
+2026-10-21T12:25:33.2291374Z #16 45.87    Compiling block-buffer v0.10.4
+2026-10-21T12:25:33.2293018Z #16 45.88    Compiling chacha20 v0.10.2
+2026-10-21T12:25:33.3851156Z #16 45.97    Compiling webpki-roots v1.0.9
+2026-10-21T12:25:33.3853516Z #16 46.05    Compiling tokio-util v0.7.20
+2026-10-21T12:25:33.3854696Z #16 46.12    Compiling thiserror-impl v2.0.21
+2026-10-21T12:25:34.0867550Z #16 46.69    Compiling servo_arc v0.4.3
+2026-10-21T12:25:34.1871039Z #16 46.82    Compiling debug_unsafe v0.1.4
+2026-10-21T12:25:34.1872355Z #16 46.85    Compiling rustc-hash v2.1.3
+2026-10-21T12:25:34.1873673Z #16 46.86    Compiling anstyle-query v1.1.5
+2026-10-21T12:25:34.1874862Z #16 46.92    Compiling typed-path v0.12.3
+2026-10-21T12:25:34.3396263Z #16 46.92    Compiling unicode-properties v0.1.4
+2026-10-21T12:25:34.5633872Z #16 47.11    Compiling cpubits v0.1.1
+2026-10-21T12:25:34.5634905Z #16 47.15    Compiling unicode-width v0.2.2
+2026-10-21T12:25:34.5939644Z #16 47.33    Compiling anstyle v1.0.14
+2026-10-21T12:25:34.7811884Z #16 47.37    Compiling cap-fs-ext v4.0.3
+2026-10-21T12:25:34.7967777Z #16 47.53    Compiling peresil v0.3.0
+2026-10-21T12:25:34.9025888Z #16 47.55    Compiling anyhow v1.0.104
+2026-10-21T12:25:34.9026533Z #16 47.64    Compiling colorchoice v1.0.5
+2026-10-21T12:25:35.0538621Z #16 47.69    Compiling typed-arena v1.7.0
+2026-10-21T12:25:35.0539434Z #16 47.73    Compiling unicode-bidi v0.3.18
+2026-10-21T12:25:35.0540094Z #16 47.79    Compiling is_terminal_polyfill v1.70.2
+2026-10-21T12:25:35.2664115Z #16 47.85    Compiling anstream v1.0.0
+2026-10-21T12:25:35.5969599Z #16 48.18    Compiling stringprep v0.1.5
+2026-10-21T12:25:35.9434907Z #16 48.68    Compiling zip v8.6.0
+2026-10-21T12:25:36.4187595Z #16 49.15    Compiling sxd-document v0.3.2
+2026-10-21T12:25:37.5742342Z #16 50.16    Compiling getopts v0.2.24
+2026-10-21T12:25:37.8303948Z #16 50.57    Compiling aes v0.9.3
+2026-10-21T12:25:38.3612834Z #16 51.10    Compiling atoi_simd v0.18.1
+2026-10-21T12:25:38.5430196Z #16 51.28    Compiling tower-http v0.6.11
+2026-10-21T12:25:39.8764945Z #16 52.37    Compiling rand v0.10.3
+2026-10-21T12:25:39.8765778Z #16 52.41    Compiling hyper-rustls v0.27.10
+2026-10-21T12:25:39.8766435Z #16 52.46    Compiling digest v0.10.7
+2026-10-21T12:25:40.2249756Z #16 52.81    Compiling html5ever v0.39.0
+2026-10-21T12:25:40.8843578Z #16 53.46    Compiling hashlink v0.11.1
+2026-10-21T12:25:40.8844900Z #16 53.47    Compiling brotli-decompressor v5.0.3
+2026-10-21T12:25:41.1946960Z #16 53.78    Compiling sha2 v0.11.0
+2026-10-21T12:25:41.4606265Z #16 54.05    Compiling md-5 v0.11.0
+2026-10-21T12:25:41.6381016Z #16 54.23    Compiling ecb v0.2.1
+2026-10-21T12:25:41.6382024Z #16 54.29    Compiling cbc v0.2.1
+2026-10-21T12:25:41.7889727Z #16 54.37    Compiling quick-xml v0.41.0
+2026-10-21T12:25:42.9539057Z #16 55.47    Compiling codepage v0.1.3
+2026-10-21T12:25:42.9541032Z #16 55.54    Compiling futures-executor v0.3.34
+2026-10-21T12:25:43.2237064Z #16 55.81    Compiling csv-core v0.1.13
+2026-10-21T12:25:43.2238123Z #16 55.88    Compiling nom v8.0.0
+2026-10-21T12:25:43.4243089Z #16 55.96    Compiling cpufeatures v0.2.17
+2026-10-21T12:25:43.4244422Z #16 56.00    Compiling ego-tree v0.11.0
+2026-10-21T12:25:43.4245643Z #16 56.06    Compiling fallible-streaming-iterator v0.1.9
+2026-10-21T12:25:43.6733703Z #16 56.16    Compiling base64 v0.22.1
+2026-10-21T12:25:43.6734838Z #16 56.26    Compiling mime v0.3.17
+2026-10-21T12:25:43.9845258Z #16 56.53    Compiling strsim v0.11.1
+2026-10-21T12:25:43.9846249Z #16 56.57    Compiling byteorder v1.5.0
+2026-10-21T12:25:44.2070905Z #16 56.79    Compiling weezl v0.2.1
+2026-10-21T12:25:44.5429329Z #16 57.07    Compiling quick-error v1.2.3
+2026-10-21T12:25:44.5430715Z #16 57.13    Compiling clap_lex v1.1.1
+2026-10-21T12:25:44.7477539Z #16 57.35    Compiling heck v0.5.0
+2026-10-21T12:25:44.9226003Z #16 57.48    Compiling fallible-iterator v0.3.0
+2026-10-21T12:25:44.9227116Z #16 57.51    Compiling iana-time-zone v0.1.65
+2026-10-21T12:25:45.0925445Z #16 57.83    Compiling rangemap v1.8.0
+2026-10-21T12:25:45.2570180Z #16 57.84    Compiling fast-float2 v0.2.4
+2026-10-21T12:25:45.4091589Z #16 58.05    Compiling lazy_static v1.5.1
+2026-10-21T12:25:45.4092323Z #16 58.09    Compiling sharded-slab v0.1.7
+2026-10-21T12:25:45.4092889Z #16 58.14    Compiling calamine v0.36.1
+2026-10-21T12:25:45.9424998Z #16 58.68    Compiling chrono v0.4.45
+2026-10-21T12:25:46.8678652Z #16 59.45    Compiling lopdf v0.45.0
+2026-10-21T12:25:48.9365568Z #16 61.47    Compiling clap_derive v4.6.7
+2026-10-21T12:25:48.9384500Z #16 61.52    Compiling clap_builder v4.6.7
+2026-10-21T12:25:50.7139989Z #16 63.30    Compiling sxd-xpath v0.4.2
+2026-10-21T12:25:53.9155492Z #16 66.50    Compiling axum-core v0.5.6
+2026-10-21T12:25:55.7125923Z #16 68.30    Compiling reqwest v0.12.28
+2026-10-21T12:25:56.2157160Z #16 68.80    Compiling scraper v0.27.0
+2026-10-21T12:26:00.2207429Z #16 72.81    Compiling sha2 v0.10.9
+2026-10-21T12:26:01.1232701Z #16 73.71    Compiling csv v1.4.0
+2026-10-21T12:26:01.8354003Z #16 74.42    Compiling futures v0.3.34
+2026-10-21T12:26:02.3877831Z #16 74.97    Compiling regex v1.13.1
+2026-10-21T12:26:03.2926833Z #16 75.79    Compiling matchers v0.2.0
+2026-10-21T12:26:03.2928021Z #16 75.88    Compiling tracing-log v0.2.0
+2026-10-21T12:26:03.5080273Z #16 76.09    Compiling serde_path_to_error v0.1.20
+2026-10-21T12:26:03.9354531Z #16 76.52    Compiling quick-xml v0.42.0
+2026-10-21T12:26:04.5972292Z #16 77.18    Compiling thread_local v1.1.10
+2026-10-21T12:26:04.8169083Z #16 77.40    Compiling nu-ansi-term v0.50.3
+2026-10-21T12:26:05.1672127Z #16 77.75    Compiling ttf-parser v0.25.1
+2026-10-21T12:26:05.6817819Z #16 78.27    Compiling imagesize v0.15.0
+2026-10-21T12:26:06.5079958Z #16 79.00    Compiling open-seo-spider v0.1.0 (/build/crates/app)
+2026-10-21T12:26:06.5080811Z #16 79.09    Compiling robotstxt v0.3.0
+2026-10-21T12:26:06.8635655Z #16 79.45    Compiling matchit v0.8.4
+2026-10-21T12:26:07.2864502Z #16 79.87    Compiling axum v0.8.9
+2026-10-21T12:26:09.2346458Z #16 81.82    Compiling tracing-subscriber v0.3.23
+2026-10-21T12:26:12.5373546Z #16 85.08    Compiling clap v4.6.7
+2026-10-21T12:26:12.5374203Z #16 85.12    Compiling uuid v1.28.0
+2026-10-21T12:26:33.2209564Z #16 106.0    Compiling rusqlite v0.39.0
+2026-10-21T12:26:33.8579007Z #16 106.6    Compiling open-seo-spider-core v0.1.0 (/build/crates/core)
+2026-10-21T12:37:11.8221397Z #16 744.6     Finished `release` profile [optimized] target(s) in 12m 24s
+2026-10-21T12:37:11.9748346Z #16 DONE 744.7s
+2026-10-21T12:37:12.0967662Z 
+2026-10-21T12:37:12.0968595Z #17 [stage-1 3/3] COPY --from=build /build/target/release/open-seo-spider /usr/local/bin/open-seo-spider
+2026-10-21T12:37:12.0969312Z #17 DONE 0.0s
+2026-10-21T12:37:12.2488498Z 
+2026-10-21T12:37:12.2489173Z #18 exporting to image
+2026-10-21T12:37:12.2489652Z #18 exporting layers
+2026-10-21T12:37:13.0077542Z #18 exporting layers 0.9s done
+2026-10-21T12:37:13.0358498Z #18 writing image sha256:38f6ecb70ab7253cdc51ef997f03b3ad6262ac137833b885d1aa127f0113d8d9 0.0s done
+2026-10-21T12:37:13.0360051Z #18 naming to docker.io/library/open-seo-spider-ci:2b52ac76-d90 done
+2026-10-21T12:37:13.0360596Z #18 DONE 0.9s
+2026-10-21T12:37:24.1801245Z {"tested_at":"2026-10-21T12:37:24.179Z","result":"PASS","scope":"Linux Docker build, UID10001, loopback publication, no privileges/capabilities, bundled font offline API, local legacy/resource V1/explicit V2 self-crawls, 26 MCP tools, exact validated occurrence/transport SQLite snapshots after container restart","resource_contract_v2":"open-seo-spider/resource-contract-v2","external_website_requests":0,"browser_worker":"not included","local_windows_docker_installation":"not proven"}
+2026-10-21T12:37:24.3617082Z Post job cleanup.
+2026-10-21T12:37:24.4957052Z (node:9725) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T12:37:24.4958338Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T12:37:24.5290039Z Post job cleanup.
+2026-10-21T12:37:24.6236107Z [command]/usr/bin/git version
+2026-10-21T12:37:24.6288047Z git version 2.55.0
+2026-10-21T12:37:24.6335372Z Temporarily overriding HOME='/home/runner/work/_temp/f41cc019-51ff-4c06-87a6-b24753c406c1' before making global git config changes
+2026-10-21T12:37:24.6337276Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T12:37:24.6343019Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T12:37:24.6390608Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T12:37:24.6432305Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T12:37:24.6720136Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T12:37:24.6757814Z http.https://github.com/.extraheader
+2026-10-21T12:37:24.6769801Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-21T12:37:24.6809343Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T12:37:24.7206139Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T12:37:24.7241651Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T12:37:24.7882431Z Cleaning up orphan processes
+2026-10-21T12:37:24.8403586Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

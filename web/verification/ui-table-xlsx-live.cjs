@@ -176,7 +176,9 @@ function expectedWorkbook(rows,keys,job,sectionName){
   const visibility=job.detail.reporting_visibility;
   const header=[...keys.map(key=>sectionName==='responses'&&key==='status'?'HTTP beobachtet':labels[key]),...metadataLabels,...visibility?reportingLabels:[]];
   return{header,rows:rows.map(row=>{
-    const values=keys.map(key=>row[key]??null),provenance=sectionName==='responses'?['crawl_snapshot','unknown_or_mixed_row_identity','','','','']:['crawl_snapshot','captured','','',row.page.fetched_at,row.page.url];
+    // Keep the existing DOM/CSV label oracle; XLSX now preserves the original
+    // native boolean independently of that localized display representation.
+    const values=keys.map(key=>key==='indexable'?(typeof row.page.indexable==='boolean'?row.page.indexable:null):row[key]??null),provenance=sectionName==='responses'?['crawl_snapshot','unknown_or_mixed_row_identity','','','','']:['crawl_snapshot','captured','','',row.page.fetched_at,row.page.url];
     return[...values,...provenance,...visibility?['captured_pages','visible_pages','hidden_pages'].map(key=>visibility[key]):[]];
   })};
 }

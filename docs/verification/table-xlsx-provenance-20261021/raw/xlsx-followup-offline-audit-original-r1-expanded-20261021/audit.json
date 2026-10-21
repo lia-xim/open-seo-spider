@@ -1,0 +1,181 @@
+{
+  "result": "PARTIAL_AUDIT_ORIGINAL_FAILED_OR_INCOMPLETE",
+  "run": "artifacts\\xlsx-source-followup-native-20261021-r1",
+  "scope": "Offline original-file audit only; no product/test-oracle/compiler/writer imports or runtime activity.",
+  "original_outer_complete": false,
+  "original_outer_failure": "Error: table-xlsx-provenance: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at stableCases (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:169:606)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:229:212\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:128:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "original_inner_results": [
+    {
+      "family": "table-xlsx-provenance",
+      "result": "FAIL",
+      "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 1\n\n    at stableCases (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:169:606)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:229:212",
+      "audited": true
+    },
+    {
+      "family": "table-xlsx-availability",
+      "result": "NO_FINAL_RECEIPT",
+      "audited": false
+    }
+  ],
+  "audited_pairs": 7,
+  "reconstructed_data_rows": 678,
+  "physical_cells": 13578,
+  "distinct_bound_segment_tokens": 2,
+  "native_segment_reads_independently_checked": 22,
+  "files": [
+    {
+      "label": "warm-pending-retained-only",
+      "family": "table-xlsx-provenance",
+      "original_native_result": "FAIL",
+      "rows": 113,
+      "columns": 16,
+      "physical_cells": 1824,
+      "xlsx_sha256": "e1bfa22a9fdc17c7e2159d11b3f27a7a686d37d5307e9940cb774c193bfbe175",
+      "csv_sha256": "4f4e241f6ba126a9db74370ff4919fe0fb4a4260a65b3f26474a5bc1b94811bb",
+      "scalar_types": {
+        "string": 919,
+        "number": 903,
+        "null": 2
+      },
+      "source": "Genuine immutable parent minus both exact selected requested targets; stable child operation supplies invariant parent/hash/coverage. No persisted running full report is invented."
+    },
+    {
+      "label": "warm-limited-ordinary",
+      "family": "table-xlsx-provenance",
+      "original_native_result": "FAIL",
+      "rows": 114,
+      "columns": 16,
+      "physical_cells": 1840,
+      "xlsx_sha256": "e40609d4e4c46a4d8bffb77c2b59bffac2977b514894aa238887f563ffb96fda",
+      "csv_sha256": "71665b80ef4a6a502ec01488ed4eeb408567d1303f1de6794b2fa5d3b154cab0",
+      "scalar_types": {
+        "string": 927,
+        "number": 911,
+        "null": 2
+      },
+      "source": "limited-original-project.json + canonical-generation.json"
+    },
+    {
+      "label": "warm-limited-status",
+      "family": "table-xlsx-provenance",
+      "original_native_result": "FAIL",
+      "rows": 114,
+      "columns": 17,
+      "physical_cells": 1955,
+      "xlsx_sha256": "197a739f19a1c3243cec8fe5052bf8e12b9762f79c8acfca67ff9f199152ec19",
+      "csv_sha256": "eb34d9ec117818660a073b2b2dad3403fa01b747c1ce3731bfec04437884929c",
+      "scalar_types": {
+        "string": 929,
+        "number": 798,
+        "boolean": 114,
+        "null": 114
+      },
+      "source": "limited-original-project.json + canonical-generation.json"
+    },
+    {
+      "label": "warm-limited-segment-reported",
+      "family": "table-xlsx-provenance",
+      "original_native_result": "FAIL",
+      "rows": 111,
+      "columns": 23,
+      "physical_cells": 2576,
+      "xlsx_sha256": "0ecadd97ea7c67a662d9461c40aa8c45ad8dbc60bf1d055f79d0da8885fed246",
+      "csv_sha256": "60fc1f4f00f544f2d3960588f638313b0c887da012b6fae3e2791e2537b94f6b",
+      "scalar_types": {
+        "string": 1466,
+        "number": 1110
+      },
+      "source": "limited-original-project.json + canonical-generation.json"
+    },
+    {
+      "label": "warm-limited-segment-raw",
+      "family": "table-xlsx-provenance",
+      "original_native_result": "FAIL",
+      "rows": 112,
+      "columns": 23,
+      "physical_cells": 2599,
+      "xlsx_sha256": "fbd8491f6c93acd388d1e86970ac33c92ea5d4e0b3d38fcdddb8f4dbb454cace",
+      "csv_sha256": "fa0fa7b54475b72821abfa9ed593b6cb327c241c5ae0638ecbc943a6abf854c7",
+      "scalar_types": {
+        "string": 1479,
+        "number": 1120
+      },
+      "source": "limited-original-project.json + canonical-generation.json"
+    },
+    {
+      "label": "warm-limited-raw-status-bools",
+      "family": "table-xlsx-provenance",
+      "original_native_result": "FAIL",
+      "rows": 112,
+      "columns": 24,
+      "physical_cells": 2712,
+      "xlsx_sha256": "415dedcb3fd7a514f502bc1dd217e43389e9392d9d7a33a27843159c7ff3e1cf",
+      "csv_sha256": "b51cdd1d038036b0cbb9c3f8560df388b2c844ff9678fe96258be2c3bb07ce45",
+      "scalar_types": {
+        "string": 1480,
+        "number": 1008,
+        "boolean": 112,
+        "null": 112
+      },
+      "source": "limited-original-project.json + canonical-generation.json"
+    },
+    {
+      "label": "warm-limited-raw-text-filter-false",
+      "family": "table-xlsx-provenance",
+      "original_native_result": "FAIL",
+      "rows": 2,
+      "columns": 24,
+      "physical_cells": 72,
+      "xlsx_sha256": "c1bb6010fd65679312675204d5d67c32c677e56c27506bfafede49a8b7df8274",
+      "csv_sha256": "184fa1ddc23b6262097f787300715aa0bf97f750f70452792bfdc6911c842922",
+      "scalar_types": {
+        "string": 50,
+        "number": 18,
+        "boolean": 2,
+        "null": 2
+      },
+      "source": "limited-original-project.json + canonical-generation.json"
+    }
+  ],
+  "pinned_original_inputs": {
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\proof.json": "5994bd672bc6d89847b35f2723d6f4249b92d603ca260cc33875ba267b8f6fc5",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\ui-table-xlsx-provenance-live.json": "da783abe85958ff0c73fbd048ef6431a3b39328806a338d0664c035449827a97",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\parent-original-project.json": "c3133cd164e18228bf1949039c89888b3a30d7ca9e00744d8fe9426ae0898b08",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\parent-canonical-generation.json": "753aa458baddf13b53238782098f458011264b38af2a6f1c2aa1f13407eeef8c",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\limited-original-project.json": "d6581aacdaf61a2d069e58a05396fa88fdc6060fba8706979346e14e27345b4e",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\limited-canonical-generation.json": "9ca0ca2addc889f56e31ce6e4579eebf535603fcff1cd9d5e82f84b018ba613e",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\actual-child-immutable-parent.json": "753aa458baddf13b53238782098f458011264b38af2a6f1c2aa1f13407eeef8c",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-pending-retained-only.xlsx": "e1bfa22a9fdc17c7e2159d11b3f27a7a686d37d5307e9940cb774c193bfbe175",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-pending-retained-only.csv": "4f4e241f6ba126a9db74370ff4919fe0fb4a4260a65b3f26474a5bc1b94811bb",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-pending-retained-only.expected.json": "c4814eae94887aed4a7571e194ae92f7a55f6bcb6e39c766376a2aa3408549b6",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-ordinary.xlsx": "e40609d4e4c46a4d8bffb77c2b59bffac2977b514894aa238887f563ffb96fda",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-ordinary.csv": "71665b80ef4a6a502ec01488ed4eeb408567d1303f1de6794b2fa5d3b154cab0",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-ordinary.expected.json": "ce58d67dc0af8586ade414b65d5fbe09d991d38dea78b9896b5fd28cf715a756",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-status.xlsx": "197a739f19a1c3243cec8fe5052bf8e12b9762f79c8acfca67ff9f199152ec19",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-status.csv": "eb34d9ec117818660a073b2b2dad3403fa01b747c1ce3731bfec04437884929c",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-status.expected.json": "7b068696dc07562f9fcc768a71185e20380cd92ac43f5089e7bcd6d755e34e63",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-segment-reported.xlsx": "0ecadd97ea7c67a662d9461c40aa8c45ad8dbc60bf1d055f79d0da8885fed246",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-segment-reported.csv": "60fc1f4f00f544f2d3960588f638313b0c887da012b6fae3e2791e2537b94f6b",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-segment-reported.expected.json": "f32e8dca0d4b187360a9570b7c0823d5013cabc2da30d310718ee2cf5aaa7d1d",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-segment-raw.xlsx": "fbd8491f6c93acd388d1e86970ac33c92ea5d4e0b3d38fcdddb8f4dbb454cace",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-segment-raw.csv": "fa0fa7b54475b72821abfa9ed593b6cb327c241c5ae0638ecbc943a6abf854c7",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-segment-raw.expected.json": "5fdb6c62f84adac1f4324341ee33d1ec8dfa2a33049546d9ed6eedaef06abb7a",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-raw-status-bools.xlsx": "415dedcb3fd7a514f502bc1dd217e43389e9392d9d7a33a27843159c7ff3e1cf",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-raw-status-bools.csv": "b51cdd1d038036b0cbb9c3f8560df388b2c844ff9678fe96258be2c3bb07ce45",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-raw-status-bools.expected.json": "945d3a7e27e1f592ccb99d15d89fce9a98b936eb43c19caa1301f3db23fc28b9",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-raw-text-filter-false.xlsx": "c1bb6010fd65679312675204d5d67c32c677e56c27506bfafede49a8b7df8274",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-raw-text-filter-false.csv": "184fa1ddc23b6262097f787300715aa0bf97f750f70452792bfdc6911c842922",
+    "artifacts\\xlsx-source-followup-native-20261021-r1\\table-xlsx-provenance\\table-xlsx-provenance-1792587373150-d548fa4f\\warm-limited-raw-text-filter-false.expected.json": "25e3566d4a36f8cedf515fc624626a31666cd6e887c3200eada4a2fae50f17dd"
+  },
+  "negative_controls": [
+    "Declared own-memory CRC corruption rejected by standard Python ZIP reader; original file unchanged"
+  ],
+  "boundaries": [
+    "Original FAIL/missing final receipt is not relabelled PASS even when its partial files decode correctly.",
+    "Expected matrices are only redundant cross-checks after separate reconstruction; membership/scalars/context/rules derive from genuine original reports, declared fixture predicates and native context receipts.",
+    "Segment API contexts are exact independently repeated read-only POST data, not original captured browser bodies. App-declared origin and false SQL/report-generation-attestation flags remain qualified.",
+    "Pending retained cells derive from immutable genuine parent minus exact selected requested targets, plus invariant stable-child parent/hash/coverage. No full running report or positive pending PageRecord is invented.",
+    "Archived limited generation and later completed generation are separate canonical native outputs; no mutation/ancestry attestation beyond original bytes and native operation fields.",
+    "This does not establish Excel/LibreOffice GUI roundtrip, every schema/operator/browser/renderer, specialist bulk formats or manufacturer parity."
+  ]
+}

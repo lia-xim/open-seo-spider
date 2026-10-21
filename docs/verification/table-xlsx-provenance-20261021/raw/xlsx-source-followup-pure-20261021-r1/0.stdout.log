@@ -1,0 +1,21 @@
+✔ a submitted edit invalidates an import while File.text is still pending (5.0371ms)
+✔ a late import response cannot overwrite a newer submitted edit or persisted draft (1.6715ms)
+✔ a newer import wins when responses complete in reverse order (1.4144ms)
+✔ an older import completion cannot clear the newer selected file or status (1.0476ms)
+✔ a newer import also wins when file reads finish in reverse order (0.9555ms)
+✔ adding a row invalidates an in-flight import and selects the new blank editor row (0.9692ms)
+✔ deleting a row invalidates an in-flight import and clears measurements for shifted rows (1.0043ms)
+✔ an import replaces an older in-flight preview without the old metrics returning (1.0096ms)
+✔ a stale preview error cannot replace the status of a completed import (0.9804ms)
+✔ preview completion preserves text typed after the last submitted edit (0.9402ms)
+✔ an import cannot overwrite an unsubmitted newer form draft (0.8774ms)
+✔ an older preview cannot restore a deleted row after the newer preview completes (1.4452ms)
+✔ JSON snapshots and CSV API inputs keep exact ordered duplicate rows and only local API requests (1.4251ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 76.0309

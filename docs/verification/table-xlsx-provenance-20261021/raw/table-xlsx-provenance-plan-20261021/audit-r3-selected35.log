@@ -1,0 +1,29 @@
+{
+  "result": "PASS_SELECTED_ORIGINAL_PROVENANCE_35_PAIRS",
+  "run": "artifacts\\xlsx-source-followup-native-20261021-r3",
+  "requested_family": "provenance",
+  "auditor_sha256": "444a849ecf485fbd00aaf72084847a745a2a386ee1785266c0ae1e657fc58855",
+  "scope": "Offline original-file audit only; no product/test-oracle/compiler/writer imports or runtime activity.",
+  "original_native_binary_sha256": "72ee2e6b46064467080624305258aa56761e438635b947a2ce11666b17845571",
+  "original_outer_complete": false,
+  "original_outer_failure": "Error: table-xlsx-availability: AssertionError [ERR_ASSERTION]: Ordinary captured pages do not fabricate input provenance\n+ actual - expected\n\n+ [\n+   {\n+     engine: 'open-seo-spider/offline-list-v1/calamine-0.36.1',\n+     input_bytes: 74,\n+     input_sha256: '97a136d455ea0c9df54b99ea1c1f382e872c9a976218844feb3126fdb788973f',\n+     limitations: [\n+       'Import does not start a crawl, follow links, evaluate formulas or fetch sitemap indexes.',\n+       'Only absolute HTTP/HTTPS values are URL candidates; original values and duplicate rows are retained.',\n+       'Independent import contract; complete original parser/filter parity is NOT_PROVEN.'\n+     ],\n+     options: {\n+       format: {\n+         kind: 'txt'\n+       },\n+       limits: {\n+         max_csv_fields: 200000,\n+         max_field_bytes: 8192,\n+         max_input_bytes: 8388608,\n+         max_output_bytes: 8388608,\n+         max_rows: 50000,\n+         max_shared_strings: 100000,\n+         max_sheet_cells: 200000,\n+         max_sheets: 128,\n+         max_xml_depth: 64,\n+         max_xml_events: 500000,\n+         max_zip_entries: 1024,\n+         max_zip_entry_bytes: 8388608,\n+         max_zip_total_bytes: 33554432\n+       }\n+     },\n+     rows: [\n+       {\n+         candidate_kind: 'page_url',\n+         cell: null,\n+         cell_type: 'text',\n+         error: null,\n+         formula_metadata: null,\n+         fragment: null,\n+         normalized_url: 'http://127.0.0.1:50402/a',\n+         raw_value: 'http://127.0.0.1:50402/a',\n+         sheet: null,\n+         source_index: 1,\n+         source_line: 1,\n+         source_row: 1\n+       },\n+       {\n+         candidate_kind: 'page_url',\n+         cell: null,\n+         cell_type: 'text',\n+         error: null,\n+         formula_metadata: null,\n+         fragment: null,\n+         normalized_url: 'http://127.0.0.1:50402/b',\n+         raw_value: 'http://127.0.0.1:50402/b',\n+         sheet: null,\n+         source_index: 2,\n+         source_line: 2,\n+         source_row: 2\n+       },\n+       {\n+         candidate_kind: 'page_url',\n+         cell: null,\n+         cell_type: 'text',\n+         error: null,\n+         formula_metadata: null,\n+         fragment: null,\n+         normalized_url: 'http://127.0.0.1:50402/c',\n+         raw_value: 'http://127.0.0.1:50402/c',\n+         sheet: null,\n+         source_index: 3,\n+         source_line: 3,\n+         source_row: 3\n+       }\n+     ],\n+     selected_column: null,\n+     selected_sheet: null,\n+     warnings: [],\n+     website_requests: 0\n+   }\n+ ]\n- []\n\n    at E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-availability-live.cjs:120:391\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:128:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "original_inner_results": [
+    {
+      "family": "table-xlsx-provenance",
+      "result": "PASS",
+      "failure": null,
+      "audited": true
+    }
+  ],
+  "audited_pairs": 35,
+  "unique_family_label_pairs": 35,
+  "unique_actual_original_paths": 70,
+  "reconstructed_data_rows": 3050,
+  "physical_cells": 65063,
+  "distinct_bound_segment_tokens": 6,
+  "native_segment_reads_independently_checked": 188,
+  "source_bindings": [],
+  "negative_controls": [
+    "Declared own-memory CRC corruption rejected by standard Python ZIP reader; original file unchanged"
+  ]
+}

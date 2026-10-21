@@ -1,0 +1,66 @@
+✔ linkmetrics: absent analysis refuses actual programmatic CSV/XLSX (12.0566ms)
+✔ linkmetrics: failed native source refuses cached arrays until recovery (9.298ms)
+✔ linkmetrics: malformed analysis [] is unavailable (1.6592ms)
+✔ linkmetrics: malformed analysis {} is unavailable (1.4647ms)
+✔ linkmetrics: malformed analysis {"graph":{"nodes":{}}} is unavailable (1.5096ms)
+✔ linkmetrics: malformed analysis {"graph":[]} is unavailable (1.4484ms)
+✔ linkmetrics: genuine loaded empty array exports headers during unrelated polling (18.1561ms)
+✔ structured: absent analysis refuses actual programmatic CSV/XLSX (2.8042ms)
+✔ structured: failed native source refuses cached arrays until recovery (28.3861ms)
+✔ structured: malformed analysis [] is unavailable (1.672ms)
+✔ structured: malformed analysis {} is unavailable (1.4772ms)
+✔ structured: malformed analysis {"structured_data":{}} is unavailable (1.3783ms)
+✔ structured: malformed analysis {"structured_data":null} is unavailable (1.3207ms)
+✔ structured: genuine loaded empty array exports headers during unrelated polling (10.0799ms)
+✔ inputs: unavailable captured envelope undefined (2.7831ms)
+✔ inputs: unavailable captured envelope null (1.3622ms)
+✔ inputs: unavailable captured envelope [] (1.3728ms)
+✔ inputs: unavailable captured envelope {} (1.3516ms)
+✔ inputs: unavailable captured envelope [null] (1.3646ms)
+✔ inputs: unavailable captured envelope [{}] (1.7308ms)
+✔ inputs: unavailable captured envelope [{"rows":[]}] (1.2603ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.3817ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.3558ms)
+✔ inputs: unavailable captured envelope [{"engine":"foreign","input_bytes":76,"input_sha256":"ccdd7e497a7144c7ee327dab019c2602c3d71508e1ae00 (1.343ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"bad"," (1.3519ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":0,"input_sha256":"ccdd7e4 (1.352ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":1.1,"input_sha256":"ccdd7 (1.3779ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.4297ms)
+✔ inputs: actual serialized native fixture is available, query-empty remains a successful empty projection (10.7494ms)
+✖ inputs: failed-load recovery removes stale reason and preserves raw imported empty values (3.3357ms)
+✔ availability checks inspect import envelopes, not every native-validated row on each render (3.0462ms)
+✔ typed indexable preserves booleans/null while CSV and existing text query labels remain unchanged (4.717ms)
+✔ CSV section-specific policy and segment-issue titles survive control refresh (4.4315ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 32
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 203.4217
+
+✖ failing tests:
+
+test at web\verification\table-source-availability.test.cjs:89:1
+✖ inputs: failed-load recovery removes stale reason and preserves raw imported empty values (3.3357ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'invalid URL',
+      'https://example.test/a',
+      'https://example.test/a',
+  -   'invalid URL'
+    ]
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:94:10)
+      at async Test.run (node:internal/test_runner/test:1208:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'invalid URL', 'https://example.test/a', 'https://example.test/a' ],
+    expected: [ 'https://example.test/a', 'https://example.test/a', 'invalid URL' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

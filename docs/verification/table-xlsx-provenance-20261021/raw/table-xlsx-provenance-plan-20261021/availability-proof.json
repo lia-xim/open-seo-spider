@@ -1,0 +1,105 @@
+{
+  "kind": "read_only_actual_App_availability_distinction_audit",
+  "result": "OBSERVED_GAP_PURE_EXTRACTED_APP",
+  "source": {
+    "path": "web/app.js",
+    "bytes": 523097,
+    "sha256": "b985eba3a91774ca7f8c738f4dce82fe69d89e580182f464bf6deb081b64861c"
+  },
+  "writer": {
+    "path": "web/table-xlsx.js",
+    "sha256": "b609d3dd5ce5b8c3e3d67c81f56556e9ba09f9265805cbff71900fb438fa46b5"
+  },
+  "observed": [
+    {
+      "section": "linkmetrics",
+      "analysis": null,
+      "analysisError": "Weiterführende Analyse nicht verfügbar: controlled non-success read",
+      "label": "unavailable analysis",
+      "section_disabled_before_renderControls": false,
+      "rows": 0,
+      "CSV_enabled": true,
+      "XLSX_available": true,
+      "projection_ok": true,
+      "writer_ok": true,
+      "workbook_rows": 0,
+      "workbook_columns": 7,
+      "workbook_bytes": 2727
+    },
+    {
+      "section": "structured",
+      "analysis": null,
+      "analysisError": "Weiterführende Analyse nicht verfügbar: controlled non-success read",
+      "label": "unavailable analysis",
+      "section_disabled_before_renderControls": false,
+      "rows": 0,
+      "CSV_enabled": true,
+      "XLSX_available": true,
+      "projection_ok": true,
+      "writer_ok": true,
+      "workbook_rows": 0,
+      "workbook_columns": 7,
+      "workbook_bytes": 2727
+    },
+    {
+      "section": "linkmetrics",
+      "analysis": {
+        "graph": {
+          "nodes": []
+        },
+        "structured_data": []
+      },
+      "analysisError": "",
+      "label": "known loaded empty analysis",
+      "section_disabled_before_renderControls": false,
+      "rows": 0,
+      "CSV_enabled": true,
+      "XLSX_available": true,
+      "projection_ok": true,
+      "writer_ok": true,
+      "workbook_rows": 0,
+      "workbook_columns": 7,
+      "workbook_bytes": 2727
+    },
+    {
+      "section": "inputs",
+      "analysis": {},
+      "analysisError": "",
+      "label": "missing historical input inventory",
+      "config": {},
+      "section_disabled_before_renderControls": true,
+      "rows": 0,
+      "CSV_enabled": true,
+      "XLSX_available": true,
+      "projection_ok": true,
+      "writer_ok": true,
+      "workbook_rows": 0,
+      "workbook_columns": 7,
+      "workbook_bytes": 2727
+    },
+    {
+      "section": "inputs",
+      "analysis": {},
+      "analysisError": "",
+      "label": "declared complete empty input inventory",
+      "config": {
+        "input_imports": [
+          {
+            "rows": []
+          }
+        ]
+      },
+      "section_disabled_before_renderControls": true,
+      "rows": 0,
+      "CSV_enabled": true,
+      "XLSX_available": true,
+      "projection_ok": true,
+      "writer_ok": true,
+      "workbook_rows": 0,
+      "workbook_columns": 7,
+      "workbook_bytes": 2727
+    }
+  ],
+  "finding": "Absent/failed analysis and loaded-empty analysis both reach a successful header-only export; missing historical input data is re-enabled by renderControls after section-specific disabling. This does not establish a native failure occurrence; it proves the current source path fails to distinguish these declared states.",
+  "required_next": "Use genuine unsuccessful analysis delivery/read controls before claiming broad native schemas. Preserve known-empty export success while refusing unavailable/incomplete sources. No product edit was made."
+}

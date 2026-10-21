@@ -1,0 +1,66 @@
+{
+  "kind": "fresh_ui_source_followup_format_normal_build_strict_clippy",
+  "created_at": "2026-10-21T12:53:13.314Z",
+  "results": [
+    {
+      "name": "format",
+      "program": "cargo",
+      "args": [
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "duration_ms": 2567
+    },
+    {
+      "name": "build",
+      "program": "cargo",
+      "args": [
+        "build",
+        "--locked",
+        "-p",
+        "open-seo-spider"
+      ],
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "duration_ms": 31744
+    },
+    {
+      "name": "clippy",
+      "program": "cargo",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "duration_ms": 20871
+    }
+  ],
+  "changed": [],
+  "complete": true,
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+    "bytes": 90253312,
+    "sha256": "d4a26dbdcc0cf607b75275f7c79056d08f0f6980fac3e911a056d4986ceb5f62"
+  },
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "OPEN_SEO_BROWSER_PATH": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-runtime\\chrome-155.0.8059.80-36a30716-source12-v1\\chrome.exe"
+  },
+  "scope": "Fresh format/build/strict Clippy for changed embedded App. No ordinary Rust tests or opt-in browser fixtures run in this follow-up; earlier exact22 results remain historical. New pure and native gates are recorded separately."
+}

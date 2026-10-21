@@ -849,3 +849,7 @@ scripts/fixtures/validator-only-binary.bin -text whitespace=cr-at-eol
 
 # Preserve the reviewed native XLSX driver terminal blank lines.
 /web/verification/ui-table-xlsx-live.cjs whitespace=-blank-at-eof
+
+# Preserve native source-availability/provenance follow-up downloads and logs.
+/docs/verification/table-xlsx-provenance-20261021/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/web/verification/ui-table-xlsx-availability-live.cjs whitespace=-blank-at-eof

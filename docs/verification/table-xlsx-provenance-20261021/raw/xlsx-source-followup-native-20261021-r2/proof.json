@@ -1,0 +1,28 @@
+{
+  "kind": "redesign_UI_E2E",
+  "results": [
+    {
+      "name": "table-xlsx-provenance",
+      "script": "ui-table-xlsx-provenance-live.cjs",
+      "kind": "owned-native",
+      "code": 1,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 56565
+    }
+  ],
+  "app_origin": "http://127.0.0.1:55442",
+  "shutdown": {
+    "code": 0,
+    "signal": null
+  },
+  "binary": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+  "binary_sha256": "d4a26dbdcc0cf607b75275f7c79056d08f0f6980fac3e911a056d4986ceb5f62",
+  "binary_unchanged": true,
+  "tracked_sources_unchanged": true,
+  "changed": [],
+  "failure": "Error: table-xlsx-provenance: node:internal/process/promises:394\r\n    triggerUncaughtException(err, true /* fromPromise */);\r\n    ^\r\n\r\npage.waitForEvent: Timeout 30000ms exceeded while waiting for event \"download\"\r\n=========================== logs ===========================\r\nwaiting for event \"download\"\r\n============================================================\r\n    at pair (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:147:20)\r\n    at async stableCases (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:171:73)\r\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-xlsx-provenance-live.cjs:229:212 {\r\n  log: [],\r\n  name: 'TimeoutError'\r\n}\r\n\r\nNode.js v24.15.0\r\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:128:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "complete": false,
+  "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+}

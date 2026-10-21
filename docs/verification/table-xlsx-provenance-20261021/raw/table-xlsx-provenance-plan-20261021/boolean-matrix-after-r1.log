@@ -1,0 +1,75 @@
+✔ linkmetrics: absent analysis refuses actual programmatic CSV/XLSX (12.3091ms)
+✔ linkmetrics: failed native source refuses cached arrays until recovery (12.2678ms)
+✔ linkmetrics: malformed analysis [] is unavailable (1.756ms)
+✔ linkmetrics: malformed analysis {} is unavailable (1.5262ms)
+✔ linkmetrics: malformed analysis {"graph":{"nodes":{}}} is unavailable (1.5722ms)
+✔ linkmetrics: malformed analysis {"graph":[]} is unavailable (1.6613ms)
+✔ linkmetrics: genuine loaded empty array exports headers during unrelated polling (8.2851ms)
+✔ structured: absent analysis refuses actual programmatic CSV/XLSX (2.868ms)
+✔ structured: failed native source refuses cached arrays until recovery (12.8008ms)
+✔ structured: malformed analysis [] is unavailable (2.1535ms)
+✔ structured: malformed analysis {} is unavailable (1.4728ms)
+✔ structured: malformed analysis {"structured_data":{}} is unavailable (1.4023ms)
+✔ structured: malformed analysis {"structured_data":null} is unavailable (1.3299ms)
+✔ structured: genuine loaded empty array exports headers during unrelated polling (9.4485ms)
+✔ inputs: unavailable captured envelope undefined (3.3609ms)
+✔ inputs: unavailable captured envelope null (1.5988ms)
+✔ inputs: unavailable captured envelope [] (1.4049ms)
+✔ inputs: unavailable captured envelope {} (1.3652ms)
+✔ inputs: unavailable captured envelope [null] (1.5283ms)
+✔ inputs: unavailable captured envelope [{}] (1.8806ms)
+✔ inputs: unavailable captured envelope [{"rows":[]}] (1.3527ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.3892ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.403ms)
+✔ inputs: unavailable captured envelope [{"engine":"foreign","input_bytes":76,"input_sha256":"ccdd7e497a7144c7ee327dab019c2602c3d71508e1ae00 (1.3611ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"bad"," (1.3649ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":0,"input_sha256":"ccdd7e4 (1.4154ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":1.1,"input_sha256":"ccdd7 (1.4533ms)
+✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.395ms)
+✔ inputs: actual serialized native fixture is available, query-empty remains a successful empty projection (8.202ms)
+✔ inputs: failed-load recovery removes stale reason and preserves raw imported values (2.4448ms)
+✔ availability checks inspect import envelopes, not every native-validated row on each render (3.119ms)
+✔ typed indexable preserves booleans/null while CSV and existing text query labels remain unchanged (4.6972ms)
+✔ external.nofollow: typed boolean is independent of unchanged localized text predicates (3.3042ms)
+✔ custom-search.evidence_complete: typed boolean is independent of unchanged localized text predicates (3.0644ms)
+✔ responses.body_complete: typed boolean is independent of unchanged localized text predicates (3.0658ms)
+✔ responses.document_metadata_available: typed boolean is independent of unchanged localized text predicates (1.468ms)
+✔ headingorder.hidden_attribute: typed boolean is independent of unchanged localized text predicates (3.1168ms)
+✔ imagecandidates.eligible: typed boolean is independent of unchanged localized text predicates (5.4037ms)
+✔ fragments.target_complete: typed boolean is independent of unchanged localized text predicates (4.6896ms)
+✔ imagefiles.body_complete: typed boolean is independent of unchanged localized text predicates (2.9381ms)
+✔ pdf.text_complete: typed boolean is independent of unchanged localized text predicates (2.9232ms)
+✔ pdf.annotations_complete: typed boolean is independent of unchanged localized text predicates (1.4335ms)
+✔ extractions.truncated: typed boolean is independent of unchanged localized text predicates (2.9426ms)
+✔ cookies.httpOnly: typed boolean is independent of unchanged localized text predicates (3.03ms)
+✔ cookies.secure: typed boolean is independent of unchanged localized text predicates (1.3962ms)
+✖ derived header and canonical exports preserve native unknown/known distinctions (1.695ms)
+✔ CSV section-specific policy and segment-issue titles survive control refresh (4.2906ms)
+ℹ tests 47
+ℹ suites 0
+ℹ pass 46
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 225.6215
+
+✖ failing tests:
+
+test at web\verification\table-source-availability.test.cjs:134:1
+✖ derived header and canonical exports preserve native unknown/known distinctions (1.695ms)
+  extracted-app.js:141
+        case 'canonical': return [urlColumn, textColumn('canonical', 'Canonical-Ziel', (row) => first(row.canonical)), numberColumn('canonical_count', 'Deklarationen', canonicalCount), {...textColumn('self_reference', 'Selbstreferenz', (row) => row.canonical.length ? row.canonical.includes(row.rendered && !row.renderer_error ? row.rendered_url || row.final_url || row.url : row.final_url || row.url) ? 'Ja' : 'Nein' : '—'),exportValue:row=>!row._unavailable&&Array.isArray(row.canonical)&&row.canonical.length&&row.canonical.every(value=>typeof value==='string')?row.canonical.includes(row.rendered&&!row.renderer_error?row.rendered_url||row.final_url||row.url:row.final_url||row.url):null}, indexColumn];
+                                                                                                                                                                        ^
+  
+  ReferenceError: canonicalCount is not defined
+      at columns (extracted-app.js:141:167)
+      at tableSchema (extracted-app.js:212:12)
+      at evalmachine.<anonymous>:1:15
+      at evalmachine.<anonymous>:1:116
+      at Script.runInContext (node:vm:149:12)
+      at Object.runInContext (node:vm:301:6)
+      at Object.run (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:40:22)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:141:79)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)

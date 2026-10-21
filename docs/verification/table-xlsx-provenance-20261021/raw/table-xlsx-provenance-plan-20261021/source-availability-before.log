@@ -1,0 +1,668 @@
+✖ linkmetrics: absent analysis refuses actual programmatic CSV/XLSX (13.198ms)
+✖ linkmetrics: failed native source refuses cached arrays until recovery (1.6866ms)
+✖ linkmetrics: malformed analysis [] is unavailable (1.6313ms)
+✖ linkmetrics: malformed analysis {} is unavailable (1.5746ms)
+✖ linkmetrics: malformed analysis {"graph":{"nodes":{}}} is unavailable (2.5911ms)
+✖ linkmetrics: malformed analysis {"graph":[]} is unavailable (1.472ms)
+✔ linkmetrics: genuine loaded empty array exports headers during unrelated polling (10.3325ms)
+✖ structured: absent analysis refuses actual programmatic CSV/XLSX (3.3119ms)
+✖ structured: failed native source refuses cached arrays until recovery (1.4521ms)
+✖ structured: malformed analysis [] is unavailable (1.7987ms)
+✖ structured: malformed analysis {} is unavailable (1.5396ms)
+✖ structured: malformed analysis {"structured_data":{}} is unavailable (2.4141ms)
+✖ structured: malformed analysis {"structured_data":null} is unavailable (1.4094ms)
+✔ structured: genuine loaded empty array exports headers during unrelated polling (19.2401ms)
+✖ inputs: unavailable captured envelope undefined (3.7312ms)
+✖ inputs: unavailable captured envelope null (1.6078ms)
+✖ inputs: unavailable captured envelope [] (1.5215ms)
+✖ inputs: unavailable captured envelope {} (1.6092ms)
+✖ inputs: unavailable captured envelope [null] (1.5647ms)
+✖ inputs: unavailable captured envelope [{}] (1.6226ms)
+✖ inputs: unavailable captured envelope [{"rows":[]}] (1.987ms)
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.52ms)
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.9182ms)
+✖ inputs: unavailable captured envelope [{"engine":"foreign","input_bytes":76,"input_sha256":"ccdd7e497a7144c7ee327dab019c2602c3d71508e1ae00 (1.5885ms)
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"bad"," (1.6025ms)
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":0,"input_sha256":"ccdd7e4 (1.6061ms)
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":1.1,"input_sha256":"ccdd7 (1.6116ms)
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.6568ms)
+✔ inputs: actual serialized native fixture is available, query-empty remains a successful empty projection (21.7159ms)
+✖ inputs: failed-load recovery removes stale reason and preserves raw imported empty values (1.8003ms)
+✔ availability checks inspect import envelopes, not every native-validated row on each render (2.7746ms)
+✖ typed indexable preserves booleans/null while CSV and existing text query labels remain unchanged (4.7487ms)
+✔ CSV section-specific policy and segment-issue titles survive control refresh (4.1603ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 5
+ℹ fail 28
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 194.7673
+
+✖ failing tests:
+
+test at web\verification\table-source-availability.test.cjs:60:3
+✖ linkmetrics: absent analysis refuses actual programmatic CSV/XLSX (13.198ms)
+  AssertionError [ERR_ASSERTION]: linkmetrics: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:60:84)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.start (node:internal/test_runner/test:1096:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:61:3
+✖ linkmetrics: failed native source refuses cached arrays until recovery (1.6866ms)
+  AssertionError [ERR_ASSERTION]: linkmetrics: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:62:109)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:68:5
+✖ linkmetrics: malformed analysis [] is unavailable (1.6313ms)
+  AssertionError [ERR_ASSERTION]: malformed analysis: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:68:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:68:5
+✖ linkmetrics: malformed analysis {} is unavailable (1.5746ms)
+  AssertionError [ERR_ASSERTION]: malformed analysis: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:68:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:68:5
+✖ linkmetrics: malformed analysis {"graph":{"nodes":{}}} is unavailable (2.5911ms)
+  AssertionError [ERR_ASSERTION]: malformed analysis: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:68:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:68:5
+✖ linkmetrics: malformed analysis {"graph":[]} is unavailable (1.472ms)
+  AssertionError [ERR_ASSERTION]: malformed analysis: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:68:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:60:3
+✖ structured: absent analysis refuses actual programmatic CSV/XLSX (3.3119ms)
+  AssertionError [ERR_ASSERTION]: structured: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:60:84)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:61:3
+✖ structured: failed native source refuses cached arrays until recovery (1.4521ms)
+  AssertionError [ERR_ASSERTION]: structured: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:62:109)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:68:5
+✖ structured: malformed analysis [] is unavailable (1.7987ms)
+  AssertionError [ERR_ASSERTION]: malformed analysis: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:68:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:68:5
+✖ structured: malformed analysis {} is unavailable (1.5396ms)
+  AssertionError [ERR_ASSERTION]: malformed analysis: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:68:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:68:5
+✖ structured: malformed analysis {"structured_data":{}} is unavailable (2.4141ms)
+  AssertionError [ERR_ASSERTION]: malformed analysis: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:68:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:68:5
+✖ structured: malformed analysis {"structured_data":null} is unavailable (1.4094ms)
+  AssertionError [ERR_ASSERTION]: malformed analysis: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:68:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope undefined (3.7312ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope null (1.6078ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [] (1.5215ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope {} (1.6092ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [null] (1.5647ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV disabled
+  
+  false !== true
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:49:10)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{}] (1.6226ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{"rows":[]}] (1.987ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.52ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.9182ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{"engine":"foreign","input_bytes":76,"input_sha256":"ccdd7e497a7144c7ee327dab019c2602c3d71508e1ae00 (1.5885ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"bad"," (1.6025ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":0,"input_sha256":"ccdd7e4 (1.6061ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":1.1,"input_sha256":"ccdd7 (1.6116ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:78:3
+✖ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.6568ms)
+  AssertionError [ERR_ASSERTION]: uncaptured or malformed input source: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:79:75)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:89:1
+✖ inputs: failed-load recovery removes stale reason and preserves raw imported empty values (1.8003ms)
+  AssertionError [ERR_ASSERTION]: uncaptured inventory: CSV must not download unavailable data
+  
+  1 !== 0
+  
+      at expectUnavailable (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:48:31)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:90:35)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\table-source-availability.test.cjs:101:1
+✖ typed indexable preserves booleans/null while CSV and existing text query labels remain unchanged (4.7487ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   'Indexierbar',
+  +   'Nicht indexierbar',
+  -   true,
+  -   false,
+      null,
+      null,
+  +   'Unbekannt',
+  +   'Unbekannt'
+  -   null,
+  -   null
+    ]
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-source-availability.test.cjs:105:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'Indexierbar', 'Nicht indexierbar', null, null, 'Unbekannt', 'Unbekannt' ],
+    expected: [ true, false, null, null, null, null ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
