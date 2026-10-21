@@ -1,0 +1,30 @@
+{
+  "kind": "independent_read_only_native_candidate_review",
+  "result": "NO_REMAINING_ACTIONABLE_FINDINGS_IN_REVIEWED_SCOPE",
+  "scope": "Static independent audit; no native, Chromium, Cargo or Git mutation. Only an extracted pure CSV header decoder was executed against declared BOM header-only bytes.",
+  "reviewed_inputs": [
+    {"path":"artifacts/table-xlsx-native-draft-20261021/ui-table-xlsx-live.cjs","sha256":"1bf7dbb2ea1a7b1c40355880ba1dd2a2f2815462e36fcbc17cb62f848ed7e050"},
+    {"path":"artifacts/table-xlsx-native-draft-20261021/xlsx-package-oracle.cjs","sha256":"4757d8804b61004c150ebee570edbc7f5009abe3055e5c5016f5fe5136502729"},
+    {"path":"artifacts/table-xlsx-native-draft-20261021/plan.json","sha256":"3bc6ac13fd121fc7144127ce0b198dc8efd609c1d9c9442d6199654ab6c0e23b"}
+  ],
+  "resolved_findings": [
+    {"path":"ui-table-xlsx-live.cjs","line":118,"original":"Header-only CSV has no CRLF. text.slice(0,text.indexOf(CRLF)) therefore removed its final quote, refusing the correct product file.","current":"Explicit firstEnd<0 branch retains the complete EOF-final header. Independently extracted current decoder accepts BOM+two quoted headers with zero rows."},
+    {"path":"ui-table-xlsx-live.cjs","line":257,"original":"Non-cancel races recorded but did not assert the stale/unavailable refusal code, allowing an unrelated failure to satisfy no-download.","current":"Requires visible nonempty terminal message, phase refused and code stale/unavailable; cancellation checks cancelled phase/code."},
+    {"path":"ui-table-xlsx-live.cjs","line":258,"original":"Comments/evidence claimed requestAnimationFrame->setTimeout, although actual controller uses setTimeout(0) task handoffs.","current":"Evidence and plan describe the actual default setTimeout(0) continuation. No scheduler, Promise, timer or product API overrides found."}
+  ],
+  "observations": [
+    "Two API-started actual owned sites retain root +151 items +transport error=153 PageRecords. HTML excludes transport error=152. Redirect item150->149 yields153 response occurrences and2 observed-URL twins with different requested owners/positions.",
+    "Declared selected cohort enumerates original item indices whose observed index>=4 and observed index%5!=0, including redirect150 observing149:118. Repeated modulo7 title groups preserve duplicate membership and overlapping AND/OR query populations; original captured title arrays are explicitly checked.",
+    "Expected CSV/XLSX matrices map original captured PageRecords and declared membership. No App, table compiler, product projection or writer import supplies expected membership or cell values. All downloaded ordered cells/types/provenance are inspected independently.",
+    "Full files export from DOM page2 while every DOM page is separately enumerated. Raw null/empty/zero/NFD/formula-looking/Xstring text is independently expected, and CSV formula protection remains an explicitly separate representation.",
+    "Independent reader parses bounded actual ZIP bytes with separate tableless CRC, exact five-part allowlist and relationships, then fresh detached Chromium DOMParser with one-pass Xstring decoding. This does not certify schema conformance or Excel GUI interoperability.",
+    "Eight native race cases dispatch ordinary DOM control events in a listener after product export click handler and during prepare, before unchanged default task continuation. They measure no-download at0/50/200ms and assert explicit terminal refusal/cancellation.",
+    "The32768-code-unit title negative requires actual retained native title length before asserting exact cell_limit and whole-file refusal; no fake PageRecord or lowered runtime bound.",
+    "Actual current HTML has15 scripts plus index/styles=17 assets. Candidate pins and verifies all17 served bytes against disk on warm and cold owners, also pinning binary/Chromium/candidate/oracle dependencies.",
+    "Warm/cold comparisons reuse immutable original expected reports, require same origin with distinct native PID, exact deterministic CSV/XLSX bytes and decoded matrices, unchanged API/disk reports/catalog bytes, and two positive410 website witnesses with no product website requests.",
+    "Normal shutdown requires natural stdin EOF exit0/signalnull. Failure cleanup closes browser and owned site, attempts native EOF before marking any forced kill, preserves native logs and final FAIL evidence.",
+    "Planned counts are internally consistent:7 pairs x2owners x2phases +2responsive pairs=30workbooks+30CSVs=60browser events;8races;12geometry boxes;2nativeowners;2positive410 witnesses."
+  ],
+  "not_proven": ["Candidate execution", "Native corpus assumptions until actual capture assertions pass", "DOMParser runtime until actual reader run", "Responsive geometry until actual browser run", "Other main-table schemas", "Selected-recrawl or segment native provenance", "Specialist/bulk exports", "Default large bounds/performance", "Excel GUI", "Manufacturer parity"],
+  "candidate_not_edited_by_reviewer": true
+}

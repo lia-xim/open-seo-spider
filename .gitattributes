@@ -843,3 +843,9 @@ scripts/fixtures/validator-only-binary.bin -text whitespace=cr-at-eol
 /web/verification/ui-table-expressions-live.cjs whitespace=-blank-at-eof
 # Keep complete native portability downloads and their verification logs raw.
 /docs/verification/table-view-portability-20261019/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+
+# Preserve exact XLSX ZIPs, CSV downloads and original verification logs.
+/docs/verification/table-xlsx-export-20261021/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+
+# Preserve the reviewed native XLSX driver terminal blank lines.
+/web/verification/ui-table-xlsx-live.cjs whitespace=-blank-at-eof

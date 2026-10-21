@@ -1,0 +1,65 @@
+✔ immutable issued projection retains all typed unescaped cells and repeated context (4.5164ms)
+✔ foreign, serialized and hand-forged snapshots cannot be encoded (0.3984ms)
+✔ ordinary and null-prototype own-data input accepted, extra properties refused (0.1737ms)
+✔ input accessors and inherited records are rejected without invoking getters (0.1547ms)
+✔ dense arrays only, including symbol/extra/accessor indices (0.3195ms)
+✔ each row has exact column width with no hidden sparse slots (0.2237ms)
+✔ non-scalar and missing cells are not stringified or inferred (0.2614ms)
+✔ column keys and physical headers must be complete and unique across context (0.1916ms)
+✔ C0 XML controls, noncharacters and lone UTF16 surrogates fail whole projection (1.4416ms)
+✔ numbers refuse unsafe integer, nonfinite, over15-significant-digit and tiny values without rounding (0.5799ms)
+✔ literal textual huge numbers and formula prefixes remain exact strings (0.2139ms)
+✔ limits are own positive safe values that cannot raise draft bounds (0.2478ms)
+✔ row and column exact bounds accept, one over refuses before sparse traversal (0.2405ms)
+✔ cell-slot budget includes headers, nulls and repeated context (0.1457ms)
+✔ per-cell UTF16 and UTF8 budgets are measured independently before escaping (0.1677ms)
+✔ payload byte budget counts headers and context on every emitted row (0.1562ms)
+✔ late invalid cell refuses the entire table without an encoded partial value (0.1108ms)
+✔ issued snapshot yields deterministic fresh owned bytes on every encode (1.4274ms)
+✔ worksheet and final ZIP byte boundaries are exact and never return partial bytes (1.104ms)
+✖ actual minimal ZIP/XML and openpyxl inspect typed literals and escape ambiguities (505.1528ms)
+✔ valid empty filtered result has physical ordered header cells, no fake data row (483.9158ms)
+✔ actual workbook keeps116 ordered repeated observations beyond two hypothetical UI pages (453.433ms)
+✔ column coordinates continue Z toAA and include every scalar under independent XML reader (468.8394ms)
+✔ independent ZIP reader rejects physically corrupted workbook CRC (451.4503ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 23
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2456.369
+
+✖ failing tests:
+
+test at artifacts\table-xlsx-export-draft-20261019\table-xlsx.test.cjs:31:1
+✖ actual minimal ZIP/XML and openpyxl inspect typed literals and escape ambiguities (505.1528ms)
+  AssertionError [ERR_ASSERTION]: 
+  Traceback (most recent call last):
+    File "E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\artifacts\table-xlsx-export-draft-20261019\inspect_xlsx.py", line 148, in <module>
+      print(json.dumps(inspect(sys.argv[1], expected), ensure_ascii=False))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\artifacts\table-xlsx-export-draft-20261019\inspect_xlsx.py", line 88, in inspect
+      assert xstring(wire) == value, (ref, repr(value), repr(wire))
+             ^^^^^^^^^^^^^^^^^^^^^^
+  AssertionError: ('A13', "'_x005F_x0041_'", "'_x005F_x005F_x0041_'")
+  
+  
+  1 !== 0
+  
+      at inspect (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\artifacts\table-xlsx-export-draft-20261019\table-xlsx.test.cjs:10:443)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\artifacts\table-xlsx-export-draft-20261019\table-xlsx.test.cjs:31:616)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

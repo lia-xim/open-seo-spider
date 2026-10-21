@@ -364,6 +364,24 @@ async fn serve_with_mcp_files_ready_source_inner(
             }),
         )
         .route(
+            "/table-xlsx.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/table-xlsx.js"),
+                )
+            }),
+        )
+        .route(
+            "/table-export-ui.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/table-export-ui.js"),
+                )
+            }),
+        )
+        .route(
             "/screenshots.js",
             get(|| async {
                 (

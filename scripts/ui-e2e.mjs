@@ -58,6 +58,7 @@ const suites = [
   ['table-named-views', 'ui-table-views-live.cjs', 'owned-native'],
   ['table-expressions', 'ui-table-expressions-live.cjs', 'owned-native'],
   ['table-view-portability', 'ui-table-view-portability-live.cjs', 'owned-native'],
+  ['table-xlsx', 'ui-table-xlsx-live.cjs', 'owned-native'],
 ];
 const args = process.argv.slice(2);
 assert(args.length === 0 || (args.length === 2 && args[0] === '--only'), 'Usage: node scripts/ui-e2e.mjs [--only name,name]');

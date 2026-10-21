@@ -7107,21 +7107,70 @@
   "last_verified_at": "2026-10-19T21:34:57.502Z",
   "current_work": [
     {
+      "id": "table-xlsx-export-20261021",
+      "title_de": "Vollständige gefilterte Ergebnistabellen als XLSX exportieren",
+      "priority": -18,
+      "status": "LOCAL_R3_FOCUSED18_PASS_R1_R2_FAILS_RETAINED_FULL46_CI_PENDING",
+      "summary_de": "Vollständiger typisierter Haupttabellen-XLSX-Export ist begrenzt nativ geprüft:30 XLSX/30 CSV,3020 Datenzeilen,35652 Datenzellen plus342 Header und unabhängiger Audit aller35994 physischen Zellen. Frische533 App-Tests bei1 absichtlichem Opt-in-Ignore, Format/Build/Clippy,459 ausgewählte Node-Tests,40 semantische Gruppen und eine vollständige ausgewählte R3-Regression mit18 Suiten bestehen. R1/R2 bleiben nach je16 Erfolgen FAIL an alten Asset-Wächtern15/17 beziehungsweise30/34; Daten-/Funktionsorakel bleiben erhalten.605 ausgewählte R3-Inputs binden den Schnitt, keine transitive Closure. Vollständige46-Suiten-/exakte Public-CI, weitere native Tabellen-/Spezialpfade und Herstellerparität bleiben offen.",
+      "completed_acceptance_de": [
+        "Gemeinsamer vollständiger CSV-/XLSX-Snapshot erhält aktuelle gefilterte Gesamtpopulation, geordnete Spalten, Sortierung und rohe Typen; Bildschirmseiten beschränken die Datei nicht. CSV-Vertrag und Schutzapostrophe bleiben erhalten.",
+        "Direkter nativer Beleg:30 echte XLSX und30 CSV aus zwei ursprünglichen153-Seiten-Crawls mit Titel-/Status-/Antworttabellen,3020 Datenzeilen,35652 Datenzellen und342 Headern. Warme/kalte Dateien sind bytegleich; zwei Prozesse enden natürlichEOF0, zwei positive410-Kontrollen begleiten null Offline-Neuabrufe.",
+        "Acht echte DOM-Prepare-Races, expliziter Abbruch, tatsächlich erfasster32768-Titel als vollständige cell_limit-Verweigerung, zwölf Geometriebeobachtungen bei1440/320 sowie rohe null/leer/0/NFD-/Formel-/Xstring-Fälle und ursprüngliche Redirect-Zwillinge sind geprüft.",
+        "Unabhängiger Python-ZIP/XML-/openpyxl3.1.5-Audit rekonstruiert alle30 tatsächlichen XLSX-Dateien und35994 physischen Zellen einschließlich Headern, Typen, Reihenfolge und Herkunft aus originalen Native-Berichten.252 geschützte Xstring-Zellen brauchen den ausdrücklich benannten Standardadapter; kein Excel-GUI-Roundtrip behauptet.",
+        "Frisch:Format, normaler Build,533 App-Passes/0 Fehler/1 absichtlicher native_enrichment_browser_fixture-Ignore und striktes Clippy;459 ausgewählte Node-Tests sowie40 reine semantische Gruppen. Gewöhnliche Core-Tests und Renderer-Opt-ins sind in diesem Schnitt nicht frisch ausgeführt.",
+        "Fokussierte R3-Regression:genau18 eindeutige Suiten in einem vollständigen Aufruf,9 API-Fixtures und9 native Suiten einschließlich XLSX. R1FAIL nach16 Erfolgen an15/17 Asset-Vorbedingung und R2FAIL nach16 Erfolgen an30/34 aggregierten Assets bleiben mit Rohbelegen erhalten. R3 korrigiert nur Asset-Wächter; Daten-/Download-/Funktionsorakel bleiben unverändert.",
+        "605 ausdrücklich ausgewählte R3-Quell-/Harness-Inputs sind exakt gebunden. Kompilierte Produktinputs und Binary bleiben zu frischen Rust-Gates identisch; Suite-Registrierung, Asset-Wächter und Whitespace-Policy-Änderungen sind gesondert qualifiziert. Kein Nachweis einer transitiven Toolchain-/Abhängigkeits- oder vollständigen Metadatenclosure und keine neue Installation."
+      ],
+      "pending_acceptance_de": [
+        "Alle46 registrierten UI-Suiten lokal in einem vollständigen Aufruf ausführen; aktueller Stand NOT_RUN. Exakte öffentliche CI des XLSX-Nachfolgers bleibt PENDING. Die frühere66dfe5c-CI mit45 Suiten gilt nur für den Vorgänger.",
+        "Weitere native Haupttabellenverträge innerhalb der29 reinen Tabellenprojektionen, Segment-/Selected-Recrawl-Herkunft sowie zusätzliche Tabellen-/Operator-/Exportkombinationen separat abnehmen.",
+        "Spezial-/Ressourcen-/Policy-/Content-/Sitemap-Exporte sowie Server-Cursor- und Bulk-XLSX-Integration weiter ausbauen und nativ prüfen.",
+        "Große XLSX-Corpora, Streaming, mehrere Arbeitsblätter, Ressourcen-/Crash-/Latenzgrenzen sowie tatsächliche Excel-/LibreOffice-GUI-Kompatibilität und andere Browser prüfen.",
+        "Den vollständigen ui.filter-details-export-Ablauf und Herstellerparität weiter abarbeiten;144 Fähigkeiten,416 Filter,32 Workflows sowie39/68/37 bleiben unverändert und Referenzparität bleibt NOT_PROVEN."
+      ],
+      "documentation": [
+        "docs/table-xlsx.md",
+        "docs/e2e-testing.md",
+        "docs/FEATURE_TODO.md",
+        "docs/verification/table-xlsx-export-20261021/README.md"
+      ],
+      "gates": {
+        "implementation": "PASS_BOUNDED_LOCAL_MAIN_TABLE_XLSX",
+        "rust": "PASS_FRESH_FMT_BUILD_APP533_0FAIL_1OPTIN_IGNORED_CLIPPY",
+        "ordinary_core": "NOT_RUN_THIS_SLICE",
+        "renderer_optins": "NOT_RUN_THIS_SLICE",
+        "pure_format": "PASS27_CORE35_CONTROLLER_WITHIN459_SELECTED_NODE",
+        "semantic": "PASS40_PURE_GROUPS",
+        "App_projection": "PASS29_PURE_TABLE_SCHEMAS_NATIVE_ONLY_TITLES_STATUS_RESPONSES",
+        "native_browser": "PASS_DIRECT30_XLSX30_CSV3020_ROWS8_RACES12_GEOMETRY_WARM_COLD",
+        "independent_actual_audit": "PASS30_XLSX35994_PHYSICAL_CELLS_EXPLICIT_XSTRING_ADAPTER",
+        "focused_UI18": "PASS_R3_ONE_COMPLETE_INVOCATION9_FIXTURE9_NATIVE",
+        "focused_R1": "FAIL_RETAINED16PASS_PORTABILITY_ASSETS15_VS17",
+        "focused_R2": "FAIL_RETAINED16PASS_PORTABILITY_AGGREGATE30_VS34",
+        "full_UI46": "NOT_RUN",
+        "new_public_CI": "PENDING_EXACT_SUCCESSOR_NOT_PROVEN",
+        "source_binding": "PASS605_SELECTED_R3_COMPILED_INPUTS_EXACT_HARNESS_WHITESPACE_POLICY_QUALIFIED",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "table-view-portability-20261019",
       "title_de": "Ansichtsdefinitionen als Datei exportieren und mit Vorschau importieren",
       "priority": -17,
-      "status": "LOCAL_R2_BOUNDED_NATIVE_PASS_SPLIT_GATES_FULL45_PUBLIC_CI_PENDING",
-      "summary_de": "Getrennte v1/v2-Definitionsdateien, vollständige ausgewählte/alle Exporte und explizite Importvorschau mit Skip/Replace/Copy sind begrenzt nativ abgenommen. R2 besteht nur die neue Suite mit vier Gruppen; R1 bleibt als fehlgeschlagener Lauf mit 16 Suiten und 15 anderen Erfolgen erhalten. Ein vollständiger aktueller Lauf mit 45 Suiten, frische öffentliche Nachfolge-CI und der gesamte ui.filter-details-export-Vertrag bleiben offen.",
+      "status": "LOCAL_R2_BOUNDED_PASS_AND_EXACT_PUBLIC_CI45_ALL4_PASS",
+      "summary_de": "Getrennte v1/v2-Definitionsdateien, vollständige ausgewählte/alle Exporte und explizite Importvorschau mit Skip/Replace/Copy sind begrenzt nativ abgenommen. R2 besteht nur die neue Suite; der ursprüngliche R1-Fehllauf bleibt erhalten. Der exakte veröffentlichte Nachfolger66dfe5c besteht inzwischen alle vier öffentlichen Jobs und sämtliche45 UI-Suiten in einem ungefilterten Aufruf. Ein zusätzlicher vollständiger lokaler45-Lauf wurde nicht ausgeführt; der gesamte ui.filter-details-export-Vertrag bleibt offen.",
       "completed_acceptance_de": [
         "41 reine Planertests und 75 Controllerkontrollen liegen vor; der unveränderte R1-Stand liefert insgesamt 397 Node-, 40 semantische und 22 tatsächliche Chromiumkontrollen. Diese werden ausdrücklich wiederverwendet.",
         "R2 prüft echte ausgewählte/gesamte v1/v2-Dateien über alle enthaltenen Bereiche, unveränderliche Vorschau, explizite Skip/Replace/Copy-Konflikte, atomare Lock-/Byte-CAS-Schreibvorgänge und No-op ohne Schreiben. Import führt keine Arbeitsabfrage automatisch aus.",
         "Vier native Gruppen: 22 JSON-Dateien, 27 tatsächliche CSV-Dateien mit 2.626 Datenzeilen und 26.260 Datenzellen, 61 vollständige DOM-Populationen, acht skriptgesteuerte echte Dateilese-Races und 36 Geometrieprüfungen bei 1440/320 px. Der unabhängige Offlineprüfer rekonstruiert sämtliche CSV-Zellen aus den Originalberichten.",
         "Je zwei tatsächliche Quota- und fehlende-Web-Locks-Verweigerungen, unabhängige Katalogbytes, aktive Abfrage/Statusmarkierung und erhaltene Berichte; zwei natürliche native EOF0, zwei positive HTTP-410-Kontrollen und null Offline-Neuabrufe.",
         "Frisch auf R2: normaler Build, Rustfmt, strenges Clippy und 533 App-Tests, 0 Fehler, 1 ignoriert: native_enrichment_browser_fixture wird nicht durch diese Abnahme ausgeführt. Die vier separat tatsächlich ausgeführten Renderer-Rust-Fälle sind Core-Integrationstests und führen diesen App-Opt-in nicht aus. Die 1.298 gewöhnlichen Core-Erfolge mit 0 Fehlern und 4 ignorierten Tests stammen ausdrücklich aus R4: 241 identische ausgewählte Eingaben und fünf gleiche erfasste Umgebungswerte; kein frischer vollständiger Workspace-Lauf.",
-        "Der R1-Gesamtlauf bleibt FAIL mit 15 PASS und 1 FAIL. Ausschließlich der neue Treiber wurde für die aktive Clear-Vorbedingung korrigiert; Produkt und Binary bleiben bytegleich. 15 andere E2E-Erfolge werden unverändert wiederverwendet, ohne einen gemeinsamen PASS aller 16 Suiten zu behaupten."
+        "Der R1-Gesamtlauf bleibt FAIL mit 15 PASS und 1 FAIL. Ausschließlich der neue Treiber wurde für die aktive Clear-Vorbedingung korrigiert; Produkt und Binary bleiben bytegleich. 15 andere E2E-Erfolge werden unverändert wiederverwendet, ohne einen gemeinsamen PASS aller 16 Suiten zu behaupten.",
+        "Öffentliche CI39329699110 für exakt66dfe5c: Renderer, Container, Ubuntu und Windows erfolgreich. Ein einziger ungefilterter node scripts/ui-e2e.mjs-Aufruf besteht genau45 eindeutige registrierte Suiten in richtiger Reihenfolge: neun Fixture- und36 native Suiten. Frischer Terminalbeleg mit Rohlogs und unverändertem registergebundenem Prüfer liegt separat vor."
       ],
       "pending_acceptance_de": [
-        "Einen vollständigen lokalen Lauf mit 45 Suiten und die öffentliche CI des exakten Portabilitäts-Nachfolgecommits gesondert ausführen; beide sind für diesen Stand NOT_RUN.",
+        "Ein zusätzlicher vollständiger lokaler45-Suiten-Lauf bleibt NOT_RUN; die vollständige öffentliche45-Suiten-Abnahme ist auf exakt66dfe5c nachgewiesen und gilt nicht automatisch für spätere XLSX-Änderungen.",
         "Native portable Projektpräferenzen ergänzen; browserlokale Definitionsdateien sind keine Migration nativer Projekteinstellungen.",
         "XLSX und verbleibende CSV-Kombinationen mit Kommas, Newlines, Formeln und vollständigen Detail-/Quell-/Zielbeziehungen E2E prüfen.",
         "Weitere Tabellen, Operator-/Schemafälle und Spezialtabellen mit vollständigen Cursor-/Exportverträgen einzeln abnehmen.",
@@ -7134,7 +7183,8 @@
         "docs/table-views.md",
         "docs/table-query-expressions.md",
         "docs/e2e-testing.md",
-        "docs/FEATURE_TODO.md"
+        "docs/FEATURE_TODO.md",
+        "docs/verification/table-view-portability-20261019/public-ci-66dfe5c-20261021/receipt.json"
       ],
       "gates": {
         "implementation": "IMPLEMENTED_BOUNDED_V1_V2_FILE_IMPORT_EXPORT",
@@ -7150,8 +7200,8 @@
         "state_semantic_browser": "REUSED_R1_397_NODE40_SEMANTIC22_CHROMIUM",
         "prior_R1": "FAIL_ONE16_SUITE_INVOCATION15_PASS1_FAIL_RETAINED",
         "other_E2E": "REUSED15_R1_NO_COMBINED16_PASS",
-        "full_UI45": "NOT_RUN_FOR_PORTABILITY_SUCCESSOR",
-        "new_public_CI": "NOT_RUN_FOR_THIS_SOURCE",
+        "full_UI45": "PASS_PUBLIC_66dfe5c_ONE_UNFILTERED_INVOCATION45_UNIQUE_LOCAL_NOT_RUN",
+        "new_public_CI": "PASS_EXACT_66dfe5c_RUN39329699110_ALL4_JOBS",
         "manufacturer_parity": "NOT_PROVEN"
       },
       "reference_parity": "NOT_PROVEN"
@@ -10378,6 +10428,7 @@
     }
   ],
   "active_work_ids": [
+    "table-xlsx-export-20261021",
     "table-view-portability-20261019",
     "table-explorer-20261018",
     "profile-browser-response-capture-ci-20261018",

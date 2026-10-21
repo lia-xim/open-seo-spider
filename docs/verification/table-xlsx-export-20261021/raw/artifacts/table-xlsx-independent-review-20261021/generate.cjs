@@ -1,0 +1,24 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),cp=require('node:child_process');
+const root=path.resolve(__dirname,'../..'),Xlsx=require(path.join(root,'web/table-xlsx.js'));
+const oracleFile=path.join(root,'artifacts/table-xlsx-native-draft-20261021/xlsx-package-oracle.cjs');
+const oracle=require(oracleFile),sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+const values=[null,'',0,-0,true,false,'=SUM(A1:A2)','+1','-1','@x','_x005F_x0041_','_x0041_x0042_','_x005f_x000d_','_x005F_x005F_x0041_','_X0041_','_x0041_&lt;_x0041_',Array.from({length:32},(_,i)=>String.fromCharCode(i)).join('')+'\ufffe\uffff','CR\rLF\nTAB\tend','Cafe\u0301 / Café / \ud83d\ude00 / \udbff\udfff',' leading and trailing ',123456789012345,1234567890123450,0.123456789012345,1e20,1e307,9.99999999999999e307,2.2251e-308,-2.2251e-308,'x'.repeat(32767)];
+const writer=Xlsx.create(),data={columns:[{key:'value',label:'Value\r_x005F_x0041_'}],rows:values.map(value=>[value]),context:[{key:'context',label:'Context',value:'\u0001_x0001_'}]};
+const prepared=writer.prepareTable(data);assert.equal(prepared.ok,true);const encoded=writer.encode(prepared.value);assert.equal(encoded.ok,true);
+const bytes=Buffer.from(encoded.value.bytes);fs.writeFileSync(path.join(__dirname,'independent-cases.xlsx'),bytes);
+const expected={header:data.columns.map(c=>c.label).concat(data.context.map(c=>c.label)),rows:values.map(value=>[Object.is(value,-0)?0:value,data.context[0].value])};
+fs.writeFileSync(path.join(__dirname,'expected.json'),JSON.stringify(expected,null,2)+'\n');
+const structural=oracle.packageParts(bytes);assert.equal(structural.entries.length,5);
+const negatives=[];
+function reject(label,modified){assert.throws(()=>oracle.packageParts(modified),undefined,label);negatives.push(label);}
+const crcBad=Buffer.from(bytes),payloadStart=30+crcBad.readUInt16LE(26);crcBad[payloadStart+10]^=1;reject('damaged part CRC',crcBad);
+reject('terminal trailing byte',Buffer.concat([bytes,Buffer.from([0])]));
+const localSize=Buffer.from(bytes);localSize.writeUInt32LE(localSize.readUInt32LE(18)+1,18);reject('local/central length mismatch',localSize);
+const flags=Buffer.from(bytes);flags.writeUInt16LE(1,6);reject('local encryption flag mismatch',flags);
+const offset=Buffer.from(bytes),central=bytes.readUInt32LE(bytes.length-6);offset.writeUInt32LE(1,central+42);reject('local offset overlap/gap',offset);
+const count=Buffer.from(bytes);count.writeUInt16LE(4,count.length-12);reject('wrong part count',count);
+const python=cp.spawnSync('python',[path.join(__dirname,'verify.py')],{cwd:root,encoding:'utf8'});assert.ifError(python.error);
+fs.writeFileSync(path.join(__dirname,'python.stdout.txt'),python.stdout);fs.writeFileSync(path.join(__dirname,'python.stderr.txt'),python.stderr);assert.equal(python.status,0,python.stderr);
+const report={recordedAt:new Date().toISOString(),sourceSha256:sha(fs.readFileSync(path.join(root,'web/table-xlsx.js'))),testSha256:sha(fs.readFileSync(path.join(root,'web/verification/table-xlsx.test.cjs'))),oracleSha256:sha(fs.readFileSync(oracleFile)),workbookSha256:sha(bytes),packageEntries:structural.entries,negativeStructuralControls:negatives,python:JSON.parse(python.stdout),scope:'Offline package/datatype and standard XML parser review. Native/browser/Excel application repair/save behavior is not claimed.'};
+fs.writeFileSync(path.join(__dirname,'review.json'),JSON.stringify(report,null,2)+'\n');process.stdout.write(JSON.stringify(report,null,2)+'\n');

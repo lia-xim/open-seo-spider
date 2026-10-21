@@ -1,0 +1,14 @@
+PASS running controls expose pause and stop while resume and start stay blocked
+PASS double pause posts once and old running poll cannot overwrite same-project paused acknowledgement
+PASS URL queue in-flight and discovery units stay distinct with observed generation checkpoint revision
+PASS late resume acknowledgement cannot change newly selected project counters controls or status
+PASS old action completion cannot unlock or clear a newer project action awaiting its own acknowledgement
+PASS late old-project action error is discarded and cannot erase current action state
+PASS pausing stays active and keeps polling until durable paused state enables resume
+PASS limited resume preserves displayed limit until explicit zero confirmation and dialog bottom stays reachable at 320px
+PASS project switch invalidates open limit confirmation and stale form cannot resume previous project
+PASS explicit false resume availability hides action and missing checkpoint generation stay unknown
+PASS control states and observed checkpoint keep document width bounded with footer reachable
+PASS pre-start terminal history reply cannot remove successfully selected new crawl from dropdown
+PASS late successful start is retained in history but cannot select itself over newer project or clear newer controls
+13 isolated control UI checks passed.

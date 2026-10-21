@@ -1,0 +1,15 @@
+const fs=require('node:fs'),cp=require('node:child_process'),crypto=require('node:crypto');
+const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+const manifestFile='artifacts/table-xlsx-final-inputs-20261021.json',m=JSON.parse(fs.readFileSync(manifestFile)),driver='web/verification/ui-table-view-portability-live.cjs';
+const original=cp.execFileSync('git',['show','HEAD:'+driver]),pin=m.files.find(file=>file.path===driver);
+if(hash(original)!==pin.sha256)throw Error('Original harness mismatch');
+fs.writeFileSync('artifacts/table-xlsx-focused-r1-original-portability-driver.cjs',original,{flag:'wx'});
+const current=fs.readFileSync(driver,'utf8'),expected=original.toString('utf8').replace("assert.equal(assets.length,15,'Exactly the reviewed15 actual served assets');","assert.equal(assets.length,17,'Exactly the reviewed17 actual served assets');\nassert(assets.includes('table-xlsx.js')&&assets.includes('table-export-ui.js'));");
+if(current!==expected)throw Error('Unexpected harness delta');
+const changed=m.files.filter(file=>hash(fs.readFileSync(file.path))!==file.sha256).map(file=>file.path);
+if(JSON.stringify(changed)!==JSON.stringify([driver]))throw Error('Other source changed: '+JSON.stringify(changed));
+m.created_at=new Date().toISOString();m.supersedes_manifest_sha256=hash(fs.readFileSync(manifestFile));m.changes_to_prior_build_inputs=['scripts/ui-e2e.mjs',driver];
+m.qualification='Compiled Rust and all embedded UI product inputs remain byte-identical to fresh Cargo gates. Later changes only register the46th E2E suite and update the earlier portability exact asset precondition15to17, requiring both new assets. All data/download oracles unchanged. Two independently reviewed native XLSX driver/reader files newly added. Explicit selected605-file set, not transitive/wholemetadata closure.';
+m.files=m.files.map(file=>{const bytes=fs.readFileSync(file.path);return{...file,bytes:bytes.length,sha256:hash(bytes)};});
+const target='artifacts/table-xlsx-final-inputs-20261021-r2.json';fs.writeFileSync(target,JSON.stringify(m,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({count:m.files.length,sha256:hash(fs.readFileSync(target)),oldDriver:hash(original),newDriver:hash(Buffer.from(current))}));

@@ -1,0 +1,68 @@
+✔ minimal workbook has a real five-part ZIP, CRC, package targets and typed cells (3.2727ms)
+✔ the independent ZIP reader rejects a damaged data byte and trailing bytes (2.1872ms)
+✖ all ordered columns, rows and repeated context are retained with raw scalar types (1.4549ms)
+✔ formula-looking text, XML metacharacters and CSV-style apostrophes are literal strings (0.622ms)
+✔ literal overlapping ST_Xstring patterns protect every original escape starter once (0.5574ms)
+✔ representable XML-forbidden scalars use Xstring while TAB and LF remain literal (0.5135ms)
+✔ headers and context use the same lossless Xstring and Unicode rules (0.3373ms)
+✔ unpaired UTF16 in any header, context or late cell refuses the entire snapshot (0.6062ms)
+✔ explicit numbers retain 15 significant decimal digits, signs, exponents and bounds (0.5235ms)
+✔ numbers that need rounding or exceed Excel range refuse; identifiers stay text (0.7167ms)
+✔ non-scalars are rejected without implicit conversions (0.843ms)
+✔ records require exact own enumerable data fields and never invoke getters (0.3478ms)
+✔ rows and arrays require dense own data slots with ordinary array prototypes (0.3201ms)
+✔ invalid columns and row width cannot produce an incomplete projection (0.2814ms)
+✔ unexpected proxy failures expose no thrown object fields or partial output (0.1336ms)
+✔ snapshots are deeply frozen, instance-issued and independent of later input mutation (0.4462ms)
+✔ every encode returns fresh deterministic bytes; caller mutation cannot alter the planner (0.2748ms)
+✔ limit overrides only lower known integer limits using own data descriptors (0.2972ms)
+✔ row and combined-column limits accept exact boundaries and reject before sparse traversal (1.4606ms)
+✔ cell budgets count headers, nulls and each repeated context cell, atomically (1.9644ms)
+✔ UTF16, UTF8 and line-feed cell limits accept exact values and refuse one above (1.2842ms)
+✔ payload limit counts exact UTF8 output including repeated context and unused source context (0.232ms)
+✔ worksheet and ZIP byte limits are exact full-file gates, with no partial bytes (0.4272ms)
+✔ over ten thousand rows are supported without a product row cap (45.271ms)
+✔ the full physical Excel column range reaches XFD and refuses XFE (61.9478ms)
+✔ zero data rows is a complete headers-only table including declared context (0.3198ms)
+✔ UMD browser entry works without CommonJS, DOM, storage or network globals (2.5972ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 26
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 210.3466
+
+✖ failing tests:
+
+test at web\verification\table-xlsx.test.cjs:92:1
+✖ all ordered columns, rows and repeated context are retained with raw scalar types (1.4549ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      cellSlots: 24,
+      columnCount: 6,
+  +   inputBytes: 96,
+  +   payloadBytes: 118,
+  -   inputBytes: 77,
+  -   payloadBytes: 99,
+      rowCount: 3,
+      unknownCells: 4
+    }
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\table-xlsx.test.cjs:98:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1201:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)
+      at Test.postRun (node:internal/test_runner/test:1330:19)
+      at Test.run (node:internal/test_runner/test:1258:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { rowCount: 3, columnCount: 6, cellSlots: 24, payloadBytes: 118, inputBytes: 96, unknownCells: 4 },
+    expected: { rowCount: 3, columnCount: 6, cellSlots: 24, payloadBytes: 99, inputBytes: 77, unknownCells: 4 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

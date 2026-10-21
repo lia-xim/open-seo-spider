@@ -44,7 +44,7 @@ const server = http.createServer(async (req, res) => { try {
     return send(res, { error: 'No resource ledger fixture API exists: ' + suffix }, 404);
   }
   const file = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
-  if (!['index.html', 'app.js','dashboard-segments.js','config-profiles.js','screenshots.js','table-explorer.js','table-explorer-ui.js','table-view-library.js','table-view-storage.js','table-views-ui.js','table-view-portability.js','table-expression-editor.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
+  if (!['index.html', 'app.js','dashboard-segments.js','config-profiles.js','screenshots.js','table-explorer.js','table-explorer-ui.js','table-view-library.js','table-view-storage.js','table-views-ui.js','table-xlsx.js','table-export-ui.js','table-view-portability.js','table-expression-editor.js', 'list-import.js', 'styles.css', 'saved-comparison.js'].includes(file)) { res.statusCode = 404; return res.end(); }
   res.setHeader('content-type', file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html'); const source = fs.readFileSync(path.join(web, file)); if (file === 'app.js') servedOriginGuards.push(source.toString().split('\n').find(line => line.includes('url.hostname') && line.includes('Ressourcen-Origin-Scope'))); res.end(source);
 } catch (error) { errors.push('Fixture server: ' + error.message); send(res, { error: error.message }, 500); } });
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));

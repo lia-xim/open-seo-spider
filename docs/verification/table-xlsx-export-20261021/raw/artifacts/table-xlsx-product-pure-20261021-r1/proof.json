@@ -1,0 +1,57 @@
+{
+  "kind": "pure_product_XLSX_actual_byte_controls",
+  "created_at": "2026-10-21T11:43:11.391Z",
+  "result": "FAIL",
+  "node": "v24.15.0",
+  "sources": [
+    {
+      "path": "web/table-xlsx.js",
+      "bytes": 15122,
+      "sha256": "b609d3dd5ce5b8c3e3d67c81f56556e9ba09f9265805cbff71900fb438fa46b5"
+    },
+    {
+      "path": "web/verification/table-xlsx.test.cjs",
+      "bytes": 21936,
+      "sha256": "4891531779b7419f99c8a8776a70b554ad17ef9bfc69f29a4669875b5dec4de6"
+    },
+    {
+      "path": "artifacts/table-xlsx-export-draft-20261019/inspect_xlsx.py",
+      "bytes": 7525,
+      "sha256": "8e07d7d141467e467863315b8b16c9a98f43ebfdd2be27fce1c93387de242e55"
+    },
+    {
+      "path": "artifacts/table-xlsx-product-pure-20261021-r1/run-proof.cjs",
+      "bytes": 5730,
+      "sha256": "f7aea6959c73edaf10d5ef004a4095c83166ef11fe2dfad27f42c55743327b7e"
+    }
+  ],
+  "limits": {
+    "maxRows": 1048575,
+    "maxColumns": 16384,
+    "maxCells": 250000,
+    "maxCellCodeUnits": 32767,
+    "maxCellBytes": 131068,
+    "maxCellLineFeeds": 253,
+    "maxPayloadBytes": 16777216,
+    "maxWorksheetBytes": 33554432,
+    "maxWorkbookBytes": 33554432
+  },
+  "primary_spec_sources": [
+    "https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oi29500/d34ae755-c53f-4a44-a363-c6dd3ee018a4",
+    "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.spreadsheet.cell?view=openxml-3.0.1",
+    "https://support.microsoft.com/en-us/excel/excel-specifications-and-limits",
+    "https://www.w3.org/TR/xml/"
+  ],
+  "boundary": "Pure synchronous formatcore only; no App adapter, browser download, native workflow, Excel GUI roundtrip or schema certification.",
+  "historical_prototype": "artifacts/table-xlsx-export-draft-20261019/r1.proof.json remains FAIL and immutable. Product fixes overlapping literal Xstring escaping.",
+  "cases": [],
+  "tests": {
+    "tests": 27,
+    "pass": 27,
+    "fail": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "error": "edge-scalars-reader failed: Traceback (most recent call last):\r\n  File \"E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\table-xlsx-export-draft-20261019\\inspect_xlsx.py\", line 148, in <module>\r\n    print(json.dumps(inspect(sys.argv[1], expected), ensure_ascii=False))\r\n  File \"C:\\Users\\matth\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\encodings\\cp1252.py\", line 19, in encode\r\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 2414-2415: character maps to <undefined>\r\n",
+  "finished_at": "2026-10-21T11:43:12.072Z"
+}

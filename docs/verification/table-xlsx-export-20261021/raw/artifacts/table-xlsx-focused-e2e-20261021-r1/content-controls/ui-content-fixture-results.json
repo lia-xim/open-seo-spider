@@ -1,0 +1,941 @@
+{
+  "tested_at": "2026-10-21T12:02:15.026Z",
+  "result": "PASS",
+  "scope": "isolated saved-content browser/API fixture with authored display vectors; no native capture/analysis, persistence, website HTTP or native export proof",
+  "checks": [
+    "01 default-disabled capture omits payload and ignores disabled invalid JSON",
+    "02 typed raw/render/both capture configuration round-trips unchanged",
+    "03 invalid typed capture shape/limits block POST; native CSS rejection is displayed as fixture contract error",
+    "04 405 metadata rows page 200/200/5 and back without automatic load-all or analysis",
+    "05 exact cross-page cohort preserves redirect twins; explicit 1..128 cap rejects 129 and lower budget without first-N truncation",
+    "06 empty/missing/incomplete/error/pending/unavailable and unknown selection/whitespace/parser/hash capture profiles remain distinct with no raw-render fallback",
+    "07 inherited/refreshed/pending/unknown basis and imported/null versus known-zero generation are preserved",
+    "08 source inspector is inert plain text, source language never Page.language, exact JSON retains requested/final identity and declared imported parent",
+    "09 finite cohort filter exclusions are explicit; all-filtered HTTP200 has null analysis and no fabricated rows",
+    "10 Ngrams 1/2/3 preserve counts and sampled one-based positions; 205 result rows page/sort/search at 200",
+    "11 nullable pair values remain unknown; observed Jaccard1 is separate from byte identity and incomplete classification",
+    "12 unclamped negative/over100 readability and unsupported language/profile remain explicit, unknown analysis profile suppresses values",
+    "13 changed typed analysis config posts only explicit saved URLs with zero website requests",
+    "14 late project/source and old-snapshot responses cannot overwrite new source/cohort or unlock newer pending bodies",
+    "15 selection/config/project invalidation rejects late analyses; old finally leaves new operation locked until its own response",
+    "16 same-project resume starts fresh inventory generation; stale response/finally cannot clear newer loading state",
+    "17 engine/read errors show unavailable rather than complete-empty; current-page CSV includes snapshot and neutralizes formula text",
+    "18 320px inspector/settings bottom controls and footer remain reachable; no runtime errors or website access"
+  ],
+  "crawl_requests": 5,
+  "content_requests": [
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 200,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 400,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 200,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/requested-two",
+          "https://a.fixture/page-201"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {},
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/requested-two",
+          "https://a.fixture/page-2",
+          "https://a.fixture/page-3",
+          "https://a.fixture/page-4",
+          "https://a.fixture/page-5",
+          "https://a.fixture/page-6",
+          "https://a.fixture/page-7",
+          "https://a.fixture/page-8",
+          "https://a.fixture/page-9",
+          "https://a.fixture/page-10",
+          "https://a.fixture/page-11",
+          "https://a.fixture/page-12",
+          "https://a.fixture/page-13",
+          "https://a.fixture/page-14",
+          "https://a.fixture/page-15",
+          "https://a.fixture/page-16",
+          "https://a.fixture/page-17",
+          "https://a.fixture/page-18",
+          "https://a.fixture/page-19",
+          "https://a.fixture/page-20",
+          "https://a.fixture/page-21",
+          "https://a.fixture/page-22",
+          "https://a.fixture/page-23",
+          "https://a.fixture/page-24",
+          "https://a.fixture/page-25",
+          "https://a.fixture/page-26",
+          "https://a.fixture/page-27",
+          "https://a.fixture/page-28",
+          "https://a.fixture/page-29",
+          "https://a.fixture/page-30",
+          "https://a.fixture/page-31",
+          "https://a.fixture/page-32",
+          "https://a.fixture/page-33",
+          "https://a.fixture/page-34",
+          "https://a.fixture/page-35",
+          "https://a.fixture/page-36",
+          "https://a.fixture/page-37",
+          "https://a.fixture/page-38",
+          "https://a.fixture/page-39",
+          "https://a.fixture/page-40",
+          "https://a.fixture/page-41",
+          "https://a.fixture/page-42",
+          "https://a.fixture/page-43",
+          "https://a.fixture/page-44",
+          "https://a.fixture/page-45",
+          "https://a.fixture/page-46",
+          "https://a.fixture/page-47",
+          "https://a.fixture/page-48",
+          "https://a.fixture/page-49",
+          "https://a.fixture/page-50",
+          "https://a.fixture/page-51",
+          "https://a.fixture/page-52",
+          "https://a.fixture/page-53",
+          "https://a.fixture/page-54",
+          "https://a.fixture/page-55",
+          "https://a.fixture/page-56",
+          "https://a.fixture/page-57",
+          "https://a.fixture/page-58",
+          "https://a.fixture/page-59",
+          "https://a.fixture/page-60",
+          "https://a.fixture/page-61",
+          "https://a.fixture/page-62",
+          "https://a.fixture/page-63",
+          "https://a.fixture/page-64",
+          "https://a.fixture/page-65",
+          "https://a.fixture/page-66",
+          "https://a.fixture/page-67",
+          "https://a.fixture/page-68",
+          "https://a.fixture/page-69",
+          "https://a.fixture/page-70",
+          "https://a.fixture/page-71",
+          "https://a.fixture/page-72",
+          "https://a.fixture/page-73",
+          "https://a.fixture/page-74",
+          "https://a.fixture/page-75",
+          "https://a.fixture/page-76",
+          "https://a.fixture/page-77",
+          "https://a.fixture/page-78",
+          "https://a.fixture/page-79",
+          "https://a.fixture/page-80",
+          "https://a.fixture/page-81",
+          "https://a.fixture/page-82",
+          "https://a.fixture/page-83",
+          "https://a.fixture/page-84",
+          "https://a.fixture/page-85",
+          "https://a.fixture/page-86",
+          "https://a.fixture/page-87",
+          "https://a.fixture/page-88",
+          "https://a.fixture/page-89",
+          "https://a.fixture/page-90",
+          "https://a.fixture/page-91",
+          "https://a.fixture/page-92",
+          "https://a.fixture/page-93",
+          "https://a.fixture/page-94",
+          "https://a.fixture/page-95",
+          "https://a.fixture/page-96",
+          "https://a.fixture/page-97",
+          "https://a.fixture/page-98",
+          "https://a.fixture/page-99",
+          "https://a.fixture/page-100",
+          "https://a.fixture/page-101",
+          "https://a.fixture/page-102",
+          "https://a.fixture/page-103",
+          "https://a.fixture/page-104",
+          "https://a.fixture/page-105",
+          "https://a.fixture/page-106",
+          "https://a.fixture/page-107",
+          "https://a.fixture/page-108",
+          "https://a.fixture/page-109",
+          "https://a.fixture/page-110",
+          "https://a.fixture/page-111",
+          "https://a.fixture/page-112",
+          "https://a.fixture/page-113",
+          "https://a.fixture/page-114",
+          "https://a.fixture/page-115",
+          "https://a.fixture/page-116",
+          "https://a.fixture/page-117",
+          "https://a.fixture/page-118",
+          "https://a.fixture/page-119",
+          "https://a.fixture/page-120",
+          "https://a.fixture/page-121",
+          "https://a.fixture/page-122",
+          "https://a.fixture/page-123",
+          "https://a.fixture/page-124",
+          "https://a.fixture/page-125",
+          "https://a.fixture/page-126",
+          "https://a.fixture/page-127"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {},
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-4",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-5",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-6",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-7",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-8",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-17",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-18",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-9",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-9",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-9",
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "rendered_dom_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "rendered_dom_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-13",
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "imported",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "analysis",
+      "id": "imported",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://imported.fixture/requested%2Fone"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {},
+        "expected_snapshot_sha256": "d8873eb1430c030842979e5f12d3c393584ab57e80fc416cd0c2c80927c7bd14",
+        "indexable_only": false,
+        "complete_only": false
+      }
+    },
+    {
+      "kind": "inventory",
+      "id": "zero",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "analysis",
+      "id": "zero",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://zero.fixture/requested%2Fone"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {},
+        "expected_snapshot_sha256": "52033f20f55a00055021986e720cfc112fa0e3bfd40821cdb21ab22029c70e3e",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 0
+      }
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-9",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-16",
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/requested%2Fone",
+      "body": null
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/page-5",
+          "https://a.fixture/page-6",
+          "https://a.fixture/page-20"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {},
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": true,
+        "complete_only": true,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/page-5",
+          "https://a.fixture/page-6",
+          "https://a.fixture/page-20"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {},
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": true,
+        "complete_only": true,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/page-9",
+          "https://a.fixture/page-19"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "limits": {
+            "max_position_samples": 1
+          }
+        },
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/requested-two",
+          "https://a.fixture/page-2",
+          "https://a.fixture/page-5",
+          "https://a.fixture/page-6"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {},
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/page-2",
+          "https://a.fixture/page-3",
+          "https://a.fixture/page-14",
+          "https://a.fixture/page-18"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {},
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/page-2",
+          "https://a.fixture/page-3",
+          "https://a.fixture/page-14",
+          "https://a.fixture/page-18"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "case_behavior": "preserve"
+        },
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/page-2",
+          "https://a.fixture/page-3",
+          "https://a.fixture/page-14",
+          "https://a.fixture/page-18"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "case_behavior": "unicode_lowercase",
+          "similarity": {
+            "shingle_size": 2,
+            "threshold": 0.75,
+            "min_tokens": 3
+          },
+          "readability": {
+            "min_words": 1
+          }
+        },
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "b",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/requested%2Fone",
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "rendered_dom_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "rendered_dom_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/requested-two",
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "case_behavior": "unicode_lowercase",
+          "similarity": {
+            "shingle_size": 2,
+            "threshold": 0.75,
+            "min_tokens": 3
+          },
+          "readability": {
+            "min_words": 1
+          }
+        },
+        "expected_snapshot_sha256": "9ce94276222f5b9a58a28d574bbb6ae91709206820215ef0f50d39bde2a3658f",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 7
+      }
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/requested%2Fone",
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "case_behavior": "unicode_lowercase",
+          "similarity": {
+            "shingle_size": 2,
+            "threshold": 0.75,
+            "min_tokens": 3
+          },
+          "readability": {
+            "min_words": 1
+          }
+        },
+        "expected_snapshot_sha256": "75b485f17b224eb31d8c5f0c19681c02ed3adf45092d423ad99bd4e1409ccc44",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 8
+      }
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/requested-two",
+      "body": null
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "case_behavior": "unicode_lowercase",
+          "similarity": {
+            "shingle_size": 2,
+            "threshold": 0.75,
+            "min_tokens": 3
+          },
+          "readability": {
+            "min_words": 1
+          }
+        },
+        "expected_snapshot_sha256": "75b485f17b224eb31d8c5f0c19681c02ed3adf45092d423ad99bd4e1409ccc44",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 8
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/requested-two"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "case_behavior": "preserve"
+        },
+        "expected_snapshot_sha256": "75b485f17b224eb31d8c5f0c19681c02ed3adf45092d423ad99bd4e1409ccc44",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 8
+      }
+    },
+    {
+      "kind": "analysis",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://a.fixture/requested%2Fone",
+          "https://a.fixture/requested-two"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "case_behavior": "preserve"
+        },
+        "expected_snapshot_sha256": "75b485f17b224eb31d8c5f0c19681c02ed3adf45092d423ad99bd4e1409ccc44",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 8
+      }
+    },
+    {
+      "kind": "inventory",
+      "id": "b",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "action",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "action",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "action",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "analysis",
+      "id": "action",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": {
+        "urls": [
+          "https://action.fixture/requested%2Fone"
+        ],
+        "source_kind": "raw_http_html",
+        "config": {
+          "case_behavior": "preserve"
+        },
+        "expected_snapshot_sha256": "6f3b2953dddac344a72a59b0239be6a909ffd2645ab796451c573b2aed89c72c",
+        "indexable_only": false,
+        "complete_only": false,
+        "expected_generation": 8
+      }
+    },
+    {
+      "kind": "inventory",
+      "id": "unknown",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "broken",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "inventory",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": null,
+      "body": null
+    },
+    {
+      "kind": "document",
+      "id": "a",
+      "source": "raw_http_html",
+      "after": 0,
+      "limit": 200,
+      "url": "https://a.fixture/page-16",
+      "body": null
+    }
+  ],
+  "control_requests": [
+    {
+      "id": "action",
+      "suffix": "resume"
+    }
+  ],
+  "javascript_runtime_errors": [],
+  "unexpected_network_requests": []
+}

@@ -1,0 +1,59 @@
+[
+  {
+    "name": "format",
+    "program": "cargo",
+    "args": [
+      "fmt",
+      "--all",
+      "--check"
+    ],
+    "code": 0,
+    "signal": null,
+    "duration_ms": 2585
+  },
+  {
+    "name": "build",
+    "program": "cargo",
+    "args": [
+      "build",
+      "--locked",
+      "-p",
+      "open-seo-spider"
+    ],
+    "code": 0,
+    "signal": null,
+    "duration_ms": 46155
+  },
+  {
+    "name": "app-tests",
+    "program": "cargo",
+    "args": [
+      "test",
+      "--locked",
+      "-p",
+      "open-seo-spider",
+      "--",
+      "--test-threads=2"
+    ],
+    "code": 0,
+    "signal": null,
+    "duration_ms": 518438
+  },
+  {
+    "name": "clippy",
+    "program": "cargo",
+    "args": [
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--all-features",
+      "--locked",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "code": 0,
+    "signal": null,
+    "duration_ms": 24107
+  }
+]

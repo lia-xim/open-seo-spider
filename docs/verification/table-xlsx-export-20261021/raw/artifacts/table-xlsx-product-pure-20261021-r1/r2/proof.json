@@ -1,0 +1,123 @@
+{
+  "kind": "pure_product_XLSX_actual_byte_controls",
+  "created_at": "2026-10-21T11:43:43.570Z",
+  "result": "PASS_PURE_FORMAT_CONTROLS",
+  "node": "v24.15.0",
+  "sources": [
+    {
+      "path": "web/table-xlsx.js",
+      "bytes": 15122,
+      "sha256": "b609d3dd5ce5b8c3e3d67c81f56556e9ba09f9265805cbff71900fb438fa46b5"
+    },
+    {
+      "path": "web/verification/table-xlsx.test.cjs",
+      "bytes": 21936,
+      "sha256": "4891531779b7419f99c8a8776a70b554ad17ef9bfc69f29a4669875b5dec4de6"
+    },
+    {
+      "path": "artifacts/table-xlsx-export-draft-20261019/inspect_xlsx.py",
+      "bytes": 7525,
+      "sha256": "8e07d7d141467e467863315b8b16c9a98f43ebfdd2be27fce1c93387de242e55"
+    },
+    {
+      "path": "artifacts/table-xlsx-product-pure-20261021-r1/run-proof-r2.cjs",
+      "bytes": 5827,
+      "sha256": "3843e86c87ef3129b235fb9c55fc134b8301e2dc9efab45f14f9becdae5dc5e1"
+    }
+  ],
+  "limits": {
+    "maxRows": 1048575,
+    "maxColumns": 16384,
+    "maxCells": 250000,
+    "maxCellCodeUnits": 32767,
+    "maxCellBytes": 131068,
+    "maxCellLineFeeds": 253,
+    "maxPayloadBytes": 16777216,
+    "maxWorksheetBytes": 33554432,
+    "maxWorkbookBytes": 33554432
+  },
+  "primary_spec_sources": [
+    "https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oi29500/d34ae755-c53f-4a44-a363-c6dd3ee018a4",
+    "https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.spreadsheet.cell?view=openxml-3.0.1",
+    "https://support.microsoft.com/en-us/excel/excel-specifications-and-limits",
+    "https://www.w3.org/TR/xml/"
+  ],
+  "boundary": "Pure synchronous formatcore only; no App adapter, browser download, native workflow, Excel GUI roundtrip or schema certification.",
+  "historical_prototype": "artifacts/table-xlsx-export-draft-20261019/r1.proof.json remains FAIL and immutable. Product fixes overlapping literal Xstring escaping.",
+  "cases": [
+    {
+      "name": "edge-scalars",
+      "output": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/edge-scalars.xlsx",
+        "bytes": 5659,
+        "sha256": "e38424e44b564c3d4fed281d85f5ea31040779e5206205dd478b89bdb1847d96"
+      },
+      "expected": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/edge-scalars.expected.json",
+        "bytes": 1312,
+        "sha256": "b18b129424bdd533edfe45a3b56f9925c9c82bd3cc97100573712d5a63621af9"
+      },
+      "reader": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/edge-scalars.reader.json",
+        "bytes": 4224,
+        "sha256": "03bd4e1e6e37f468b3d043fd18b94797a7ac184e66aa6a63501ec425b290d203"
+      },
+      "rows": 8,
+      "decoded_cells": 54,
+      "reader_differences": 15
+    },
+    {
+      "name": "headers-only",
+      "output": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/headers-only.xlsx",
+        "bytes": 2308,
+        "sha256": "dbbf6965e63d2ece0665d4989c67423737238ac197053e753dd2e46ba46c15d8"
+      },
+      "expected": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/headers-only.expected.json",
+        "bytes": 63,
+        "sha256": "6c57bc880a26b865babca5cdcef8d9d01bab8702efdd683200b9df885be55f89"
+      },
+      "reader": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/headers-only.reader.json",
+        "bytes": 882,
+        "sha256": "872c8369d703928c2ff1cec037dd4b7e6ee38509477c80ef06e524de3b16ffca"
+      },
+      "rows": 0,
+      "decoded_cells": 2,
+      "reader_differences": 0
+    },
+    {
+      "name": "wide-ordered",
+      "output": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/wide-ordered.xlsx",
+        "bytes": 295246,
+        "sha256": "833f32856f306fdf96588938cb4d5e37acb719b06a713e317727ccff6ddf4a14"
+      },
+      "expected": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/wide-ordered.expected.json",
+        "bytes": 101722,
+        "sha256": "73427bd63c86e150e18bcb044237c5c9bef09eb9392e5c0f9c14df23c8a45e83"
+      },
+      "reader": {
+        "path": "artifacts/table-xlsx-product-pure-20261021-r1/r2/wide-ordered.reader.json",
+        "bytes": 1344,
+        "sha256": "4d3f3ed0c6fbc6eeb2db41199946819e421080820fd0f23b63760ed2378eea0b"
+      },
+      "rows": 253,
+      "decoded_cells": 7366,
+      "reader_differences": 0
+    }
+  ],
+  "tests": {
+    "tests": 27,
+    "pass": 27,
+    "fail": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "negative": {
+    "result": "REJECTED_BAD_ZIP"
+  },
+  "finished_at": "2026-10-21T11:43:45.520Z"
+}

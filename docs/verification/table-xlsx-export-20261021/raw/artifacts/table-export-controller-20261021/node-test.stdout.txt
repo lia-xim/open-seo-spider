@@ -1,0 +1,43 @@
+✔ real writer exports one complete XLSX Blob with exact Unicode filename and MIME (19.2164ms)
+✔ default yield crosses a real task boundary before snapshot and another before encoding (29.2884ms)
+✔ mutating the reused owner stamp during yield refuses the old export (0.5307ms)
+✔ mutating the reused generation stamp during yield refuses the old export (0.2192ms)
+✔ mutating the reused query revision stamp during yield refuses the old export (0.2021ms)
+✔ mutating the reused visible columns stamp during yield refuses the old export (0.1775ms)
+✔ mutating the reused sort stamp during yield refuses the old export (0.1657ms)
+✔ mutating the reused mode stamp during yield refuses the old export (0.1811ms)
+✔ equivalent freshly allocated metadata is accepted without relying on object identity (0.6182ms)
+✔ available is checked again after yield (0.2973ms)
+✔ connected is checked again after yield (0.4569ms)
+✔ unavailable/detached initial controls cannot read or download (0.1557ms)
+✔ a double programmatic run fails without unlocking or changing the active status (0.4035ms)
+✔ cancel blocks an old completion from unlocking/overwriting a newer operation (0.5287ms)
+✔ invalidate blocks an old completion from unlocking/overwriting a newer operation (0.454ms)
+✔ a rejected old yield cannot overwrite the newer completed export (0.4671ms)
+✔ stale changes made during snapshot are caught before planning/encoding (2.6157ms)
+✔ a changed query after real planning refuses before encoding/download (0.3658ms)
+✔ status callbacks cannot silently change export ownership or reenter run (0.1396ms)
+✔ detachment in download-phase notification refuses before Blob/download (7.1301ms)
+✔ a change during Blob creation is caught by the last freshness check (15.7363ms)
+✔ snapshot Result refusal keeps its exact reason; a thrown read fails closed (14.7168ms)
+✔ actual 32768 UTF-16 cell refusal preserves the writer cell_limit code and message (15.2753ms)
+✔ actual writer encoding-byte refusal emits no partial Blob or download (31.3139ms)
+✔ invalid filename "" is refused before export (15.8191ms)
+✔ invalid filename "../report.xlsx" is refused before export (0.4333ms)
+✔ invalid filename "folder\\report.xlsx" is refused before export (15.825ms)
+✔ invalid filename "report.csv" is refused before export (14.9511ms)
+✔ invalid filename "bad\u0000.xlsx" is refused before export (15.3076ms)
+✔ Blob unavailable, constructor failure and incomplete Blob refuse without dispatch (93.7121ms)
+✔ download dispatch failure is surfaced once and never retried (30.4488ms)
+✔ yield failure and missing task scheduler refuse before download (0.33ms)
+✔ opaque, cyclic and accessor stamps fail closed without invoking the getter (0.2247ms)
+✔ a renderer exception fails closed and a reentrant new operation remains owned (0.5459ms)
+✔ UMD browser export loads without document, network or storage globals (1.1797ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 390.943

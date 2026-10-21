@@ -1,0 +1,21 @@
+{
+  "tested_at": "2026-10-21T12:06:45.402Z",
+  "result": "PASS",
+  "scope": "isolated_browser_fixture_not_native_crawl",
+  "checks": [
+    "running controls expose pause and stop while resume and start stay blocked",
+    "double pause posts once and old running poll cannot overwrite same-project paused acknowledgement",
+    "URL queue in-flight and discovery units stay distinct with observed generation checkpoint revision",
+    "late resume acknowledgement cannot change newly selected project counters controls or status",
+    "old action completion cannot unlock or clear a newer project action awaiting its own acknowledgement",
+    "late old-project action error is discarded and cannot erase current action state",
+    "pausing stays active and keeps polling until durable paused state enables resume",
+    "limited resume preserves displayed limit until explicit zero confirmation and dialog bottom stays reachable at 320px",
+    "project switch invalidates open limit confirmation and stale form cannot resume previous project",
+    "explicit false resume availability hides action and missing checkpoint generation stay unknown",
+    "control states and observed checkpoint keep document width bounded with footer reachable",
+    "pre-start terminal history reply cannot remove successfully selected new crawl from dropdown",
+    "late successful start is retained in history but cannot select itself over newer project or clear newer controls"
+  ],
+  "javascript_runtime_errors": []
+}

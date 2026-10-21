@@ -1,0 +1,140 @@
+{
+  "headers": [
+    "Text",
+    "Number",
+    "Boolean",
+    "Unknown",
+    "Empty",
+    "Source"
+  ],
+  "rows": [
+    [
+      "=SUM(1,2)",
+      0,
+      true,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      " +A1",
+      -3,
+      false,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "-A1",
+      0.125,
+      true,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "@SUM(A1)",
+      0.125,
+      false,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "  preserved  ",
+      0.125,
+      true,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "a,\"b\"\nc",
+      0.125,
+      false,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "a\rb\r\nc",
+      0.125,
+      true,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "\t雪 é é 😀",
+      0.125,
+      false,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "_x0041_",
+      0.125,
+      true,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "_x000D_",
+      0.125,
+      false,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "_x005F_",
+      0.125,
+      true,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "_x005F_x0041_",
+      0.125,
+      false,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "_x0041__x0042_",
+      0.125,
+      true,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "_X0041_",
+      0.125,
+      false,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "'already",
+      0.125,
+      true,
+      null,
+      "",
+      "capture, \"雪\""
+    ],
+    [
+      "https://example.test/a",
+      0.125,
+      false,
+      null,
+      "",
+      "capture, \"雪\""
+    ]
+  ]
+}

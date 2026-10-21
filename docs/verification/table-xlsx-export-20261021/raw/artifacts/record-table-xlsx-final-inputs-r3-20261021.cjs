@@ -1,0 +1,15 @@
+const fs=require('node:fs'),crypto=require('node:crypto');
+const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex'),prior='artifacts/table-xlsx-final-inputs-20261021-r2.json',m=JSON.parse(fs.readFileSync(prior)),driver='web/verification/ui-table-view-portability-live.cjs';
+const original=fs.readFileSync('artifacts/table-xlsx-focused-r1-original-portability-driver.cjs','utf8');
+const r2=original.replace("assert.equal(assets.length,15,'Exactly the reviewed15 actual served assets');","assert.equal(assets.length,17,'Exactly the reviewed17 actual served assets');\nassert(assets.includes('table-xlsx.js')&&assets.includes('table-export-ui.js'));");
+if(hash(Buffer.from(r2))!=='b6801096d40739e94078209cb2d6f360eba7de1954a4e3ca58fa3d55f9b22822')throw Error('R2 source mismatch');
+fs.writeFileSync('artifacts/table-xlsx-focused-r2-portability-driver.cjs',r2,{flag:'wx'});
+const current=fs.readFileSync(driver,'utf8');
+if(current!==r2.replace('assert.equal(served.length,30)','assert.equal(served.length,assets.length*2)').replace('served15asset closure','served17asset closure'))throw Error('Unexpected R3 driver transform');
+const changed=m.files.filter(file=>hash(fs.readFileSync(file.path))!==file.sha256).map(file=>file.path);
+if(JSON.stringify(changed)!==JSON.stringify(['.gitattributes',driver]))throw Error('Other source changed: '+JSON.stringify(changed));
+m.created_at=new Date().toISOString();m.supersedes_manifest_sha256=hash(fs.readFileSync(prior));m.changes_to_prior_build_inputs=['.gitattributes','scripts/ui-e2e.mjs',driver];
+m.qualification='Compiled Rust and all embedded UI product inputs remain byte-identical to fresh Cargo gates. Later inputs: exact46th E2E registration; reviewed portability asset preconditions15to17 and two-start sum30to34, both new assets required, diagnostic label corrected; whitespace policy preserves the frozen XLSX driver terminal blank lines. All data/download oracles and deadlines unchanged. Two reviewed native XLSX driver/reader files added. Explicit selected605-file set, not transitive/wholemetadata closure.';
+m.files=m.files.map(file=>{const bytes=fs.readFileSync(file.path);return{...file,bytes:bytes.length,sha256:hash(bytes)};});
+const target='artifacts/table-xlsx-final-inputs-20261021-r3.json';fs.writeFileSync(target,JSON.stringify(m,null,2)+'\n',{flag:'wx'});
+console.log(JSON.stringify({count:m.files.length,sha256:hash(fs.readFileSync(target)),driver_sha256:hash(Buffer.from(current)),changed}));

@@ -1,0 +1,559 @@
+{
+  "result": "PASS",
+  "crawl_id": "943c29f1-1bf7-4d25-a341-3e81da4dbc89",
+  "empty_import_id": "ae7390ca-832e-4baa-9bef-69e4ebeb85ca",
+  "sparse_import_id": "2ea6060a-7e63-4015-afb8-03bad2ef9785",
+  "checks": [
+    "Actual 108-page native crawl: automatic saved noindex profile excludes exactly one captured row; requested redirect/404 statuses remain distinct and their indexability remains unknown",
+    "Every actual preview card has the native page address/label/status/indexability counts and grouping action; hierarchy breadcrumbs and105 siblings page100+5 retain stable disjoint displayed ordering, previous/next boundaries and return to root",
+    "Actual browser CSV download independently verifies bytes/Content-Length/SHA256 and exports every node beyond the visible page with matching root/profile counts and requested-URL redirect semantics",
+    "Changing the visible mode invalidates old UI results/export; raw includes the hidden captured page, and native preview plus CSV reject stale cross-view tokens with HTTP409",
+    "Populated raw hierarchy, controls and export remain reachable without document overflow at 1440px and 320px",
+    "Actual UI project import of an explicit empty report produces a known-empty root and one-row CSV, disabled paging and honest imported/unattested snapshot scope",
+    "Declared imported missing status stays unknown, duplicate conflicting captures remain two observations/one URL, and invalid/unsupported/credential URL rows are explicitly excluded rather than counted as HTTP0 or indexable",
+    "Missing saved job is a native HTTP404 rather than an empty tree; all analysis/navigation/import/export preserve original saved report bytes and make zero website requests"
+  ],
+  "website_requests_during_crawl": 109,
+  "website_refetches": 0,
+  "errors": [],
+  "browser_evidence": {
+    "main_frame_navigations": [
+      {
+        "url": "http://127.0.0.1:50853/directory-tree",
+        "at": "2026-10-21T12:03:06.382Z"
+      },
+      {
+        "url": "http://127.0.0.1:50853/",
+        "at": "2026-10-21T12:03:09.296Z"
+      },
+      {
+        "url": "http://127.0.0.1:50853/directory-tree",
+        "at": "2026-10-21T12:03:09.404Z"
+      },
+      {
+        "url": "http://127.0.0.1:50853/",
+        "at": "2026-10-21T12:03:09.629Z"
+      },
+      {
+        "url": "http://127.0.0.1:50853/directory-tree",
+        "at": "2026-10-21T12:03:09.713Z"
+      }
+    ],
+    "request_failures": [],
+    "response_captures": [
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 3187,
+        "body_sha256": "c4506a5068b719b41df050a5ce22c87e5a9796fd7c1dd5503ffd92a8a5a594c7",
+        "error": null,
+        "request_body_sha256": "3b3cef2b33383cf9dd0ade88b8b5714168e9ce19220f832e789395217e6ee547",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "3187",
+          "x-content-sha256": "c4506a5068b719b41df050a5ce22c87e5a9796fd7c1dd5503ffd92a8a5a594c7",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "3187",
+          "x-content-sha256": "c4506a5068b719b41df050a5ce22c87e5a9796fd7c1dd5503ffd92a8a5a594c7",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 3786,
+        "body_sha256": "106684360dece54b47159055ce0007202638ceb8f18dcc7bbd49bf9f75309bfc",
+        "error": null,
+        "request_body_sha256": "f3ffd9cf2a1b97081e454419bb05c761e0518560f9669c6fe79e1d779de30924",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "3786",
+          "x-content-sha256": "106684360dece54b47159055ce0007202638ceb8f18dcc7bbd49bf9f75309bfc",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "3786",
+          "x-content-sha256": "106684360dece54b47159055ce0007202638ceb8f18dcc7bbd49bf9f75309bfc",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 5572,
+        "body_sha256": "48dcde907af97df14b5caa865c6b0bc4a57a0db762698baa235a33041ae38e0a",
+        "error": null,
+        "request_body_sha256": "c06aabe7c1a2b1a561da65b4c0444a23c61f7a44cdd32fab3cce23bd223f59b2",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "5572",
+          "x-content-sha256": "48dcde907af97df14b5caa865c6b0bc4a57a0db762698baa235a33041ae38e0a",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "5572",
+          "x-content-sha256": "48dcde907af97df14b5caa865c6b0bc4a57a0db762698baa235a33041ae38e0a",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 64987,
+        "body_sha256": "d40b0abff38f864c68bb62d789be208c55278f4232b131cc77d1a6a7e15d3a86",
+        "error": null,
+        "request_body_sha256": "a7197adcf1397333c9db9181c9245f7dceef9665f15d0b3ac313d1513c73ed72",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "64987",
+          "x-content-sha256": "d40b0abff38f864c68bb62d789be208c55278f4232b131cc77d1a6a7e15d3a86",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "64987",
+          "x-content-sha256": "d40b0abff38f864c68bb62d789be208c55278f4232b131cc77d1a6a7e15d3a86",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 7420,
+        "body_sha256": "b82c23488505c98fb7a393ed0666f74ea02e2c42af3d37705092f6954bedd605",
+        "error": null,
+        "request_body_sha256": "88c700e1ee5ac28ddafc98ed1b7c06d27240a54a83a2175864ec0dba2dbb5174",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "7420",
+          "x-content-sha256": "b82c23488505c98fb7a393ed0666f74ea02e2c42af3d37705092f6954bedd605",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "7420",
+          "x-content-sha256": "b82c23488505c98fb7a393ed0666f74ea02e2c42af3d37705092f6954bedd605",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 64987,
+        "body_sha256": "d40b0abff38f864c68bb62d789be208c55278f4232b131cc77d1a6a7e15d3a86",
+        "error": null,
+        "request_body_sha256": "a7197adcf1397333c9db9181c9245f7dceef9665f15d0b3ac313d1513c73ed72",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "64987",
+          "x-content-sha256": "d40b0abff38f864c68bb62d789be208c55278f4232b131cc77d1a6a7e15d3a86",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "64987",
+          "x-content-sha256": "d40b0abff38f864c68bb62d789be208c55278f4232b131cc77d1a6a7e15d3a86",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 3187,
+        "body_sha256": "c4506a5068b719b41df050a5ce22c87e5a9796fd7c1dd5503ffd92a8a5a594c7",
+        "error": null,
+        "request_body_sha256": "652e89db4c38bb71a2de61b144722b40f52fdcfaa6ebe417bea186b1ac124343",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "3187",
+          "x-content-sha256": "c4506a5068b719b41df050a5ce22c87e5a9796fd7c1dd5503ffd92a8a5a594c7",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "3187",
+          "x-content-sha256": "c4506a5068b719b41df050a5ce22c87e5a9796fd7c1dd5503ffd92a8a5a594c7",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-csv",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/csv",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 47695,
+        "body_sha256": "7b339d661b4e805bd7db4237d092330b2ca492d6456902b9085938c95cc591fe",
+        "error": null,
+        "request_body_sha256": "6b1b7b36fa3d68ff8d8b45a5e59d2d0882064c5898938c157ae5d9554a4c2819",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "text/csv; charset=utf-8",
+          "content-length": "47695",
+          "x-content-sha256": "7b339d661b4e805bd7db4237d092330b2ca492d6456902b9085938c95cc591fe",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "text/csv; charset=utf-8",
+          "content-length": "47695",
+          "x-content-sha256": "7b339d661b4e805bd7db4237d092330b2ca492d6456902b9085938c95cc591fe",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 3182,
+        "body_sha256": "faefa9d1c5cfb4bbc1f9fc8649d3e2bbbb786acba21ff1f25e4ee6353cab0927",
+        "error": null,
+        "request_body_sha256": "f9cec51957d28dae36c2c5f0fab1d64f71473f970bba0c2e971ac6f09cb5a22e",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "3182",
+          "x-content-sha256": "faefa9d1c5cfb4bbc1f9fc8649d3e2bbbb786acba21ff1f25e4ee6353cab0927",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "3182",
+          "x-content-sha256": "faefa9d1c5cfb4bbc1f9fc8649d3e2bbbb786acba21ff1f25e4ee6353cab0927",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-csv",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/csv",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 47975,
+        "body_sha256": "79be2ec91680268b8abd9aab46f8fed46178cb60d4879654863ac0e857f3e29d",
+        "error": null,
+        "request_body_sha256": "2fb34c252c762352a920be56800ee6de5f8be4706d457ef3b11fbc856985d8c1",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "text/csv; charset=utf-8",
+          "content-length": "47975",
+          "x-content-sha256": "79be2ec91680268b8abd9aab46f8fed46178cb60d4879654863ac0e857f3e29d",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "text/csv; charset=utf-8",
+          "content-length": "47975",
+          "x-content-sha256": "79be2ec91680268b8abd9aab46f8fed46178cb60d4879654863ac0e857f3e29d",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 3781,
+        "body_sha256": "22bf9ec0e42a2f819aef0d56d6728a6b7135436028f460926cf9d677836a8347",
+        "error": null,
+        "request_body_sha256": "c0d80bc16b91bd1f56e1babff07722d865ee13bcc0aab8b5e6de6ce88802e2b6",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "3781",
+          "x-content-sha256": "22bf9ec0e42a2f819aef0d56d6728a6b7135436028f460926cf9d677836a8347",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "3781",
+          "x-content-sha256": "22bf9ec0e42a2f819aef0d56d6728a6b7135436028f460926cf9d677836a8347",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 6159,
+        "body_sha256": "97ecec9e4dc76abeb95e85a5111594716e6ed29b4c6a3d0baab7e63d0d32e8cf",
+        "error": null,
+        "request_body_sha256": "e2190dc8335b17e7ce65e750e4a66882318e46ffe460c5bde2209220ff52df1c",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "6159",
+          "x-content-sha256": "97ecec9e4dc76abeb95e85a5111594716e6ed29b4c6a3d0baab7e63d0d32e8cf",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "6159",
+          "x-content-sha256": "97ecec9e4dc76abeb95e85a5111594716e6ed29b4c6a3d0baab7e63d0d32e8cf",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 64982,
+        "body_sha256": "13f5fb59089223f7b09d63d84607ac306fc8c3f68b8ae1c2fa566d670a419157",
+        "error": null,
+        "request_body_sha256": "3b1c3cb36cb5c3508a6bb3337258f6e223a2759f59fba93575b2339d70b8b1cf",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "64982",
+          "x-content-sha256": "13f5fb59089223f7b09d63d84607ac306fc8c3f68b8ae1c2fa566d670a419157",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "64982",
+          "x-content-sha256": "13f5fb59089223f7b09d63d84607ac306fc8c3f68b8ae1c2fa566d670a419157",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/943c29f1-1bf7-4d25-a341-3e81da4dbc89/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 7415,
+        "body_sha256": "2059a61fda95cee081ce48e6fc5d6ced2e067c972e8940c2442a0102f561e675",
+        "error": null,
+        "request_body_sha256": "01f040a21b547772ddfe445de6e61ce0b9ee3a6562a69ead26bf05795822a707",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "7415",
+          "x-content-sha256": "2059a61fda95cee081ce48e6fc5d6ced2e067c972e8940c2442a0102f561e675",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "7415",
+          "x-content-sha256": "2059a61fda95cee081ce48e6fc5d6ced2e067c972e8940c2442a0102f561e675",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "project-import",
+        "url": "http://127.0.0.1:50853/api/crawls/import",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/",
+        "body_source": "actual_browser_response",
+        "body_bytes": 66,
+        "body_sha256": "73f08f116d04815901c79a7276f3e08e9669467315e08c98ec70d7cf77b44010",
+        "error": null,
+        "page_url_after_body": "http://127.0.0.1:50853/"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/ae7390ca-832e-4baa-9bef-69e4ebeb85ca/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 2045,
+        "body_sha256": "fb2a1a94d6d808b813f9b83a48b7c4e31be7f001a19b3421130b14f35f2f462f",
+        "error": null,
+        "request_body_sha256": "3b3cef2b33383cf9dd0ade88b8b5714168e9ce19220f832e789395217e6ee547",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "2045",
+          "x-content-sha256": "fb2a1a94d6d808b813f9b83a48b7c4e31be7f001a19b3421130b14f35f2f462f",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "2045",
+          "x-content-sha256": "fb2a1a94d6d808b813f9b83a48b7c4e31be7f001a19b3421130b14f35f2f462f",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-csv",
+        "url": "http://127.0.0.1:50853/api/crawls/ae7390ca-832e-4baa-9bef-69e4ebeb85ca/directory-tree/csv",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 426,
+        "body_sha256": "0205d0fc84bea1334fbe0d7dc6cfee58c0ff2c4c8358824cea40abbf2098646f",
+        "error": null,
+        "request_body_sha256": "bffdd4e8c29a58a2a776718a8cb85e5dc220f432964ed7464df0d37044032425",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "text/csv; charset=utf-8",
+          "content-length": "426",
+          "x-content-sha256": "0205d0fc84bea1334fbe0d7dc6cfee58c0ff2c4c8358824cea40abbf2098646f",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "text/csv; charset=utf-8",
+          "content-length": "426",
+          "x-content-sha256": "0205d0fc84bea1334fbe0d7dc6cfee58c0ff2c4c8358824cea40abbf2098646f",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "project-import",
+        "url": "http://127.0.0.1:50853/api/crawls/import",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/",
+        "body_source": "actual_browser_response",
+        "body_bytes": 66,
+        "body_sha256": "6785f835d19efc60fa0ebde1add01823c77282a11e329cbb7844cb8bb87dcd30",
+        "error": null,
+        "page_url_after_body": "http://127.0.0.1:50853/"
+      },
+      {
+        "label": "directory-preview",
+        "url": "http://127.0.0.1:50853/api/crawls/2ea6060a-7e63-4015-afb8-03bad2ef9785/directory-tree/preview",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 2610,
+        "body_sha256": "66fced9fdd8eb6ca0ceb774e83541554d458102a06173f6b9a2d34ed591148ce",
+        "error": null,
+        "request_body_sha256": "3b3cef2b33383cf9dd0ade88b8b5714168e9ce19220f832e789395217e6ee547",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "application/json",
+          "content-length": "2610",
+          "x-content-sha256": "66fced9fdd8eb6ca0ceb774e83541554d458102a06173f6b9a2d34ed591148ce",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "application/json",
+          "content-length": "2610",
+          "x-content-sha256": "66fced9fdd8eb6ca0ceb774e83541554d458102a06173f6b9a2d34ed591148ce",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      },
+      {
+        "label": "directory-csv",
+        "url": "http://127.0.0.1:50853/api/crawls/2ea6060a-7e63-4015-afb8-03bad2ef9785/directory-tree/csv",
+        "method": "POST",
+        "resource_type": "fetch",
+        "status": 200,
+        "page_url_at_headers": "http://127.0.0.1:50853/directory-tree",
+        "body_source": "independent_read_only_native_post",
+        "body_bytes": 1278,
+        "body_sha256": "0a6aae1e6ba17bdbe1909e20fb8245d9d32476d7a50306cab24cb02e1b17208e",
+        "error": null,
+        "request_body_sha256": "09d3b568919a1ee379e020523f92ee8092e91d55eb19ffb3fc866d9d37b5397c",
+        "oracle_status": 200,
+        "browser_headers": {
+          "content-type": "text/csv; charset=utf-8",
+          "content-length": "1278",
+          "x-content-sha256": "0a6aae1e6ba17bdbe1909e20fb8245d9d32476d7a50306cab24cb02e1b17208e",
+          "cache-control": "no-store"
+        },
+        "oracle_headers": {
+          "content-type": "text/csv; charset=utf-8",
+          "content-length": "1278",
+          "x-content-sha256": "0a6aae1e6ba17bdbe1909e20fb8245d9d32476d7a50306cab24cb02e1b17208e",
+          "cache-control": "no-store"
+        },
+        "page_url_after_body": "http://127.0.0.1:50853/directory-tree"
+      }
+    ]
+  },
+  "scope": "Actual redesigned browser/native crawler/saved report/profile/tree navigation/CSV. Each pure preview/CSV uses an unconditional independent native POST with the exact observed browser URL/body as its oracle; actual browser status/integrity headers and every rendered card or downloaded byte must match. Mutating imports use only the original browser response. Unknown and known-empty edge fixtures are honestly declared imports. Cross-view and missing-job guards are actual browser fetches to native API. No vendor semantic parity or cold-process persistence claim."
+}

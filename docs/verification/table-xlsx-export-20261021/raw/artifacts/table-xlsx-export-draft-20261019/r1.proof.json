@@ -1,0 +1,116 @@
+{
+  "kind": "ignored_XLSX_format_core_pure_proof",
+  "result": "FAIL",
+  "started_at": "2026-10-19T21:44:10.776Z",
+  "duration_ms": 2517,
+  "node": "C:/Users/matth/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+  "command": [
+    "--test",
+    "table-xlsx.test.cjs"
+  ],
+  "code": 1,
+  "signal": null,
+  "counts": {
+    "tests": 24,
+    "pass": 23,
+    "fail": 1,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "inputs": [
+    {
+      "path": "table-xlsx.cjs",
+      "bytes": 11283,
+      "sha256": "f297f6ff9c7a461eecf50217b3c59efb6b65c3492348c5385534996277106a35"
+    },
+    {
+      "path": "table-xlsx.test.cjs",
+      "bytes": 10738,
+      "sha256": "11ef6c991607460f718959fd80641975bb725de4a0f65c9f6208ebb760c07891"
+    },
+    {
+      "path": "inspect_xlsx.py",
+      "bytes": 7525,
+      "sha256": "8e07d7d141467e467863315b8b16c9a98f43ebfdd2be27fce1c93387de242e55"
+    },
+    {
+      "path": "run-pure-proof.cjs",
+      "bytes": 2332,
+      "sha256": "fecea922134820e4ddba5ee9d7d6d76fe1b3a5df68b7eb0102a634e407c6467a"
+    }
+  ],
+  "stdout": {
+    "path": "r1.stdout.log",
+    "bytes": 4038,
+    "sha256": "23f69b89ba11c8d9a59e6978d7e414df79e0a129b81a89761a5f6d5f06a8d4d1"
+  },
+  "stderr": {
+    "path": "r1.stderr.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "actual_files": [
+    {
+      "path": "actual-files/column-coordinates.expected.json",
+      "bytes": 674,
+      "sha256": "f711861c67d8854577af0e70bb79868ddd09d757da9cd0cc96a056cb5aa637e3"
+    },
+    {
+      "path": "actual-files/column-coordinates.reader.json",
+      "bytes": 1224,
+      "sha256": "4aac7c1b31cee95a14ecbe11e58d82fab3c1d2b22a703ae7d2ee2c034c232a16"
+    },
+    {
+      "path": "actual-files/column-coordinates.xlsx",
+      "bytes": 4941,
+      "sha256": "e6c6dcb3a7c4612d4a76f9871a601bb360f0f7528897ddc239757383d44db127"
+    },
+    {
+      "path": "actual-files/corrupt-negative.xlsx",
+      "bytes": 2320,
+      "sha256": "c9134c04cf22edeaaf1ae7627eda1f24eaeacd1dbdcb41f23299b1ff5aa72594"
+    },
+    {
+      "path": "actual-files/empty-result.expected.json",
+      "bytes": 72,
+      "sha256": "fffbdf2c7e25342aefe1b175bbd236657d6ab3e25df852fd1daff4214e3cbc08"
+    },
+    {
+      "path": "actual-files/empty-result.reader.json",
+      "bytes": 898,
+      "sha256": "5f4f2bcf9aeedcc8706fdc6c26b2bdcb36fffe6115daba97bb1d206926b974a5"
+    },
+    {
+      "path": "actual-files/empty-result.xlsx",
+      "bytes": 2317,
+      "sha256": "0fddd39202243ec3f540e67f901a3b89fcc5905049fe5142a1f4d7847b63644c"
+    },
+    {
+      "path": "actual-files/ordered-occurrences.expected.json",
+      "bytes": 8900,
+      "sha256": "525626bd78b2c387e1e8c3dfe218aec71e28060837f12d204cccd2780d89608b"
+    },
+    {
+      "path": "actual-files/ordered-occurrences.reader.json",
+      "bytes": 916,
+      "sha256": "a269a2c0f6f4ecf3ead517ec5dfbe77d0d4087cbb6e3f2785e9400cba04d998e"
+    },
+    {
+      "path": "actual-files/ordered-occurrences.xlsx",
+      "bytes": 27250,
+      "sha256": "04d5c121485c2140142c05680688572ddec8d938ea635451d54176f3d17a795c"
+    },
+    {
+      "path": "actual-files/scalars-and-escapes.expected.json",
+      "bytes": 1800,
+      "sha256": "583b5f2b845f4cc385037945fee3d15a669321865e637f3b92cea4618804186b"
+    },
+    {
+      "path": "actual-files/scalars-and-escapes.xlsx",
+      "bytes": 7593,
+      "sha256": "d1dee374caf393cbc3d8b273414bfec8f8772dc5b45c884870ecc808cbc3b9d5"
+    }
+  ],
+  "scope": "Pure projection/format tests with actual ZIP/XML and installed openpyxl reads. No App/DOM/native/browser/Cargo/Git, no Excel application or production acceptance."
+}

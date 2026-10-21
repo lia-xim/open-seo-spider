@@ -1,0 +1,169 @@
+{
+  "result": "PASS",
+  "crawl_id": "ba6ea02c-96e4-48a1-b4db-5cea14312bb6",
+  "pagination_crawl_id": "4be2abdf-bda4-40f3-823f-94f52ab31f2a",
+  "checks": [
+    "Actual builder creates ordered AND/OR/regex definitions; explicit save and reload restore all browser-persisted rules",
+    "Native saved report separates true/false/unknown, overlapping matches, AND/OR and noindex profile exclusions",
+    "Browser downloads full JSON and CSV; actual response SHA256, preview token, page rows and issue rows all agree",
+    "Confirmed segment, unassigned and unknown selections retain exact native membership; issue view and full export agree",
+    "Reported/raw UI revision invalidates old output; native preview/JSON/CSV reject crossed profile, stale generation and changed rules; unbound export is refused",
+    "Rust-only regex validation surfaces a real native refusal and clears the prior preview before recovery",
+    "105 real saved pages span 100+5 snapshot-bound browser pages without gaps/duplicates; verified full CSV exports all 105 from the last preview"
+  ],
+  "captured_pages": 112,
+  "website_refetches": 0,
+  "typed_report_sha256": "c15d0bfcad4ae9c089e04a9fe14663a1f76c1e5392595cb81c8a609f7cc0b717",
+  "errors": [],
+  "read_only_native_oracles": [
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments",
+      "method": "POST",
+      "request_sha256": "4a61fda3652f2bb67b32e0275c8941bdc8710987b64bc05654fd94ec7f7800f6",
+      "status": 200,
+      "bytes": 3574,
+      "sha256": "bce1d7e111248d5d82858a58d67d2b94b9baffb4785874772494e42336ba8ef2",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments.json",
+      "method": "POST",
+      "request_sha256": "9ed5ad9e51cfed0f61ea8ca42d9b85169de1837e1c38948e662e9429cb0ecc87",
+      "status": 200,
+      "bytes": 16567,
+      "sha256": "5c07038cc116196aff67afbcb7aaab7a2fcadd9dd47b0fa2aab8ed389abc946d",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments.csv",
+      "method": "POST",
+      "request_sha256": "9ed5ad9e51cfed0f61ea8ca42d9b85169de1837e1c38948e662e9429cb0ecc87",
+      "status": 200,
+      "bytes": 21168,
+      "sha256": "545c2f49c51e6fd9a12a7e6310a105fc76bfc2eb5484f29e39a031eee997422c",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments",
+      "method": "POST",
+      "request_sha256": "5f60694df8ede9ce2549121110b3ff24f0215247e15a70be2480f5283fd8b4de",
+      "status": 200,
+      "bytes": 2780,
+      "sha256": "e9d3b8aeb2d64c672fc209d56ff61d515acb9de5c5f4861aabbc987ea3f5592e",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments",
+      "method": "POST",
+      "request_sha256": "dc1e064c23d2cb17ddcc7d88b299a894614a70baeff38f6c3740a35ceb66410c",
+      "status": 200,
+      "bytes": 2544,
+      "sha256": "2bb6c63c692aa330412328c8cf5329be70d7885631c4f012e1b0a7186de2a826",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments",
+      "method": "POST",
+      "request_sha256": "7a0975cb0975e51a93e57dc63a2dff4480e721e44cacd30cce8af03167ecd6db",
+      "status": 200,
+      "bytes": 2743,
+      "sha256": "96f474affc3c67ac0d9c64dfa323374f99f9f491206079b13f7d6525d51ac58f",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments",
+      "method": "POST",
+      "request_sha256": "2bfa3eae2442a0c7359d21ba4d40cb7a94750c9565e041a32a1c0cad17945f11",
+      "status": 200,
+      "bytes": 4602,
+      "sha256": "b6d4a51f71696ffd67d10869728f43b7bb5654f2f4399b800bc7977e301d1c7e",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments.json",
+      "method": "POST",
+      "request_sha256": "e77b24ed756f7c47b688db34b466ba54337623978245bf5a7e1b475958073fc3",
+      "status": 200,
+      "bytes": 5735,
+      "sha256": "78fb8aa014d8feb6260c0fb1cbe7450963c1b8fbaed4717d28ebe5c545c4706d",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments",
+      "method": "POST",
+      "request_sha256": "a4bf5898682e80a50e7e5e2b4c630f550544f5edd9a3031ee266d63d2fd171f6",
+      "status": 200,
+      "bytes": 3765,
+      "sha256": "a3ba8b0ca80701837b9e8c08e7a30efcac3dad42ef556d28d02742295c2e267a",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments",
+      "method": "POST",
+      "request_sha256": "53aec6d52ecde4a2889157ad603b052da2e1df6f71594655966f3a6d2f308bf5",
+      "status": 400,
+      "bytes": 175,
+      "sha256": "02272429523c5b591f7ac9c0b8c67b0637314e20adde2375d7526f7f6f9bd88f",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments",
+      "method": "POST",
+      "request_sha256": "a4bf5898682e80a50e7e5e2b4c630f550544f5edd9a3031ee266d63d2fd171f6",
+      "status": 200,
+      "bytes": 3765,
+      "sha256": "a3ba8b0ca80701837b9e8c08e7a30efcac3dad42ef556d28d02742295c2e267a",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/4be2abdf-bda4-40f3-823f-94f52ab31f2a/segments",
+      "method": "POST",
+      "request_sha256": "57ea7376804f382221fae18dd8e8f3d07ef430427e5a483870ef9dcfe7ee500c",
+      "status": 200,
+      "bytes": 24264,
+      "sha256": "44ea772f044e733a1fc6ce52a63acb7e61c6f0584702007055b73441e7ab272c",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/4be2abdf-bda4-40f3-823f-94f52ab31f2a/segments",
+      "method": "POST",
+      "request_sha256": "9aa6971a83d8ad7592ccc27dacd4a41523afa7a9e49d9f2bf244b4358358afbe",
+      "status": 200,
+      "bytes": 2320,
+      "sha256": "dcba317f54c5bc95bcbcd5aa3222b21f51a0fc8a4d57fe8e7cd897089b06ced7",
+      "body_source": "unconditional_exact_read_only_native_post"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/4be2abdf-bda4-40f3-823f-94f52ab31f2a/segments.csv",
+      "method": "POST",
+      "request_sha256": "415a84c7dba83cc9f55b51427d4067651aa805d7fe5017ea38a539aaea8e05ec",
+      "status": 200,
+      "bytes": 887782,
+      "sha256": "c2025cd784ef280a285cac50cf97a217f74251b408391bfe46f54619f58910cc",
+      "body_source": "unconditional_exact_read_only_native_post"
+    }
+  ],
+  "browser_downloads": [
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments.json",
+      "bytes": 16567,
+      "sha256": "5c07038cc116196aff67afbcb7aaab7a2fcadd9dd47b0fa2aab8ed389abc946d"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments.csv",
+      "bytes": 21168,
+      "sha256": "545c2f49c51e6fd9a12a7e6310a105fc76bfc2eb5484f29e39a031eee997422c"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/ba6ea02c-96e4-48a1-b4db-5cea14312bb6/segments.json",
+      "bytes": 5735,
+      "sha256": "78fb8aa014d8feb6260c0fb1cbe7450963c1b8fbaed4717d28ebe5c545c4706d"
+    },
+    {
+      "url": "http://127.0.0.1:59743/api/crawls/4be2abdf-bda4-40f3-823f-94f52ab31f2a/segments.csv",
+      "bytes": 887782,
+      "sha256": "c2025cd784ef280a285cac50cf97a217f74251b408391bfe46f54619f58910cc"
+    }
+  ],
+  "scope": "Actual redesigned browser -> native Rust saved crawls -> deterministic predicates -> preview, snapshot-bound 100+5 pagination and integrity-verified full exports. Browser reload persistence covers definitions only; no cold native process restart, imported missing status or database attestation is claimed."
+}

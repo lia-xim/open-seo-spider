@@ -1,0 +1,12 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),cp=require('node:child_process'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'../..');
+const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+const files=['web/table-export-ui.js','web/verification/table-export-ui.test.cjs','web/table-xlsx.js'];
+const before=Object.fromEntries(files.map(name=>[name,hash(fs.readFileSync(path.join(root,name)))]));
+const run=cp.spawnSync(process.execPath,['--test','web/verification/table-export-ui.test.cjs'],{cwd:root,encoding:null});
+assert.ifError(run.error);fs.writeFileSync(path.join(__dirname,'node-test.stdout.txt'),run.stdout);fs.writeFileSync(path.join(__dirname,'node-test.stderr.txt'),run.stderr);
+assert.equal(run.status,0);const stdout=run.stdout.toString('utf8');assert.match(stdout,/(?:# |ℹ )tests 35/);assert.match(stdout,/(?:# |ℹ )pass 35/);assert.match(stdout,/(?:# |ℹ )fail 0/);
+const after=Object.fromEntries(files.map(name=>[name,hash(fs.readFileSync(path.join(root,name)))]));assert.deepEqual(after,before,'source files must not change during verification');
+const proof={recordedAt:new Date().toISOString(),command:[process.execPath,'--test','web/verification/table-export-ui.test.cjs'],exitCode:run.status,tests:35,pass:35,fail:0,sourceHashes:after,stdoutSha256:hash(run.stdout),stderrSha256:hash(run.stderr),scope:'Pure Node controller tests with the real current TableXlsx writer and real Blob; native controls/App integration, OS save and manufacturer/full feature parity are not proven by this receipt.'};
+fs.writeFileSync(path.join(__dirname,'proof.json'),JSON.stringify(proof,null,2)+'\n');process.stdout.write(JSON.stringify(proof,null,2)+'\n');

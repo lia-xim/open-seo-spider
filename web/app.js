@@ -34,6 +34,7 @@
   let screenshotController = null, screenshotView = null;
   let tableExplorer = null;
   let tableRenderSequence = 0;
+  let tableExport = null;
   let tableViews = null, tableExpressionViews = null, tableQueryRevision = 0, tableSearchTimer = null;
   function tableQueryEdited() {
     tableQueryRevision++;
@@ -648,6 +649,7 @@
     if(state.segmentView)$('export-sitemap').disabled=true;
     if(dashboardSegments?.state.busy){$('export-csv').disabled=true;$('export-resources').disabled=true;$('export-visible-report').disabled=true;}
     if(tableExplorer && !$('table-view').hidden && !tableExplorer.canExport())$('export-csv').disabled=true;
+    renderTableExport();
     renderDashboardSegments();
     renderSitemapBundleControls();
     renderQuotaSummary();
@@ -1205,6 +1207,7 @@
     else if (findingsSection()) renderSitemapFindings();
     else renderTable();
     if(dashboardSegments?.state.busy){$('export-csv').disabled=true;$('export-resources').disabled=true;$('export-visible-report').disabled=true;}
+    renderTableExport();
   }
 
   function selectResponse(response) {
@@ -1572,18 +1575,15 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  function exportCSV() {
-    if(dashboardSegments?.state.busy)return;
-    if (policySection()) { exportPolicyPage(); return; }
-    if (contentSection()) { exportContentRows(); return; }
-    if (state.section==='resource-discovery' || sitemapSection() || findingsSection()) return;
+  function captureTableProjection(typed=false) {
     const original = state.section;
     const useExplorer=!['overview','graph'].includes(original);
-    if(useExplorer&&tableExplorer&&!tableExplorer.canExport()){message('Die Tabellenansicht enthält einen Fehler. Vor dem Export die angezeigte Meldung beheben.',true);return;}
+    if(useExplorer&&tableExplorer&&!tableExplorer.canExport())return{ok:false,error:{code:'query',message:'Die Tabellenansicht enthält einen Fehler. Vor dem Export die angezeigte Meldung beheben.'}};
+    try {
     if (['overview', 'graph'].includes(original)) state.section = 'internal';
-    const cols = useExplorer&&tableExplorer?tableExplorer.columns(tableSchema()):columns();
+    const cols = useExplorer&&tableExplorer?tableExplorer.columns(tableSchema()).slice():columns();
     const rows = filteredRows(useExplorer);
-    if(useExplorer&&tableExplorer&&!tableExplorer.canExport()){state.section=original;message('Die Tabellenansicht konnte nicht ausgewertet werden; kein CSV erzeugt.',true);return;}
+    if(useExplorer&&tableExplorer&&!tableExplorer.canExport())return{ok:false,error:{code:'query',message:'Die Tabellenansicht konnte nicht vollständig ausgewertet werden; kein Export erzeugt.'}};
     const operation = state.crawl?.operation;
     const selected = operation?.coverage === 'mixed_age_selected_recrawl';
     const targets = new Map(array(operation?.targets).map(target => [target.requested_url, target]));
@@ -1599,12 +1599,66 @@
     if(segment)for(const[key,label,value]of [['token','Segment Snapshot Token',()=>segment.context.snapshot_token],['rules','Segment Rules SHA256',()=>segment.context.rules_sha256],['report','Segment Typed Report SHA256',()=>segment.context.typed_report_sha256],['generation','Segment Generation',()=>segment.context.app_generation],['selection','Segment Selection',()=>JSON.stringify(segment.selection)],['reporting','Segment Reporting Identity',()=>JSON.stringify(segment.context.reporting_view??null)],['ordinal','Original Page Ordinal',row=>['issues','linkmetrics','structured'].includes(state.section)?'':(row._page||row)._segmentOrdinal??'']])cols.push(textColumn('segment_'+key,label,value));
     const visibility=state.crawl?.reporting_visibility;
     if(visibility)for(const [key,label] of [['captured_pages','Captured Pages'],['visible_pages','Visible Pages'],['hidden_pages','Hidden Pages']])cols.push(textColumn('reporting_'+key,label,()=>visibility[key]));
+    // Resolve getters while their original table context is still current.
+    // CSV retains its existing display values; XLSX preserves known raw scalars.
+    const values=rows.map(row=>cols.map(column=>{
+      const value=(typed&&column.rawValue?column.rawValue:column.value)(row);
+      return typed&&value==null?null:value;
+    }));
+    return{ok:true,value:{section:state.section,columns:cols.map(({key,label})=>({key,label})),rows:values}};
+    } catch { return{ok:false,error:{code:'snapshot',message:'Die vollständige Tabellenprojektion konnte nicht gelesen werden.'}}; }
+    finally { state.section=original; }
+  }
+
+  function exportCSV() {
+    if(dashboardSegments?.state.busy)return;
+    if (policySection()) { exportPolicyPage(); return; }
+    if (contentSection()) { exportContentRows(); return; }
+    if (state.section==='resource-discovery' || sitemapSection() || findingsSection()) return;
+    const captured=captureTableProjection();
+    if(!captured.ok){message(captured.error.message,true);return;}
+    const {columns:cols,rows,section}=captured.value;
     const csvCell = (input) => { let value = String(input ?? ''); if (typeof input !== 'number' && typeof input !== 'boolean' && /^[\s\uFEFF]*[=+@-]/u.test(value)) value = `'${value}`; return `"${value.replace(/"/g, '""')}"`; };
-    const data = [cols.map((column) => csvCell(column.label)).join(','), ...rows.map((row) => cols.map((column) => csvCell(column.value(row))).join(','))].join('\r\n');
-    const section = state.section;
-    state.section = original;
+    const data = [cols.map((column) => csvCell(column.label)).join(','), ...rows.map((row) => row.map(csvCell).join(','))].join('\r\n');
     downloadBlob(new Blob(['\uFEFF', data], { type: 'text/csv;charset=utf-8' }), `open-seo-spider-${section}-${state.crawl?.id || 'export'}.csv`);
     message(`${number(rows.length)} gefilterte Datensätze als CSV exportiert.`);
+  }
+
+  function tableExportAvailable() {
+    return Boolean(state.crawl && !$('table-view').hidden && !$('export-csv').disabled && !dashboardSegments?.state.busy && tableExplorer?.canExport());
+  }
+
+  function renderTableExport(view=tableExport?.state()) {
+    const button=$('export-xlsx'),status=$('table-export-status'),cancel=$('table-export-cancel');
+    if(!button||!status||!cancel)return;
+    button.hidden=$('table-view').hidden;
+    button.disabled=!tableExport||Boolean(view?.busy)||!tableExportAvailable();
+    cancel.hidden=!view?.busy;
+    status.hidden=!view?.message;status.textContent=view?.message||'';
+    status.dataset.phase=view?.phase||'idle';status.dataset.code=view?.error?.code||'';
+    status.classList.toggle('error',Boolean(view?.error));
+  }
+
+  function bindTableExport() {
+    const button=$('export-xlsx');
+    if(!window.TableXlsx||!window.TableExportUI){
+      renderTableExport({busy:false,phase:'refused',error:{code:'unavailable'},message:'XLSX-Export ist nicht geladen.'});return;
+    }
+    tableExport=window.TableExportUI.create({
+      writer:window.TableXlsx.create(),
+      available:tableExportAvailable,
+      connected:()=>button.isConnected&&$('export-xlsx')===button,
+      stamp:()=>JSON.stringify([tableOwner(),tableQueryRevision,tableRenderSequence,state.sort,state.direction,state.search,state.filter]),
+      snapshot:()=>{
+        const captured=captureTableProjection(true);if(!captured.ok)return captured;
+        const {section,columns,rows}=captured.value;
+        return{ok:true,value:{data:{columns,rows,context:[]},filename:`open-seo-spider-${section}-${state.crawl.id}.xlsx`}};
+      },
+      download:downloadBlob,changed:renderTableExport
+    });
+    button.addEventListener('click',()=>{void tableExport.run();});
+    $('table-export-cancel').addEventListener('click',()=>tableExport.cancel());
+    renderTableExport();
   }
 
   async function serverDownload(endpoint, filename) {
@@ -4071,6 +4125,7 @@
     bindEvents();
     bindTableExplorer();
     bindNamedTableViews();
+    bindTableExport();
     selectSection('overview');
     render();
     await initializeConfigProfiles();

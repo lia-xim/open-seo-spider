@@ -1,0 +1,164 @@
+{
+  "result": "PASS_LOCAL_MAIN_TABLE_XLSX_BOUNDED_ACCEPTANCE_WITH_RETAINED_R1_R2_FOCUSED_FAILURES",
+  "source_manifest": {
+    "path": "artifacts/table-xlsx-final-inputs-20261021-r3.json",
+    "bytes": 107430,
+    "sha256": "1e9d5a289784fe1bdc018dfc611e421a782810d87e751ce211ba3c33a5a9eeb5"
+  },
+  "historical_R1_source_manifest": {
+    "path": "artifacts/table-xlsx-final-inputs-20261021.json",
+    "bytes": 107046,
+    "sha256": "fd3960bd74c9d9335c65352e5347424aa149df3a8282c43004bbd1cd63a4a6d2"
+  },
+  "historical_R2_source_manifest": {
+    "path": "artifacts/table-xlsx-final-inputs-20261021-r2.json",
+    "bytes": 107313,
+    "sha256": "f51aec60687110c0a5905cbd40379bb11d99d54abb83d45134e7132856b9dd71"
+  },
+  "selected_inputs": 605,
+  "normal_binary": {
+    "path": "target/debug/open-seo-spider.exe",
+    "bytes": 90249216,
+    "sha256": "c2df6f1ce6699b8c91af9488b8c71a77f91b5991a1df9b7c1f6f76cb2a4aa72c"
+  },
+  "Rust": [
+    {
+      "name": "format",
+      "program": "cargo",
+      "args": [
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 2585
+    },
+    {
+      "name": "build",
+      "program": "cargo",
+      "args": [
+        "build",
+        "--locked",
+        "-p",
+        "open-seo-spider"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 46155
+    },
+    {
+      "name": "app-tests",
+      "program": "cargo",
+      "args": [
+        "test",
+        "--locked",
+        "-p",
+        "open-seo-spider",
+        "--",
+        "--test-threads=2"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 518438
+    },
+    {
+      "name": "clippy",
+      "program": "cargo",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 24107
+    }
+  ],
+  "ordinary_Core_suite": "NOT_RUN_IN_THIS_SLICE",
+  "renderer_opt_ins": "NOT_RUN_IN_THIS_SLICE",
+  "Node_tests": 459,
+  "semantic_groups": 40,
+  "core_pure_tests": 27,
+  "controller_pure_tests": 35,
+  "App_CSV_exact_cases": 124,
+  "App_typed_projection_sections": 29,
+  "direct_native_R1": {
+    "receipt": {
+      "path": "artifacts/table-xlsx-native-run-20261021-r1/native/ui-table-xlsx-live.json",
+      "bytes": 222149,
+      "sha256": "b74be7ac1178460c802c4553751146775e16b563375e9ff530cf17ea1d0165d0"
+    },
+    "stats": {
+      "workbooks": 30,
+      "csv": 30,
+      "rows": 3020,
+      "data_cells": 35652,
+      "headers": 342
+    }
+  },
+  "focused_R1": {
+    "complete": false,
+    "passed": 16,
+    "failed": 1,
+    "not_reached": "table-xlsx",
+    "reason": "Old portability driver asserted15 assets although actualHTML has17. Failure occurred before portability native runtime; direct XLSX run is separate PASS."
+  },
+  "focused_R2": {
+    "complete": false,
+    "passed": 16,
+    "failed": 1,
+    "not_reached": "table-xlsx",
+    "reason": "Portability final two-start served-asset sum still expected30, actual34. Completed groups remain partial evidence; the final native and coordinator receipts stay FAIL."
+  },
+  "focused_R3": {
+    "complete": true,
+    "selected": 18,
+    "passed": 18,
+    "full_registered46": false,
+    "XLSX": {
+      "receipt": {
+        "path": "artifacts/table-xlsx-focused-e2e-20261021-r3/table-xlsx/table-xlsx-1792585011713-a65700f3/ui-table-xlsx-live.json",
+        "bytes": 224613,
+        "sha256": "6287e6c39df39c2d6e2f0fbd3a731570f91fc051da19f58239eb82df9c7fd221"
+      },
+      "stats": {
+        "workbooks": 30,
+        "csv": 30,
+        "rows": 3020,
+        "data_cells": 35652,
+        "headers": 342
+      }
+    }
+  },
+  "independent_original_actual_audit": {
+    "raw": {
+      "path": "artifacts/table-xlsx-actual-audit-20261021-r1/audit.json",
+      "bytes": 28286,
+      "sha256": "4ac3bae740ddc146652ae7fdf71f7ba77c562f5f0267e9d95186fb6021922b7b"
+    },
+    "workbooks": 30,
+    "rows": 3020,
+    "physical_cells": 35994,
+    "openpyxl_version": "3.1.5"
+  },
+  "post_Cargo_harness_changes": [
+    ".gitattributes",
+    "scripts/ui-e2e.mjs",
+    "web/verification/ui-table-view-portability-live.cjs"
+  ],
+  "post_Cargo_new_reviewed_harness_files": [
+    "web/verification/ui-table-xlsx-live.cjs",
+    "web/verification/xlsx-package-oracle.cjs"
+  ],
+  "qualification": "605 explicit selected source/harness inputs, not a transitive toolchain/dependency or whole metadata closure. Compiled Rust and embedded UI remain byte-identical to fresh Cargo gates. Later changes are one suite registration, exact reviewed portability asset count/presence then aggregate sum/diagnostic correction, and one driver-specific trailing-whitespace policy.",
+  "installed_application_updated": false,
+  "full_current_UI46": "NOT_RUN",
+  "exact_successor_public_CI": "NOT_PROVEN_BY_THIS_LOCAL_SUPPLEMENT",
+  "manufacturer_parity": "NOT_PROVEN"
+}

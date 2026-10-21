@@ -1,0 +1,1925 @@
+{
+  "tested_at": "2026-10-21T12:02:29.004Z",
+  "result": "PASS",
+  "scope": "isolated settings/disabled-ledger browser/API fixture; no native discovery/parser/persistence/website-HTTP proof",
+  "checks": [
+    "01 disabled malformed config/limits are ignored and all optional resource fields are omitted",
+    "02 nested typed roles/CSS/scope/nofollow settings persist across reopen/reload and round-trip without UI fields",
+    "03 unknown fields/types fail visibly; provided partial NavigationSwitch uses fetch=false and preserves exact JSON without injected family defaults",
+    "04 bounded budgets reject zero fractional string and above-cap values; exact lower/cap limits and null or positive safe-integer ledger survive",
+    "05 exact origins preserve host/default-port/slash spelling, reject normalized duplicates and 33/path/query/credentials/fragment/wildcard/nonHTTP values including empty query/fragment",
+    "06 renderer/resource conflict is visible on Save and restored Start before POST and preserves both settings rather than silently disabling one",
+    "07 optional crawl policy and explicit resource roles coexist in the typed start payload",
+    "08 spider/list navigation switch keeps explicit resource configuration and exact list identity without mutating roles",
+    "09 disabled legacy ledger uses exact bounded API availability and reason without inferred legacy rows coverage or exports",
+    "10 320px resource settings bottom controls and footer stay reachable without page overflow runtime errors or website requests"
+  ],
+  "crawl_requests": 10,
+  "crawl_payloads": [
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "indexability_agent": "googlebot",
+      "renderer_collect_cookies": false,
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "validate_fragments": false,
+      "link_position_rules_json": "[]",
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "resource_discovery": {
+        "resources": {
+          "css": {
+            "store": true,
+            "fetch": true
+          },
+          "javascript": {
+            "store": true,
+            "fetch": false
+          },
+          "images": {
+            "store": true,
+            "fetch": true
+          },
+          "media": {
+            "store": true,
+            "fetch": false
+          },
+          "pdf": {
+            "store": true,
+            "fetch": true
+          },
+          "swf": {
+            "store": true,
+            "fetch": false
+          },
+          "other": {
+            "store": true,
+            "fetch": true
+          }
+        },
+        "navigation": {
+          "internal_anchors": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          },
+          "external_anchors": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "iframes": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "refresh": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "canonical": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "hreflang": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "amp": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "mobile_alternate": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "pdf_annotations": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          }
+        },
+        "css": {
+          "stylesheets": true,
+          "style_elements": true,
+          "style_attributes": false
+        },
+        "resource_scope": {
+          "external_origins": [
+            "https://cdn.fixture:8443",
+            "http://127.0.0.1:9999"
+          ]
+        },
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true
+      },
+      "resource_discovery_limits": {
+        "max_source_candidates": 100000,
+        "max_occurrence_utf8_bytes": 65536,
+        "max_source_batch_bytes": 33554432,
+        "max_css_utf8_bytes": 16777216,
+        "max_css_tokens": 1000000,
+        "max_css_nesting": 64,
+        "max_diagnostics": 1000,
+        "max_ledger_bytes": null
+      },
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "resource_discovery": {
+        "navigation": {
+          "internal_anchors": {
+            "store": false
+          },
+          "iframes": {
+            "fetch": true,
+            "expand": true
+          }
+        }
+      },
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "resource_discovery": {
+        "resources": {
+          "css": {
+            "store": true,
+            "fetch": true
+          },
+          "javascript": {
+            "store": true,
+            "fetch": false
+          },
+          "images": {
+            "store": true,
+            "fetch": true
+          },
+          "media": {
+            "store": true,
+            "fetch": false
+          },
+          "pdf": {
+            "store": true,
+            "fetch": true
+          },
+          "swf": {
+            "store": true,
+            "fetch": false
+          },
+          "other": {
+            "store": true,
+            "fetch": true
+          }
+        },
+        "navigation": {
+          "internal_anchors": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          },
+          "external_anchors": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "iframes": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "refresh": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "canonical": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "hreflang": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "amp": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "mobile_alternate": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "pdf_annotations": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          }
+        },
+        "css": {
+          "stylesheets": true,
+          "style_elements": true,
+          "style_attributes": false
+        },
+        "resource_scope": {
+          "external_origins": [
+            "https://cdn.fixture:8443",
+            "http://127.0.0.1:9999"
+          ]
+        },
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true
+      },
+      "resource_discovery_limits": {
+        "max_source_candidates": 1,
+        "max_occurrence_utf8_bytes": 1,
+        "max_source_batch_bytes": 1,
+        "max_css_utf8_bytes": 1,
+        "max_css_tokens": 1,
+        "max_css_nesting": 1,
+        "max_diagnostics": 1,
+        "max_ledger_bytes": null
+      },
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "resource_discovery": {
+        "resources": {
+          "css": {
+            "store": true,
+            "fetch": true
+          },
+          "javascript": {
+            "store": true,
+            "fetch": false
+          },
+          "images": {
+            "store": true,
+            "fetch": true
+          },
+          "media": {
+            "store": true,
+            "fetch": false
+          },
+          "pdf": {
+            "store": true,
+            "fetch": true
+          },
+          "swf": {
+            "store": true,
+            "fetch": false
+          },
+          "other": {
+            "store": true,
+            "fetch": true
+          }
+        },
+        "navigation": {
+          "internal_anchors": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          },
+          "external_anchors": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "iframes": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "refresh": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "canonical": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "hreflang": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "amp": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "mobile_alternate": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "pdf_annotations": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          }
+        },
+        "css": {
+          "stylesheets": true,
+          "style_elements": true,
+          "style_attributes": false
+        },
+        "resource_scope": {
+          "external_origins": [
+            "https://cdn.fixture:8443",
+            "http://127.0.0.1:9999"
+          ]
+        },
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true
+      },
+      "resource_discovery_limits": {
+        "max_source_candidates": 1000000,
+        "max_occurrence_utf8_bytes": 65536,
+        "max_source_batch_bytes": 134217728,
+        "max_css_utf8_bytes": 67108864,
+        "max_css_tokens": 8000000,
+        "max_css_nesting": 128,
+        "max_diagnostics": 10000,
+        "max_ledger_bytes": 9007199254740991
+      },
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "resource_discovery": {
+        "resources": {
+          "css": {
+            "store": true,
+            "fetch": true
+          },
+          "javascript": {
+            "store": true,
+            "fetch": false
+          },
+          "images": {
+            "store": true,
+            "fetch": true
+          },
+          "media": {
+            "store": true,
+            "fetch": false
+          },
+          "pdf": {
+            "store": true,
+            "fetch": true
+          },
+          "swf": {
+            "store": true,
+            "fetch": false
+          },
+          "other": {
+            "store": true,
+            "fetch": true
+          }
+        },
+        "navigation": {
+          "internal_anchors": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          },
+          "external_anchors": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "iframes": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "refresh": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "canonical": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "hreflang": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "amp": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "mobile_alternate": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "pdf_annotations": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          }
+        },
+        "css": {
+          "stylesheets": true,
+          "style_elements": true,
+          "style_attributes": false
+        },
+        "resource_scope": {
+          "external_origins": [
+            "https://cdn-0.fixture",
+            "https://cdn-1.fixture",
+            "https://cdn-2.fixture",
+            "https://cdn-3.fixture",
+            "https://cdn-4.fixture",
+            "https://cdn-5.fixture",
+            "https://cdn-6.fixture",
+            "https://cdn-7.fixture",
+            "https://cdn-8.fixture",
+            "https://cdn-9.fixture",
+            "https://cdn-10.fixture",
+            "https://cdn-11.fixture",
+            "https://cdn-12.fixture",
+            "https://cdn-13.fixture",
+            "https://cdn-14.fixture",
+            "https://cdn-15.fixture",
+            "https://cdn-16.fixture",
+            "https://cdn-17.fixture",
+            "https://cdn-18.fixture",
+            "https://cdn-19.fixture",
+            "https://cdn-20.fixture",
+            "https://cdn-21.fixture",
+            "https://cdn-22.fixture",
+            "https://cdn-23.fixture",
+            "https://cdn-24.fixture",
+            "https://cdn-25.fixture",
+            "https://cdn-26.fixture",
+            "https://cdn-27.fixture",
+            "https://cdn-28.fixture",
+            "https://cdn-29.fixture",
+            "https://cdn-30.fixture",
+            "https://cdn-31.fixture"
+          ]
+        },
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true
+      },
+      "resource_discovery_limits": {
+        "max_source_candidates": 100000,
+        "max_occurrence_utf8_bytes": 65536,
+        "max_source_batch_bytes": 33554432,
+        "max_css_utf8_bytes": 16777216,
+        "max_css_tokens": 1000000,
+        "max_css_nesting": 64,
+        "max_diagnostics": 1000,
+        "max_ledger_bytes": null
+      },
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "resource_discovery": {
+        "resources": {
+          "css": {
+            "store": true,
+            "fetch": true
+          },
+          "javascript": {
+            "store": true,
+            "fetch": false
+          },
+          "images": {
+            "store": true,
+            "fetch": true
+          },
+          "media": {
+            "store": true,
+            "fetch": false
+          },
+          "pdf": {
+            "store": true,
+            "fetch": true
+          },
+          "swf": {
+            "store": true,
+            "fetch": false
+          },
+          "other": {
+            "store": true,
+            "fetch": true
+          }
+        },
+        "navigation": {
+          "internal_anchors": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          },
+          "external_anchors": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "iframes": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "refresh": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "canonical": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "hreflang": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "amp": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "mobile_alternate": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "pdf_annotations": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          }
+        },
+        "css": {
+          "stylesheets": true,
+          "style_elements": true,
+          "style_attributes": false
+        },
+        "resource_scope": {
+          "external_origins": [
+            "https://CDN.fixture:443/",
+            "http://Other.fixture:80/"
+          ]
+        },
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true
+      },
+      "resource_discovery_limits": {
+        "max_source_candidates": 100000,
+        "max_occurrence_utf8_bytes": 65536,
+        "max_source_batch_bytes": 33554432,
+        "max_css_utf8_bytes": 16777216,
+        "max_css_tokens": 1000000,
+        "max_css_nesting": 64,
+        "max_diagnostics": 1000,
+        "max_ledger_bytes": null
+      },
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "crawl_policy": {
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://start.fixture",
+              "subdomains": false,
+              "folders": [
+                "/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "encoded_bytes",
+          "order": "stable_encoded_key"
+        }
+      },
+      "resource_discovery": {
+        "resources": {
+          "css": {
+            "store": true,
+            "fetch": true
+          },
+          "javascript": {
+            "store": true,
+            "fetch": false
+          },
+          "images": {
+            "store": true,
+            "fetch": true
+          },
+          "media": {
+            "store": true,
+            "fetch": false
+          },
+          "pdf": {
+            "store": true,
+            "fetch": true
+          },
+          "swf": {
+            "store": true,
+            "fetch": false
+          },
+          "other": {
+            "store": true,
+            "fetch": true
+          }
+        },
+        "navigation": {
+          "internal_anchors": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          },
+          "external_anchors": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "iframes": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "refresh": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "canonical": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "hreflang": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "amp": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "mobile_alternate": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "pdf_annotations": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          }
+        },
+        "css": {
+          "stylesheets": true,
+          "style_elements": true,
+          "style_attributes": false
+        },
+        "resource_scope": {
+          "external_origins": [
+            "https://cdn.fixture:8443",
+            "http://127.0.0.1:9999"
+          ]
+        },
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true
+      },
+      "resource_discovery_limits": {
+        "max_source_candidates": 100000,
+        "max_occurrence_utf8_bytes": 65536,
+        "max_source_batch_bytes": 33554432,
+        "max_css_utf8_bytes": 16777216,
+        "max_css_tokens": 1000000,
+        "max_css_nesting": 64,
+        "max_diagnostics": 1000,
+        "max_ledger_bytes": null
+      },
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "crawl_policy": {
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://start.fixture",
+              "subdomains": false,
+              "folders": [
+                "/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "encoded_bytes",
+          "order": "stable_encoded_key"
+        }
+      },
+      "resource_discovery": {
+        "resources": {
+          "css": {
+            "store": true,
+            "fetch": true
+          },
+          "javascript": {
+            "store": true,
+            "fetch": false
+          },
+          "images": {
+            "store": true,
+            "fetch": true
+          },
+          "media": {
+            "store": true,
+            "fetch": false
+          },
+          "pdf": {
+            "store": true,
+            "fetch": true
+          },
+          "swf": {
+            "store": true,
+            "fetch": false
+          },
+          "other": {
+            "store": true,
+            "fetch": true
+          }
+        },
+        "navigation": {
+          "internal_anchors": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          },
+          "external_anchors": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "iframes": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "refresh": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "canonical": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "hreflang": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "amp": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "mobile_alternate": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "pdf_annotations": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          }
+        },
+        "css": {
+          "stylesheets": true,
+          "style_elements": true,
+          "style_attributes": false
+        },
+        "resource_scope": {
+          "external_origins": [
+            "https://cdn.fixture:8443",
+            "http://127.0.0.1:9999"
+          ]
+        },
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true
+      },
+      "resource_discovery_limits": {
+        "max_source_candidates": 100000,
+        "max_occurrence_utf8_bytes": 65536,
+        "max_source_batch_bytes": 33554432,
+        "max_css_utf8_bytes": 16777216,
+        "max_css_tokens": 1000000,
+        "max_css_nesting": 64,
+        "max_diagnostics": 1000,
+        "max_ledger_bytes": null
+      },
+      "mode": "list",
+      "seed_url": "https://start.fixture/exact%2Fone",
+      "urls": [
+        "https://start.fixture/exact%2Fone",
+        "https://start.fixture/two"
+      ],
+      "seed_urls": [
+        "https://start.fixture/exact%2Fone",
+        "https://start.fixture/two"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [
+        {
+          "engine": "open-seo-spider/offline-list-v1/calamine-0.36.1",
+          "input_sha256": "d0218678a2b5694d8bf3f3073c830bf304e7e05ffd2dcec71d20cc7b86dbca58",
+          "input_bytes": 59,
+          "options": {
+            "format": {
+              "kind": "txt"
+            }
+          },
+          "selected_sheet": null,
+          "selected_column": null,
+          "rows": [
+            {
+              "source_index": 1,
+              "source_row": 1,
+              "source_line": 1,
+              "sheet": null,
+              "cell": null,
+              "raw_value": "https://start.fixture/exact%2Fone",
+              "cell_type": "plain_text",
+              "formula_metadata": null,
+              "candidate_kind": "page_url",
+              "normalized_url": "https://start.fixture/exact%2Fone",
+              "fragment": null,
+              "error": null
+            },
+            {
+              "source_index": 2,
+              "source_row": 2,
+              "source_line": 2,
+              "sheet": null,
+              "cell": null,
+              "raw_value": "https://start.fixture/two",
+              "cell_type": "plain_text",
+              "formula_metadata": null,
+              "candidate_kind": "page_url",
+              "normalized_url": "https://start.fixture/two",
+              "fragment": null,
+              "error": null
+            }
+          ],
+          "website_requests": 0,
+          "warnings": [],
+          "limitations": [
+            "Authored valid TXT display fixture; native list parsing is not exercised."
+          ]
+        }
+      ],
+      "crawl_links": false,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    },
+    {
+      "concurrency": 8,
+      "timeout_seconds": 20,
+      "max_pages": 0,
+      "max_depth": 0,
+      "user_agent": "Open SEO Spider/0.1",
+      "indexability_agent": "googlebot",
+      "obey_robots": true,
+      "follow_subdomains": false,
+      "delay_ms": 100,
+      "max_body_mb": 5,
+      "check_external": false,
+      "javascript_rendering": false,
+      "renderer_endpoint": "http://127.0.0.1:8790/render",
+      "renderer_wait_ms": 500,
+      "renderer_accessibility": false,
+      "renderer_screenshot": false,
+      "renderer_collect_cookies": false,
+      "include_patterns_text": "",
+      "exclude_patterns_text": "",
+      "custom_extractions_json": "[]",
+      "custom_javascript_json": "[]",
+      "audit_thresholds_json": "{}",
+      "pdf_analysis_json": "{}",
+      "link_position_rules_json": "[]",
+      "validate_fragments": false,
+      "custom_extractions": [],
+      "audit_thresholds": {},
+      "pdf_analysis": {},
+      "link_position_rules": [],
+      "include_patterns": [],
+      "exclude_patterns": [],
+      "crawl_policy": {
+        "scope": {
+          "roots": [
+            {
+              "origin": "https://start.fixture",
+              "subdomains": false,
+              "folders": [
+                "/"
+              ],
+              "exact_paths": []
+            }
+          ],
+          "outside_folder": "deny",
+          "external": "deny"
+        },
+        "query": {
+          "remove_keys": [
+            "utm_source"
+          ],
+          "key_match": "encoded_bytes",
+          "order": "stable_encoded_key"
+        }
+      },
+      "resource_discovery": {
+        "resources": {
+          "css": {
+            "store": true,
+            "fetch": true
+          },
+          "javascript": {
+            "store": true,
+            "fetch": false
+          },
+          "images": {
+            "store": true,
+            "fetch": true
+          },
+          "media": {
+            "store": true,
+            "fetch": false
+          },
+          "pdf": {
+            "store": true,
+            "fetch": true
+          },
+          "swf": {
+            "store": true,
+            "fetch": false
+          },
+          "other": {
+            "store": true,
+            "fetch": true
+          }
+        },
+        "navigation": {
+          "internal_anchors": {
+            "store": true,
+            "fetch": true,
+            "expand": true
+          },
+          "external_anchors": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "iframes": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "refresh": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "canonical": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "hreflang": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "pagination": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "amp": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          },
+          "mobile_alternate": {
+            "store": true,
+            "fetch": true,
+            "expand": false
+          },
+          "pdf_annotations": {
+            "store": true,
+            "fetch": false,
+            "expand": false
+          }
+        },
+        "css": {
+          "stylesheets": true,
+          "style_elements": true,
+          "style_attributes": false
+        },
+        "resource_scope": {
+          "external_origins": [
+            "https://cdn.fixture:8443",
+            "http://127.0.0.1:9999"
+          ]
+        },
+        "follow_rel_nofollow": false,
+        "follow_document_nofollow": true
+      },
+      "resource_discovery_limits": {
+        "max_source_candidates": 100000,
+        "max_occurrence_utf8_bytes": 65536,
+        "max_source_batch_bytes": 33554432,
+        "max_css_utf8_bytes": 16777216,
+        "max_css_tokens": 1000000,
+        "max_css_nesting": 64,
+        "max_diagnostics": 1000,
+        "max_ledger_bytes": null
+      },
+      "mode": "spider",
+      "seed_url": "https://start.fixture/",
+      "urls": [
+        "https://start.fixture/"
+      ],
+      "seed_urls": [
+        "https://start.fixture/"
+      ],
+      "sitemap_urls": [],
+      "input_imports": [],
+      "crawl_links": true,
+      "include_subdomains": false,
+      "request_timeout_secs": 20,
+      "max_body_bytes": 5242880,
+      "renderer": null
+    }
+  ],
+  "api_requests": [
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-1",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-1/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-1/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-1/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-1/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-1/fragments",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-2",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-2/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-2/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-2/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-2/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-2/fragments",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-3",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-3/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-3/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-3/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-3/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-3/fragments",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-4",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-4/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-4/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-4/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-4/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-4/fragments",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-5",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-5/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-5/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-5/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-5/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-5/fragments",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-6",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-6/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-6/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-6/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-6/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-6/fragments",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-7",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-7/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-7/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-7/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-7/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-7/fragments",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-8",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-8/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-8/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-8/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-8/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-8/fragments",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/lists/import",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-9",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-9/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-9/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-9/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-9/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-9/fragments",
+      "query": ""
+    },
+    {
+      "method": "POST",
+      "path": "/api/crawls",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-10",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-10/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-10/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-10/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-10/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/started-10/fragments",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/legacy",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/legacy/issues",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/legacy/pages",
+      "query": "?offset=0&limit=1000"
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/legacy/analysis",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/legacy/responses",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/legacy/fragments",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/crawls/legacy/resources",
+      "query": "?after_sequence=0&limit=200"
+    }
+  ],
+  "javascript_runtime_errors": [],
+  "unexpected_network_requests": []
+}

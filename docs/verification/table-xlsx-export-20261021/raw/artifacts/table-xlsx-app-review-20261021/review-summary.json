@@ -1,0 +1,39 @@
+{
+  "kind": "independent_read_only_App_XLSX_integration_review",
+  "result": "NO_ACTIONABLE_FINDINGS_IN_REVIEWED_SCOPE",
+  "reviewed_paths": {
+    "web/app.js": "b985eba3a91774ca7f8c738f4dce82fe69d89e580182f464bf6deb081b64861c",
+    "web/index.html": "e329fc2fa6d4346c171d8b6df10d1bd1c3bf23f52f3c81e34a3ccf5a47679258",
+    "web/styles.css": "42a07636745d33796d8706295bb05fd7ab566a9969ebc7cf9de9df5e8cd3ba6d",
+    "crates/app/src/server.rs": "6094e465471c3d11c3900f197e97b1289d010f735fcdfb019c74c40d5767db02",
+    "web/table-export-ui.js": "9b778ecbf936e6510c609ade5279965d6d7b6f8e9d20a6a62747d0e2f5189d1c"
+  },
+  "executed_pure_regression": {
+    "proof": "artifacts/table-xlsx-app-review-20261021/review-proof.json",
+    "proof_sha256": "f7710a8fa639bc13fb169bbf5d47dd1cc5df07c255f878aaf70819267b5ba8a1",
+    "harness": "artifacts/table-xlsx-app-review-20261021/review.cjs",
+    "harness_sha256": "76c1618866842c9d8c94eb8344471c057e7080daa2e6176c7d16d4ccd764e5bf",
+    "baseline": "66dfe5c:web/app.js",
+    "baseline_sha256": "be73e0886fcee14b4f00b0c87546fd03021d6b82d74dd7385e0ce43bd3b0721a",
+    "csv": "124 actual extracted-function executions produce identical BOM/CSV bytes and filenames: 31 sections including overview/graph x 2 full/reordered-column modes x 2 plain/selected-recrawl-segment-reporting contexts. Original section is restored.",
+    "xlsx_projection": "29 main-table sections have their actual raw projections accepted by the actual writer. Specific controls verify unknown/empty title, unknown/zero pixels, unknown/empty meta and input text, and original formula text.",
+    "scope": "Declared universal fixture rows replace getRows. Real columns, tableSchema, filteredRows, TableExplorer compiler and export/capture functions execute. This is CSV refactor and raw projection proof; it is not independent native membership or every column-specific domain assertion.",
+    "retained_harness_failures": [
+      "review-proof-r1-harness-helper-fail.json: reviewer extraction omitted accessibilityLabel; product code unchanged.",
+      "review-proof-r2-harness-input-identity-fail.json: reviewer tried to find input rows by absent URL column; product code unchanged."
+    ]
+  },
+  "observations": [
+    {"path":"web/app.js","lines":[1578,1610],"observation":"Temporary internal section is protected by finally. All cell and metadata getters run before restoration; projected section is returned for CSV filename."},
+    {"path":"web/app.js","lines":[1604,1606],"observation":"CSV uses existing value getters. XLSX uses existing rawValue getters where present and normalizes only undefined/null to explicit null before writer validation."},
+    {"path":"web/app.js","lines":[1613,1624],"observation":"CSV specialist dispatch and formula protection remain in place; output now consumes captured complete scalar rows."},
+    {"path":"web/app.js","lines":[1627,1657],"observation":"XLSX availability shares valid complete table/CSV availability. Stamp includes owner, query revision, render sequence, sort, direction, search and filter. Capture is synchronous and writer validates its own frozen copy."},
+    {"path":"web/app.js","lines":[1146,1151],"observation":"Table-only edits finish with renderControls, which refreshes XLSX availability; no stale enabled-state omission found."},
+    {"path":"web/table-export-ui.js","lines":[109,144],"observation":"Ticket, availability, connected element and stamp checks surround both task handoffs, synchronous snapshot/planning/encoding, Blob creation and immediate single download dispatch. Writer errors retain their specific reason."},
+    {"path":"web/index.html","lines":[22,24],"observation":"Both locally served deferred assets load before App. XLSX/cancel/status controls have explicit button type and a polite live region."},
+    {"path":"crates/app/src/server.rs","lines":[367,384],"observation":"Both new exact static routes serve the matching embedded JS assets with JavaScript content type."}
+  ],
+  "findings": [],
+  "not_proven": ["Native workflow", "Actual browser download", "Responsive layout", "Excel GUI roundtrip", "Every domain-specific column value", "Full manufacturer parity"],
+  "no_tracked_edits_by_reviewer": true
+}

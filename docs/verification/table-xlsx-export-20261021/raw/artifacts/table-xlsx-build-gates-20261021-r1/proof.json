@@ -1,0 +1,78 @@
+{
+  "kind": "table_xlsx_root_fresh_Rust_build_gates",
+  "created_at": "2026-10-21T11:58:52.030Z",
+  "results": [
+    {
+      "name": "format",
+      "program": "cargo",
+      "args": [
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 2585
+    },
+    {
+      "name": "build",
+      "program": "cargo",
+      "args": [
+        "build",
+        "--locked",
+        "-p",
+        "open-seo-spider"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 46155
+    },
+    {
+      "name": "app-tests",
+      "program": "cargo",
+      "args": [
+        "test",
+        "--locked",
+        "-p",
+        "open-seo-spider",
+        "--",
+        "--test-threads=2"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 518438
+    },
+    {
+      "name": "clippy",
+      "program": "cargo",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 24107
+    }
+  ],
+  "changed": [],
+  "complete": true,
+  "binary": {
+    "path": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+    "bytes": 90249216,
+    "sha256": "c2df6f1ce6699b8c91af9488b8c71a77f91b5991a1df9b7c1f6f76cb2a4aa72c"
+  },
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "OPEN_SEO_BROWSER_PATH": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-runtime\\chrome-155.0.8059.80-36a30716-source12-v1\\chrome.exe"
+  },
+  "scope": "Fresh App tests only, ordinary Core suite is not executed. App native_enrichment_browser_fixture remains ignored. Core renderer opt-ins are separate."
+}

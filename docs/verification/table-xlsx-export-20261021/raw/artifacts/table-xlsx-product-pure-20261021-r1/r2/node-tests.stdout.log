@@ -1,0 +1,172 @@
+TAP version 13
+# Subtest: minimal workbook has a real five-part ZIP, CRC, package targets and typed cells
+ok 1 - minimal workbook has a real five-part ZIP, CRC, package targets and typed cells
+  ---
+  duration_ms: 3.1779
+  type: 'test'
+  ...
+# Subtest: the independent ZIP reader rejects a damaged data byte and trailing bytes
+ok 2 - the independent ZIP reader rejects a damaged data byte and trailing bytes
+  ---
+  duration_ms: 1.5876
+  type: 'test'
+  ...
+# Subtest: all ordered columns, rows and repeated context are retained with raw scalar types
+ok 3 - all ordered columns, rows and repeated context are retained with raw scalar types
+  ---
+  duration_ms: 0.9468
+  type: 'test'
+  ...
+# Subtest: formula-looking text, XML metacharacters and CSV-style apostrophes are literal strings
+ok 4 - formula-looking text, XML metacharacters and CSV-style apostrophes are literal strings
+  ---
+  duration_ms: 0.522
+  type: 'test'
+  ...
+# Subtest: literal overlapping ST_Xstring patterns protect every original escape starter once
+ok 5 - literal overlapping ST_Xstring patterns protect every original escape starter once
+  ---
+  duration_ms: 0.4536
+  type: 'test'
+  ...
+# Subtest: representable XML-forbidden scalars use Xstring while TAB and LF remain literal
+ok 6 - representable XML-forbidden scalars use Xstring while TAB and LF remain literal
+  ---
+  duration_ms: 0.4518
+  type: 'test'
+  ...
+# Subtest: headers and context use the same lossless Xstring and Unicode rules
+ok 7 - headers and context use the same lossless Xstring and Unicode rules
+  ---
+  duration_ms: 0.3149
+  type: 'test'
+  ...
+# Subtest: unpaired UTF16 in any header, context or late cell refuses the entire snapshot
+ok 8 - unpaired UTF16 in any header, context or late cell refuses the entire snapshot
+  ---
+  duration_ms: 0.575
+  type: 'test'
+  ...
+# Subtest: explicit numbers retain 15 significant decimal digits, signs, exponents and bounds
+ok 9 - explicit numbers retain 15 significant decimal digits, signs, exponents and bounds
+  ---
+  duration_ms: 0.4952
+  type: 'test'
+  ...
+# Subtest: numbers that need rounding or exceed Excel range refuse; identifiers stay text
+ok 10 - numbers that need rounding or exceed Excel range refuse; identifiers stay text
+  ---
+  duration_ms: 0.6393
+  type: 'test'
+  ...
+# Subtest: non-scalars are rejected without implicit conversions
+ok 11 - non-scalars are rejected without implicit conversions
+  ---
+  duration_ms: 0.4814
+  type: 'test'
+  ...
+# Subtest: records require exact own enumerable data fields and never invoke getters
+ok 12 - records require exact own enumerable data fields and never invoke getters
+  ---
+  duration_ms: 0.2792
+  type: 'test'
+  ...
+# Subtest: rows and arrays require dense own data slots with ordinary array prototypes
+ok 13 - rows and arrays require dense own data slots with ordinary array prototypes
+  ---
+  duration_ms: 0.2952
+  type: 'test'
+  ...
+# Subtest: invalid columns and row width cannot produce an incomplete projection
+ok 14 - invalid columns and row width cannot produce an incomplete projection
+  ---
+  duration_ms: 0.2718
+  type: 'test'
+  ...
+# Subtest: unexpected proxy failures expose no thrown object fields or partial output
+ok 15 - unexpected proxy failures expose no thrown object fields or partial output
+  ---
+  duration_ms: 0.1113
+  type: 'test'
+  ...
+# Subtest: snapshots are deeply frozen, instance-issued and independent of later input mutation
+ok 16 - snapshots are deeply frozen, instance-issued and independent of later input mutation
+  ---
+  duration_ms: 0.3837
+  type: 'test'
+  ...
+# Subtest: every encode returns fresh deterministic bytes; caller mutation cannot alter the planner
+ok 17 - every encode returns fresh deterministic bytes; caller mutation cannot alter the planner
+  ---
+  duration_ms: 0.2455
+  type: 'test'
+  ...
+# Subtest: limit overrides only lower known integer limits using own data descriptors
+ok 18 - limit overrides only lower known integer limits using own data descriptors
+  ---
+  duration_ms: 0.2733
+  type: 'test'
+  ...
+# Subtest: row and combined-column limits accept exact boundaries and reject before sparse traversal
+ok 19 - row and combined-column limits accept exact boundaries and reject before sparse traversal
+  ---
+  duration_ms: 1.4012
+  type: 'test'
+  ...
+# Subtest: cell budgets count headers, nulls and each repeated context cell, atomically
+ok 20 - cell budgets count headers, nulls and each repeated context cell, atomically
+  ---
+  duration_ms: 1.978
+  type: 'test'
+  ...
+# Subtest: UTF16, UTF8 and line-feed cell limits accept exact values and refuse one above
+ok 21 - UTF16, UTF8 and line-feed cell limits accept exact values and refuse one above
+  ---
+  duration_ms: 1.1256
+  type: 'test'
+  ...
+# Subtest: payload limit counts exact UTF8 output including repeated context and unused source context
+ok 22 - payload limit counts exact UTF8 output including repeated context and unused source context
+  ---
+  duration_ms: 0.1912
+  type: 'test'
+  ...
+# Subtest: worksheet and ZIP byte limits are exact full-file gates, with no partial bytes
+ok 23 - worksheet and ZIP byte limits are exact full-file gates, with no partial bytes
+  ---
+  duration_ms: 0.3861
+  type: 'test'
+  ...
+# Subtest: over ten thousand rows are supported without a product row cap
+ok 24 - over ten thousand rows are supported without a product row cap
+  ---
+  duration_ms: 44.2426
+  type: 'test'
+  ...
+# Subtest: the full physical Excel column range reaches XFD and refuses XFE
+ok 25 - the full physical Excel column range reaches XFD and refuses XFE
+  ---
+  duration_ms: 58.063
+  type: 'test'
+  ...
+# Subtest: zero data rows is a complete headers-only table including declared context
+ok 26 - zero data rows is a complete headers-only table including declared context
+  ---
+  duration_ms: 0.3009
+  type: 'test'
+  ...
+# Subtest: UMD browser entry works without CommonJS, DOM, storage or network globals
+ok 27 - UMD browser entry works without CommonJS, DOM, storage or network globals
+  ---
+  duration_ms: 2.64
+  type: 'test'
+  ...
+1..27
+# tests 27
+# suites 0
+# pass 27
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 196.9159

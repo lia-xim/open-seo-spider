@@ -321,6 +321,7 @@ jobs:
       - run: node --test web/verification/table-view-library.test.cjs web/verification/table-view-storage.test.cjs web/verification/table-views-ui.test.cjs
       - run: node --test web/verification/table-expression-state.test.cjs web/verification/expression-view-state.test.cjs web/verification/table-expression-ui.test.cjs
       - run: node --test web/verification/table-view-portability.test.cjs
+      - run: node --test web/verification/table-xlsx.test.cjs web/verification/table-export-ui.test.cjs
       - run: cargo build --locked -p open-seo-spider
       - name: Opt-in Rust browser fixtures on an owned renderer
         run: node scripts/renderer-rust-e2e.mjs
