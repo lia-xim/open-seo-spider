@@ -1,8 +1,14 @@
 # Offener Vertrag für portable native Projektansichten
 
-Status: **geplant, nicht implementiert**. Browserlokale Spalten und benannte
+Status: **Spalten-Teilschnitt implementiert; vollständiger Workspace offen**. Browserlokale Spalten und benannte
 Ansichten sind keine portable native Projekteinstellung. Dieser Punkt bleibt
 Teil des gesamten Feature-Backlogs.
+
+Der [native Spalten-Teilschnitt](native-project-columns.md) ist separat lokal
+abgenommen: explizite Präferenzen je bestehender Crawl-UUID und Tabellenbereich.
+Er umfasst keine nativen V1/V2-Kataloge, portablen Pakete oder atomaren
+Bericht-plus-Workspace-Importe. Die folgenden vollständigen Anforderungen
+bleiben offen.
 
 Ein vollständiger Ausbau benötigt einen projektlokalen Workspace-Sidecar und
 ein versioniertes natives Projektpaket. Der ursprüngliche Crawl-Bericht muss

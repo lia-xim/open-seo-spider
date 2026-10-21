@@ -1,0 +1,9 @@
+# Dashboard fixture correction after failed public CI
+
+The exact published `2c573d9` Renderer UI invocation failed its first `dashboard` fixture: the old fixture expected a confirmed-empty extraction from legacy rows without source observations. Its original raw log, run/jobs snapshots, artifact ZIP and four original members remain FAIL. There are zero completed canonical suite PASS records; the other48 suites were not reached. The raw run snapshot was still in progress for its otherjobs; it is preserved as that snapshot, not a terminal whole-run receipt.
+
+The separate corrected local invocation passes only the selected dashboard fixture, with unchanged normal App binary and423 compiled inputs. It preserves both original legacy rows as unknown and adds two explicitly mocked complete-source value/zero rows. Positive confirmed-empty, unknown2, present2, inspectors and CSV controls remain checked. These API-fixture observations are not native capture evidence. [Result](result.json) and [index](index.json) bind the exact source/diff, original logs, wrapper and CSV controls.
+
+The earlier enrichment step of the same failed public Renderer job independently passed the actual App cfg(test) opt-in `server::enrichment_browser_fixture::native_enrichment_browser_fixture` in two processes. Original test logs, coordinator and digest-bound artifact ZIP prove one pass/zero failures/zero ignores per process and natural EOF0. This closes only that exact public opt-in condition; local NOT_RUN_HERE and the later UI failure remain separate. The normal App binary is distinct from the App test executable.
+
+No combined full49 invocation, successor publicCI, full feature backlog or manufacturer parity is accepted here. All archived files retain their original bytes and declarations. Parent evidence indexes are unchanged. Helpers are archived source evidence; relocation is not a promise they run from this folder.

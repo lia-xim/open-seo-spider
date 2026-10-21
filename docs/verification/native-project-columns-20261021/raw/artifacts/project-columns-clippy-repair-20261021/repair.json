@@ -1,0 +1,23 @@
+{
+  "kind": "strict_clippy_two_style_repairs",
+  "prior": "R1 format/App550/build PASS but strictClippy101; whole R1 remainsFAIL",
+  "changes": [
+    "Use clamp(1024, MAX_REQUEST_BYTES) for equivalent constant bounded geometric capacity",
+    "Remove needless borrow in test serde_json::to_value(entries())"
+  ],
+  "files": [
+    {
+      "file": "crates/app/src/server/table_preferences.rs",
+      "before_sha256": "f0bfe1dc2f43d6ffd445afb4200ea637593258f5e5c1c0806ddbc53f9703da4b",
+      "after_sha256": "c4602eb559920a4a556900307c62a2e64e930a05f28c906b6a3d5fb16986f1b8"
+    },
+    {
+      "file": "crates/app/src/server/table_preferences_tests.rs",
+      "before_sha256": "09418e68a8ca596defc9924b591827078bb363277ff4faec7452534ce416edf2",
+      "after_sha256": "81cca1ce4c54af8e8d51e73f28b24091ab6a576b940b2f96fcd572ddbc7519fa"
+    }
+  ],
+  "next_gate": "Fresh full App tests, build, format and strict workspaceClippy R2; pure579 and semantic40 reused on byte-identical JS/UI inputs",
+  "tests_bypassed": 0,
+  "deadlines_changed": 0
+}

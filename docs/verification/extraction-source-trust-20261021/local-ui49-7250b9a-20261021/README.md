@@ -1,0 +1,7 @@
+# One complete local UI49 invocation at7250b9a
+
+This finite receipt accepts one actual unfiltered local Windows `node scripts/ui-e2e.mjs` invocation at immutable `7250b9a`: exactly49 unique suites in committed order,9 API fixtures and40 native suites. Every coordinator result has code0, null signal and no timeout; the coordinator closed naturally with EOF0. The original wrapper, coordinator proof and all49 child stdout/stderr logs are retained byte for byte. The normal App binary SHA remains `4d29595df29ff22bb2b56e73c702b59f69bc24e0f0b5ec0f7011eedb3535060e`; all423 selected compiler/product input bytes and all49 child/coordinator source bytes are checked against their stated authority. [Result](result.json), [source bindings](source-bindings.json) and [index](index.json) give the exact scope.
+
+This is a log/receipt publication, not a new independent replay of every child data oracle. Large downloaded files, SQLite/native stores, screenshots, repeated-relation corpus and child JSON/data receipts remain LOCAL ONLY in the ignored original run directory. Those heavy files are not copied or silently replaced with generated expectations. The child logs retain their own actual declarations.
+
+Exact successor public725 CI is a separate proof. The prior2c public dashboard failure and selected1 fixture correction remain separate evidence. Full feature backlog, manufacturer parity and the upcoming native project-column implementation remain open. No archived active Git configuration is introduced; parent indexes remain unchanged.

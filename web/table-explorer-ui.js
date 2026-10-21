@@ -174,6 +174,22 @@
       const rules=state.rules.map(rule=>({...rule})),visibleKeys=canonical(state.visibleKeys),check=tools.compile(state.schema,{search:'',rules,sort:hooks.sort(),visibleKeys},hooks.identity);
       return check.ok?{ok:true,value:{rules,visibleKeys:[...visibleKeys]}}:check;
     }
+    function installColumns(visibleKeys,guard) {
+      const stale=()=>({ok:false,error:{code:'stale_preferences',message:'Die Tabellenansicht wurde inzwischen geändert.'}});
+      try{
+        if(typeof guard!=='function'||guard()!==true)return stale();
+        if(state.error||state.evaluationError||state.expressionError)return{ok:false,error:{code:'invalid_working_view',message:'Die aktuelle Tabellenansicht enthält einen Fehler.'}};
+        if(!Array.isArray(visibleKeys))return{ok:false,error:{code:'invalid_columns',message:'Die Spaltenauswahl ist ungültig.'}};
+        const checked=tools.projectColumns(state.schema,[...visibleKeys]);if(!checked.ok)return checked;
+        const keys=canonical(checked.value.map(column=>column.key));
+        if(JSON.stringify(keys)!==JSON.stringify(visibleKeys))return{ok:false,error:{code:'invalid_columns',message:'Pflichtspalten müssen in ihrer festen Reihenfolge sichtbar bleiben.'}};
+        if(guard()!==true)return stale();
+        // One synchronous column-only transaction. Query mode, accepted rules,
+        // V2 AST, search, sort and browser/native storage remain independent.
+        state.visibleKeys=keys;edited();state.notice='Projektspalten für diesen Bereich angewendet.';changed();return{ok:true,value:null};
+      }catch(_){return{ok:false,error:{code:'invalid_columns',message:'Die Projektspalten konnten nicht angewendet werden.'}};}
+    }
+
     function installPrepared(view){
       // Validate all inputs before touching accepted state. The App performs its
       // complete owner/revision/filter validation and commits synchronously.
@@ -193,7 +209,7 @@
         return{ok:true,value:null};
       }catch(_){return{ok:false,error:{code:'invalid_working_view',message:'Die vollständige Tabellenansicht ist ungültig; bisherige Auswahl bleibt erhalten.'}};}
     }
-    return Object.freeze({columns,rows,render,synchronize,draft,installPrepared,queryVersion:()=>state.mode==='grouped'?2:1,hasRules:()=>state.mode==='grouped'?state.expression!==null:Boolean(state.rules.length),canExport:()=>!state.error&&!state.evaluationError&&!state.expressionError,resetOwner:()=>{revision++;state.scope=null;state.rules=[];state.mode='simple';state.expression=null;state.expressionError='';state.error='';state.evaluationError='';expressionEditor?.reset();}});
+    return Object.freeze({columns,rows,render,synchronize,draft,installPrepared,installColumns,queryVersion:()=>state.mode==='grouped'?2:1,hasRules:()=>state.mode==='grouped'?state.expression!==null:Boolean(state.rules.length),canExport:()=>!state.error&&!state.evaluationError&&!state.expressionError,resetOwner:()=>{revision++;state.scope=null;state.rules=[];state.mode='simple';state.expression=null;state.expressionError='';state.error='';state.evaluationError='';expressionEditor?.reset();}});
   }
   window.TableExplorerUI=Object.freeze({create});
 })();

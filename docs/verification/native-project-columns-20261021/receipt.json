@@ -1,0 +1,244 @@
+{
+  "kind": "bounded_native_project_columns_actual_gate_publication",
+  "binary": {
+    "bytes": 91236352,
+    "sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9"
+  },
+  "pure_passed": 579,
+  "rust_authority": "artifacts/project-columns-rust-20261021-r2",
+  "rust_results": [
+    {
+      "name": "format",
+      "args": [
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 3641
+    },
+    {
+      "name": "app-tests",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider",
+        "--locked",
+        "--",
+        "--test-threads=2"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 510217
+    },
+    {
+      "name": "build",
+      "args": [
+        "build",
+        "--locked",
+        "-p",
+        "open-seo-spider"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 44842
+    },
+    {
+      "name": "clippy",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 27730
+    }
+  ],
+  "historical_rust_attempts": [
+    {
+      "path": "artifacts/project-columns-rust-20261021-r1",
+      "result": "FAIL",
+      "complete": false,
+      "results": [
+        {
+          "name": "format",
+          "args": [
+            "fmt",
+            "--all",
+            "--check"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 3913
+        },
+        {
+          "name": "app-tests",
+          "args": [
+            "test",
+            "-p",
+            "open-seo-spider",
+            "--locked",
+            "--",
+            "--test-threads=2"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 432838
+        },
+        {
+          "name": "build",
+          "args": [
+            "build",
+            "--locked",
+            "-p",
+            "open-seo-spider"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 37533
+        },
+        {
+          "name": "clippy",
+          "args": [
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--all-features",
+            "--locked",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "code": 101,
+          "signal": null,
+          "duration_ms": 28441
+        }
+      ],
+      "binary": {
+        "bytes": 91231744,
+        "sha256": "115067a4bbf162cda79e0e78e0ef48dc2ec4a7cd0fc16b9613ef7aac17363dc1"
+      },
+      "repair_receipt": "artifacts/project-columns-clippy-repair-20261021/repair.json",
+      "qualification": "R1 format/App550/build succeeded; strictClippy failed101. Two original Rust sources and all original four command logs/pins are retained. No R1 overall PASS or combined subset reuse is inferred."
+    }
+  ],
+  "native_authority": "artifacts/project-columns-native-20261021-r2",
+  "historical_native_attempts": [
+    {
+      "path": "artifacts/project-columns-native-20261021-r1",
+      "result": "FAIL",
+      "complete": false,
+      "results": [
+        {
+          "name": "project-columns",
+          "script": "ui-project-columns-live.cjs",
+          "kind": "owned-native",
+          "code": 1,
+          "signal": null,
+          "timed_out": false,
+          "timeout_ms": 240000,
+          "duration_ms": 36088
+        }
+      ],
+      "shutdown": {
+        "code": 0,
+        "signal": null
+      },
+      "binary_sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9",
+      "inner_receipt": "artifacts/project-columns-native-20261021-r1/project-columns/project-columns-1792606492247-0e047af3/ui-project-columns-live.json",
+      "original_driver": "artifacts/project-columns-native-20261021-r1.driver-source.cjs",
+      "repair_receipt": "artifacts/project-columns-native-readiness-repair-20261021.json",
+      "qualification": "Actual63/3 captures completed; V1 asyncCreate readiness was not awaited before changing mode, so catalog preparation failed. Warmchild and coordinator EOF0 do not turn the original failed suite into PASS. Driver-only readiness waits preserve assertions/deadlines; original logs/HTML/driver remain."
+    }
+  ],
+  "native_suite": "project-columns",
+  "actual_pairs": [
+    {
+      "label": "warm-A-titles-V2",
+      "rows": 63,
+      "columns": 9,
+      "data_cells": 567,
+      "header_cells": 9,
+      "xlsx_sha256": "e52d8c5a6b4f1e6941f7d57d0f28635a9137098356bfded7bf8b94db168a3be3",
+      "csv_sha256": "9d2d552ae41d0151f2546316ab62bb05cb65405e2f2a6a3397af81fb51788969",
+      "matrix_sha256": "997f2e277ce129ea64019b2c6dc16de0713e21acf1ac53d968ff5e208b6b2ce1"
+    },
+    {
+      "label": "warm-A-status-V1",
+      "rows": 63,
+      "columns": 9,
+      "data_cells": 567,
+      "header_cells": 9,
+      "xlsx_sha256": "61d39828458e214e5aa67d36dd62660141e18102b26eeb9652bd60d5f0971e10",
+      "csv_sha256": "5de565f4ccb8045696c25fe664e07f582da2c54878ff7c539ecd7536af893fd6",
+      "matrix_sha256": "d28648978ad07e7532b8da8e619b2681347039a233220a9c8cf40a6138773d9a"
+    },
+    {
+      "label": "warm-B-titles",
+      "rows": 3,
+      "columns": 8,
+      "data_cells": 24,
+      "header_cells": 8,
+      "xlsx_sha256": "03f264ef7b90c7a60a5df46ccc499bd23006899c96de06821e6a1ccd9494fdf7",
+      "csv_sha256": "71f533213e845f51f75b4e46565b221f71c99a21f5c33ab5b5e58685fce8b6cc",
+      "matrix_sha256": "aed74d6a6c688bbf4e01a72af01b867e461eaeaa1c4fa58645489dccf0d022c3"
+    },
+    {
+      "label": "cold-new-origin-A-titles",
+      "rows": 63,
+      "columns": 9,
+      "data_cells": 567,
+      "header_cells": 9,
+      "xlsx_sha256": "e52d8c5a6b4f1e6941f7d57d0f28635a9137098356bfded7bf8b94db168a3be3",
+      "csv_sha256": "9d2d552ae41d0151f2546316ab62bb05cb65405e2f2a6a3397af81fb51788969",
+      "matrix_sha256": "997f2e277ce129ea64019b2c6dc16de0713e21acf1ac53d968ff5e208b6b2ce1"
+    },
+    {
+      "label": "cold-new-origin-A-status",
+      "rows": 63,
+      "columns": 9,
+      "data_cells": 567,
+      "header_cells": 9,
+      "xlsx_sha256": "61d39828458e214e5aa67d36dd62660141e18102b26eeb9652bd60d5f0971e10",
+      "csv_sha256": "5de565f4ccb8045696c25fe664e07f582da2c54878ff7c539ecd7536af893fd6",
+      "matrix_sha256": "d28648978ad07e7532b8da8e619b2681347039a233220a9c8cf40a6138773d9a"
+    },
+    {
+      "label": "cold-new-origin-B-titles",
+      "rows": 3,
+      "columns": 8,
+      "data_cells": 24,
+      "header_cells": 8,
+      "xlsx_sha256": "03f264ef7b90c7a60a5df46ccc499bd23006899c96de06821e6a1ccd9494fdf7",
+      "csv_sha256": "71f533213e845f51f75b4e46565b221f71c99a21f5c33ab5b5e58685fce8b6cc",
+      "matrix_sha256": "aed74d6a6c688bbf4e01a72af01b867e461eaeaa1c4fa58645489dccf0d022c3"
+    }
+  ],
+  "totals": {
+    "pairs": 6,
+    "csv_files": 6,
+    "xlsx_files": 6,
+    "data_rows": 258,
+    "data_cells": 2316,
+    "header_cells": 52
+  },
+  "natural_native_EOF0": 2,
+  "coordinator_EOF0": true,
+  "changed_origin": true,
+  "offline_product_requests": 0,
+  "positive_410_witnesses": 2,
+  "scope": "Only actual selected gate results and finite original pair/evidence files. RustR2 and NativeR2 are authoritative; original RustR1/NativeR1 remain FAIL and are retained separately. No full new regression, publicCI, ordinary Core workspace, installed-user update or manufacturer parity inferred.",
+  "not_proven": [
+    "Full native workspace, nativeV1/V2 catalogs, portable report-plus-workspace packages/import, project grouping and recrawl adapters remain open.",
+    "This is one selected native suite, not a complete new50-suite/publicCI or ordinary Core/renderer test execution.",
+    "Original captured report corpus is not copied; retained expected/reader artifacts do not independently replace that original input evidence.",
+    "All unrelated144/416/32 backlog acceptance and manufacturer parity remain unchanged."
+  ]
+}

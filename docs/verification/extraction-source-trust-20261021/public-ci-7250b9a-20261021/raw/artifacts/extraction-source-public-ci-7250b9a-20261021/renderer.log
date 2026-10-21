@@ -1,0 +1,2112 @@
+﻿2026-10-21T16:53:50.2094697Z Current runner version: '2.338.0'
+2026-10-21T16:53:50.2131781Z ##[group]Runner Image Provisioner
+2026-10-21T16:53:50.2133286Z Hosted Compute Agent
+2026-10-21T16:53:50.2134361Z Version: 20261015.610
+2026-10-21T16:53:50.2135473Z Commit: 267fdb4e8bbec4ab5ea31367f3a00d5c480c7656
+2026-10-21T16:53:50.2136707Z Build Date: 2026-10-14T17:06:54Z
+2026-10-21T16:53:50.2138156Z Worker ID: {e8d26e4d-6e57-4286-b1ad-d265a6bac8b7}
+2026-10-21T16:53:50.2139611Z Region: eastus2
+2026-10-21T16:53:50.2140577Z Cloud: Azure
+2026-10-21T16:53:50.2141556Z ##[endgroup]
+2026-10-21T16:53:50.2144612Z ##[group]Operating System
+2026-10-21T16:53:50.2145745Z Ubuntu
+2026-10-21T16:53:50.2146798Z 24.04.5
+2026-10-21T16:53:50.2148098Z LTS
+2026-10-21T16:53:50.2148994Z ##[endgroup]
+2026-10-21T16:53:50.2150127Z ##[group]Runner Image
+2026-10-21T16:53:50.2151281Z Image: ubuntu-24.04
+2026-10-21T16:53:50.2152542Z Version: 20261018.339.1
+2026-10-21T16:53:50.2154876Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261018.339/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-21T16:53:50.2158507Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261018.339
+2026-10-21T16:53:50.2160346Z ##[endgroup]
+2026-10-21T16:53:50.2162677Z ##[group]GITHUB_TOKEN Permissions
+2026-10-21T16:53:50.2165739Z Contents: read
+2026-10-21T16:53:50.2166900Z Metadata: read
+2026-10-21T16:53:50.2168217Z ##[endgroup]
+2026-10-21T16:53:50.2171205Z Secret source: Actions
+2026-10-21T16:53:50.2172969Z Cache mode: write
+2026-10-21T16:53:50.2174590Z Prepare workflow directory
+2026-10-21T16:53:50.2654071Z Prepare all required actions
+2026-10-21T16:53:50.2726118Z Getting action download info
+2026-10-21T16:53:50.5312461Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-21T16:53:50.6456665Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-21T16:53:50.7367162Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:b725eda525362e7cf34af9a7243cac1e3f01a7ec)
+2026-10-21T16:53:50.8682972Z Download action repository 'Swatinem/rust-cache@v2' (SHA:d1527c8f67ef9af357290475d4af4b0fab8f12e0)
+2026-10-21T16:53:51.0585785Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-21T16:53:51.3422036Z Complete job name: renderer
+2026-10-21T16:53:51.4547770Z ##[group]Run actions/checkout@v4
+2026-10-21T16:53:51.4548842Z with:
+2026-10-21T16:53:51.4549374Z   repository: lia-xim/open-seo-spider
+2026-10-21T16:53:51.4553956Z   token: ***
+2026-10-21T16:53:51.4554428Z   ssh-strict: true
+2026-10-21T16:53:51.4554913Z   ssh-user: git
+2026-10-21T16:53:51.4555397Z   persist-credentials: true
+2026-10-21T16:53:51.4555936Z   clean: true
+2026-10-21T16:53:51.4556428Z   sparse-checkout-cone-mode: true
+2026-10-21T16:53:51.4556998Z   fetch-depth: 1
+2026-10-21T16:53:51.4557668Z   fetch-tags: false
+2026-10-21T16:53:51.4558180Z   show-progress: true
+2026-10-21T16:53:51.4558672Z   lfs: false
+2026-10-21T16:53:51.4559135Z   submodules: false
+2026-10-21T16:53:51.4559667Z   set-safe-directory: true
+2026-10-21T16:53:51.4560228Z   allow-unsafe-pr-checkout: false
+2026-10-21T16:53:51.4561093Z ##[endgroup]
+2026-10-21T16:53:51.5620685Z Syncing repository: lia-xim/open-seo-spider
+2026-10-21T16:53:51.5623845Z ##[group]Getting Git version info
+2026-10-21T16:53:51.5625368Z Working directory is '/home/runner/work/open-seo-spider/open-seo-spider'
+2026-10-21T16:53:51.5627764Z [command]/usr/bin/git version
+2026-10-21T16:53:51.5702672Z git version 2.55.0
+2026-10-21T16:53:51.5725913Z ##[endgroup]
+2026-10-21T16:53:51.5742634Z Temporarily overriding HOME='/home/runner/work/_temp/5b3fe8dc-51ba-4244-b029-4cd579ba7321' before making global git config changes
+2026-10-21T16:53:51.5745413Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T16:53:51.5748454Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T16:53:51.5812669Z Deleting the contents of '/home/runner/work/open-seo-spider/open-seo-spider'
+2026-10-21T16:53:51.5831902Z ##[group]Initializing the repository
+2026-10-21T16:53:51.5836439Z [command]/usr/bin/git init /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T16:53:51.5960737Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-21T16:53:51.5962680Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-21T16:53:51.5964499Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-21T16:53:51.5965854Z hint: call:
+2026-10-21T16:53:51.5966726Z hint:
+2026-10-21T16:53:51.5967902Z hint: 	git config --global init.defaultBranch <name>
+2026-10-21T16:53:51.5969096Z hint:
+2026-10-21T16:53:51.5970189Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-21T16:53:51.5971909Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-21T16:53:51.5973252Z hint:
+2026-10-21T16:53:51.5973976Z hint: 	git branch -m <name>
+2026-10-21T16:53:51.5974897Z hint:
+2026-10-21T16:53:51.5976113Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-21T16:53:51.5978595Z Initialized empty Git repository in /home/runner/work/open-seo-spider/open-seo-spider/.git/
+2026-10-21T16:53:51.5981700Z [command]/usr/bin/git remote add origin https://github.com/lia-xim/open-seo-spider
+2026-10-21T16:53:51.6034195Z ##[endgroup]
+2026-10-21T16:53:51.6035769Z ##[group]Disabling automatic garbage collection
+2026-10-21T16:53:51.6037975Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-21T16:53:51.6099166Z ##[endgroup]
+2026-10-21T16:53:51.6100469Z ##[group]Setting up auth
+2026-10-21T16:53:51.6101767Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T16:53:51.6128812Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T16:53:51.6574215Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T16:53:51.6623916Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T16:53:51.6873494Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T16:53:51.6919652Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T16:53:51.7164725Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-21T16:53:51.7216017Z ##[endgroup]
+2026-10-21T16:53:51.7225832Z ##[group]Fetching the repository
+2026-10-21T16:53:51.7227966Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +7250b9a0007d0f307321e3b4c7076fa95430dbc3:refs/remotes/origin/main
+2026-10-21T16:53:55.4039567Z From https://github.com/lia-xim/open-seo-spider
+2026-10-21T16:53:55.4041393Z  * [new ref]         7250b9a0007d0f307321e3b4c7076fa95430dbc3 -> origin/main
+2026-10-21T16:53:55.4059590Z ##[endgroup]
+2026-10-21T16:53:55.4060609Z ##[group]Determining the checkout info
+2026-10-21T16:53:55.4061622Z ##[endgroup]
+2026-10-21T16:53:55.4062188Z [command]/usr/bin/git sparse-checkout disable
+2026-10-21T16:53:55.4123622Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-21T16:53:55.4166135Z ##[group]Checking out the ref
+2026-10-21T16:53:55.4171866Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-10-21T16:53:56.4358185Z Updating files:  84% (7115/8445)
+2026-10-21T16:53:56.4431568Z Updating files:  85% (7179/8445)
+2026-10-21T16:53:56.4533098Z Updating files:  86% (7263/8445)
+2026-10-21T16:53:56.4622955Z Updating files:  87% (7348/8445)
+2026-10-21T16:53:56.4752360Z Updating files:  88% (7432/8445)
+2026-10-21T16:53:56.4827879Z Updating files:  89% (7517/8445)
+2026-10-21T16:53:56.4911779Z Updating files:  90% (7601/8445)
+2026-10-21T16:53:56.5045210Z Updating files:  91% (7685/8445)
+2026-10-21T16:53:56.5111569Z Updating files:  92% (7770/8445)
+2026-10-21T16:53:56.5262375Z Updating files:  93% (7854/8445)
+2026-10-21T16:53:56.5358308Z Updating files:  94% (7939/8445)
+2026-10-21T16:53:56.5497682Z Updating files:  95% (8023/8445)
+2026-10-21T16:53:56.5537647Z Updating files:  96% (8108/8445)
+2026-10-21T16:53:56.5625147Z Updating files:  97% (8192/8445)
+2026-10-21T16:53:56.5721449Z Updating files:  98% (8277/8445)
+2026-10-21T16:53:56.5820757Z Updating files:  99% (8361/8445)
+2026-10-21T16:53:56.5821755Z Updating files: 100% (8445/8445)
+2026-10-21T16:53:56.5822354Z Updating files: 100% (8445/8445), done.
+2026-10-21T16:53:56.5930870Z Switched to a new branch 'main'
+2026-10-21T16:53:56.5939345Z branch 'main' set up to track 'origin/main'.
+2026-10-21T16:53:56.6069798Z ##[endgroup]
+2026-10-21T16:53:56.6129851Z [command]/usr/bin/git log -1 --format=%H
+2026-10-21T16:53:56.6165890Z 7250b9a0007d0f307321e3b4c7076fa95430dbc3
+2026-10-21T16:53:56.6451986Z ##[group]Run actions/setup-node@v4
+2026-10-21T16:53:56.6452306Z with:
+2026-10-21T16:53:56.6452522Z   node-version: 24
+2026-10-21T16:53:56.6452742Z   always-auth: false
+2026-10-21T16:53:56.6452962Z   check-latest: false
+2026-10-21T16:53:56.6455725Z   token: ***
+2026-10-21T16:53:56.6455944Z ##[endgroup]
+2026-10-21T16:53:56.7979788Z Found in cache @ /opt/hostedtoolcache/node/24.22.0/x64
+2026-10-21T16:53:56.7983479Z (node:2266) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T16:53:56.7984204Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T16:53:56.7986705Z ##[group]Environment details
+2026-10-21T16:53:57.2835484Z node: v24.22.0
+2026-10-21T16:53:57.2835865Z npm: 11.19.1
+2026-10-21T16:53:57.2836218Z yarn: 1.22.22
+2026-10-21T16:53:57.2860616Z ##[endgroup]
+2026-10-21T16:53:57.3146839Z ##[group]Run dtolnay/rust-toolchain@stable
+2026-10-21T16:53:57.3147166Z with:
+2026-10-21T16:53:57.3147716Z   toolchain: stable
+2026-10-21T16:53:57.3147948Z ##[endgroup]
+2026-10-21T16:53:57.3216878Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+2026-10-21T16:53:57.3290326Z ##[group]Run if [[ -z $toolchain ]]; then
+2026-10-21T16:53:57.3290716Z [36;1mif [[ -z $toolchain ]]; then[0m
+2026-10-21T16:53:57.3291287Z [36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070[0m
+2026-10-21T16:53:57.3291874Z [36;1m  echo "'toolchain' is a required input" >&2[0m
+2026-10-21T16:53:57.3292195Z [36;1m  exit 1[0m
+2026-10-21T16:53:57.3292543Z [36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then[0m
+2026-10-21T16:53:57.3292976Z [36;1m  if [[ Linux == macOS ]]; then[0m
+2026-10-21T16:53:57.3293578Z [36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-10-21T16:53:57.3294121Z [36;1m  else[0m
+2026-10-21T16:53:57.3294535Z [36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT[0m
+2026-10-21T16:53:57.3295011Z [36;1m  fi[0m
+2026-10-21T16:53:57.3295329Z [36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then[0m
+2026-10-21T16:53:57.3295873Z [36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT[0m
+2026-10-21T16:53:57.3296353Z [36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then[0m
+2026-10-21T16:53:57.3296889Z [36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT[0m
+2026-10-21T16:53:57.3297639Z [36;1melse[0m
+2026-10-21T16:53:57.3297854Z [36;1m  delimiter=EOF[0m
+2026-10-21T16:53:57.3298179Z [36;1m  while [[ $toolchain == *$delimiter* ]]; do delimiter+=_; done[0m
+2026-10-21T16:53:57.3298894Z [36;1m  printf 'toolchain<<%s\n%s\n%s\n' "$delimiter" "$toolchain" "$delimiter" >> $GITHUB_OUTPUT[0m
+2026-10-21T16:53:57.3299323Z [36;1mfi[0m
+2026-10-21T16:53:57.3505220Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.3505618Z env:
+2026-10-21T16:53:57.3505832Z   toolchain: stable
+2026-10-21T16:53:57.3506062Z ##[endgroup]
+2026-10-21T16:53:57.3638936Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=42]
+2026-10-21T16:53:57.3643759Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+2026-10-21T16:53:57.3663544Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV
+2026-10-21T16:53:57.3664057Z [36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV[0m
+2026-10-21T16:53:57.3714827Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.3715177Z ##[endgroup]
+2026-10-21T16:53:57.3795751Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=15]
+2026-10-21T16:53:57.3798423Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+2026-10-21T16:53:57.3821565Z ##[group]Run if ! command -v rustup &>/dev/null; then
+2026-10-21T16:53:57.3821937Z [36;1mif ! command -v rustup &>/dev/null; then[0m
+2026-10-21T16:53:57.3822708Z [36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y[0m
+2026-10-21T16:53:57.3823456Z [36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH[0m
+2026-10-21T16:53:57.3823753Z [36;1mfi[0m
+2026-10-21T16:53:57.3872400Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.3872745Z env:
+2026-10-21T16:53:57.3872952Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.3873214Z ##[endgroup]
+2026-10-21T16:53:57.3952495Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=success;conclusion=success;duration_ms=15]
+2026-10-21T16:53:57.3954652Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+2026-10-21T16:53:57.3960665Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+2026-10-21T16:53:57.3972897Z ##[start-action display=rustup toolchain install stable;id=__dtolnay_rust-toolchain.__run_4]
+2026-10-21T16:53:57.3990367Z ##[group]Run set -f  # split targets and components on commas and whitespace, without glob expansion
+2026-10-21T16:53:57.3991049Z [36;1mset -f  # split targets and components on commas and whitespace, without glob expansion[0m
+2026-10-21T16:53:57.3991503Z [36;1mflags=()[0m
+2026-10-21T16:53:57.3991799Z [36;1mfor t in ${targets//,/ }; do flags+=(--target "$t"); done[0m
+2026-10-21T16:53:57.3992226Z [36;1mfor c in ${components//,/ }; do flags+=(--component "$c"); done[0m
+2026-10-21T16:53:57.3992750Z [36;1mif [[ $toolchain == nightly && -n $components ]]; then flags+=(--allow-downgrade); fi[0m
+2026-10-21T16:53:57.3993217Z [36;1mlog=$(mktemp)[0m
+2026-10-21T16:53:57.3993467Z [36;1mtrap 'rm -f "$log"' EXIT[0m
+2026-10-21T16:53:57.3993738Z [36;1mfor attempt in 1 2 3 4 5; do[0m
+2026-10-21T16:53:57.3994326Z [36;1m  if rustup toolchain install "$toolchain" "${flags[@]}" --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then[0m
+2026-10-21T16:53:57.3994913Z [36;1m    break[0m
+2026-10-21T16:53:57.3995199Z [36;1m  else[0m
+2026-10-21T16:53:57.3995439Z [36;1m    status=$?[0m
+2026-10-21T16:53:57.3995670Z [36;1m  fi[0m
+2026-10-21T16:53:57.3995975Z [36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \[0m
+2026-10-21T16:53:57.3996598Z [36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then[0m
+2026-10-21T16:53:57.3997078Z [36;1m    exit "$status"[0m
+2026-10-21T16:53:57.3997563Z [36;1m  fi[0m
+2026-10-21T16:53:57.3998018Z [36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2[0m
+2026-10-21T16:53:57.3998660Z [36;1m  sleep 30[0m
+2026-10-21T16:53:57.3998896Z [36;1mdone[0m
+2026-10-21T16:53:57.4046936Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.4047555Z env:
+2026-10-21T16:53:57.4047779Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.4048047Z   toolchain: stable
+2026-10-21T16:53:57.4048262Z   targets: 
+2026-10-21T16:53:57.4048473Z   components: 
+2026-10-21T16:53:57.4048694Z   RUSTUP_PERMIT_COPY_RENAME: 1
+2026-10-21T16:53:57.4048938Z ##[endgroup]
+2026-10-21T16:53:57.6272710Z info: syncing channel updates for stable-x86_64-unknown-linux-gnu
+2026-10-21T16:53:57.7266345Z 
+2026-10-21T16:53:57.7355651Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-21T16:53:57.7356104Z 
+2026-10-21T16:53:57.7411342Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=343]
+2026-10-21T16:53:57.7417278Z ##[start-action display=rustup default stable;id=__dtolnay_rust-toolchain.__run_5]
+2026-10-21T16:53:57.7438050Z ##[group]Run rustup default "$toolchain" --force-non-host
+2026-10-21T16:53:57.7438486Z [36;1mrustup default "$toolchain" --force-non-host[0m
+2026-10-21T16:53:57.7492832Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.7493194Z env:
+2026-10-21T16:53:57.7493411Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.7493691Z   toolchain: stable
+2026-10-21T16:53:57.7493909Z ##[endgroup]
+2026-10-21T16:53:57.7627592Z info: using existing install for stable-x86_64-unknown-linux-gnu
+2026-10-21T16:53:57.7659671Z info: default toolchain set to stable-x86_64-unknown-linux-gnu
+2026-10-21T16:53:57.7660102Z 
+2026-10-21T16:53:57.7749024Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-21T16:53:57.7763030Z 
+2026-10-21T16:53:57.7769167Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=35]
+2026-10-21T16:53:57.7773510Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+2026-10-21T16:53:57.7793254Z ##[group]Run DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+2026-10-21T16:53:57.7794166Z [36;1mDATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')[0m
+2026-10-21T16:53:57.7794872Z [36;1mHASH=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-hash: //p')[0m
+2026-10-21T16:53:57.7795407Z [36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT[0m
+2026-10-21T16:53:57.7849921Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.7850273Z env:
+2026-10-21T16:53:57.7850486Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.7850747Z   toolchain: stable
+2026-10-21T16:53:57.7850961Z ##[endgroup]
+2026-10-21T16:53:57.8305133Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=53]
+2026-10-21T16:53:57.8309432Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+2026-10-21T16:53:57.8338681Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+2026-10-21T16:53:57.8339376Z [36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then[0m
+2026-10-21T16:53:57.8340001Z [36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV[0m
+2026-10-21T16:53:57.8340537Z [36;1mfi[0m
+2026-10-21T16:53:57.8396945Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.8397435Z env:
+2026-10-21T16:53:57.8397654Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.8397921Z ##[endgroup]
+2026-10-21T16:53:57.8478790Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=16]
+2026-10-21T16:53:57.8481041Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+2026-10-21T16:53:57.8499005Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+2026-10-21T16:53:57.8499407Z [36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then[0m
+2026-10-21T16:53:57.8499911Z [36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV[0m
+2026-10-21T16:53:57.8500222Z [36;1mfi[0m
+2026-10-21T16:53:57.8548441Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.8548789Z env:
+2026-10-21T16:53:57.8549002Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.8549270Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:53:57.8549495Z ##[endgroup]
+2026-10-21T16:53:57.8634042Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=15]
+2026-10-21T16:53:57.8638358Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+2026-10-21T16:53:57.8656832Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+2026-10-21T16:53:57.8657719Z [36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70[0m
+2026-10-21T16:53:57.8658478Z [36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then[0m
+2026-10-21T16:53:57.8659253Z [36;1m  if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[89]\.'; then[0m
+2026-10-21T16:53:57.8659864Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-10-21T16:53:57.8660421Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV[0m
+2026-10-21T16:53:57.8660962Z [36;1m  elif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[67]\.'; then[0m
+2026-10-21T16:53:57.8661568Z [36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true[0m
+2026-10-21T16:53:57.8662107Z [36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV[0m
+2026-10-21T16:53:57.8662469Z [36;1m  fi[0m
+2026-10-21T16:53:57.8662669Z [36;1mfi[0m
+2026-10-21T16:53:57.8714851Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.8715196Z env:
+2026-10-21T16:53:57.8715600Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.8715887Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:53:57.8716124Z   CARGO_TERM_COLOR: always
+2026-10-21T16:53:57.8716355Z   toolchain: stable
+2026-10-21T16:53:57.8716562Z ##[endgroup]
+2026-10-21T16:53:57.9068419Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=42]
+2026-10-21T16:53:57.9072338Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+2026-10-21T16:53:57.9090768Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+2026-10-21T16:53:57.9091542Z [36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation[0m
+2026-10-21T16:53:57.9092215Z [36;1mif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.7[01]\.'; then[0m
+2026-10-21T16:53:57.9092717Z [36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV[0m
+2026-10-21T16:53:57.9093040Z [36;1mfi[0m
+2026-10-21T16:53:57.9145568Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.9145920Z env:
+2026-10-21T16:53:57.9146136Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.9146399Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:53:57.9146625Z   CARGO_TERM_COLOR: always
+2026-10-21T16:53:57.9146858Z   toolchain: stable
+2026-10-21T16:53:57.9147072Z ##[endgroup]
+2026-10-21T16:53:57.9363579Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=29]
+2026-10-21T16:53:57.9368845Z ##[start-action display=rustc +stable --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+2026-10-21T16:53:57.9387522Z ##[group]Run rustc +"$toolchain" --version --verbose
+2026-10-21T16:53:57.9387947Z [36;1mrustc +"$toolchain" --version --verbose[0m
+2026-10-21T16:53:57.9441269Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:53:57.9441619Z env:
+2026-10-21T16:53:57.9441840Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.9442120Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:53:57.9442887Z   CARGO_TERM_COLOR: always
+2026-10-21T16:53:57.9443127Z   toolchain: stable
+2026-10-21T16:53:57.9443336Z ##[endgroup]
+2026-10-21T16:53:57.9641151Z rustc 1.99.1 (58cf8f9c3 2026-10-13)
+2026-10-21T16:53:57.9641738Z binary: rustc
+2026-10-21T16:53:57.9642359Z commit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67
+2026-10-21T16:53:57.9643000Z commit-date: 2026-10-13
+2026-10-21T16:53:57.9643556Z host: x86_64-unknown-linux-gnu
+2026-10-21T16:53:57.9644019Z release: 1.99.1
+2026-10-21T16:53:57.9644445Z LLVM version: 23.1.1
+2026-10-21T16:53:57.9666195Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=29]
+2026-10-21T16:53:57.9778595Z ##[group]Run Swatinem/rust-cache@v2
+2026-10-21T16:53:57.9778918Z with:
+2026-10-21T16:53:57.9779140Z   prefix-key: v0-rust
+2026-10-21T16:53:57.9779382Z   add-job-id-key: true
+2026-10-21T16:53:57.9779639Z   add-rust-environment-hash-key: true
+2026-10-21T16:53:57.9779926Z   cache-targets: true
+2026-10-21T16:53:57.9780173Z   cache-all-crates: false
+2026-10-21T16:53:57.9780425Z   cache-workspace-crates: false
+2026-10-21T16:53:57.9780677Z   save-if: true
+2026-10-21T16:53:57.9780892Z   cache-provider: github
+2026-10-21T16:53:57.9781128Z   cache-bin: true
+2026-10-21T16:53:57.9781340Z   lookup-only: false
+2026-10-21T16:53:57.9781557Z   cmd-format: {0}
+2026-10-21T16:53:57.9781755Z env:
+2026-10-21T16:53:57.9781961Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:53:57.9782217Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:53:57.9782440Z   CARGO_TERM_COLOR: always
+2026-10-21T16:53:57.9782667Z ##[endgroup]
+2026-10-21T16:53:59.0612345Z ##[group]Cache Configuration
+2026-10-21T16:53:59.0613223Z Cache Provider:
+2026-10-21T16:53:59.0613777Z     github
+2026-10-21T16:53:59.0614219Z Workspaces:
+2026-10-21T16:53:59.0614882Z     /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T16:53:59.0615528Z Cache Paths:
+2026-10-21T16:53:59.0615936Z     /home/runner/.cargo/bin
+2026-10-21T16:53:59.0616460Z     /home/runner/.cargo/.crates.toml
+2026-10-21T16:53:59.0616991Z     /home/runner/.cargo/.crates2.json
+2026-10-21T16:53:59.0617595Z     /home/runner/.cargo/registry
+2026-10-21T16:53:59.0618149Z     /home/runner/.cargo/git
+2026-10-21T16:53:59.0618793Z     /home/runner/work/open-seo-spider/open-seo-spider/target
+2026-10-21T16:53:59.0619428Z Restore Key:
+2026-10-21T16:53:59.0619894Z     v0-rust-renderer-Linux-x64-01b81e85
+2026-10-21T16:53:59.0620408Z Cache Key:
+2026-10-21T16:53:59.0620907Z     v0-rust-renderer-Linux-x64-01b81e85-c3965fa5
+2026-10-21T16:53:59.0621476Z .. Prefix:
+2026-10-21T16:53:59.0621913Z   - v0-rust-renderer-Linux-x64
+2026-10-21T16:53:59.0622450Z .. Environment considered:
+2026-10-21T16:53:59.0622923Z   - Rust Versions:
+2026-10-21T16:53:59.0623605Z     - 1.99.1 x86_64-unknown-linux-gnu 58cf8f9c35b355199727627d07ae34a4e2846d67
+2026-10-21T16:53:59.0624312Z   - CARGO_HOME
+2026-10-21T16:53:59.0624704Z   - CARGO_INCREMENTAL
+2026-10-21T16:53:59.0625181Z   - CARGO_TERM_COLOR
+2026-10-21T16:53:59.0625613Z .. Lockfiles considered:
+2026-10-21T16:53:59.0626277Z   - /home/runner/work/open-seo-spider/open-seo-spider/Cargo.lock
+2026-10-21T16:53:59.0627247Z   - /home/runner/work/open-seo-spider/open-seo-spider/crates/app/Cargo.toml
+2026-10-21T16:53:59.0628570Z   - /home/runner/work/open-seo-spider/open-seo-spider/crates/core/Cargo.toml
+2026-10-21T16:53:59.0629588Z ##[endgroup]
+2026-10-21T16:53:59.0629816Z 
+2026-10-21T16:53:59.0630031Z ... Restoring cache ...
+2026-10-21T16:53:59.1603175Z Cache hit for: v0-rust-renderer-Linux-x64-01b81e85-c3965fa5
+2026-10-21T16:54:00.2139913Z Received 222298112 of 432359224 (51.4%), 211.4 MBs/sec
+2026-10-21T16:54:01.0398689Z Received 432359224 of 432359224 (100.0%), 225.8 MBs/sec
+2026-10-21T16:54:01.0412805Z Cache Size: ~412 MB (432359224 B)
+2026-10-21T16:54:01.0468239Z [command]/usr/bin/tar -xf /home/runner/work/_temp/468577c7-909f-4e8d-ac63-07e17bd78d5a/cache.tzst -P -C /home/runner/work/open-seo-spider/open-seo-spider --use-compress-program unzstd
+2026-10-21T16:54:03.9283184Z Cache restored successfully
+2026-10-21T16:54:03.9474532Z Restored from cache key "v0-rust-renderer-Linux-x64-01b81e85-c3965fa5" full match: true.
+2026-10-21T16:54:03.9783260Z ##[group]Run npm ci --ignore-scripts
+2026-10-21T16:54:03.9783650Z [36;1mnpm ci --ignore-scripts[0m
+2026-10-21T16:54:03.9845693Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:03.9846132Z env:
+2026-10-21T16:54:03.9846498Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:03.9846966Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:03.9847570Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:03.9848014Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:03.9848300Z ##[endgroup]
+2026-10-21T16:54:06.9981486Z 
+2026-10-21T16:54:06.9982197Z added 2 packages, and audited 3 packages in 3s
+2026-10-21T16:54:06.9989867Z 
+2026-10-21T16:54:06.9990168Z found 0 vulnerabilities
+2026-10-21T16:54:07.0427247Z ##[group]Run node node_modules/playwright-core/cli.js install chromium --with-deps
+2026-10-21T16:54:07.0428553Z [36;1mnode node_modules/playwright-core/cli.js install chromium --with-deps[0m
+2026-10-21T16:54:07.0480493Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:07.0480768Z env:
+2026-10-21T16:54:07.0480991Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:07.0481287Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:07.0481528Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:07.0481780Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:07.0482022Z ##[endgroup]
+2026-10-21T16:54:07.4026176Z Installing dependencies...
+2026-10-21T16:54:07.4097643Z Switching to root user to install dependencies...
+2026-10-21T16:54:07.4889828Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-21T16:54:07.5186008Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-21T16:54:07.5215617Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-21T16:54:07.5242499Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-21T16:54:07.5244363Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-21T16:54:07.5267674Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-21T16:54:07.6628739Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1400 kB]
+2026-10-21T16:54:07.6778256Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [309 kB]
+2026-10-21T16:54:07.6799996Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1706 kB]
+2026-10-21T16:54:07.6889763Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+2026-10-21T16:54:07.7229245Z Get:11 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [567 kB]
+2026-10-21T16:54:07.7303273Z Get:12 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [630 kB]
+2026-10-21T16:54:07.8346623Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1145 kB]
+2026-10-21T16:54:07.8402288Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-21T16:54:07.8429525Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1222 kB]
+2026-10-21T16:54:11.0587741Z Fetched 7934 kB in 1s (9534 kB/s)
+2026-10-21T16:54:12.1360795Z Reading package lists...
+2026-10-21T16:54:12.4794547Z Reading package lists...
+2026-10-21T16:54:12.7132359Z Building dependency tree...
+2026-10-21T16:54:12.7140898Z Reading state information...
+2026-10-21T16:54:12.9475317Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+2026-10-21T16:54:12.9476304Z libasound2t64 set to manually installed.
+2026-10-21T16:54:12.9477704Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-21T16:54:12.9478529Z libatk-bridge2.0-0t64 set to manually installed.
+2026-10-21T16:54:12.9479341Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-21T16:54:12.9480120Z libatk1.0-0t64 set to manually installed.
+2026-10-21T16:54:12.9480725Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-21T16:54:12.9481689Z libatspi2.0-0t64 set to manually installed.
+2026-10-21T16:54:12.9482197Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-10-21T16:54:12.9482818Z libcairo2 set to manually installed.
+2026-10-21T16:54:12.9483622Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+2026-10-21T16:54:12.9484263Z libcups2t64 set to manually installed.
+2026-10-21T16:54:12.9484787Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-10-21T16:54:12.9485287Z libdbus-1-3 set to manually installed.
+2026-10-21T16:54:12.9485811Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+2026-10-21T16:54:12.9486318Z libdrm2 set to manually installed.
+2026-10-21T16:54:12.9486813Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+2026-10-21T16:54:12.9487934Z libgbm1 set to manually installed.
+2026-10-21T16:54:12.9488468Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-10-21T16:54:12.9488877Z libnspr4 set to manually installed.
+2026-10-21T16:54:12.9489280Z libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+2026-10-21T16:54:12.9489687Z libnss3 set to manually installed.
+2026-10-21T16:54:12.9490115Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-10-21T16:54:12.9490553Z libpango-1.0-0 set to manually installed.
+2026-10-21T16:54:12.9490986Z libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+2026-10-21T16:54:12.9491383Z libx11-6 set to manually installed.
+2026-10-21T16:54:12.9491946Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-10-21T16:54:12.9492617Z libxcb1 set to manually installed.
+2026-10-21T16:54:12.9493188Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-10-21T16:54:12.9493623Z libxcomposite1 set to manually installed.
+2026-10-21T16:54:12.9494054Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-10-21T16:54:12.9494461Z libxdamage1 set to manually installed.
+2026-10-21T16:54:12.9494860Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-10-21T16:54:12.9495246Z libxext6 set to manually installed.
+2026-10-21T16:54:12.9495650Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-10-21T16:54:12.9496047Z libxfixes3 set to manually installed.
+2026-10-21T16:54:12.9496460Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-10-21T16:54:12.9497074Z libxkbcommon0 set to manually installed.
+2026-10-21T16:54:12.9497809Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-10-21T16:54:12.9498209Z libxrandr2 set to manually installed.
+2026-10-21T16:54:12.9498712Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-10-21T16:54:12.9499308Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-10-21T16:54:12.9499752Z libfontconfig1 set to manually installed.
+2026-10-21T16:54:12.9500211Z libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+2026-10-21T16:54:12.9500651Z libfreetype6 set to manually installed.
+2026-10-21T16:54:12.9501081Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-10-21T16:54:12.9501513Z fonts-liberation set to manually installed.
+2026-10-21T16:54:12.9501937Z The following additional packages will be installed:
+2026-10-21T16:54:12.9502477Z   gir1.2-glib-2.0 libglib2.0-bin libglib2.0-data xfonts-encodings xfonts-utils
+2026-10-21T16:54:12.9502897Z   xserver-common
+2026-10-21T16:54:12.9503263Z Suggested packages:
+2026-10-21T16:54:12.9503518Z   low-memory-monitor
+2026-10-21T16:54:12.9503773Z Recommended packages:
+2026-10-21T16:54:12.9504099Z   fonts-ipafont-mincho fonts-tlwg-loma xfonts-base
+2026-10-21T16:54:12.9770187Z The following NEW packages will be installed:
+2026-10-21T16:54:12.9771000Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-10-21T16:54:12.9780245Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-10-21T16:54:12.9781002Z   xfonts-utils
+2026-10-21T16:54:12.9784395Z The following packages will be upgraded:
+2026-10-21T16:54:12.9791564Z   gir1.2-glib-2.0 libglib2.0-0t64 libglib2.0-bin libglib2.0-data
+2026-10-21T16:54:12.9792643Z   xserver-common xvfb
+2026-10-21T16:54:13.0029129Z 6 upgraded, 9 newly installed, 0 to remove and 46 not upgraded.
+2026-10-21T16:54:13.0029877Z Need to get 23.9 MB of archives.
+2026-10-21T16:54:13.0030350Z After this operation, 79.5 MB of additional disk space will be used.
+2026-10-21T16:54:13.0030901Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-21T16:54:13.1282448Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-10-21T16:54:13.3631848Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglib2.0-data all 2.80.0-6ubuntu3.10 [50.2 kB]
+2026-10-21T16:54:13.4732683Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglib2.0-bin amd64 2.80.0-6ubuntu3.10 [97.9 kB]
+2026-10-21T16:54:13.5852037Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 gir1.2-glib-2.0 amd64 2.80.0-6ubuntu3.10 [183 kB]
+2026-10-21T16:54:13.6980345Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglib2.0-0t64 amd64 2.80.0-6ubuntu3.10 [1548 kB]
+2026-10-21T16:54:13.8555578Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-10-21T16:54:14.1656186Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-10-21T16:54:14.2747243Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-10-21T16:54:14.5309969Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-10-21T16:54:14.8873077Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-10-21T16:54:15.2039263Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-10-21T16:54:15.3143172Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-10-21T16:54:15.4586070Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-10-21T16:54:15.5703824Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 xserver-common all 2:21.1.12-1ubuntu1.9 [35.0 kB]
+2026-10-21T16:54:15.6762580Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 xvfb amd64 2:21.1.12-1ubuntu1.9 [877 kB]
+2026-10-21T16:54:15.9917590Z Fetched 23.9 MB in 3s (8815 kB/s)
+2026-10-21T16:54:16.0181811Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-10-21T16:54:16.0497090Z (Reading database ... 
+2026-10-21T16:54:16.0498146Z (Reading database ... 5%
+2026-10-21T16:54:16.0498777Z (Reading database ... 10%
+2026-10-21T16:54:16.0499150Z (Reading database ... 15%
+2026-10-21T16:54:16.0499501Z (Reading database ... 20%
+2026-10-21T16:54:16.0499837Z (Reading database ... 25%
+2026-10-21T16:54:16.0500157Z (Reading database ... 30%
+2026-10-21T16:54:16.0500496Z (Reading database ... 35%
+2026-10-21T16:54:16.0500819Z (Reading database ... 40%
+2026-10-21T16:54:16.0501141Z (Reading database ... 45%
+2026-10-21T16:54:16.0501465Z (Reading database ... 50%
+2026-10-21T16:54:16.0552559Z (Reading database ... 55%
+2026-10-21T16:54:16.1832337Z (Reading database ... 60%
+2026-10-21T16:54:16.3843724Z (Reading database ... 65%
+2026-10-21T16:54:16.4913269Z (Reading database ... 70%
+2026-10-21T16:54:16.6306895Z (Reading database ... 75%
+2026-10-21T16:54:16.8191301Z (Reading database ... 80%
+2026-10-21T16:54:17.0047236Z (Reading database ... 85%
+2026-10-21T16:54:17.2269137Z (Reading database ... 90%
+2026-10-21T16:54:17.3858107Z (Reading database ... 95%
+2026-10-21T16:54:17.3858834Z (Reading database ... 100%
+2026-10-21T16:54:17.3859866Z (Reading database ... 214410 files and directories currently installed.)
+2026-10-21T16:54:17.3905576Z Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-10-21T16:54:17.4008689Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-21T16:54:17.6563995Z Preparing to unpack .../01-libglib2.0-data_2.80.0-6ubuntu3.10_all.deb ...
+2026-10-21T16:54:17.6580202Z Unpacking libglib2.0-data (2.80.0-6ubuntu3.10) over (2.80.0-6ubuntu3.9) ...
+2026-10-21T16:54:17.7004157Z Preparing to unpack .../02-libglib2.0-bin_2.80.0-6ubuntu3.10_amd64.deb ...
+2026-10-21T16:54:17.7021356Z Unpacking libglib2.0-bin (2.80.0-6ubuntu3.10) over (2.80.0-6ubuntu3.9) ...
+2026-10-21T16:54:17.7565822Z Preparing to unpack .../03-gir1.2-glib-2.0_2.80.0-6ubuntu3.10_amd64.deb ...
+2026-10-21T16:54:17.7582975Z Unpacking gir1.2-glib-2.0:amd64 (2.80.0-6ubuntu3.10) over (2.80.0-6ubuntu3.9) ...
+2026-10-21T16:54:17.8024624Z Preparing to unpack .../04-libglib2.0-0t64_2.80.0-6ubuntu3.10_amd64.deb ...
+2026-10-21T16:54:17.8163012Z Unpacking libglib2.0-0t64:amd64 (2.80.0-6ubuntu3.10) over (2.80.0-6ubuntu3.9) ...
+2026-10-21T16:54:17.8650509Z Selecting previously unselected package fonts-freefont-ttf.
+2026-10-21T16:54:17.8800256Z Preparing to unpack .../05-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-10-21T16:54:17.8806834Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-21T16:54:17.9670923Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-10-21T16:54:17.9812409Z Preparing to unpack .../06-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-10-21T16:54:17.9838426Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-21T16:54:18.0076598Z Selecting previously unselected package fonts-unifont.
+2026-10-21T16:54:18.0223079Z Preparing to unpack .../07-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-10-21T16:54:18.0230113Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-10-21T16:54:18.1342924Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-21T16:54:18.1485943Z Preparing to unpack .../08-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-21T16:54:18.1600152Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-21T16:54:18.6507720Z Selecting previously unselected package xfonts-encodings.
+2026-10-21T16:54:18.6648104Z Preparing to unpack .../09-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-10-21T16:54:18.6653292Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-21T16:54:18.6974458Z Selecting previously unselected package xfonts-utils.
+2026-10-21T16:54:18.7115685Z Preparing to unpack .../10-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-10-21T16:54:18.7123833Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-10-21T16:54:18.7518247Z Selecting previously unselected package xfonts-cyrillic.
+2026-10-21T16:54:18.7662781Z Preparing to unpack .../11-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-10-21T16:54:18.7669618Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-21T16:54:18.8057766Z Selecting previously unselected package xfonts-scalable.
+2026-10-21T16:54:18.8202092Z Preparing to unpack .../12-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-10-21T16:54:18.8209824Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-21T16:54:18.8620960Z Preparing to unpack .../13-xserver-common_2%3a21.1.12-1ubuntu1.9_all.deb ...
+2026-10-21T16:54:18.8638649Z Unpacking xserver-common (2:21.1.12-1ubuntu1.9) over (2:21.1.12-1ubuntu1.8) ...
+2026-10-21T16:54:18.9052305Z Preparing to unpack .../14-xvfb_2%3a21.1.12-1ubuntu1.9_amd64.deb ...
+2026-10-21T16:54:18.9069074Z Unpacking xvfb (2:21.1.12-1ubuntu1.9) over (2:21.1.12-1ubuntu1.8) ...
+2026-10-21T16:54:18.9659797Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-21T16:54:18.9782787Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-21T16:54:18.9802112Z Setting up libglib2.0-0t64:amd64 (2.80.0-6ubuntu3.10) ...
+2026-10-21T16:54:18.9972290Z Setting up libglib2.0-data (2.80.0-6ubuntu3.10) ...
+2026-10-21T16:54:18.9991156Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-21T16:54:19.0009436Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-21T16:54:19.0027029Z Setting up gir1.2-glib-2.0:amd64 (2.80.0-6ubuntu3.10) ...
+2026-10-21T16:54:19.0045265Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-21T16:54:19.0116633Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-10-21T16:54:19.0131579Z Setting up xserver-common (2:21.1.12-1ubuntu1.9) ...
+2026-10-21T16:54:19.0148585Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-10-21T16:54:19.0164703Z Setting up xvfb (2:21.1.12-1ubuntu1.9) ...
+2026-10-21T16:54:19.0181370Z Setting up libglib2.0-bin (2.80.0-6ubuntu3.10) ...
+2026-10-21T16:54:19.0199413Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-10-21T16:54:19.0241207Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-21T16:54:19.0555721Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-21T16:54:19.0875049Z Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+2026-10-21T16:54:19.1224725Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-21T16:54:19.1250017Z Not building database; man-db/auto-update is not 'true'.
+2026-10-21T16:54:19.1265302Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-21T16:54:19.8613705Z 
+2026-10-21T16:54:19.8614520Z Running kernel seems to be up-to-date.
+2026-10-21T16:54:19.8614945Z 
+2026-10-21T16:54:19.8615137Z Restarting services...
+2026-10-21T16:54:19.9094707Z  systemctl restart packagekit.service php8.3-fpm.service polkit.service udisks2.service
+2026-10-21T16:54:20.0389938Z 
+2026-10-21T16:54:20.0390899Z Service restarts being deferred:
+2026-10-21T16:54:20.0391953Z  systemctl restart ModemManager.service
+2026-10-21T16:54:20.0392977Z  systemctl restart networkd-dispatcher.service
+2026-10-21T16:54:20.0393605Z 
+2026-10-21T16:54:20.0394045Z No containers need to be restarted.
+2026-10-21T16:54:20.0394382Z 
+2026-10-21T16:54:20.0394716Z No user sessions are running outdated binaries.
+2026-10-21T16:54:20.0395142Z 
+2026-10-21T16:54:20.0395655Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-21T16:54:21.0635076Z Downloading Chrome for Testing 156.0.8078.4 (playwright chromium v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-linux64.zip
+2026-10-21T16:54:21.4884933Z |                                                                                |   0% of 191.1 MiB
+2026-10-21T16:54:21.6582983Z |■■■■■■■■                                                                        |  10% of 191.1 MiB
+2026-10-21T16:54:21.7373510Z |■■■■■■■■■■■■■■■■                                                                |  20% of 191.1 MiB
+2026-10-21T16:54:21.8370267Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 191.1 MiB
+2026-10-21T16:54:21.9015159Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 191.1 MiB
+2026-10-21T16:54:21.9780869Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 191.1 MiB
+2026-10-21T16:54:22.0746468Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 191.1 MiB
+2026-10-21T16:54:22.1525824Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 191.1 MiB
+2026-10-21T16:54:22.2555873Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 191.1 MiB
+2026-10-21T16:54:22.3315398Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 191.1 MiB
+2026-10-21T16:54:22.4299286Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 191.1 MiB
+2026-10-21T16:54:25.5966711Z Chrome for Testing 156.0.8078.4 (playwright chromium v1248) downloaded to /home/runner/.cache/ms-playwright/chromium-1248
+2026-10-21T16:54:25.5973132Z Downloading FFmpeg (playwright ffmpeg v1013) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1013/ffmpeg-linux.zip
+2026-10-21T16:54:26.1040411Z |                                                                                |   0% of 2.2 MiB
+2026-10-21T16:54:26.1136294Z |■■■■■■■■                                                                        |  10% of 2.2 MiB
+2026-10-21T16:54:26.1184021Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.2 MiB
+2026-10-21T16:54:26.1213247Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.2 MiB
+2026-10-21T16:54:26.1243568Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.2 MiB
+2026-10-21T16:54:26.1257077Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.2 MiB
+2026-10-21T16:54:26.1271407Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.2 MiB
+2026-10-21T16:54:26.1285529Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.2 MiB
+2026-10-21T16:54:26.1299789Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.2 MiB
+2026-10-21T16:54:26.1326075Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.2 MiB
+2026-10-21T16:54:26.1374905Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.2 MiB
+2026-10-21T16:54:26.2011299Z FFmpeg (playwright ffmpeg v1013) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1013
+2026-10-21T16:54:26.2015272Z Downloading Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) from https://cdn.playwright.dev/builds/cft/156.0.8078.4/linux64/chrome-headless-shell-linux64.zip
+2026-10-21T16:54:26.6178716Z |                                                                                |   0% of 120 MiB
+2026-10-21T16:54:26.7180520Z |■■■■■■■■                                                                        |  10% of 120 MiB
+2026-10-21T16:54:26.7883794Z |■■■■■■■■■■■■■■■■                                                                |  20% of 120 MiB
+2026-10-21T16:54:26.8454653Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 120 MiB
+2026-10-21T16:54:26.9170614Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 120 MiB
+2026-10-21T16:54:26.9559336Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 120 MiB
+2026-10-21T16:54:26.9955239Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 120 MiB
+2026-10-21T16:54:27.0504013Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 120 MiB
+2026-10-21T16:54:27.0853422Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 120 MiB
+2026-10-21T16:54:27.1346836Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 120 MiB
+2026-10-21T16:54:27.1908401Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 120 MiB
+2026-10-21T16:54:29.4235007Z Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1248
+2026-10-21T16:54:29.4432196Z ##[group]Run node --input-type=module -e 'import {chromium} from "playwright-core"; import {appendFileSync} from "node:fs"; appendFileSync(process.env.GITHUB_ENV, `OPEN_SEO_BROWSER_PATH=${chromium.executablePath()}\n`);'
+2026-10-21T16:54:29.4433791Z [36;1mnode --input-type=module -e 'import {chromium} from "playwright-core"; import {appendFileSync} from "node:fs"; appendFileSync(process.env.GITHUB_ENV, `OPEN_SEO_BROWSER_PATH=${chromium.executablePath()}\n`);'[0m
+2026-10-21T16:54:29.4486077Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:29.4486346Z env:
+2026-10-21T16:54:29.4486563Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:29.4486847Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:29.4487085Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:29.4487654Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:29.4487919Z ##[endgroup]
+2026-10-21T16:54:29.8203131Z ##[group]Run if [[ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]]; then
+2026-10-21T16:54:29.8203785Z [36;1mif [[ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]]; then[0m
+2026-10-21T16:54:29.8204352Z [36;1m  # Exact downloaded executable only; Chromium sandbox remains enabled.[0m
+2026-10-21T16:54:29.8204897Z [36;1m  sudo tee /etc/apparmor.d/open-seo-spider-ci-chromium > /dev/null <<EOF[0m
+2026-10-21T16:54:29.8205316Z [36;1mabi <abi/4.0>,[0m
+2026-10-21T16:54:29.8205579Z [36;1minclude <tunables/global>[0m
+2026-10-21T16:54:29.8206042Z [36;1mprofile open-seo-spider-ci-chromium "$OPEN_SEO_BROWSER_PATH" flags=(unconfined) {[0m
+2026-10-21T16:54:29.8206509Z [36;1m  userns,[0m
+2026-10-21T16:54:29.8206729Z [36;1m}[0m
+2026-10-21T16:54:29.8206927Z [36;1mEOF[0m
+2026-10-21T16:54:29.8207927Z [36;1m  sudo apparmor_parser -r /etc/apparmor.d/open-seo-spider-ci-chromium[0m
+2026-10-21T16:54:29.8208373Z [36;1mfi[0m
+2026-10-21T16:54:29.8260064Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T16:54:29.8260431Z env:
+2026-10-21T16:54:29.8260658Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:29.8260947Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:29.8261189Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:29.8261441Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:29.8261874Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:29.8262346Z ##[endgroup]
+2026-10-21T16:54:29.8581503Z ##[group]Run npm test
+2026-10-21T16:54:29.8581829Z [36;1mnpm test[0m
+2026-10-21T16:54:29.8633081Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:29.8633362Z env:
+2026-10-21T16:54:29.8633588Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:29.8633890Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:29.8634136Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:29.8634390Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:29.8634875Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:29.8635375Z ##[endgroup]
+2026-10-21T16:54:29.9944891Z 
+2026-10-21T16:54:29.9945607Z > open-seo-spider-renderer@0.1.0 test
+2026-10-21T16:54:29.9946505Z > node --test tests/*.test.mjs
+2026-10-21T16:54:29.9946722Z 
+2026-10-21T16:54:30.4646868Z ✔ response header observations redact cookie values while preserving independent attributes (1.231805ms)
+2026-10-21T16:54:30.4688764Z ✔ validation rejects non-HTTP URLs, header injection and unbounded options (1.208571ms)
+2026-10-21T16:54:30.5050031Z ✔ job pool caps concurrency, queue growth and shutdown (42.301494ms)
+2026-10-21T16:54:30.5379611Z ▶ real installed browser renders JavaScript, isolates jobs and audits owned fixtures
+2026-10-21T16:54:30.5388975Z   ✔ health is available before launching a browser (22.39513ms)
+2026-10-21T16:54:31.2370026Z   ✔ bounded cold browser launch completes before ordinary functional requests (688.554297ms)
+2026-10-21T16:54:31.6469761Z   ✔ dynamic title and link, console errors, network and PNG are captured (420.760477ms)
+2026-10-21T16:54:32.3594543Z   ✔ cookies and local storage do not leak across jobs (710.068553ms)
+2026-10-21T16:54:32.7555637Z   ✔ named browser scripts await DOM values and retain individual errors (397.145192ms)
+2026-10-21T16:54:33.8119446Z   ✔ cookie audit records attributes without cookie values and remains isolated (1049.595537ms)
+2026-10-21T16:54:36.3650519Z   ✔ CPU-bound custom script deadline aborts rendering and leaves worker reusable (2555.572875ms)
+2026-10-21T16:54:37.5689304Z   ✔ custom credentials stay on their origin for resources and redirects (1204.73144ms)
+2026-10-21T16:54:38.2099883Z   ✔ axe violations are reported without claiming full accessibility compliance (639.198222ms)
+2026-10-21T16:54:38.5846177Z   ✔ HTTP error status remains an observation rather than a worker failure (376.735649ms)
+2026-10-21T16:54:39.5260732Z   ✔ navigation timeout closes its context and releases capacity (938.06704ms)
+2026-10-21T16:54:39.5444307Z   ✔ HTTP boundary rejects malformed inputs and foreign browser origins (21.194653ms)
+2026-10-21T16:54:39.6059618Z   ✔ loopback shutdown responds then closes the browser and rejects new jobs (62.491957ms)
+2026-10-21T16:54:39.6066771Z ✔ real installed browser renders JavaScript, isolates jobs and audits owned fixtures (9103.070017ms)
+2026-10-21T16:54:39.6071184Z ℹ Browser executable: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:39.6072772Z ℹ Cold browser launch and first render: 689 ms
+2026-10-21T16:54:39.6403754Z ℹ tests 17
+2026-10-21T16:54:39.6404534Z ℹ suites 0
+2026-10-21T16:54:39.6405304Z ℹ pass 17
+2026-10-21T16:54:39.6405799Z ℹ fail 0
+2026-10-21T16:54:39.6406244Z ℹ cancelled 0
+2026-10-21T16:54:39.6406699Z ℹ skipped 0
+2026-10-21T16:54:39.6407123Z ℹ todo 0
+2026-10-21T16:54:39.6407955Z ℹ duration_ms 9606.672653
+2026-10-21T16:54:39.6581091Z ##[group]Run node web/verification/saved-comparison-contract.test.cjs
+2026-10-21T16:54:39.6581716Z [36;1mnode web/verification/saved-comparison-contract.test.cjs[0m
+2026-10-21T16:54:39.6632777Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:39.6633047Z env:
+2026-10-21T16:54:39.6633273Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:39.6633559Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:39.6633831Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:39.6634093Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:39.6634543Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:39.6635029Z ##[endgroup]
+2026-10-21T16:54:39.7099088Z PASS accepts versioned complete result shape and exact page counts
+2026-10-21T16:54:39.7104227Z PASS unknown and partial facts retain source profiles without empty coercion
+2026-10-21T16:54:39.7115188Z PASS rejects unknown engine
+2026-10-21T16:54:39.7119991Z PASS rejects wrong counts
+2026-10-21T16:54:39.7124597Z PASS rejects duplicate identity
+2026-10-21T16:54:39.7128367Z PASS rejects missing fact state
+2026-10-21T16:54:39.7132866Z PASS rejects duplicate field
+2026-10-21T16:54:39.7136163Z PASS rejects inconsistent added identity
+2026-10-21T16:54:39.7142782Z PASS rejects nonzero website request claim
+2026-10-21T16:54:39.7143809Z PASS CSV formula protection includes BOM and whitespace
+2026-10-21T16:54:39.7168073Z PASS CSV quotes and multiline old/new JSON plus profile/provenance preserved
+2026-10-21T16:54:39.7172951Z PASS CSV refuses imprecise integer instead of silently rounding
+2026-10-21T16:54:39.7176737Z PASS empty cohort exports explicit CSV header
+2026-10-21T16:54:39.7178801Z PASS safeJSON preserves ordinary metadata and safe integer boundary
+2026-10-21T16:54:39.7180384Z PASS safeJSON removes rounded numeric metadata while preserving other keys
+2026-10-21T16:54:39.7181783Z PASS safeJSON keeps exact decimal strings unchanged
+2026-10-21T16:54:39.7192594Z PASS opt-in full report shape binds declared profiles counts hashes and original URL references
+2026-10-21T16:54:39.7209239Z PASS bundle must be explicitly requested and cannot be silently absent
+2026-10-21T16:54:39.7212574Z PASS opt-in rejects future bundle version
+2026-10-21T16:54:39.7216072Z PASS opt-in rejects unknown report representation
+2026-10-21T16:54:39.7219669Z PASS opt-in rejects unknown typed binding
+2026-10-21T16:54:39.7223314Z PASS opt-in rejects snapshot hash mismatch
+2026-10-21T16:54:39.7228198Z PASS opt-in rejects snapshot byte count mismatch
+2026-10-21T16:54:39.7233213Z PASS opt-in rejects report page inventory mismatch
+2026-10-21T16:54:39.7238554Z PASS opt-in rejects report reference URL mismatch
+2026-10-21T16:54:39.7243589Z PASS opt-in rejects unexpected bundle wrapper property
+2026-10-21T16:54:39.7265454Z PASS bundle validation retains received original bodies and unknown/partial comparison states without coercion
+2026-10-21T16:54:39.7283060Z PASS CSV remains compared facts and excludes optional report body data
+2026-10-21T16:54:39.7293449Z Proof: /tmp/open-seo-spider-comparison-unit-ePxwL6/unit-results.json
+2026-10-21T16:54:39.7398568Z ##[group]Run node web/verification/saved-comparison-native-fence.test.cjs
+2026-10-21T16:54:39.7399637Z [36;1mnode web/verification/saved-comparison-native-fence.test.cjs[0m
+2026-10-21T16:54:39.7454169Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:39.7454442Z env:
+2026-10-21T16:54:39.7454682Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:39.7454975Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:39.7455234Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:39.7455484Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:39.7455924Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:39.7456392Z ##[endgroup]
+2026-10-21T16:54:39.7890029Z PASS MCP crawl mutation blocked before delivery
+2026-10-21T16:54:39.7892104Z PASS same-origin direct crawl mutation blocked before delivery
+2026-10-21T16:54:39.7893076Z PASS DELETE outside /api inventory blocked and captured
+2026-10-21T16:54:39.7894039Z PASS saved comparison POST remains allowed and captured
+2026-10-21T16:54:39.8005546Z ##[group]Run node web/verification/saved-comparison-bundle-native-fence.test.cjs
+2026-10-21T16:54:39.8006708Z [36;1mnode web/verification/saved-comparison-bundle-native-fence.test.cjs[0m
+2026-10-21T16:54:39.8082940Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:39.8083463Z env:
+2026-10-21T16:54:39.8083871Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:39.8084382Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:39.8084818Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:39.8085290Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:39.8086092Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:39.8086950Z ##[endgroup]
+2026-10-21T16:54:39.8511619Z PASS MCP crawl mutation blocked before delivery
+2026-10-21T16:54:39.8518395Z PASS same-origin direct crawl mutation blocked before delivery
+2026-10-21T16:54:39.8519598Z PASS DELETE outside /api inventory blocked and captured
+2026-10-21T16:54:39.8520815Z PASS saved comparison POST remains allowed and captured
+2026-10-21T16:54:39.8627267Z ##[group]Run node scripts/update-feature-todo.mjs --check
+2026-10-21T16:54:39.8628342Z [36;1mnode scripts/update-feature-todo.mjs --check[0m
+2026-10-21T16:54:39.8690682Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:39.8690962Z env:
+2026-10-21T16:54:39.8691190Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:39.8691704Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:39.8691959Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:39.8692210Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:39.8692654Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:39.8693122Z ##[endgroup]
+2026-10-21T16:54:39.9504294Z PASS: 144 unique grouped capabilities; 39/68/37; 416 filters; 32 workflows.
+2026-10-21T16:54:39.9609568Z ##[group]Run node --test web/verification/serp-state-race.test.cjs
+2026-10-21T16:54:39.9610105Z [36;1mnode --test web/verification/serp-state-race.test.cjs[0m
+2026-10-21T16:54:39.9660898Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:39.9661177Z env:
+2026-10-21T16:54:39.9661397Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:39.9661676Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:39.9661915Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:39.9662171Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:39.9662600Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:39.9663075Z ##[endgroup]
+2026-10-21T16:54:40.0720689Z ✔ a submitted edit invalidates an import while File.text is still pending (10.69063ms)
+2026-10-21T16:54:40.0748225Z ✔ a late import response cannot overwrite a newer submitted edit or persisted draft (3.666288ms)
+2026-10-21T16:54:40.0788664Z ✔ a newer import wins when responses complete in reverse order (2.886235ms)
+2026-10-21T16:54:40.0797993Z ✔ an older import completion cannot clear the newer selected file or status (2.1419ms)
+2026-10-21T16:54:40.0816510Z ✔ a newer import also wins when file reads finish in reverse order (1.947948ms)
+2026-10-21T16:54:40.0834924Z ✔ adding a row invalidates an in-flight import and selects the new blank editor row (1.894859ms)
+2026-10-21T16:54:40.0858341Z ✔ deleting a row invalidates an in-flight import and clears measurements for shifted rows (1.962756ms)
+2026-10-21T16:54:40.0882462Z ✔ an import replaces an older in-flight preview without the old metrics returning (2.341561ms)
+2026-10-21T16:54:40.0908734Z ✔ a stale preview error cannot replace the status of a completed import (1.993933ms)
+2026-10-21T16:54:40.0926292Z ✔ preview completion preserves text typed after the last submitted edit (2.36842ms)
+2026-10-21T16:54:40.0945125Z ✔ an import cannot overwrite an unsubmitted newer form draft (1.698035ms)
+2026-10-21T16:54:40.0973671Z ✔ an older preview cannot restore a deleted row after the newer preview completes (2.906974ms)
+2026-10-21T16:54:40.1009084Z ✔ JSON snapshots and CSV API inputs keep exact ordered duplicate rows and only local API requests (2.561621ms)
+2026-10-21T16:54:40.1102219Z ℹ tests 13
+2026-10-21T16:54:40.1102688Z ℹ suites 0
+2026-10-21T16:54:40.1103137Z ℹ pass 13
+2026-10-21T16:54:40.1103571Z ℹ fail 0
+2026-10-21T16:54:40.1103990Z ℹ cancelled 0
+2026-10-21T16:54:40.1104439Z ℹ skipped 0
+2026-10-21T16:54:40.1104918Z ℹ todo 0
+2026-10-21T16:54:40.1105406Z ℹ duration_ms 103.508209
+2026-10-21T16:54:40.1213234Z ##[group]Run node --test web/verification/robots-input-state.test.cjs
+2026-10-21T16:54:40.1214227Z [36;1mnode --test web/verification/robots-input-state.test.cjs[0m
+2026-10-21T16:54:40.1279346Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:40.1279635Z env:
+2026-10-21T16:54:40.1279860Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:40.1280144Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:40.1280399Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:40.1280652Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:40.1281094Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:40.1281555Z ##[endgroup]
+2026-10-21T16:54:40.2537699Z ✔ empty non-ASCII and control-containing agent values are rejected before API (5.647297ms)
+2026-10-21T16:54:40.2541510Z ✔ all positive bounded numeric fields reject zero negative fractional missing and excessive values (16.387961ms)
+2026-10-21T16:54:40.2548667Z ✔ limits count UTF-8 bytes field rows total input and parser work before API (4.056765ms)
+2026-10-21T16:54:40.2552148Z ✔ exact URL order duplicates and interior empty rows survive local submission and JSON export (3.009856ms)
+2026-10-21T16:54:40.2562226Z ✔ reverse responses cannot replace newer submitted rules agent or results (1.269975ms)
+2026-10-21T16:54:40.2563966Z ✔ an unsent edit invalidates old success error and CSV export responses (1.838123ms)
+2026-10-21T16:54:40.2574116Z ✔ preset selection invalidates prior results and every result cell uses safe text (1.157015ms)
+2026-10-21T16:54:40.2690328Z ℹ tests 7
+2026-10-21T16:54:40.2690814Z ℹ suites 0
+2026-10-21T16:54:40.2698305Z ℹ pass 7
+2026-10-21T16:54:40.2698710Z ℹ fail 0
+2026-10-21T16:54:40.2699101Z ℹ cancelled 0
+2026-10-21T16:54:40.2699513Z ℹ skipped 0
+2026-10-21T16:54:40.2699900Z ℹ todo 0
+2026-10-21T16:54:40.2700346Z ℹ duration_ms 102.443251
+2026-10-21T16:54:40.2827222Z ##[group]Run node --test web/verification/list-import-state.test.mjs
+2026-10-21T16:54:40.2828329Z [36;1mnode --test web/verification/list-import-state.test.mjs[0m
+2026-10-21T16:54:40.2894543Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:40.2894987Z env:
+2026-10-21T16:54:40.2895337Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:40.2895787Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:40.2896187Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:40.2896601Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:40.2897513Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:40.2898329Z ##[endgroup]
+2026-10-21T16:54:40.4064096Z ✔ closing during parse ignores late response and preserves completed acceptance (3.121042ms)
+2026-10-21T16:54:40.4065686Z ✔ closing during file read prevents old source restoration (0.326779ms)
+2026-10-21T16:54:40.4091035Z ✔ manual text import retains exact UTF8 bytes including CRLF empty and invalid lines (1.075052ms)
+2026-10-21T16:54:40.4093148Z ✔ format adapter preserves exact names and constructs only tagged explicit selections (0.511993ms)
+2026-10-21T16:54:40.4095062Z ✔ client byte cap prevents read and transport before oversize file input (0.270694ms)
+2026-10-21T16:54:40.4096814Z ✔ newer file selection wins against old completed file read and old error (0.47831ms)
+2026-10-21T16:54:40.4098915Z ✔ format selection during same-file read survives without replacing a newer source (0.49889ms)
+2026-10-21T16:54:40.4100877Z ✔ late workbook inspection cannot restore file provenance after URL text edit (0.539174ms)
+2026-10-21T16:54:40.4102806Z ✔ changed options invalidate pending preview and prohibit stale acceptance (0.40827ms)
+2026-10-21T16:54:40.4104551Z ✔ old request error cannot replace newer successful preview (0.747052ms)
+2026-10-21T16:54:40.4106534Z ✔ acceptance preserves invalid rows duplicates order and sitemap identity without starting a crawl (0.796834ms)
+2026-10-21T16:54:40.4108970Z ✔ nonzero website requests or malformed row envelope never becomes accepted preview (0.449277ms)
+2026-10-21T16:54:40.4203788Z ℹ tests 12
+2026-10-21T16:54:40.4204211Z ℹ suites 0
+2026-10-21T16:54:40.4204585Z ℹ pass 12
+2026-10-21T16:54:40.4204941Z ℹ fail 0
+2026-10-21T16:54:40.4205352Z ℹ cancelled 0
+2026-10-21T16:54:40.4205748Z ℹ skipped 0
+2026-10-21T16:54:40.4206118Z ℹ todo 0
+2026-10-21T16:54:40.4206541Z ℹ duration_ms 85.635473
+2026-10-21T16:54:40.4318607Z ##[group]Run node --test web/verification/api-enrichment-state.test.cjs
+2026-10-21T16:54:40.4319517Z [36;1mnode --test web/verification/api-enrichment-state.test.cjs[0m
+2026-10-21T16:54:40.4386627Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:40.4387052Z env:
+2026-10-21T16:54:40.4387588Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:40.4388052Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:40.4388464Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:40.4388878Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:40.4389609Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:40.4390419Z ##[endgroup]
+2026-10-21T16:54:40.5954460Z ✔ completed reopen, append pagination and exact-snapshot CSV keep the whole report (43.450722ms)
+2026-10-21T16:54:40.6001635Z ✔ terminal completed job cannot be presented as waiting for cancellation (4.764075ms)
+2026-10-21T16:54:40.6040785Z ✔ late status failure from A cannot overwrite successfully reopened B (5.721502ms)
+2026-10-21T16:54:40.6070261Z ✔ late cancel success from A cannot overwrite successfully reopened B (3.193948ms)
+2026-10-21T16:54:40.6102187Z ✔ late cancel failure from A cannot overwrite successfully reopened B (2.665023ms)
+2026-10-21T16:54:40.6127916Z ✔ older start status completion cannot unlock a newer pending reopen (2.988395ms)
+2026-10-21T16:54:40.6154371Z ✔ a stale-snapshot API refusal invalidates continuation and CSV permission (2.300174ms)
+2026-10-21T16:54:40.6172126Z ✔ a stale-snapshot CSV refusal cannot retain export permission or create a download (2.246213ms)
+2026-10-21T16:54:40.6338690Z ℹ tests 8
+2026-10-21T16:54:40.6339715Z ℹ suites 0
+2026-10-21T16:54:40.6340469Z ℹ pass 8
+2026-10-21T16:54:40.6341175Z ℹ fail 0
+2026-10-21T16:54:40.6341898Z ℹ cancelled 0
+2026-10-21T16:54:40.6342636Z ℹ skipped 0
+2026-10-21T16:54:40.6343417Z ℹ todo 0
+2026-10-21T16:54:40.6344230Z ℹ duration_ms 140.248012
+2026-10-21T16:54:40.6464154Z ##[group]Run node --test web/verification/accessibility-state.test.cjs
+2026-10-21T16:54:40.6464708Z [36;1mnode --test web/verification/accessibility-state.test.cjs[0m
+2026-10-21T16:54:40.6516981Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:40.6517480Z env:
+2026-10-21T16:54:40.6517745Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:40.6518078Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:40.6518339Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:40.6518610Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:40.6519063Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:40.6519549Z ##[endgroup]
+2026-10-21T16:54:40.7756716Z ✔ malformed imported metadata objects cannot crash real accessibility table or inspector (18.170881ms)
+2026-10-21T16:54:40.7759099Z ✔ actual classifier preserves observed0 and unknown instead of using empty fallbacks (2.702042ms)
+2026-10-21T16:54:40.7765874Z ✔ late A accessibility CSV network failure cannot overwrite newly selected B message (2.787531ms)
+2026-10-21T16:54:40.7768322Z ✔ late A metadata refusal stays scoped while current export errors remain visible (2.699017ms)
+2026-10-21T16:54:40.7879815Z ℹ tests 4
+2026-10-21T16:54:40.7882971Z ℹ suites 0
+2026-10-21T16:54:40.7883750Z ℹ pass 4
+2026-10-21T16:54:40.7884146Z ℹ fail 0
+2026-10-21T16:54:40.7884538Z ℹ cancelled 0
+2026-10-21T16:54:40.7884940Z ℹ skipped 0
+2026-10-21T16:54:40.7885312Z ℹ todo 0
+2026-10-21T16:54:40.7885750Z ℹ duration_ms 95.605384
+2026-10-21T16:54:40.7995442Z ##[group]Run node --test web/verification/dashboard-segments-state.test.cjs
+2026-10-21T16:54:40.7996419Z [36;1mnode --test web/verification/dashboard-segments-state.test.cjs[0m
+2026-10-21T16:54:40.8063594Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:40.8064017Z env:
+2026-10-21T16:54:40.8064367Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:40.8064827Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:40.8065226Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:40.8065660Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:40.8066390Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:40.8067200Z ##[endgroup]
+2026-10-21T16:54:40.9848723Z ✔ complete 200+1 pages and issues install atomically with raw ordinals, original facts, target context and exact frozen requests (54.623256ms)
+2026-10-21T16:54:40.9852423Z ✔ invalid saved definition cannot leave an old valid draft actionable (0.706515ms)
+2026-10-21T16:54:40.9879050Z ✔ draft edit invalidates pending A and late A success cannot install or clear busy B (2.617815ms)
+2026-10-21T16:54:40.9880949Z ✔ old crawl failure cannot overwrite newer crawl error or busy ownership (0.77862ms)
+2026-10-21T16:54:40.9893091Z ✔ same-job generation change without callback invalidation still discards pending snapshot (2.27692ms)
+2026-10-21T16:54:40.9916292Z ✔ malformed population refuses repeated page ordinal with no partial installation (1.795854ms)
+2026-10-21T16:54:40.9951255Z ✔ malformed population refuses omitted tail page with no partial installation (3.910734ms)
+2026-10-21T16:54:40.9966427Z ✔ malformed population refuses wrong page cursor with no partial installation (1.597986ms)
+2026-10-21T16:54:40.9990300Z ✔ malformed population refuses changed summary between pages with no partial installation (1.999233ms)
+2026-10-21T16:54:41.0016310Z ✔ malformed population refuses changed snapshot between pages with no partial installation (2.280407ms)
+2026-10-21T16:54:41.0043653Z ✔ page read failure clears the full usable snapshot and leaves no firstpage success (2.745784ms)
+2026-10-21T16:54:41.0082831Z ✔ actual complete CSV bytes require exact snapshot, generation, length and digest (4.040385ms)
+2026-10-21T16:54:41.0128162Z ✔ edit while download waits prevents old bytes and errors from creating downloads (4.623591ms)
+2026-10-21T16:54:41.0154971Z ✔ export corruption clears actionable context x-segment-snapshot-token (2.680583ms)
+2026-10-21T16:54:41.0189578Z ✔ export corruption clears actionable context x-segment-generation (3.42042ms)
+2026-10-21T16:54:41.0233523Z ✔ export corruption clears actionable context x-content-sha256 (4.513727ms)
+2026-10-21T16:54:41.0263894Z ✔ export corruption clears actionable context content-length (2.756424ms)
+2026-10-21T16:54:41.0326300Z ✔ duplicate requested URLs retain individually selected raw observations (6.265099ms)
+2026-10-21T16:54:41.0379492Z ✔ full JSON export verifies the named cohort envelope and complete original observation order (5.130916ms)
+2026-10-21T16:54:41.0416439Z ✔ full JSON cannot claim completeness with a repeated observation replacing the tail (3.664725ms)
+2026-10-21T16:54:41.0956907Z ✔ browser storage invalidation requires definitions reload before another application (3.706192ms)
+2026-10-21T16:54:41.0959280Z ✔ actual page projections retain duplicate URL records and inspector selection uses the selected observation (13.358508ms)
+2026-10-21T16:54:41.0962611Z ✔ actual source-owned image/external projections retain captured target facts outside the selected cohort (6.420448ms)
+2026-10-21T16:54:41.0965971Z ✔ actual current-section CSV includes all filtered rows beyond the DOM page and context/ordinal for every row (28.776032ms)
+2026-10-21T16:54:41.0969413Z ✔ actual HTML exposes exactly thirteen native CSV kinds with pages as the labelled default (1.010683ms)
+2026-10-21T16:54:41.1156959Z ✔ actual output-choice handler changes neither cohort nor requests until explicit export and preserves native issues CSV bytes (19.654364ms)
+2026-10-21T16:54:41.1227141Z ✔ actual render disables the native kind selector with its CSV button and explains issue-count versus complete relationships (7.676086ms)
+2026-10-21T16:54:41.1393156Z ℹ tests 27
+2026-10-21T16:54:41.1393928Z ℹ suites 0
+2026-10-21T16:54:41.1394577Z ℹ pass 27
+2026-10-21T16:54:41.1395137Z ℹ fail 0
+2026-10-21T16:54:41.1395820Z ℹ cancelled 0
+2026-10-21T16:54:41.1397855Z ℹ skipped 0
+2026-10-21T16:54:41.1398773Z ℹ todo 0
+2026-10-21T16:54:41.1399510Z ℹ duration_ms 290.438808
+2026-10-21T16:54:41.1508381Z ##[group]Run node --test web/verification/config-profiles-state.test.cjs
+2026-10-21T16:54:41.1509314Z [36;1mnode --test web/verification/config-profiles-state.test.cjs[0m
+2026-10-21T16:54:41.1576420Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:41.1576849Z env:
+2026-10-21T16:54:41.1577197Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:41.1577907Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:41.1578312Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:41.1578728Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:41.1579469Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:41.1580291Z ##[endgroup]
+2026-10-21T16:54:41.3943838Z ✔ raw field views retain unsafe integers, nested arrays, strings and absence (2.24945ms)
+2026-10-21T16:54:41.3945865Z ✔ MiB projections roundtrip exact byte budgets including beyond JS safe integer (0.549243ms)
+2026-10-21T16:54:41.3949326Z ✔ malformed UTF8 file never reaches native inspection or mutates accepted state/storage (1.693083ms)
+2026-10-21T16:54:41.3951774Z ✔ raw duplicate keys reach native validator without parse/stringify collapse (0.373916ms)
+2026-10-21T16:54:41.3953452Z ✔ late file A cannot issue native inspection after B owns the draft (1.792128ms)
+2026-10-21T16:54:41.3956321Z ✔ late native response cannot overwrite B or release B busy ownership (0.652916ms)
+2026-10-21T16:54:41.3959595Z ✔ stale selected-crawl owner refuses a valid late reply (0.418329ms)
+2026-10-21T16:54:41.3960985Z ✔ storage quota refusal leaves active profile, staged text and prior bytes unchanged (1.136847ms)
+2026-10-21T16:54:41.3962533Z ✔ case-distinct and prototype-like header names retain exact volatile bindings only (1.000413ms)
+2026-10-21T16:54:41.3970422Z ✔ explicit empty header differs from unresolved and is not persisted (0.663606ms)
+2026-10-21T16:54:41.3972009Z ✔ native response containing header values cannot reach working draft or storage (0.353478ms)
+2026-10-21T16:54:41.3973576Z ✔ an incompatible native engine cannot stage or persist a profile (0.216674ms)
+2026-10-21T16:54:41.3975669Z ✔ valid export leaves active/staged profile and storage unchanged (0.571133ms)
+2026-10-21T16:54:41.3980369Z ✔ restore validates stored JSON text without rounding or rewriting the storage key (0.3866ms)
+2026-10-21T16:54:41.3987914Z ✔ closing dialog invalidates pending native result and keeps active storage unchanged (0.249445ms)
+2026-10-21T16:54:41.4005020Z ✔ explicit source replacement clears all header values while retaining exact requirements (0.442153ms)
+2026-10-21T16:54:41.4006895Z ✔ canceling another staged profile cannot transfer its header secrets to the active profile (0.398713ms)
+2026-10-21T16:54:41.4008952Z ✔ saving then closing retains only the explicitly resolved active-session header values (0.447373ms)
+2026-10-21T16:54:41.4011068Z ✔ corrupt, incompatible and native-refused restores remain blocked through dialog/edit/import until a validated atomic Save (2.826654ms)
+2026-10-21T16:54:41.4014374Z ✔ storage read refusal blocks restore without deleting or writing a profile (0.315999ms)
+2026-10-21T16:54:41.4016095Z ✔ a superseded late restore refusal cannot block a newer explicitly saved profile (0.592884ms)
+2026-10-21T16:54:41.4018214Z ✔ opening Settings during pending restore cannot enable a fallback Start before an explicit valid Save (33.488168ms)
+2026-10-21T16:54:41.4020224Z ✔ actual App projection preserves exact non-MiB/unsafe values without committing or dirty patches (4.941563ms)
+2026-10-21T16:54:41.4049314Z ✔ actual unrelated form edit emits only its path and preserves all native-only declarations (5.200375ms)
+2026-10-21T16:54:41.4058779Z ✔ actual renderer edit patches one leaf instead of replacing native max_response_bytes (5.42296ms)
+2026-10-21T16:54:41.4060689Z ✔ actual body edit maps decimal MiB to an exact integer JSON token (4.667974ms)
+2026-10-21T16:54:41.4062240Z ✔ actual optional disable removes only a declared key, never absent linked limits (5.107853ms)
+2026-10-21T16:54:41.4064404Z ✔ actual imported quota projection and unrelated quota edit retain untouched original pattern rows (7.419118ms)
+2026-10-21T16:54:41.4066336Z ✔ actual quota row edit is detected independently of hidden JSON formatting (8.997564ms)
+2026-10-21T16:54:41.4103308Z ✔ actual header input and unresolve listeners survive synchronous rerender without losing typed values (4.247891ms)
+2026-10-21T16:54:41.4105594Z ✔ actual Save preserves an explicit toolbar target after header reentry and Start emits original-source replacement patches (7.578053ms)
+2026-10-21T16:54:41.4108100Z ✔ actual Save deliberately projects a changed profile source instead of retaining an old toolbar override (6.888219ms)
+2026-10-21T16:54:41.4110259Z ✔ actual App blocks button and both programmatic Start paths after corrupt restore while keeping recovery reachable (5.523888ms)
+2026-10-21T16:54:41.4271252Z ℹ tests 33
+2026-10-21T16:54:41.4271680Z ℹ suites 0
+2026-10-21T16:54:41.4271974Z ℹ pass 33
+2026-10-21T16:54:41.4272204Z ℹ fail 0
+2026-10-21T16:54:41.4272433Z ℹ cancelled 0
+2026-10-21T16:54:41.4275997Z ℹ skipped 0
+2026-10-21T16:54:41.4276254Z ℹ todo 0
+2026-10-21T16:54:41.4276667Z ℹ duration_ms 216.344578
+2026-10-21T16:54:41.4395110Z ##[group]Run node --test web/verification/profile-response-capture.test.cjs
+2026-10-21T16:54:41.4396074Z [36;1mnode --test web/verification/profile-response-capture.test.cjs[0m
+2026-10-21T16:54:41.4463059Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:41.4463476Z env:
+2026-10-21T16:54:41.4463820Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:41.4464279Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:41.4464678Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:41.4465092Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:41.4465824Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:41.4466630Z ##[endgroup]
+2026-10-21T16:54:41.6145819Z ✔ synchronous wrapper preserves exact Promise, Response and original rejection identities without another fetch (49.704318ms)
+2026-10-21T16:54:41.6299591Z ✔ exact UTF8/u64 bytes transfer in bounded chunks and history discloses neither raw body nor response/header values (8.168611ms)
+2026-10-21T16:54:41.6301803Z ✔ excluded routes and methods pass through and unrelated argument getters are not read again (2.879272ms)
+2026-10-21T16:54:41.6305082Z ✔ unsupported body and excessive request UTF8 fail capture without changing original fetch (5.421036ms)
+2026-10-21T16:54:41.6311251Z ✔ Request GET inputs pass through without inspecting native or custom getters and never invent a POST observation (2.00835ms)
+2026-10-21T16:54:41.6399100Z ✔ marks ignore earlier pending work and exact request SHA selects B even while A completes later (7.846614ms)
+2026-10-21T16:54:41.6549100Z ✔ duplicate exact requests after one mark are ambiguous, even when their response status differs (6.496739ms)
+2026-10-21T16:54:41.6566442Z ✔ reload creates a new epoch and stale or impossible marks are rejected instead of matching a new response (4.132577ms)
+2026-10-21T16:54:41.6616759Z ✔ declared and streamed per-response limits cancel only the clone without awaiting a stalled original branch (10.947228ms)
+2026-10-21T16:54:41.6771519Z ✔ aggregate and record budgets fail explicitly without HTTP replay or silent record eviction (11.993997ms)
+2026-10-21T16:54:41.6861340Z ✔ clone errors, errored streams, length/header/status mismatch are explicit while original Response remains unchanged (9.688543ms)
+2026-10-21T16:54:41.6863664Z ✔ installation is scoped/idempotent and fixture limits can only be explicitly lowered (1.867868ms)
+2026-10-21T16:54:41.6979402Z ✔ capture releases retained response bytes while preserving metadata and duplicate-request ambiguity (10.917052ms)
+2026-10-21T16:54:41.7112951Z ✔ observer-only read deadline discards partial bytes without aborting or blocking the original response (13.540337ms)
+2026-10-21T16:54:41.7186473Z ✔ request and response hash failures stay observational and release all retained fixture bytes (6.059796ms)
+2026-10-21T16:54:41.7230315Z ✔ about:blank and other non-HTTP documents skip crypto and fetch wrapping, then a new HTTP document installs a fresh epoch (7.458911ms)
+2026-10-21T16:54:41.7404525Z ✔ implicit catalog list and explicit item GET capture exact bytes, empty request SHA and full response identity without replay (9.027954ms)
+2026-10-21T16:54:41.7415121Z ✔ catalog mutations, malformed/noncanonical paths, query/fragment and other GET routes remain completely excluded (3.652552ms)
+2026-10-21T16:54:41.7452676Z ✔ GET unsupported body or method shapes refuse without getter invocation, original Promise changes or Request reads (10.649233ms)
+2026-10-21T16:54:41.7566523Z ✔ GET selection binds URL and mark, rejects duplicate same-URL captures, status/header drift and old document epochs (7.353705ms)
+2026-10-21T16:54:41.7568178Z ✔ owned routes require an explicit named third-argument policy and preserve the default pure allowlist (2.283043ms)
+2026-10-21T16:54:41.7811632Z ✔ each explicitly owned operation captures exactly one unchanged Promise and Response including a 409 body (19.130849ms)
+2026-10-21T16:54:41.7816807Z ✔ owned policy is exact, canonical, loopback-scoped and included in idempotent installation comparison (1.963517ms)
+2026-10-21T16:54:41.7819665Z ✔ owned matcher excludes wrong origins, methods, noncanonical UUIDs, path suffixes and empty query/fragment delimiters (3.088993ms)
+2026-10-21T16:54:41.7841786Z ✔ owned nonmatching documents never install a wrapper and every accepted origin return gets a fresh epoch (5.322482ms)
+2026-10-21T16:54:41.7928958Z ✔ owned CAS errors bind exact status, headers, raw body and unique sequence rather than treating errors as capture success (4.904203ms)
+2026-10-21T16:54:41.8001043Z ✔ owned unsupported request shapes and lowered byte limits refuse observation without mutating the original request or response (5.797787ms)
+2026-10-21T16:54:41.8003597Z ✔ screenshot suite is one separate explicit policy with exactly three profile operations plus metadata, never PNG or catalog (2.672136ms)
+2026-10-21T16:54:41.8142738Z ✔ screenshot query Node and installed-document matchers agree on strict canonical metadata URL and ordinal matrix (14.519414ms)
+2026-10-21T16:54:41.8173350Z ✔ metadata original Promise and Response bytes remain unchanged while capture binds full query, epoch, empty request SHA and release (4.500762ms)
+2026-10-21T16:54:41.8230510Z ✔ obsolete metadata A failure cannot match current B, while a current failed clone stays fatal and old epochs refuse (5.583258ms)
+2026-10-21T16:54:41.8243341Z ✔ screenshot suite metadata stream enforces65536 before transfer with no cap increase or original body mutation (1.811654ms)
+2026-10-21T16:54:41.8382279Z ℹ tests 32
+2026-10-21T16:54:41.8382713Z ℹ suites 0
+2026-10-21T16:54:41.8383100Z ℹ pass 32
+2026-10-21T16:54:41.8383345Z ℹ fail 0
+2026-10-21T16:54:41.8388183Z ℹ cancelled 0
+2026-10-21T16:54:41.8408322Z ℹ skipped 0
+2026-10-21T16:54:41.8408815Z ℹ todo 0
+2026-10-21T16:54:41.8409313Z ℹ duration_ms 339.279638
+2026-10-21T16:54:41.8510881Z ##[group]Run node --test web/verification/profile-response-capture-browser.test.cjs
+2026-10-21T16:54:41.8512095Z [36;1mnode --test web/verification/profile-response-capture-browser.test.cjs[0m
+2026-10-21T16:54:41.8566047Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:41.8566326Z env:
+2026-10-21T16:54:41.8566554Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:41.8566845Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:41.8567106Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:41.8567715Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:41.8568185Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:41.8568676Z ##[endgroup]
+2026-10-21T16:54:42.8752419Z ▶ actual Chromium Response.clone profile transport controls (not native product acceptance)
+2026-10-21T16:54:42.8780954Z   ✔ actual UTF8/u64 bytes and original Response remain independently consumable without CDP (95.272211ms)
+2026-10-21T16:54:42.9765617Z   ✔ two distinct bodies on one route bind their own sequence and actual response (104.883152ms)
+2026-10-21T16:54:43.0457141Z   ✔ implicit catalog-list and explicit catalog-item GET bind exact bytes and absent request bodies (69.622589ms)
+2026-10-21T16:54:43.0927159Z   ✔ same request body repeated after one marker is refused as ambiguous (47.420886ms)
+2026-10-21T16:54:43.1853884Z   ✔ marker from the prior real document is refused after reload (92.3072ms)
+2026-10-21T16:54:43.2053527Z   ✔ actual abort stream cannot become a successful captured body (18.199755ms)
+2026-10-21T16:54:43.2232959Z   ✔ actual error stream cannot become a successful captured body (18.942778ms)
+2026-10-21T16:54:43.2609351Z   ✔ GET, unrelated route and native-start route are unmodified and never captured or replayed (35.770741ms)
+2026-10-21T16:54:43.4233177Z   ✔ real lowered clone byte cap refuses capture while original Response still succeeds (164.033802ms)
+2026-10-21T16:54:43.8075115Z   ✔ stalled clone read times out without aborting the original HTTP response (383.709134ms)
+2026-10-21T16:54:43.9336144Z   ✔ real about:blank transitions are error-free and each HTTP return creates a fresh capture epoch (125.430781ms)
+2026-10-21T16:54:44.0086563Z ✔ actual Chromium Response.clone profile transport controls (not native product acceptance) (1724.739861ms)
+2026-10-21T16:54:44.5011457Z ▶ actual Chromium explicitly owned JSON mutation capture remains observational and origin bound
+2026-10-21T16:54:44.5013594Z   ✔ default pure capture still excludes every extra operation while actual HTTP and original responses succeed once (102.780015ms)
+2026-10-21T16:54:44.8609619Z   ✔ explicit owned policy captures each exact operation plus409 with full byte/header/status/request binding and no replay (257.513709ms)
+2026-10-21T16:54:44.9079629Z   ✔ wrong methods, path shapes and query or fragment requests cannot become successful owned captures (45.470511ms)
+2026-10-21T16:54:45.0319320Z   ✔ a different owned HTTP document is not wrapped by a policy for the first origin (125.172983ms)
+2026-10-21T16:54:45.1829738Z ✔ actual Chromium explicitly owned JSON mutation capture remains observational and origin bound (1176.084278ms)
+2026-10-21T16:54:45.7934588Z ▶ actual Chromium screenshot-suite JSON policy captures original query responses and refuses obsolete metadata without CDP bodies
+2026-10-21T16:54:45.7960795Z   ✔ three profile operations and metadata with optional0 capture actual bytes/status/headers/request once (233.689897ms)
+2026-10-21T16:54:46.0980177Z   ✔ default and owned profile policies still reject real metadata queries and the suite rejects PNG/extra query (305.421561ms)
+2026-10-21T16:54:46.1459702Z   ✔ genuinely held A clone can abort while exact later B succeeds once, and current captured error remains observable (47.841119ms)
+2026-10-21T16:54:46.2503293Z   ✔ reload invalidates old metadata marks and aboutblank never becomes a capture document (104.035567ms)
+2026-10-21T16:54:46.3253863Z ✔ actual Chromium screenshot-suite JSON policy captures original query responses and refuses obsolete metadata without CDP bodies (1142.664531ms)
+2026-10-21T16:54:46.3588583Z ℹ tests 22
+2026-10-21T16:54:46.3589102Z ℹ suites 0
+2026-10-21T16:54:46.3589578Z ℹ pass 22
+2026-10-21T16:54:46.3590001Z ℹ fail 0
+2026-10-21T16:54:46.3590543Z ℹ cancelled 0
+2026-10-21T16:54:46.3595527Z ℹ skipped 0
+2026-10-21T16:54:46.3596029Z ℹ todo 0
+2026-10-21T16:54:46.3596549Z ℹ duration_ms 4457.346853
+2026-10-21T16:54:46.3700455Z ##[group]Run node --test web/verification/config-profile-catalog-state.test.cjs
+2026-10-21T16:54:46.3701509Z [36;1mnode --test web/verification/config-profile-catalog-state.test.cjs[0m
+2026-10-21T16:54:46.3769381Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:46.3769806Z env:
+2026-10-21T16:54:46.3770158Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:46.3770614Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:46.3771022Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:46.3771433Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:46.3772169Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:46.3772978Z ##[endgroup]
+2026-10-21T16:54:46.4965767Z ✔ construction and dialog reopen never auto-fetch a native catalog or store browser catalog metadata (4.7142ms)
+2026-10-21T16:54:46.4968828Z ✔ explicit list and selection expose metadata only without loading or adopting a profile (2.586948ms)
+2026-10-21T16:54:46.5012777Z ✔ verified catalog load stages only the dialog draft and clears runtime bindings without adopting or repairing storage (12.861631ms)
+2026-10-21T16:54:46.5015215Z ✔ create purely inspects exact source text and changed raw tokens before storing, preserving active/working/header/browser state (2.867821ms)
+2026-10-21T16:54:46.5047711Z ✔ create from a legacy form uses pure native from-config without staging its normalized copy (2.759249ms)
+2026-10-21T16:54:46.5090070Z ✔ overwrite sends exact string revision beyond JS safe integer and SHA CAS while keeping its prepared copy inactive (2.440696ms)
+2026-10-21T16:54:46.5093494Z ✔ rename and delete use selected native CAS and never rewrite the already loaded draft, active profile or secret bindings (1.825991ms)
+2026-10-21T16:54:46.5125446Z ✔ 409 overwrite, rename and delete preserve every prior profile and metadata fact (3.428986ms)
+2026-10-21T16:54:46.5175667Z ✔ a duplicate-name create failure does not adopt the inspected copy or replace the working draft (2.325701ms)
+2026-10-21T16:54:46.5179791Z ✔ missing and unavailable native catalog reads leave profile/headers and prior metadata unchanged (1.827894ms)
+2026-10-21T16:54:46.5215322Z ✔ malformed load metadata, wrong ID/bytes/SHA and conflicting known names are atomic refusals before draft/header changes (4.915344ms)
+2026-10-21T16:54:46.5242076Z ✔ new selection and load B discard a late valid load A without releasing busy ownership or transferring headers (2.026033ms)
+2026-10-21T16:54:46.5248086Z ✔ old list failure cannot overwrite a newer pending list or clear its busy flag (0.760736ms)
+2026-10-21T16:54:46.5260841Z ✔ closing Settings invalidates pending catalog load and does not stage its late native result (1.579612ms)
+2026-10-21T16:54:46.5275426Z ✔ actual profile editing invalidates a pending catalog result while retaining the newer raw draft (1.522296ms)
+2026-10-21T16:54:46.5380916Z ✔ an explicit catalog load supersedes an older pending profile preview before either native reply completes (1.886804ms)
+2026-10-21T16:54:46.5383014Z ✔ editing a name while pure validation waits prevents the obsolete create mutation from being sent (0.673114ms)
+2026-10-21T16:54:46.5385120Z ✔ a delayed rename acknowledgement after selection B cannot alter metadata, selection or draft (0.67148ms)
+2026-10-21T16:54:46.5387098Z ✔ malformed metadata and advertised budgets are rejected without partially replacing a valid list (1.782039ms)
+2026-10-21T16:54:46.5389279Z ✔ name validation uses exact native UTF8/Unicode rules without interpreting paths or trimming (0.324194ms)
+2026-10-21T16:54:46.5391437Z ✔ rename with mismatched immutable hash cannot update either metadata or live profile (0.466589ms)
+2026-10-21T16:54:46.5560952Z ✔ actual shared transport forwards PUT and DELETE methods and original CAS strings (6.547333ms)
+2026-10-21T16:54:46.5716045Z ✔ actual App saves a patched catalog copy without adopting it or resetting an explicit toolbar target (16.586931ms)
+2026-10-21T16:54:46.5726097Z ✔ actual App renders exact hostile names as option text and keeps catalog selection metadata-only (5.390309ms)
+2026-10-21T16:54:46.5728394Z ✔ actual App delete handler requires visible matching selection/revision confirmation before DELETE (5.228968ms)
+2026-10-21T16:54:46.5750926Z ✔ actual App projects a loaded catalog copy into settings while retaining original toolbar, active profile and browser storage (7.412565ms)
+2026-10-21T16:54:46.5916102Z ℹ tests 26
+2026-10-21T16:54:46.5916634Z ℹ suites 0
+2026-10-21T16:54:46.5917067Z ℹ pass 26
+2026-10-21T16:54:46.5917767Z ℹ fail 0
+2026-10-21T16:54:46.5918220Z ℹ cancelled 0
+2026-10-21T16:54:46.5918669Z ℹ skipped 0
+2026-10-21T16:54:46.5919097Z ℹ todo 0
+2026-10-21T16:54:46.5919578Z ℹ duration_ms 173.155804
+2026-10-21T16:54:46.6010510Z ##[group]Run node --test web/verification/screenshot-state.test.cjs
+2026-10-21T16:54:46.6011229Z [36;1mnode --test web/verification/screenshot-state.test.cjs[0m
+2026-10-21T16:54:46.6062253Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:46.6062524Z env:
+2026-10-21T16:54:46.6062747Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:46.6063029Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:46.6063273Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:46.6063522Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:46.6063969Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:46.6064445Z ##[endgroup]
+2026-10-21T16:54:46.7284689Z ✔ constructing screenshot controller is lazy and issues no website/native request (1.463475ms)
+2026-10-21T16:54:46.7299622Z ✔ explicit inspect confirms metadata and exact raw ordinal without downloading PNG (10.494236ms)
+2026-10-21T16:54:46.7335179Z ✔ complete PNG download refreshes metadata and binds all query/header identities before Blob creation (3.989219ms)
+2026-10-21T16:54:46.7360961Z ✔ unique URL lookup without known ordinal binds returned raw ordinal and legacy unknown generation without guessing (2.593529ms)
+2026-10-21T16:54:46.7403262Z ✔ disabled, render-failed, missing and corrupt are distinct unavailable observations, never empty PNGs (3.263768ms)
+2026-10-21T16:54:46.7405533Z ✔ corrupt out-of-range stored viewport is visible evidence while an available invalid viewport is refused (0.511663ms)
+2026-10-21T16:54:46.7452751Z ✔ malformed metadata, wrong owner/ordinal/generation and fabricated complete values refuse atomically (4.641374ms)
+2026-10-21T16:54:46.7457989Z ✔ metadata integrity headers, bytes and MIME are checked independently of parsed JSON (0.60103ms)
+2026-10-21T16:54:46.7545615Z ✔ PNG full identity, MIME, digest, length and no-store refusals never create a download (6.556911ms)
+2026-10-21T16:54:46.7585926Z ✔ PNG CRC, dimension mismatch, trailing bytes and non-PNG data refuse even with internally matching response hashes (6.285957ms)
+2026-10-21T16:54:46.7602102Z ✔ late metadata A cannot overwrite B or release current pending ownership (1.823035ms)
+2026-10-21T16:54:46.7611304Z ✔ late old error after a new successful observation cannot replace current metadata or status (0.814336ms)
+2026-10-21T16:54:46.7640473Z ✔ every selected owner dimension invalidates a late PNG without claiming a completed artifact (2.916231ms)
+2026-10-21T16:54:46.7651815Z ✔ closing details or Inspector cancels operation, clears evidence and cannot later save a PNG (0.921016ms)
+2026-10-21T16:54:46.7912151Z ✔ native409 stale image and ambiguous metadata failures are visible and do not reuse an old file (0.959597ms)
+2026-10-21T16:54:46.7915610Z ✔ actual native-fetch transport bounds declared and streamed metadata before parsing without downloading (24.662541ms)
+2026-10-21T16:54:46.8858598Z ✔ preview validates exact saved Base64 bytes, SHA and PNG dimensions/CRC without fabricating response headers (3.839942ms)
+2026-10-21T16:54:46.8863812Z ✔ actual App projection keeps absent/null viewport inactive and unchanged profile patches empty (20.487425ms)
+2026-10-21T16:54:46.8866187Z ✔ actual App preserves an explicit viewport when screenshot is false and only patches the edited axis (5.202328ms)
+2026-10-21T16:54:46.8870195Z ✔ actual viewport disable removes only declared viewport; unrelated edits retain all native options (4.744386ms)
+2026-10-21T16:54:46.8872496Z ✔ actual enable adds both viewport dimensions and refuses fractional/out-of-range inputs before patching (23.386254ms)
+2026-10-21T16:54:46.8874983Z ✔ actual legacy form profile conversion omits default viewport and adds explicit viewport without requiring screenshot (6.455413ms)
+2026-10-21T16:54:46.8877764Z ✔ actual legacy settings restore and form gating retain explicit dimensions, old settings remain disabled by default (6.198955ms)
+2026-10-21T16:54:46.8880059Z ✔ actual legacy Save, storage restore and Start deliver exact explicit viewport, while old configuration omits it (12.326136ms)
+2026-10-21T16:54:46.8882683Z ✔ actual Screenshot Inspector stays lazy, exposes unavailable paths and binds selected row/tab/DOM visibility (4.062416ms)
+2026-10-21T16:54:46.8926098Z ✔ actual details listener never assigns image data before metadata, then creates only a fully checked Blob preview without PNG GET (10.347301ms)
+2026-10-21T16:54:46.9150542Z ✔ actual unavailable/corrupt/native-refused observations never expose an image or allocate a Blob URL (22.363451ms)
+2026-10-21T16:54:46.9276546Z ✔ actual corrupt, hash-mismatched and oversized raw preview fields cannot bypass otherwise available native metadata (9.935833ms)
+2026-10-21T16:54:46.9649653Z ✔ late actual checked preview bytes are discarded after close, selection/tab/job/generation/context changes (37.814004ms)
+2026-10-21T16:54:46.9911876Z ✔ actual current preview is removed and its object URL revoked when metadata fails or current table context changes (31.57745ms)
+2026-10-21T16:54:47.0070656Z ℹ tests 30
+2026-10-21T16:54:47.0071421Z ℹ suites 0
+2026-10-21T16:54:47.0072113Z ℹ pass 30
+2026-10-21T16:54:47.0072739Z ℹ fail 0
+2026-10-21T16:54:47.0073296Z ℹ cancelled 0
+2026-10-21T16:54:47.0073936Z ℹ skipped 0
+2026-10-21T16:54:47.0074508Z ℹ todo 0
+2026-10-21T16:54:47.0075454Z ℹ duration_ms 355.008792
+2026-10-21T16:54:47.0193421Z ##[group]Run node --test web/verification/table-explorer-state.test.cjs
+2026-10-21T16:54:47.0194314Z [36;1mnode --test web/verification/table-explorer-state.test.cjs[0m
+2026-10-21T16:54:47.0262157Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:47.0262601Z env:
+2026-10-21T16:54:47.0262949Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:47.0263415Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:47.0263820Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:47.0264232Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:47.0264979Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:47.0265789Z ##[endgroup]
+2026-10-21T16:54:47.1528424Z ✔ raw classification separates unknown, observed empty, zero, finite positive and wrong numeric types (3.165936ms)
+2026-10-21T16:54:47.1531066Z ✔ text normalization uses NFC and German lowercase without losing accents or merging internal whitespace (1.792899ms)
+2026-10-21T16:54:47.1539215Z ✔ AND numeric bounds are inclusive and text rules retain every matching row beyond the first hundred (1.266558ms)
+2026-10-21T16:54:47.1541446Z ✔ known, empty and unknown rules are disjoint and numeric zero is never fabricated from missing data (0.664257ms)
+2026-10-21T16:54:47.1545021Z ✔ hidden columns supply raw filter and sort values while global search also retains scalar display labels (0.680277ms)
+2026-10-21T16:54:47.1547593Z ✔ numeric ordering keeps empty before unknown at the end in both directions and distinguishes 2 from 10 (0.238754ms)
+2026-10-21T16:54:47.1551328Z ✔ natural text sort has ascending identity and ordinal ties independent of primary direction, preserving duplicate observations (0.436593ms)
+2026-10-21T16:54:47.1554088Z ✔ projection preserves requested order, appends mandatory identity and rejects duplicate or unknown keys (0.46162ms)
+2026-10-21T16:54:47.1555884Z ✔ invalid rule/schema/sort limits refuse before evaluating rows or causing a partial result (1.180599ms)
+2026-10-21T16:54:47.1558104Z ✔ preferences save only visible columns with exact project/section identity, retaining other scopes and no view state (0.990444ms)
+2026-10-21T16:54:47.1561488Z ✔ corrupt, wrong-scope, stale-column and oversized preferences remain unchanged and visibly fail instead of resetting (0.765185ms)
+2026-10-21T16:54:47.1569304Z ✔ unavailable or failed browser storage is an explicit Result, preserving bytes and never automatically writing (0.690987ms)
+2026-10-21T16:54:47.1571257Z ✔ reset explicitly removes only its current scope, and invalid contexts do not access storage (0.441011ms)
+2026-10-21T16:54:47.1575379Z ✔ browser UMD installs only its namespace and constructing/compiling never accesses storage or network (3.195822ms)
+2026-10-21T16:54:47.1705165Z ℹ tests 14
+2026-10-21T16:54:47.1705839Z ℹ suites 0
+2026-10-21T16:54:47.1706502Z ℹ pass 14
+2026-10-21T16:54:47.1706823Z ℹ fail 0
+2026-10-21T16:54:47.1707062Z ℹ cancelled 0
+2026-10-21T16:54:47.1708335Z ℹ skipped 0
+2026-10-21T16:54:47.1708851Z ℹ todo 0
+2026-10-21T16:54:47.1709472Z ℹ duration_ms 100.541536
+2026-10-21T16:54:47.1823523Z ##[group]Run node --test web/verification/table-view-library.test.cjs web/verification/table-view-storage.test.cjs web/verification/table-views-ui.test.cjs
+2026-10-21T16:54:47.1824729Z [36;1mnode --test web/verification/table-view-library.test.cjs web/verification/table-view-storage.test.cjs web/verification/table-views-ui.test.cjs[0m
+2026-10-21T16:54:47.1876245Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:47.1876520Z env:
+2026-10-21T16:54:47.1876746Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:47.1877031Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:47.1877528Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:47.1877805Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:47.1878257Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:47.1878739Z ##[endgroup]
+2026-10-21T16:54:47.5149702Z ✔ extraction source v1 supports new version1 views and refuses stale filter semantics (8.148726ms)
+2026-10-21T16:54:47.5189173Z ✔ extraction source v1 supports new version2 views and refuses stale filter semantics (6.019901ms)
+2026-10-21T16:54:47.5201034Z ✔ full atomic payload retains every accepted query field and no capture identity or result data (2.873371ms)
+2026-10-21T16:54:47.5203348Z ✔ existing compiler independently selects complete original rows with hidden NFC text and measured zero (1.778412ms)
+2026-10-21T16:54:47.5205931Z ✔ section-name uniqueness folds NFC/trim/German case but preserves display spelling, accents and inner spaces (10.462936ms)
+2026-10-21T16:54:47.5208544Z ✔ section, full schema, filter set and explicitly maintained raw getter semantics must all match (2.129837ms)
+2026-10-21T16:54:47.5210655Z ✔ invalid typed queries refuse complete Apply without replacing accepted data or coercing unknowns to zero (2.74389ms)
+2026-10-21T16:54:47.5212965Z ✔ corrupt, wrong-version, unknown-field and stale-base bytes are preserved and never planned as an overwrite (1.83116ms)
+2026-10-21T16:54:47.5215216Z ✔ exact UTF8 name boundary, controls, IDs and entry count have meaningful refusal boundaries (3.252378ms)
+2026-10-21T16:54:47.5217262Z ✔ physical serialized byte exact/-1 boundaries reject without truncation or cap changes (2.053153ms)
+2026-10-21T16:54:47.5219752Z ✔ existing rule/search bounds and exact schemas remain authoritative; unsupported data cannot be persisted (3.790961ms)
+2026-10-21T16:54:47.5222031Z ✔ sparse and inherited indices cannot produce a successful unreadable catalog or Apply payload (3.139477ms)
+2026-10-21T16:54:47.5224246Z ✔ every successful encoded fixture and replacement plan decodes to complete stable definition data (10.243518ms)
+2026-10-21T16:54:47.5226486Z ✔ non-default section filter survives encoding, decoding and the complete explicit Apply payload (2.077258ms)
+2026-10-21T16:54:47.5228954Z ✔ stale absent-to-present and present-to-absent bases refuse independently without replacement plans (1.436366ms)
+2026-10-21T16:54:47.5231331Z ✔ schema and section-filter ordering is deliberately conservative and filter meaning belongs to query_semantics (1.495414ms)
+2026-10-21T16:54:47.5233703Z ✔ prepareView independently validates the complete App payload without requiring a saved definition ID or name (0.557177ms)
+2026-10-21T16:54:47.5236080Z ✔ stored foreign semantics stay inspectable but cannot be applied through an unsupported current contract (1.007907ms)
+2026-10-21T16:54:47.5238648Z ✔ fixed configuration bounds enforce actual2MiB aggregate refusal without lowering query limits (108.675334ms)
+2026-10-21T16:54:47.5240713Z ✔ the global32-entry boundary covers every section and a33rd entry is refused intact (16.991893ms)
+2026-10-21T16:54:47.5365221Z ✔ explicit read of absent catalog has no write/lock effects and never touches legacy column keys (3.48484ms)
+2026-10-21T16:54:47.5367657Z ✔ explicit complete catalog create/rename/overwrite/delete uses one fixed exclusive lock and one write each (13.961441ms)
+2026-10-21T16:54:47.5370195Z ✔ missing or busy locks refuse mutation without storage writes, while read remains available (4.017342ms)
+2026-10-21T16:54:47.5371957Z ✔ both absent-to-present and present-to-absent byte-CAS conflicts preserve exact current storage (3.317057ms)
+2026-10-21T16:54:47.5373773Z ✔ two cooperating callers with the same old bytes cannot silently overwrite the first committed catalog (2.045449ms)
+2026-10-21T16:54:47.5376028Z ✔ immediate query revision changes while awaiting the lock refuse before any delayed-render commit (2.290927ms)
+2026-10-21T16:54:47.5378009Z ✔ guards are rechecked after held-lock read, replacement preparation and setItem method acquisition (3.368935ms)
+2026-10-21T16:54:47.5379748Z ✔ caller draft mutation while awaiting a lock cannot retarget the validated immutable payload (1.94361ms)
+2026-10-21T16:54:47.5381488Z ✔ corrupt/unsupported catalog, quota and read failures preserve old bytes without resets or retries (2.184678ms)
+2026-10-21T16:54:47.5383154Z ✔ invalid replacement data and lock rejection refuse as Results without effects or retry (1.744058ms)
+2026-10-21T16:54:47.5384790Z ✔ both UMD modules install only namespaces without acquiring browser environment or storage (3.523842ms)
+2026-10-21T16:54:47.5386642Z ✔ invalid existing bytes are exposed only as transient observedRaw and stay unchanged until explicit guarded reset (1.160421ms)
+2026-10-21T16:54:47.5388719Z ✔ stale reset and successor-owner reset cannot delete changed catalog bytes (0.353458ms)
+2026-10-21T16:54:47.5390351Z ✔ reset rechecks guard after reading and method lookup; unavailable/busy/failed removal changes no key (0.895999ms)
+2026-10-21T16:54:47.5392054Z ✔ malformed mutation/reset arguments refuse without invoking accessors or acquiring a lock (0.390978ms)
+2026-10-21T16:54:47.5393761Z ✔ a catalog change while waiting for the lock is compared after acquisition and cannot be overwritten (1.384949ms)
+2026-10-21T16:54:47.5395507Z ✔ nested draft edits during a held lock cannot change accepted search, rules, sort, projection or name (1.045227ms)
+2026-10-21T16:54:47.5397532Z ✔ explicit reset of valid and absent catalogs removes only the exact key once without rewriting or parsing (1.420986ms)
+2026-10-21T16:54:47.5443652Z ✔ status and explicit read never auto-apply or write, and entries are section scoped (11.139814ms)
+2026-10-21T16:54:47.5446167Z ✔ portable export rereads all sections, emits exact original definition bytes and never applies or persists (9.027483ms)
+2026-10-21T16:54:47.5449006Z ✔ portable import stages every section, requires conflict choice, commits one locked catalog and never Apply (15.019943ms)
+2026-10-21T16:54:47.5451434Z ✔ portable identical/skip no-op preserves exact whitespace without a lock or write and keeps active badge (4.644811ms)
+2026-10-21T16:54:47.5453907Z ✔ portable replacement matching the already edited current query clears the active unsaved badge without Apply (6.297088ms)
+2026-10-21T16:54:47.5456301Z ✔ portable re-add of an externally removed active ID compares the actual working query and never applies (7.982407ms)
+2026-10-21T16:54:47.5458924Z ✔ portable grouped definitions use their own planner and locked key without migration or v1 changes (20.381698ms)
+2026-10-21T16:54:47.5461370Z ✔ portable copy UUID is generated once, reused while editing its name and final collisions refuse atomically (11.642843ms)
+2026-10-21T16:54:47.5463885Z ✔ portable file guards refuse physical mismatch, oversized files, malformed UTF8 and read rejection before a preview/write (1.539798ms)
+2026-10-21T16:54:47.5466616Z ▶ portable delayed actual file read is invalidated by query/owner/mode/selection/name/catalog/cancel without blocking its successor
+2026-10-21T16:54:47.5470676Z   ✔ query (1.693745ms)
+2026-10-21T16:54:47.5471564Z   ✔ owner (1.391832ms)
+2026-10-21T16:54:47.5472405Z   ✔ mode (0.800341ms)
+2026-10-21T16:54:47.5473240Z   ✔ selection (1.389518ms)
+2026-10-21T16:54:47.5474080Z   ✔ name (1.004461ms)
+2026-10-21T16:54:47.5474922Z   ✔ catalog (0.750438ms)
+2026-10-21T16:54:47.5475841Z   ✔ cancel (0.803997ms)
+2026-10-21T16:54:47.5479075Z ✔ portable delayed actual file read is invalidated by query/owner/mode/selection/name/catalog/cancel without blocking its successor (10.344955ms)
+2026-10-21T16:54:47.5481651Z ▶ portable confirmation uses exact preview bytes under held lock and query/mode/owner/cancel changes refuse writes
+2026-10-21T16:54:47.5483128Z   ✔ bytes (4.707908ms)
+2026-10-21T16:54:47.5483951Z   ✔ query (2.682444ms)
+2026-10-21T16:54:47.5484768Z   ✔ mode (2.739189ms)
+2026-10-21T16:54:47.5485570Z   ✔ owner (3.285206ms)
+2026-10-21T16:54:47.5486260Z   ✔ cancel (2.623114ms)
+2026-10-21T16:54:47.5488074Z ✔ portable confirmation uses exact preview bytes under held lock and query/mode/owner/cancel changes refuse writes (16.79985ms)
+2026-10-21T16:54:47.5491427Z ✔ portable quota/lock failures keep current bytes and a resolvable preview; corrupt/unreadable catalogs refuse export/import (10.048398ms)
+2026-10-21T16:54:47.5493641Z ✔ portable export detects same-tab byte change and immediate query change while rereading before download (1.182451ms)
+2026-10-21T16:54:47.5496959Z ✔ portable DOM exposes real-read loading and Cancel before completion, clearing the file control for reselection (27.206022ms)
+2026-10-21T16:54:47.5499725Z ✔ portable DOM renders full cross-section definitions as text, preserves copy focus and refuses detached choices (9.870457ms)
+2026-10-21T16:54:47.5502099Z ✔ create saves the complete explicit query and does not apply or change the working table (1.500133ms)
+2026-10-21T16:54:47.5504446Z ✔ selection never applies; Apply commits every query field once and rebinds after intentional App invalidation (0.831779ms)
+2026-10-21T16:54:47.5508447Z ✔ failed atomic Apply preserves the active query and exposes the concrete Result (0.912439ms)
+2026-10-21T16:54:47.5510564Z ✔ rename and replace require explicit actions, preserve working query and never autosave edits (2.058733ms)
+2026-10-21T16:54:47.5538757Z ✔ rename uniqueness errors preserve existing catalog bytes and working query (1.067337ms)
+2026-10-21T16:54:47.5629459Z ✔ saving the current query over its active definition clears the unsaved badge without Apply or table mutation (2.106452ms)
+2026-10-21T16:54:47.5631532Z ✔ rename of the active definition updates its badge name without clearing unsaved query state (1.425384ms)
+2026-10-21T16:54:47.5633375Z ✔ delete of an active definition removes its badge while preserving the current working query (1.184836ms)
+2026-10-21T16:54:47.5635439Z ✔ selection and saving, renaming or deleting another definition never rebind the active view (4.663773ms)
+2026-10-21T16:54:47.5637480Z ✔ delete requires its second confirmation, removes only its selected definition and preserves query (1.127149ms)
+2026-10-21T16:54:47.5639274Z ▶ selection, name, immediate query and owner changes invalidate delete confirmation
+2026-10-21T16:54:47.5640268Z   ✔ selection (0.544173ms)
+2026-10-21T16:54:47.5640882Z   ✔ name (0.38727ms)
+2026-10-21T16:54:47.5641468Z   ✔ query (0.425342ms)
+2026-10-21T16:54:47.5642052Z   ✔ owner (0.538032ms)
+2026-10-21T16:54:47.5642661Z   ✔ contract (0.787416ms)
+2026-10-21T16:54:47.5643270Z   ✔ cancel (0.707326ms)
+2026-10-21T16:54:47.5644509Z ✔ selection, name, immediate query and owner changes invalidate delete confirmation (4.560821ms)
+2026-10-21T16:54:47.5646271Z ✔ unread catalog and invalid/incompatible definitions refuse actions before any App commit (0.923509ms)
+2026-10-21T16:54:47.5648341Z ✔ missing crawl refuses create, replace and apply, while rename/delete/reset remain catalog actions (2.269595ms)
+2026-10-21T16:54:47.5650340Z ✔ genuine external catalog event makes old list unusable until explicit Reload, preserving table and bytes (1.623863ms)
+2026-10-21T16:54:47.5652149Z ✔ same-tab byte conflict refuses original catalog save even without a storage event (1.442616ms)
+2026-10-21T16:54:47.5654023Z ▶ pending mutation is invalidated by immediate name, selection, query, owner or contract change before lock acquisition
+2026-10-21T16:54:47.5655227Z   ✔ name (1.79925ms)
+2026-10-21T16:54:47.5655837Z   ✔ selection (1.229859ms)
+2026-10-21T16:54:47.5656874Z   ✔ query (1.772419ms)
+2026-10-21T16:54:47.5657674Z   ✔ owner (1.070954ms)
+2026-10-21T16:54:47.5658520Z   ✔ contract (1.175379ms)
+2026-10-21T16:54:47.5660404Z ✔ pending mutation is invalidated by immediate name, selection, query, owner or contract change before lock acquisition (7.728328ms)
+2026-10-21T16:54:47.5662265Z ✔ stale completion never clears a newer pending operation or its accepted name (1.425614ms)
+2026-10-21T16:54:47.5663778Z ▶ missing or busy locks still allow read/Apply and visibly refuse mutations
+2026-10-21T16:54:47.5664668Z   ✔ null (1.022804ms)
+2026-10-21T16:54:47.5665255Z   ✔ busy (0.926515ms)
+2026-10-21T16:54:47.5666356Z ✔ missing or busy locks still allow read/Apply and visibly refuse mutations (2.320811ms)
+2026-10-21T16:54:47.5668184Z ▶ corrupt or unsupported bytes stay untouched until exact observed second reset confirmation
+2026-10-21T16:54:47.5669255Z   ✔ {broken (0.451581ms)
+2026-10-21T16:54:47.5670285Z   ✔ {"engine":"open-seo-spider/table-views-v1","version":17,"entries":[]} (0.733445ms)
+2026-10-21T16:54:47.5672004Z ✔ corrupt or unsupported bytes stay untouched until exact observed second reset confirmation (1.567348ms)
+2026-10-21T16:54:47.5673636Z ▶ reset confirmation refuses query changes and foreign bytes without removing anything
+2026-10-21T16:54:47.5674619Z   ✔ query (0.302232ms)
+2026-10-21T16:54:47.5675213Z   ✔ bytes (0.193059ms)
+2026-10-21T16:54:47.5675788Z   ✔ cancel (0.167552ms)
+2026-10-21T16:54:47.5676372Z   ✔ name (0.145ms)
+2026-10-21T16:54:47.5677795Z ✔ reset confirmation refuses query changes and foreign bytes without removing anything (1.357287ms)
+2026-10-21T16:54:47.5679505Z ✔ pending reset observes immediate query revision and releases only its own ticket (0.367254ms)
+2026-10-21T16:54:47.5681041Z ✔ unavailable read cannot arm recovery using previously observed bytes (0.602793ms)
+2026-10-21T16:54:47.5682735Z ✔ inactive query mode refuses all catalog mutations and Apply before snapshots or native commits (0.550565ms)
+2026-10-21T16:54:47.5684427Z ▶ query mode participates in the pending lock guard even without a query revision callback
+2026-10-21T16:54:47.5685455Z   ✔ rename (0.786745ms)
+2026-10-21T16:54:47.5686052Z   ✔ reset (0.480444ms)
+2026-10-21T16:54:47.5687512Z ✔ query mode participates in the pending lock guard even without a query revision callback (1.569322ms)
+2026-10-21T16:54:47.5689469Z ✔ explorer draft/install retain deep-copy ownership and do not render, notify, save or apply captured rows (5.077463ms)
+2026-10-21T16:54:47.5691417Z ✔ invalid explorer install rejects every partial payload before changing accepted rules or columns (1.790944ms)
+2026-10-21T16:54:47.5693463Z ✔ manual rule/clear/sort callbacks invalidate the named transaction immediately before accepted query mutation (1.720152ms)
+2026-10-21T16:54:47.5778818Z ℹ tests 113
+2026-10-21T16:54:47.5779244Z ℹ suites 0
+2026-10-21T16:54:47.5779617Z ℹ pass 113
+2026-10-21T16:54:47.5779996Z ℹ fail 0
+2026-10-21T16:54:47.5780399Z ℹ cancelled 0
+2026-10-21T16:54:47.5780798Z ℹ skipped 0
+2026-10-21T16:54:47.5781210Z ℹ todo 0
+2026-10-21T16:54:47.5781632Z ℹ duration_ms 349.31827
+2026-10-21T16:54:47.5898722Z ##[group]Run node --test web/verification/table-expression-state.test.cjs web/verification/expression-view-state.test.cjs web/verification/table-expression-ui.test.cjs
+2026-10-21T16:54:47.5900995Z [36;1mnode --test web/verification/table-expression-state.test.cjs web/verification/expression-view-state.test.cjs web/verification/table-expression-ui.test.cjs[0m
+2026-10-21T16:54:47.5969881Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:47.5970302Z env:
+2026-10-21T16:54:47.5970640Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:47.5971102Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:47.5971493Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:47.5971904Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:47.5972633Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:47.5973452Z ##[endgroup]
+2026-10-21T16:54:47.8189159Z ✔ version2 full declaration roundtrips and applies without v1 properties or auto migration (12.803557ms)
+2026-10-21T16:54:47.8225912Z ✔ version2 rejects incompatible full schema/semantics, rules/version fields and partial invalid groups atomically (6.272528ms)
+2026-10-21T16:54:47.8228097Z ✔ v2 storage writes and resets exactly its own key/lock without touching v1 or legacy bytes (3.5559ms)
+2026-10-21T16:54:47.8229897Z ✔ v1 bytes and APIs remain identical while v2 constants and explicit factories are separate (1.738286ms)
+2026-10-21T16:54:47.8231903Z ✔ v2 declarations are complete, lossless, deeply frozen and evaluated against a second set of observations (6.06411ms)
+2026-10-21T16:54:47.8233774Z ✔ v2 rejects hidden/symbol/accessor fields and decorated/sparse lists before inspecting rows (1.607222ms)
+2026-10-21T16:54:47.8235642Z ✔ two catalogs permit exactly32 entries each, per-section names and strict independent byte limits (43.627985ms)
+2026-10-21T16:54:47.8237781Z ✔ v2 held-lock snapshot cannot be retargeted by nested caller changes and stale revisions refuse (2.483343ms)
+2026-10-21T16:54:47.8239505Z ✔ v2 byte CAS and lock refusal never overwrite or cross-mutate another catalog (1.469616ms)
+2026-10-21T16:54:47.8241266Z ✔ v2 corrupt or oversized bytes require explicit exact-byte recovery and preserve all other storage (2.031712ms)
+2026-10-21T16:54:47.8330618Z ✔ nested all/any obey independent truth tables and single-child groups (7.866846ms)
+2026-10-21T16:54:47.8332654Z ✔ OR preserves each original occurrence exactly once without URL/object deduplication (0.524256ms)
+2026-10-21T16:54:47.8334485Z ✔ every v1 leaf keeps exact v1 known/empty/unknown/zero/NFC semantics (3.923374ms)
+2026-10-21T16:54:47.8336182Z ✔ full AST validates before any row access even behind a satisfied OR branch (0.573237ms)
+2026-10-21T16:54:47.8338393Z ✔ each occurrence caches one raw read across repeated leaves, hidden search and sort (1.07973ms)
+2026-10-21T16:54:47.8340537Z ✔ serialized declarations retain lossless text while validated snapshots are deeply immutable (0.480465ms)
+2026-10-21T16:54:47.8342413Z ✔ null, one rule and all-rules conversion preserve declaration order and original text (1.087826ms)
+2026-10-21T16:54:47.8344231Z ✔ empty groups, null children, unknown operators/fields and old v1 query properties refuse (0.884547ms)
+2026-10-21T16:54:47.8346033Z ✔ sparse/inherited/accessor arrays and object accessors are refused without invoking getters (0.896109ms)
+2026-10-21T16:54:47.8348011Z ✔ cycles and hidden/symbol declaration fields cannot become silently serialized data (0.769032ms)
+2026-10-21T16:54:47.8349622Z ✔ 31 nodes/16 leaves/four group levels are admitted at boundaries and refused beyond (1.927349ms)
+2026-10-21T16:54:47.8351235Z ✔ 128KiB serialized AST limit is exact and never retroactively constrains v1 rules (11.654929ms)
+2026-10-21T16:54:47.8970564Z ✔ pure structural append/wrap/kind/move edits preserve the original tree and real leaf data (4.64087ms)
+2026-10-21T16:54:47.8976817Z ✔ pure insertion requires actual rules, wraps a leaf with AND and never invents an empty group (0.498017ms)
+2026-10-21T16:54:47.8984411Z ✔ pure removal recursively drops empty ancestors but preserves genuine unary grouping (0.681058ms)
+2026-10-21T16:54:47.8986604Z ✔ pure invalid paths, impossible moves and leaf group-kind edits refuse without changing data (0.805851ms)
+2026-10-21T16:54:47.8988909Z ✔ pure flat conversion preserves DFS AND order and refuses real OR rather than weakening it (0.71435ms)
+2026-10-21T16:54:47.8991032Z ✔ pure clone rejects accessors, cycles, sparse children and shared branches without running getters (0.409963ms)
+2026-10-21T16:54:47.8992900Z ✔ pure node paths describe the actual hierarchy, not flattened OR groups (0.593505ms)
+2026-10-21T16:54:47.8994840Z ✔ simple mode retains the exact legacy draft shape and explicit conversion clones its AND rules (28.850382ms)
+2026-10-21T16:54:47.8998478Z ✔ actual control callbacks construct a genuinely nested four-level mixed AND/OR tree (43.380435ms)
+2026-10-21T16:54:47.9001158Z ✔ group type, sibling movement and removal controls edit only accepted tree nodes with immediate invalidation (11.139302ms)
+2026-10-21T16:54:47.9005556Z ✔ invalid depth/range edits preserve accepted expression/rows and visibly disable export until corrected (15.911754ms)
+2026-10-21T16:54:47.9008313Z ✔ OR conversion refusal keeps the tree and mode; Clear removes AST without implicitly switching mode (12.116538ms)
+2026-10-21T16:54:47.9011365Z ✔ explicit all-only and unary-any conversion preserves DFS rule order and original v1 state shape (5.975956ms)
+2026-10-21T16:54:47.9020134Z ✔ v2 installation validates every field before mutation, copies data and performs no hooks/storage/render (4.761685ms)
+2026-10-21T16:54:47.9022527Z ✔ accepted OR query preserves every matching original occurrence beyond pagination and hidden search columns (5.550223ms)
+2026-10-21T16:54:47.9025709Z ✔ detached and old-revision group controls cannot change current rules, owner or export state (5.691226ms)
+2026-10-21T16:54:47.9027903Z ✔ node selection does not change the query, and action rerender restores connected focus (5.955989ms)
+2026-10-21T16:54:47.9144212Z ℹ tests 39
+2026-10-21T16:54:47.9144999Z ℹ suites 0
+2026-10-21T16:54:47.9145416Z ℹ pass 39
+2026-10-21T16:54:47.9145790Z ℹ fail 0
+2026-10-21T16:54:47.9146173Z ℹ cancelled 0
+2026-10-21T16:54:47.9146571Z ℹ skipped 0
+2026-10-21T16:54:47.9146939Z ℹ todo 0
+2026-10-21T16:54:47.9147857Z ℹ duration_ms 275.698153
+2026-10-21T16:54:47.9253793Z ##[group]Run node --test web/verification/table-view-portability.test.cjs
+2026-10-21T16:54:47.9254720Z [36;1mnode --test web/verification/table-view-portability.test.cjs[0m
+2026-10-21T16:54:47.9320526Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:47.9320943Z env:
+2026-10-21T16:54:47.9321291Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:47.9321746Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:47.9322150Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:47.9322559Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:47.9323296Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:47.9324136Z ##[endgroup]
+2026-10-21T16:54:48.1853467Z ✔ v1 exports selected or all complete definitions with canonical stable bytes and no rows (9.403327ms)
+2026-10-21T16:54:48.1873710Z ✔ v1 previews all sections without effects and only prepares complete immutable definitions (2.491118ms)
+2026-10-21T16:54:48.1891696Z ✔ v1 exact ID equality is a no-op preserving observed whitespace bytes (1.728188ms)
+2026-10-21T16:54:48.1898901Z ✔ v1 ID conflict has no default overwrite; skip, replace and copy are explicit (4.215649ms)
+2026-10-21T16:54:48.1900656Z ✔ v1 normalized name conflict preserves replacement target ID and display name (2.000415ms)
+2026-10-21T16:54:48.1904554Z ✔ v1 ambiguous ID/name targets and cross-section IDs can only skip or fresh-copy (3.094151ms)
+2026-10-21T16:54:48.1908669Z ✔ v1 replacement mapping is atomic and copied IDs must be genuinely fresh (2.437048ms)
+2026-10-21T16:54:48.1910266Z ✔ v1 whole merged32-entry cap permits explicit skips without first32 salvage (14.473386ms)
+2026-10-21T16:54:48.1911869Z ✔ v1 malformed/wrong-version file and corrupt destination refuse complete preview (6.30004ms)
+2026-10-21T16:54:48.1913326Z ✔ v1 file UTF8/BOM and exact physical size boundaries are explicit (1.926056ms)
+2026-10-21T16:54:48.1914846Z ✔ v1 choices reject unknown, partial, accessor, hidden and symbol data without getters (2.040438ms)
+2026-10-21T16:54:48.1916384Z ✔ v1 foreign semantics stay inspectable without implicit apply/migration (1.086383ms)
+2026-10-21T16:54:48.1918090Z ✔ v1 an invalid later entry or invalid copy name cannot produce a partial plan (2.994935ms)
+2026-10-21T16:54:48.1919804Z ✔ v1 bytes and prepared entries cannot be retargeted by user methods or later resolution edits (1.304028ms)
+2026-10-21T16:54:48.1921607Z ✔ v1 exact entry and catalog fixture bounds fail as a whole without raising production caps (1.308166ms)
+2026-10-21T16:54:48.1923303Z ✔ v2 exports selected or all complete definitions with canonical stable bytes and no rows (4.274628ms)
+2026-10-21T16:54:48.1929261Z ✔ v2 previews all sections without effects and only prepares complete immutable definitions (2.724372ms)
+2026-10-21T16:54:48.1931078Z ✔ v2 exact ID equality is a no-op preserving observed whitespace bytes (1.621729ms)
+2026-10-21T16:54:48.1932474Z ✔ v2 ID conflict has no default overwrite; skip, replace and copy are explicit (4.847214ms)
+2026-10-21T16:54:48.1933947Z ✔ v2 normalized name conflict preserves replacement target ID and display name (3.552164ms)
+2026-10-21T16:54:48.1935564Z ✔ v2 ambiguous ID/name targets and cross-section IDs can only skip or fresh-copy (4.532959ms)
+2026-10-21T16:54:48.1967677Z ✔ v2 replacement mapping is atomic and copied IDs must be genuinely fresh (3.118355ms)
+2026-10-21T16:54:48.1969292Z ✔ v2 whole merged32-entry cap permits explicit skips without first32 salvage (26.909039ms)
+2026-10-21T16:54:48.1970694Z ✔ v2 malformed/wrong-version file and corrupt destination refuse complete preview (1.330468ms)
+2026-10-21T16:54:48.1971514Z ✔ v2 file UTF8/BOM and exact physical size boundaries are explicit (1.558602ms)
+2026-10-21T16:54:48.1972371Z ✔ v2 choices reject unknown, partial, accessor, hidden and symbol data without getters (1.661003ms)
+2026-10-21T16:54:48.1973165Z ✔ v2 foreign semantics stay inspectable without implicit apply/migration (1.661904ms)
+2026-10-21T16:54:48.1974252Z ✔ v2 an invalid later entry or invalid copy name cannot produce a partial plan (5.260273ms)
+2026-10-21T16:54:48.1975145Z ✔ v2 bytes and prepared entries cannot be retargeted by user methods or later resolution edits (0.834253ms)
+2026-10-21T16:54:48.1976043Z ✔ v2 exact entry and catalog fixture bounds fail as a whole without raising production caps (2.055778ms)
+2026-10-21T16:54:48.2021813Z ✔ portability factory rejects other versions/raised bounds and never exposes a persistence or Apply API (0.284229ms)
+2026-10-21T16:54:48.2031325Z ✔ pure planning never acquires browser storage, fetch, locks or changes existing product exports (2.168227ms)
+2026-10-21T16:54:48.2033139Z ✔ independent v1 two copy choices cannot reuse one new ID or poison a later preparation (0.81087ms)
+2026-10-21T16:54:48.2034869Z ✔ independent v1 a skipped source identity remains reserved even without a destination (0.664157ms)
+2026-10-21T16:54:48.2036539Z ✔ independent v1 name and selection accessors are refused without execution (0.544183ms)
+2026-10-21T16:54:48.2043514Z ✔ independent v1 accepted BOM bytes count against the physical file budget (0.333481ms)
+2026-10-21T16:54:48.2045169Z ✔ independent v2 two copy choices cannot reuse one new ID or poison a later preparation (1.18675ms)
+2026-10-21T16:54:48.2046856Z ✔ independent v2 a skipped source identity remains reserved even without a destination (0.497125ms)
+2026-10-21T16:54:48.2048774Z ✔ independent v2 name and selection accessors are refused without execution (0.76276ms)
+2026-10-21T16:54:48.2050269Z ✔ independent v2 accepted BOM bytes count against the physical file budget (0.53723ms)
+2026-10-21T16:54:48.2052182Z ✔ browser UMD installs only its namespace and performs complete v1/v2 planning without browser environment access (12.433378ms)
+2026-10-21T16:54:48.2159920Z ℹ tests 41
+2026-10-21T16:54:48.2160360Z ℹ suites 0
+2026-10-21T16:54:48.2160776Z ℹ pass 41
+2026-10-21T16:54:48.2161167Z ℹ fail 0
+2026-10-21T16:54:48.2161537Z ℹ cancelled 0
+2026-10-21T16:54:48.2161896Z ℹ skipped 0
+2026-10-21T16:54:48.2162147Z ℹ todo 0
+2026-10-21T16:54:48.2162410Z ℹ duration_ms 243.678473
+2026-10-21T16:54:48.2285453Z ##[group]Run node --test web/verification/table-xlsx.test.cjs web/verification/table-export-ui.test.cjs
+2026-10-21T16:54:48.2286780Z [36;1mnode --test web/verification/table-xlsx.test.cjs web/verification/table-export-ui.test.cjs[0m
+2026-10-21T16:54:48.2354203Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:48.2354626Z env:
+2026-10-21T16:54:48.2354978Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:48.2355430Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:48.2355837Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:48.2356255Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:48.2356992Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:48.2358224Z ##[endgroup]
+2026-10-21T16:54:48.3614777Z ✔ real writer exports one complete XLSX Blob with exact Unicode filename and MIME (21.727451ms)
+2026-10-21T16:54:48.3751524Z ✔ default yield crosses a real task boundary before snapshot and another before encoding (3.950577ms)
+2026-10-21T16:54:48.3758079Z ✔ mutating the reused owner stamp during yield refuses the old export (0.87534ms)
+2026-10-21T16:54:48.3759688Z ✔ mutating the reused generation stamp during yield refuses the old export (0.324524ms)
+2026-10-21T16:54:48.3761352Z ✔ mutating the reused query revision stamp during yield refuses the old export (0.74678ms)
+2026-10-21T16:54:48.3769509Z ✔ mutating the reused visible columns stamp during yield refuses the old export (0.406848ms)
+2026-10-21T16:54:48.3788726Z ✔ mutating the reused sort stamp during yield refuses the old export (0.296902ms)
+2026-10-21T16:54:48.3801783Z ✔ mutating the reused mode stamp during yield refuses the old export (0.462721ms)
+2026-10-21T16:54:48.3812357Z ✔ equivalent freshly allocated metadata is accepted without relying on object identity (1.867477ms)
+2026-10-21T16:54:48.3818870Z ✔ available is checked again after yield (0.591741ms)
+2026-10-21T16:54:48.3821052Z ✔ connected is checked again after yield (0.770124ms)
+2026-10-21T16:54:48.3822773Z ✔ unavailable/detached initial controls cannot read or download (0.237231ms)
+2026-10-21T16:54:48.3824672Z ✔ a double programmatic run fails without unlocking or changing the active status (0.699643ms)
+2026-10-21T16:54:48.3826456Z ✔ cancel blocks an old completion from unlocking/overwriting a newer operation (0.851565ms)
+2026-10-21T16:54:48.3829567Z ✔ invalidate blocks an old completion from unlocking/overwriting a newer operation (0.909854ms)
+2026-10-21T16:54:48.3831310Z ✔ a rejected old yield cannot overwrite the newer completed export (0.90817ms)
+2026-10-21T16:54:48.3851554Z ✔ stale changes made during snapshot are caught before planning/encoding (7.724141ms)
+2026-10-21T16:54:48.3863154Z ✔ a changed query after real planning refuses before encoding/download (0.825096ms)
+2026-10-21T16:54:48.3864765Z ✔ status callbacks cannot silently change export ownership or reenter run (0.370981ms)
+2026-10-21T16:54:48.3888447Z ✔ detachment in download-phase notification refuses before Blob/download (3.821104ms)
+2026-10-21T16:54:48.3924102Z ✔ a change during Blob creation is caught by the last freshness check (3.601937ms)
+2026-10-21T16:54:48.3949400Z ✔ snapshot Result refusal keeps its exact reason; a thrown read fails closed (2.223617ms)
+2026-10-21T16:54:48.3974127Z ✔ actual 32768 UTF-16 cell refusal preserves the writer cell_limit code and message (2.881916ms)
+2026-10-21T16:54:48.4006374Z ✔ actual writer encoding-byte refusal emits no partial Blob or download (3.348484ms)
+2026-10-21T16:54:48.4025633Z ✔ invalid filename "" is refused before export (1.720533ms)
+2026-10-21T16:54:48.4043027Z ✔ invalid filename "../report.xlsx" is refused before export (1.701337ms)
+2026-10-21T16:54:48.4069802Z ✔ invalid filename "folder\\report.xlsx" is refused before export (0.591381ms)
+2026-10-21T16:54:48.4070792Z ✔ invalid filename "report.csv" is refused before export (1.028917ms)
+2026-10-21T16:54:48.4072083Z ✔ invalid filename "bad\u0000.xlsx" is refused before export (0.643017ms)
+2026-10-21T16:54:48.4169290Z ✔ Blob unavailable, constructor failure and incomplete Blob refuse without dispatch (9.367681ms)
+2026-10-21T16:54:48.4223619Z ✔ download dispatch failure is surfaced once and never retried (2.5413ms)
+2026-10-21T16:54:48.4231812Z ✔ yield failure and missing task scheduler refuse before download (0.425783ms)
+2026-10-21T16:54:48.4233670Z ✔ opaque, cyclic and accessor stamps fail closed without invoking the getter (0.471718ms)
+2026-10-21T16:54:48.4237049Z ✔ a renderer exception fails closed and a reentrant new operation remains owned (0.959386ms)
+2026-10-21T16:54:48.4245768Z ✔ UMD browser export loads without document, network or storage globals (1.62731ms)
+2026-10-21T16:54:48.5889714Z ✔ minimal workbook has a real five-part ZIP, CRC, package targets and typed cells (5.427304ms)
+2026-10-21T16:54:48.5892982Z ✔ the independent ZIP reader rejects a damaged data byte and trailing bytes (3.449425ms)
+2026-10-21T16:54:48.5895024Z ✔ all ordered columns, rows and repeated context are retained with raw scalar types (1.863931ms)
+2026-10-21T16:54:48.5897187Z ✔ formula-looking text, XML metacharacters and CSV-style apostrophes are literal strings (0.986647ms)
+2026-10-21T16:54:48.5899591Z ✔ literal overlapping ST_Xstring patterns protect every original escape starter once (0.937846ms)
+2026-10-21T16:54:48.5901676Z ✔ representable XML-forbidden scalars use Xstring while TAB and LF remain literal (1.034225ms)
+2026-10-21T16:54:48.5905028Z ✔ headers and context use the same lossless Xstring and Unicode rules (0.792105ms)
+2026-10-21T16:54:48.5910386Z ✔ unpaired UTF16 in any header, context or late cell refuses the entire snapshot (1.041309ms)
+2026-10-21T16:54:48.5912154Z ✔ explicit numbers retain 15 significant decimal digits, signs, exponents and bounds (1.140223ms)
+2026-10-21T16:54:48.5914071Z ✔ numbers that need rounding or exceed Excel range refuse; identifiers stay text (1.981049ms)
+2026-10-21T16:54:48.5918048Z ✔ non-scalars are rejected without implicit conversions (1.072844ms)
+2026-10-21T16:54:48.5920804Z ✔ records require exact own enumerable data fields and never invoke getters (0.456099ms)
+2026-10-21T16:54:48.5922602Z ✔ rows and arrays require dense own data slots with ordinary array prototypes (0.494351ms)
+2026-10-21T16:54:48.5924202Z ✔ invalid columns and row width cannot produce an incomplete projection (0.457772ms)
+2026-10-21T16:54:48.5925942Z ✔ unexpected proxy failures expose no thrown object fields or partial output (0.251228ms)
+2026-10-21T16:54:48.5928028Z ✔ snapshots are deeply frozen, instance-issued and independent of later input mutation (0.786635ms)
+2026-10-21T16:54:48.5936820Z ✔ every encode returns fresh deterministic bytes; caller mutation cannot alter the planner (0.4083ms)
+2026-10-21T16:54:48.5939552Z ✔ limit overrides only lower known integer limits using own data descriptors (0.543802ms)
+2026-10-21T16:54:48.5943590Z ✔ row and combined-column limits accept exact boundaries and reject before sparse traversal (5.177279ms)
+2026-10-21T16:54:48.5944479Z ✔ cell budgets count headers, nulls and each repeated context cell, atomically (7.413632ms)
+2026-10-21T16:54:48.5947893Z ✔ UTF16, UTF8 and line-feed cell limits accept exact values and refuse one above (2.781619ms)
+2026-10-21T16:54:48.5950041Z ✔ payload limit counts exact UTF8 output including repeated context and unused source context (0.439448ms)
+2026-10-21T16:54:48.5952712Z ✔ worksheet and ZIP byte limits are exact full-file gates, with no partial bytes (0.944188ms)
+2026-10-21T16:54:48.5965907Z ✔ over ten thousand rows are supported without a product row cap (92.265039ms)
+2026-10-21T16:54:48.5966671Z ✔ the full physical Excel column range reaches XFD and refuses XFE (102.833843ms)
+2026-10-21T16:54:48.5967742Z ✔ zero data rows is a complete headers-only table including declared context (0.51009ms)
+2026-10-21T16:54:48.5968962Z ✔ UMD browser entry works without CommonJS, DOM, storage or network globals (4.088973ms)
+2026-10-21T16:54:48.6161192Z ℹ tests 62
+2026-10-21T16:54:48.6161878Z ℹ suites 0
+2026-10-21T16:54:48.6162369Z ℹ pass 62
+2026-10-21T16:54:48.6162902Z ℹ fail 0
+2026-10-21T16:54:48.6163393Z ℹ cancelled 0
+2026-10-21T16:54:48.6164428Z ℹ skipped 0
+2026-10-21T16:54:48.6164951Z ℹ todo 0
+2026-10-21T16:54:48.6165542Z ℹ duration_ms 333.086963
+2026-10-21T16:54:48.6260855Z ##[group]Run node --test web/verification/table-source-availability.test.cjs
+2026-10-21T16:54:48.6261447Z [36;1mnode --test web/verification/table-source-availability.test.cjs[0m
+2026-10-21T16:54:48.6312318Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:48.6312595Z env:
+2026-10-21T16:54:48.6313071Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:48.6324178Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:48.6324459Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:48.6324738Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:48.6325421Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:48.6325924Z ##[endgroup]
+2026-10-21T16:54:48.7577249Z ✔ linkmetrics: absent analysis refuses actual programmatic CSV/XLSX (16.805548ms)
+2026-10-21T16:54:48.7748801Z ✔ linkmetrics: failed native source refuses cached arrays until recovery (18.476399ms)
+2026-10-21T16:54:48.7750285Z ✔ linkmetrics: malformed analysis [] is unavailable (2.274694ms)
+2026-10-21T16:54:48.7752564Z ✔ linkmetrics: malformed analysis {} is unavailable (1.861266ms)
+2026-10-21T16:54:48.7763412Z ✔ linkmetrics: malformed analysis {"graph":{"nodes":{}}} is unavailable (3.138483ms)
+2026-10-21T16:54:48.7764837Z ✔ linkmetrics: malformed analysis {"graph":[]} is unavailable (1.895028ms)
+2026-10-21T16:54:48.7872451Z ✔ linkmetrics: genuine loaded empty array exports headers during unrelated polling (6.455178ms)
+2026-10-21T16:54:48.7875599Z ✔ structured: absent analysis refuses actual programmatic CSV/XLSX (3.87798ms)
+2026-10-21T16:54:48.8003093Z ✔ structured: failed native source refuses cached arrays until recovery (7.697731ms)
+2026-10-21T16:54:48.8004885Z ✔ structured: malformed analysis [] is unavailable (2.311884ms)
+2026-10-21T16:54:48.8006964Z ✔ structured: malformed analysis {} is unavailable (1.709753ms)
+2026-10-21T16:54:48.8010766Z ✔ structured: malformed analysis {"structured_data":{}} is unavailable (1.510241ms)
+2026-10-21T16:54:48.8018225Z ✔ structured: malformed analysis {"structured_data":null} is unavailable (1.762462ms)
+2026-10-21T16:54:48.8377275Z ✔ structured: genuine loaded empty array exports headers during unrelated polling (6.301863ms)
+2026-10-21T16:54:48.8379470Z ✔ inputs: unavailable captured envelope undefined (3.85146ms)
+2026-10-21T16:54:48.8380919Z ✔ inputs: unavailable captured envelope null (1.59495ms)
+2026-10-21T16:54:48.8382212Z ✔ inputs: unavailable captured envelope [] (1.581534ms)
+2026-10-21T16:54:48.8387636Z ✔ inputs: unavailable captured envelope {} (2.21863ms)
+2026-10-21T16:54:48.8407859Z ✔ inputs: unavailable captured envelope [null] (1.663287ms)
+2026-10-21T16:54:48.8409179Z ✔ inputs: unavailable captured envelope [{}] (1.43395ms)
+2026-10-21T16:54:48.8410502Z ✔ inputs: unavailable captured envelope [{"rows":[]}] (1.514459ms)
+2026-10-21T16:54:48.8412799Z ✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.851808ms)
+2026-10-21T16:54:48.8414714Z ✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.862668ms)
+2026-10-21T16:54:48.8416143Z ✔ inputs: unavailable captured envelope [{"engine":"foreign","input_bytes":76,"input_sha256":"ccdd7e497a7144c7ee327dab019c2602c3d71508e1ae00 (1.543503ms)
+2026-10-21T16:54:48.8417932Z ✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"bad"," (1.645323ms)
+2026-10-21T16:54:48.8420278Z ✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":0,"input_sha256":"ccdd7e4 (1.822493ms)
+2026-10-21T16:54:48.8422095Z ✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":1.1,"input_sha256":"ccdd7 (2.023047ms)
+2026-10-21T16:54:48.8423807Z ✔ inputs: unavailable captured envelope [{"engine":"open-seo-spider/offline-list-v1/calamine-0.36.1","input_bytes":76,"input_sha256":"ccdd7e (1.771098ms)
+2026-10-21T16:54:48.9297237Z ✔ inputs: actual serialized native fixture is available, query-empty remains a successful empty projection (12.998543ms)
+2026-10-21T16:54:48.9299923Z ✔ inputs: failed-load recovery removes stale reason and preserves raw imported values (3.368852ms)
+2026-10-21T16:54:48.9302227Z ✔ availability checks inspect import envelopes, not every native-validated row on each render (5.861743ms)
+2026-10-21T16:54:48.9304490Z ✔ typed indexable preserves booleans/null while CSV and existing text query labels remain unchanged (7.455631ms)
+2026-10-21T16:54:48.9307199Z ✔ external.nofollow: typed boolean is independent of unchanged localized text predicates (4.631243ms)
+2026-10-21T16:54:48.9321209Z ✔ custom-search.evidence_complete: typed boolean is independent of unchanged localized text predicates (4.292792ms)
+2026-10-21T16:54:48.9325119Z ✔ responses.body_complete: typed boolean is independent of unchanged localized text predicates (8.383618ms)
+2026-10-21T16:54:48.9327237Z ✔ responses.document_metadata_available: typed boolean is independent of unchanged localized text predicates (4.353785ms)
+2026-10-21T16:54:48.9329811Z ✔ headingorder.hidden_attribute: typed boolean is independent of unchanged localized text predicates (4.247748ms)
+2026-10-21T16:54:48.9332110Z ✔ imagecandidates.eligible: typed boolean is independent of unchanged localized text predicates (4.129048ms)
+2026-10-21T16:54:48.9334338Z ✔ fragments.target_complete: typed boolean is independent of unchanged localized text predicates (4.145998ms)
+2026-10-21T16:54:48.9336582Z ✔ imagefiles.body_complete: typed boolean is independent of unchanged localized text predicates (4.024332ms)
+2026-10-21T16:54:48.9338994Z ✔ pdf.text_complete: typed boolean is independent of unchanged localized text predicates (3.951647ms)
+2026-10-21T16:54:48.9355172Z ✔ pdf.annotations_complete: typed boolean is independent of unchanged localized text predicates (1.734079ms)
+2026-10-21T16:54:48.9358412Z ✔ extractions.truncated: typed boolean is independent of unchanged localized text predicates (4.203096ms)
+2026-10-21T16:54:48.9360420Z ✔ cookies.httpOnly: typed boolean is independent of unchanged localized text predicates (4.158041ms)
+2026-10-21T16:54:48.9362195Z ✔ cookies.secure: typed boolean is independent of unchanged localized text predicates (1.588647ms)
+2026-10-21T16:54:48.9363259Z ✔ derived header and canonical exports preserve native unknown/known distinctions (1.842981ms)
+2026-10-21T16:54:48.9364194Z ✔ CSV section-specific policy and segment-issue titles survive control refresh (5.954606ms)
+2026-10-21T16:54:48.9446219Z ✔ titles: actual installed, confirmed empty segment permits both complete header-only exports (15.160716ms)
+2026-10-21T16:54:48.9533236Z ✔ status: actual installed, confirmed empty segment permits both complete header-only exports (10.182377ms)
+2026-10-21T16:54:48.9666322Z ✔ issues: actual installed, confirmed empty segment permits both complete header-only exports (8.794253ms)
+2026-10-21T16:54:48.9668710Z ✔ an empty unbound/malformed segment does not authorize empty page inventory (8.578852ms)
+2026-10-21T16:54:48.9819807Z ℹ tests 51
+2026-10-21T16:54:48.9820314Z ℹ suites 0
+2026-10-21T16:54:48.9820755Z ℹ pass 51
+2026-10-21T16:54:48.9821167Z ℹ fail 0
+2026-10-21T16:54:48.9821610Z ℹ cancelled 0
+2026-10-21T16:54:48.9822027Z ℹ skipped 0
+2026-10-21T16:54:48.9823563Z ℹ todo 0
+2026-10-21T16:54:48.9824077Z ℹ duration_ms 307.922793
+2026-10-21T16:54:48.9924685Z ##[group]Run node --test web/verification/extraction-source-trust.test.cjs
+2026-10-21T16:54:48.9925293Z [36;1mnode --test web/verification/extraction-source-trust.test.cjs[0m
+2026-10-21T16:54:48.9977028Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:48.9977563Z env:
+2026-10-21T16:54:48.9977801Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:48.9978089Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:48.9978340Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:48.9978596Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:48.9979040Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:48.9979514Z ##[endgroup]
+2026-10-21T16:54:49.1607195Z ✔ App has one source classifier and preserves complete-source zero independently from result limit (13.928511ms)
+2026-10-21T16:54:49.1609460Z ✔ legacy never enters confirmed-empty or acquires an exact count (3.246795ms)
+2026-10-21T16:54:49.1611463Z ✔ truncated source never enters confirmed-empty or acquires an exact count (2.761341ms)
+2026-10-21T16:54:49.1614592Z ✔ lossy source never enters confirmed-empty or acquires an exact count (2.588309ms)
+2026-10-21T16:54:49.1617076Z ✔ unknown charset never enters confirmed-empty or acquires an exact count (2.14281ms)
+2026-10-21T16:54:49.1619177Z ✔ evaluation error never enters confirmed-empty or acquires an exact count (2.096984ms)
+2026-10-21T16:54:49.1621271Z ✔ complete input with result-budget truncation keeps exact count3 and retained values2 (2.82525ms)
+2026-10-21T16:54:49.1626534Z ✔ partial input values are evaluated-input-only, not a complete count or generic lower bound (2.146797ms)
+2026-10-21T16:54:49.1628233Z ✔ XPath scalar "0" is one retained value, distinct from empty nodeset (3.016696ms)
+2026-10-21T16:54:49.1629274Z ✔ XPath scalar "false" is one retained value, distinct from empty nodeset (3.055939ms)
+2026-10-21T16:54:49.1633002Z ✔ XPath scalar "" is one retained value, distinct from empty nodeset (2.017106ms)
+2026-10-21T16:54:49.1634881Z ✔ optional renderer failure does not revoke complete raw-source evidence (1.953818ms)
+2026-10-21T16:54:49.1636915Z ✔ unavailable not-run source is visible and never becomes an evaluated zero (2.743328ms)
+2026-10-21T16:54:49.1639200Z ✔ malformed wrong contract engine remains unknown with null exact count (1.971019ms)
+2026-10-21T16:54:49.1640984Z ✔ malformed wrong source binding remains unknown with null exact count (1.967874ms)
+2026-10-21T16:54:49.1655091Z ✔ malformed malformed hash remains unknown with null exact count (2.739604ms)
+2026-10-21T16:54:49.1656818Z ✔ malformed invalid byte count remains unknown with null exact count (1.894838ms)
+2026-10-21T16:54:49.1658902Z ✔ malformed unknown status remains unknown with null exact count (1.831099ms)
+2026-10-21T16:54:49.1660578Z ✔ malformed nonarray reasons remains unknown with null exact count (2.647507ms)
+2026-10-21T16:54:49.1689878Z ✔ missing configured result remains an explicit unknown row without synthesized matches (1.993351ms)
+2026-10-21T16:54:49.1693991Z ✔ unconfigured no-observation extraction source refuses header-only export (2.039527ms)
+2026-10-21T16:54:49.1696296Z ✔ historical present observations remain readable even when configuration is absent (2.677234ms)
+2026-10-21T16:54:49.1698142Z ✔ actual columns carry typed trust fields and keep zero/empty/null scalars separate (2.914025ms)
+2026-10-21T16:54:49.1861702Z ℹ tests 23
+2026-10-21T16:54:49.1862244Z ℹ suites 0
+2026-10-21T16:54:49.1862673Z ℹ pass 23
+2026-10-21T16:54:49.1863106Z ℹ fail 0
+2026-10-21T16:54:49.1863556Z ℹ cancelled 0
+2026-10-21T16:54:49.1864007Z ℹ skipped 0
+2026-10-21T16:54:49.1864426Z ℹ todo 0
+2026-10-21T16:54:49.1864914Z ℹ duration_ms 150.889359
+2026-10-21T16:54:49.1953767Z ##[group]Run cargo build --locked -p open-seo-spider
+2026-10-21T16:54:49.1954199Z [36;1mcargo build --locked -p open-seo-spider[0m
+2026-10-21T16:54:49.2006116Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:54:49.2006391Z env:
+2026-10-21T16:54:49.2006629Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:54:49.2006915Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:54:49.2007158Z   CARGO_TERM_COLOR: always
+2026-10-21T16:54:49.2007662Z   CACHE_ON_FAILURE: false
+2026-10-21T16:54:49.2008331Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:54:49.2008819Z ##[endgroup]
+2026-10-21T16:54:49.2805321Z [1m[92m    Updating[0m crates.io index
+2026-10-21T16:54:50.5065103Z [1m[92m   Compiling[0m open-seo-spider v0.1.0 (/home/runner/work/open-seo-spider/open-seo-spider/crates/app)
+2026-10-21T16:54:50.5067220Z [1m[92m   Compiling[0m open-seo-spider-core v0.1.0 (/home/runner/work/open-seo-spider/open-seo-spider/crates/core)
+2026-10-21T16:56:11.3249997Z [1m[92m    Finished[0m `dev` profile [unoptimized + debuginfo] target(s) in 1m 22s
+2026-10-21T16:56:11.3541126Z ##[group]Run node scripts/renderer-rust-e2e.mjs
+2026-10-21T16:56:11.3541530Z [36;1mnode scripts/renderer-rust-e2e.mjs[0m
+2026-10-21T16:56:11.3591542Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:56:11.3591813Z env:
+2026-10-21T16:56:11.3592037Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:56:11.3592317Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:56:11.3592559Z   CARGO_TERM_COLOR: always
+2026-10-21T16:56:11.3592827Z   CACHE_ON_FAILURE: false
+2026-10-21T16:56:11.3593262Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:56:11.3593730Z ##[endgroup]
+2026-10-21T16:56:11.7991067Z Owned Rust browser fixture worker: http://127.0.0.1:46195/render
+2026-10-21T16:56:11.9836738Z [1m[92m   Compiling[0m open-seo-spider-core v0.1.0 (/home/runner/work/open-seo-spider/open-seo-spider/crates/core)
+2026-10-21T16:57:51.1923537Z [1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 1m 39s
+2026-10-21T16:57:51.2111726Z [1m[92m     Running[0m unittests src/lib.rs (target/debug/deps/open_seo_spider_core-19bd48ea879ac526)
+2026-10-21T16:57:51.2151598Z [1m[92m     Running[0m tests/content_capture_fixtures.rs (target/debug/deps/content_capture_fixtures-a44470ea9a932918)
+2026-10-21T16:57:51.2152883Z 
+2026-10-21T16:57:51.2153318Z running 0 tests
+2026-10-21T16:57:51.2153845Z 
+2026-10-21T16:57:51.2155703Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1172 filtered out; finished in 0.00s
+2026-10-21T16:57:51.2156648Z 
+2026-10-21T16:57:51.2179780Z 
+2026-10-21T16:57:51.2180069Z running 1 test
+2026-10-21T16:57:52.5912782Z test live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness ... ok
+2026-10-21T16:57:52.5913511Z 
+2026-10-21T16:57:52.5914125Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 1.37s
+2026-10-21T16:57:52.5914712Z 
+2026-10-21T16:57:52.5921487Z [1m[92m     Running[0m tests/control_fixtures.rs (target/debug/deps/control_fixtures-e087b448eb4b0e23)
+2026-10-21T16:57:52.5948807Z 
+2026-10-21T16:57:52.5949053Z running 1 test
+2026-10-21T16:57:53.8164127Z test live_browser_worker_pause_drains_render_and_retains_rendered_discoveries ... ok
+2026-10-21T16:57:53.8164782Z 
+2026-10-21T16:57:53.8165403Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 1.22s
+2026-10-21T16:57:53.8166037Z 
+2026-10-21T16:57:53.8173821Z [1m[92m     Running[0m tests/crawl_fixtures.rs (target/debug/deps/crawl_fixtures-2df0f8b8b7db0334)
+2026-10-21T16:57:53.8202833Z 
+2026-10-21T16:57:53.8203028Z running 1 test
+2026-10-21T16:57:54.4090867Z test live_browser_worker_executes_javascript_for_core_crawl ... ok
+2026-10-21T16:57:54.4091609Z 
+2026-10-21T16:57:54.4092645Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.59s
+2026-10-21T16:57:54.4093363Z 
+2026-10-21T16:57:54.4109210Z [1m[92m     Running[0m tests/directive_reporting_crawl.rs (target/debug/deps/directive_reporting_crawl-f320a3aa7bf96c62)
+2026-10-21T16:57:54.4140399Z 
+2026-10-21T16:57:54.4141062Z running 0 tests
+2026-10-21T16:57:54.4153361Z [1m[92m     Running[0m tests/dom_fixtures.rs (target/debug/deps/dom_fixtures-ae27ffdaf924dffd)
+2026-10-21T16:57:54.4154056Z 
+2026-10-21T16:57:54.4155212Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+2026-10-21T16:57:54.4156235Z 
+2026-10-21T16:57:54.4180566Z 
+2026-10-21T16:57:54.4180970Z running 0 tests
+2026-10-21T16:57:54.4181494Z 
+2026-10-21T16:57:54.4182467Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 5 filtered out; finished in 0.00s
+2026-10-21T16:57:54.4183156Z 
+2026-10-21T16:57:54.4193009Z [1m[92m     Running[0m tests/extraction_observation_fixtures.rs (target/debug/deps/extraction_observation_fixtures-ce1a8cf07366bf60)
+2026-10-21T16:57:54.4214436Z 
+2026-10-21T16:57:54.4214717Z running 0 tests
+2026-10-21T16:57:54.4214994Z 
+2026-10-21T16:57:54.4216080Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+2026-10-21T16:57:54.4216740Z 
+2026-10-21T16:57:54.4219672Z [1m[92m     Running[0m tests/policy_fixtures.rs (target/debug/deps/policy_fixtures-9868d83963667c8a)
+2026-10-21T16:57:54.4245460Z 
+2026-10-21T16:57:54.4245726Z running 0 tests
+2026-10-21T16:57:54.4245989Z 
+2026-10-21T16:57:54.4246651Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+2026-10-21T16:57:54.4247247Z 
+2026-10-21T16:57:54.4250877Z [1m[92m     Running[0m tests/recrawl_fixtures.rs (target/debug/deps/recrawl_fixtures-3b520213e831d4f8)
+2026-10-21T16:57:54.4274922Z 
+2026-10-21T16:57:54.4275117Z running 1 test
+2026-10-21T16:57:55.2121931Z test live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion ... ok
+2026-10-21T16:57:55.2122393Z 
+2026-10-21T16:57:55.2122788Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.78s
+2026-10-21T16:57:55.2123160Z 
+2026-10-21T16:57:55.2131336Z [1m[92m     Running[0m tests/resource_contract_fixtures.rs (target/debug/deps/resource_contract_fixtures-7d9d2958d207d790)
+2026-10-21T16:57:55.2157690Z 
+2026-10-21T16:57:55.2157978Z running 0 tests
+2026-10-21T16:57:55.2158280Z 
+2026-10-21T16:57:55.2159077Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 22 filtered out; finished in 0.00s
+2026-10-21T16:57:55.2159853Z 
+2026-10-21T16:57:55.2162637Z [1m[92m     Running[0m tests/resource_discovery_fixtures.rs (target/debug/deps/resource_discovery_fixtures-5bc239b9f1799e84)
+2026-10-21T16:57:55.2188568Z 
+2026-10-21T16:57:55.2188808Z running 0 tests
+2026-10-21T16:57:55.2189144Z 
+2026-10-21T16:57:55.2189728Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.00s
+2026-10-21T16:57:55.2190178Z 
+2026-10-21T16:57:55.2192755Z [1m[92m     Running[0m tests/resource_fixtures.rs (target/debug/deps/resource_fixtures-d72314a39839874b)
+2026-10-21T16:57:55.2217864Z 
+2026-10-21T16:57:55.2218219Z running 0 tests
+2026-10-21T16:57:55.2218518Z 
+2026-10-21T16:57:55.2219565Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+2026-10-21T16:57:55.2220206Z 
+2026-10-21T16:57:55.2223645Z [1m[92m     Running[0m tests/resource_matrix_fixtures.rs (target/debug/deps/resource_matrix_fixtures-4da42361810f7dcc)
+2026-10-21T16:57:55.2247205Z 
+2026-10-21T16:57:55.2247412Z running 0 tests
+2026-10-21T16:57:55.2247760Z 
+2026-10-21T16:57:55.2248798Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+2026-10-21T16:57:55.2249374Z 
+2026-10-21T16:57:55.2251931Z [1m[92m     Running[0m tests/resource_quota_fixtures.rs (target/debug/deps/resource_quota_fixtures-f63da0e0d7cf215b)
+2026-10-21T16:57:55.2276103Z 
+2026-10-21T16:57:55.2276349Z running 0 tests
+2026-10-21T16:57:55.2276677Z 
+2026-10-21T16:57:55.2277211Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+2026-10-21T16:57:55.2278177Z 
+2026-10-21T16:57:55.2281278Z [1m[92m     Running[0m tests/resource_redirect_fixtures.rs (target/debug/deps/resource_redirect_fixtures-084e7bbbc926ef5a)
+2026-10-21T16:57:55.2304080Z 
+2026-10-21T16:57:55.2304278Z running 0 tests
+2026-10-21T16:57:55.2304641Z 
+2026-10-21T16:57:55.2305430Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+2026-10-21T16:57:55.2305828Z 
+2026-10-21T16:57:55.2310252Z [1m[92m     Running[0m tests/resource_response_fixtures.rs (target/debug/deps/resource_response_fixtures-2ed6882bdf4d2f0e)
+2026-10-21T16:57:55.2333691Z 
+2026-10-21T16:57:55.2334025Z running 0 tests
+2026-10-21T16:57:55.2334350Z 
+2026-10-21T16:57:55.2334872Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+2026-10-21T16:57:55.2335242Z 
+2026-10-21T16:57:55.2880923Z {"kind":"owned_renderer_rust_fixtures","result":"PASS","executed":["live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness","live_browser_worker_executes_javascript_for_core_crawl","live_browser_worker_pause_drains_render_and_retains_rendered_discoveries","live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"],"outcome":{"code":0,"signal":null},"scope":"Explicit opt-in Rust browser tests on an ephemeral owned renderer. Installed ports/stores are untouched."}
+2026-10-21T16:57:55.3140121Z ##[group]Run node scripts/run-enrichment-browser-checks.mjs
+2026-10-21T16:57:55.3140623Z [36;1mnode scripts/run-enrichment-browser-checks.mjs[0m
+2026-10-21T16:57:55.3209771Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:57:55.3210069Z env:
+2026-10-21T16:57:55.3210319Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:57:55.3210638Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:57:55.3210908Z   CARGO_TERM_COLOR: always
+2026-10-21T16:57:55.3211185Z   CACHE_ON_FAILURE: false
+2026-10-21T16:57:55.3211676Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:57:55.3212363Z   SPIDER_ENRICHMENT_ARTIFACT_DIR: /home/runner/work/_temp/enrichment-browser-e2e
+2026-10-21T16:57:55.3212833Z ##[endgroup]
+2026-10-21T16:59:12.3158802Z Compiled cfg(test) native host a52c16787dba012b4152f348306c1766e1b5d6e1e48ba068cda8212fcb586a7e
+2026-10-21T16:59:16.0352967Z PASS Browser acknowledgement starts real native service; owned HTTP provider produces exact 100+8 DOM rows, zero and missing metrics, duplicates, rejected input, retry and failures
+2026-10-21T16:59:17.8946696Z PASS Explicit fresh acknowledgement creates a new refresh job and new provider calls; old generation, rows, full CSV and all four saved files stay byte-identical
+2026-10-21T16:59:17.9578818Z PASS Native stale snapshot and cross-job continuation are rejected for results and full export
+2026-10-21T16:59:18.2566760Z PASS Actual held provider request is cancelled and disconnected; unattempted tail remains cancelled with unknown metrics and zero attempts
+2026-10-21T16:59:22.7664779Z PASS New browser and actual cold native process reopen exact saved configuration, generation, 100+8 rows and byte-identical full CSV without provider resume or stale acknowledgement
+2026-10-21T16:59:24.4192825Z PASS positive native enrichment and process-cold reopen: /home/runner/work/_temp/enrichment-browser-e2e
+2026-10-21T16:59:24.5156365Z ##[group]Run actions/upload-artifact@v4
+2026-10-21T16:59:24.5156688Z with:
+2026-10-21T16:59:24.5157026Z   name: enrichment-browser-e2e-7250b9a0007d0f307321e3b4c7076fa95430dbc3
+2026-10-21T16:59:24.5157729Z   retention-days: 14
+2026-10-21T16:59:24.5157995Z   if-no-files-found: warn
+2026-10-21T16:59:24.5158322Z   path: /home/runner/work/_temp/enrichment-browser-e2e/**
+2026-10-21T16:59:24.5158687Z   compression-level: 6
+2026-10-21T16:59:24.5158930Z   overwrite: false
+2026-10-21T16:59:24.5159171Z   include-hidden-files: false
+2026-10-21T16:59:24.5159428Z env:
+2026-10-21T16:59:24.5159642Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:59:24.5159922Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:59:24.5160164Z   CARGO_TERM_COLOR: always
+2026-10-21T16:59:24.5160416Z   CACHE_ON_FAILURE: false
+2026-10-21T16:59:24.5160840Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:59:24.5161312Z ##[endgroup]
+2026-10-21T16:59:24.9058420Z (node:6038) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T16:59:24.9059880Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T16:59:24.9196877Z With the provided path, there will be 29 files uploaded
+2026-10-21T16:59:24.9203127Z Artifact name is valid!
+2026-10-21T16:59:24.9203897Z Root directory input is valid!
+2026-10-21T16:59:25.1593772Z Beginning upload of artifact content to blob storage
+2026-10-21T16:59:25.2463671Z (node:6038) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-21T16:59:25.2802006Z Uploaded bytes 367868
+2026-10-21T16:59:25.2977483Z Finished uploading artifact content to blob storage!
+2026-10-21T16:59:25.2978867Z SHA256 digest of uploaded artifact zip is a513fa5536ed0a2e404878be21db1e937d4c932a62512c815f65f4b5a6252241
+2026-10-21T16:59:25.2988220Z Finalizing artifact upload
+2026-10-21T16:59:25.5184296Z Artifact enrichment-browser-e2e-7250b9a0007d0f307321e3b4c7076fa95430dbc3.zip successfully finalized. Artifact ID 12364591532
+2026-10-21T16:59:25.5186956Z Artifact enrichment-browser-e2e-7250b9a0007d0f307321e3b4c7076fa95430dbc3 has been successfully uploaded! Final size is 367868 bytes. Artifact ID is 12364591532
+2026-10-21T16:59:25.5193289Z Artifact download URL: https://github.com/lia-xim/open-seo-spider/actions/runs/39638818285/artifacts/12364591532
+2026-10-21T16:59:25.5357726Z ##[group]Run npm ci --ignore-scripts
+2026-10-21T16:59:25.5358211Z [36;1mnpm ci --ignore-scripts[0m
+2026-10-21T16:59:25.5454305Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:59:25.5454597Z env:
+2026-10-21T16:59:25.5454829Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:59:25.5455131Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:59:25.5455385Z   CARGO_TERM_COLOR: always
+2026-10-21T16:59:25.5455645Z   CACHE_ON_FAILURE: false
+2026-10-21T16:59:25.5456217Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:59:25.5456740Z ##[endgroup]
+2026-10-21T16:59:26.4861686Z 
+2026-10-21T16:59:26.4862510Z added 13 packages, and audited 14 packages in 838ms
+2026-10-21T16:59:26.4862941Z 
+2026-10-21T16:59:26.4863776Z 2 packages are looking for funding
+2026-10-21T16:59:26.4864894Z   run `npm fund` for details
+2026-10-21T16:59:26.4874901Z 
+2026-10-21T16:59:26.4875217Z found 0 vulnerabilities
+2026-10-21T16:59:26.5044537Z ##[group]Run node scripts/ui-e2e.mjs
+2026-10-21T16:59:26.5045116Z [36;1mnode scripts/ui-e2e.mjs[0m
+2026-10-21T16:59:26.5106703Z shell: /usr/bin/bash -e {0}
+2026-10-21T16:59:26.5106995Z env:
+2026-10-21T16:59:26.5107231Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T16:59:26.5107771Z   CARGO_INCREMENTAL: 0
+2026-10-21T16:59:26.5108034Z   CARGO_TERM_COLOR: always
+2026-10-21T16:59:26.5108308Z   CACHE_ON_FAILURE: false
+2026-10-21T16:59:26.5108777Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T16:59:26.5109318Z   SPIDER_BINARY: target/debug/open-seo-spider
+2026-10-21T16:59:26.5109711Z   SPIDER_E2E_OUTPUT: /home/runner/work/_temp/redesign-ui-e2e
+2026-10-21T16:59:26.5110071Z ##[endgroup]
+2026-10-21T16:59:39.9009861Z PASS dashboard (fixture)
+2026-10-21T16:59:47.1389687Z PASS pause-controls (fixture)
+2026-10-21T16:59:53.1504707Z PASS recrawl-controls (fixture)
+2026-10-21T17:00:01.2024425Z PASS policy-controls (fixture)
+2026-10-21T17:00:27.1955041Z PASS content-controls (fixture)
+2026-10-21T17:00:46.3491755Z PASS resource-controls (fixture)
+2026-10-21T17:00:57.4926972Z PASS resource-ledger (fixture)
+2026-10-21T17:01:11.8538812Z PASS resource-contract (fixture)
+2026-10-21T17:01:16.0799129Z PASS comparison-controls (fixture)
+2026-10-21T17:01:21.9837099Z PASS tool-navigation (live)
+2026-10-21T17:01:28.7976367Z PASS rendered-crawl (live)
+2026-10-21T17:01:43.3721254Z PASS dom-capture (live)
+2026-10-21T17:02:19.2365318Z PASS accessibility-review (owned-native)
+2026-10-21T17:02:27.1293704Z PASS resources (live)
+2026-10-21T17:02:28.6337160Z PASS robots (live)
+2026-10-21T17:02:29.7091705Z PASS serp (live)
+2026-10-21T17:02:35.4227053Z PASS list-import (live)
+2026-10-21T17:02:52.2233653Z PASS pause-resume (live)
+2026-10-21T17:03:01.0638259Z PASS selected-recrawl (live)
+2026-10-21T17:03:06.3743127Z PASS policy (live)
+2026-10-21T17:03:18.0658792Z PASS content (live)
+2026-10-21T17:03:27.4835602Z PASS resource-discovery (live)
+2026-10-21T17:03:34.8200500Z PASS resource-persistence (live)
+2026-10-21T17:03:37.4763853Z PASS saved-spelling (live)
+2026-10-21T17:03:41.8296794Z PASS link-workflows (live)
+2026-10-21T17:03:43.4632759Z PASS api-enrichment (live)
+2026-10-21T17:03:50.1147730Z PASS directory-tree (live)
+2026-10-21T17:03:55.6303305Z PASS saved-ngrams (live)
+2026-10-21T17:04:01.3506874Z PASS saved-segments (live)
+2026-10-21T17:10:43.3569120Z PASS dashboard-segments (owned-native)
+2026-10-21T17:35:02.2727969Z PASS segments-repeated-metadata (owned-native)
+2026-10-21T17:35:11.5162407Z PASS segments-density (owned-native)
+2026-10-21T17:35:27.3306113Z PASS ngrams-cold-restart (owned-native)
+2026-10-21T17:35:48.3274071Z PASS segments-cold-restart (owned-native)
+2026-10-21T17:36:09.9784415Z PASS resource-sources (live)
+2026-10-21T17:36:37.0799160Z PASS custom-search (live)
+2026-10-21T17:36:44.6200115Z PASS saved-comparison (owned-native)
+2026-10-21T17:36:53.4362684Z PASS comparison-bundles (owned-native)
+2026-10-21T17:37:10.8239019Z PASS configuration-profiles (owned-native)
+2026-10-21T17:37:37.5425083Z PASS configuration-profile-catalog (owned-native)
+2026-10-21T17:38:06.1298048Z PASS screenshot-viewport (owned-native)
+2026-10-21T17:38:35.0118071Z PASS table-explorer (owned-native)
+2026-10-21T17:39:36.8006996Z PASS table-named-views (owned-native)
+2026-10-21T17:40:24.1080439Z PASS table-expressions (owned-native)
+2026-10-21T17:42:13.0404748Z PASS table-view-portability (owned-native)
+2026-10-21T17:43:20.1639273Z PASS table-xlsx (owned-native)
+2026-10-21T17:46:28.5692081Z PASS table-xlsx-provenance (owned-native)
+2026-10-21T17:46:49.1717250Z PASS table-xlsx-availability (owned-native)
+2026-10-21T17:47:23.5933494Z PASS extraction-source-trust (owned-native)
+2026-10-21T17:47:26.0632322Z Evidence: /home/runner/work/_temp/redesign-ui-e2e
+2026-10-21T17:47:26.1482775Z ##[group]Run actions/upload-artifact@v4
+2026-10-21T17:47:26.1483116Z with:
+2026-10-21T17:47:26.1483436Z   name: redesign-ui-e2e-7250b9a0007d0f307321e3b4c7076fa95430dbc3
+2026-10-21T17:47:26.1483833Z   retention-days: 14
+2026-10-21T17:47:26.1484092Z   if-no-files-found: warn
+2026-10-21T17:47:26.1484399Z   path: /home/runner/work/_temp/redesign-ui-e2e/**
+2026-10-21T17:47:26.1484741Z   compression-level: 6
+2026-10-21T17:47:26.1484992Z   overwrite: false
+2026-10-21T17:47:26.1485232Z   include-hidden-files: false
+2026-10-21T17:47:26.1485498Z env:
+2026-10-21T17:47:26.1485722Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T17:47:26.1486002Z   CARGO_INCREMENTAL: 0
+2026-10-21T17:47:26.1486252Z   CARGO_TERM_COLOR: always
+2026-10-21T17:47:26.1486508Z   CACHE_ON_FAILURE: false
+2026-10-21T17:47:26.1486958Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T17:47:26.1487771Z ##[endgroup]
+2026-10-21T17:47:26.3206772Z (node:22256) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T17:47:26.3208587Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T17:47:26.5541277Z With the provided path, there will be 1319 files uploaded
+2026-10-21T17:47:26.5546362Z Artifact name is valid!
+2026-10-21T17:47:26.5547041Z Root directory input is valid!
+2026-10-21T17:47:26.8012644Z Beginning upload of artifact content to blob storage
+2026-10-21T17:47:27.9012419Z (node:22256) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-21T17:47:28.0694982Z Uploaded bytes 8388608
+2026-10-21T17:47:28.4265027Z Uploaded bytes 16777216
+2026-10-21T17:47:28.8438537Z Uploaded bytes 25165824
+2026-10-21T17:47:29.5702668Z Uploaded bytes 33554432
+2026-10-21T17:47:30.5618623Z Uploaded bytes 41943040
+2026-10-21T17:47:31.4747703Z Uploaded bytes 50331648
+2026-10-21T17:47:32.4705243Z Uploaded bytes 58720256
+2026-10-21T17:47:33.2961728Z Uploaded bytes 67108864
+2026-10-21T17:47:34.9488524Z Uploaded bytes 75115563
+2026-10-21T17:47:34.9638943Z Finished uploading artifact content to blob storage!
+2026-10-21T17:47:34.9642940Z SHA256 digest of uploaded artifact zip is bbb7fce4a3de24e93bf1d509d8c918b71cc06b8ee65f2e9c58aff1291b258b9c
+2026-10-21T17:47:34.9645116Z Finalizing artifact upload
+2026-10-21T17:47:35.2645324Z Artifact redesign-ui-e2e-7250b9a0007d0f307321e3b4c7076fa95430dbc3.zip successfully finalized. Artifact ID 12367387504
+2026-10-21T17:47:35.2646921Z Artifact redesign-ui-e2e-7250b9a0007d0f307321e3b4c7076fa95430dbc3 has been successfully uploaded! Final size is 75115563 bytes. Artifact ID is 12367387504
+2026-10-21T17:47:35.2656314Z Artifact download URL: https://github.com/lia-xim/open-seo-spider/actions/runs/39638818285/artifacts/12367387504
+2026-10-21T17:47:35.2995732Z ##[group]Run node scripts/run-sitemap-native-checks.mjs membership
+2026-10-21T17:47:35.2996294Z [36;1mnode scripts/run-sitemap-native-checks.mjs membership[0m
+2026-10-21T17:47:35.3049893Z shell: /usr/bin/bash -e {0}
+2026-10-21T17:47:35.3050322Z env:
+2026-10-21T17:47:35.3050659Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T17:47:35.3051109Z   CARGO_INCREMENTAL: 0
+2026-10-21T17:47:35.3051498Z   CARGO_TERM_COLOR: always
+2026-10-21T17:47:35.3051893Z   CACHE_ON_FAILURE: false
+2026-10-21T17:47:35.3052598Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T17:47:35.3053400Z   SPIDER_BINARY: target/debug/open-seo-spider
+2026-10-21T17:47:35.3054024Z   SPIDER_SOURCE_COMMIT: 7250b9a0007d0f307321e3b4c7076fa95430dbc3
+2026-10-21T17:47:35.3054770Z   SPIDER_EXPECTED_SOURCE_COMMIT: 7250b9a0007d0f307321e3b4c7076fa95430dbc3
+2026-10-21T17:47:35.3055614Z   SPIDER_SITEMAP_NATIVE_OUTPUT: /home/runner/work/_temp/sitemap-membership-native
+2026-10-21T17:47:35.3056089Z ##[endgroup]
+2026-10-21T17:47:53.9587855Z {"mode":"membership","result":"PASS_NATIVE_SITEMAP_API_SDK_BROWSER","output":"/home/runner/work/_temp/sitemap-membership-native"}
+2026-10-21T17:47:54.0196258Z ##[group]Run node scripts/run-sitemap-native-checks.mjs assessment
+2026-10-21T17:47:54.0196790Z [36;1mnode scripts/run-sitemap-native-checks.mjs assessment[0m
+2026-10-21T17:47:54.0248625Z shell: /usr/bin/bash -e {0}
+2026-10-21T17:47:54.0248913Z env:
+2026-10-21T17:47:54.0249147Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T17:47:54.0249450Z   CARGO_INCREMENTAL: 0
+2026-10-21T17:47:54.0249702Z   CARGO_TERM_COLOR: always
+2026-10-21T17:47:54.0249964Z   CACHE_ON_FAILURE: false
+2026-10-21T17:47:54.0250424Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T17:47:54.0250971Z   SPIDER_BINARY: target/debug/open-seo-spider
+2026-10-21T17:47:54.0251378Z   SPIDER_SOURCE_COMMIT: 7250b9a0007d0f307321e3b4c7076fa95430dbc3
+2026-10-21T17:47:54.0251851Z   SPIDER_EXPECTED_SOURCE_COMMIT: 7250b9a0007d0f307321e3b4c7076fa95430dbc3
+2026-10-21T17:47:54.0252409Z   SPIDER_SITEMAP_NATIVE_OUTPUT: /home/runner/work/_temp/sitemap-assessment-native
+2026-10-21T17:47:54.0252889Z ##[endgroup]
+2026-10-21T17:48:13.5811088Z {"mode":"assessment","result":"PASS_NATIVE_SITEMAP_ASSESSMENTS_API_SDK_BROWSER","output":"/home/runner/work/_temp/sitemap-assessment-native"}
+2026-10-21T17:48:13.6484569Z ##[group]Run actions/upload-artifact@v4
+2026-10-21T17:48:13.6484907Z with:
+2026-10-21T17:48:13.6485295Z   name: sitemap-membership-witnesses-7250b9a0007d0f307321e3b4c7076fa95430dbc3
+2026-10-21T17:48:13.6485754Z   retention-days: 14
+2026-10-21T17:48:13.6486013Z   if-no-files-found: warn
+2026-10-21T17:48:13.6486538Z   path: /home/runner/work/_temp/sitemap-membership-native/**
+/home/runner/work/_temp/sitemap-assessment-native/**
+
+2026-10-21T17:48:13.6487109Z   compression-level: 6
+2026-10-21T17:48:13.6487688Z   overwrite: false
+2026-10-21T17:48:13.6487958Z   include-hidden-files: false
+2026-10-21T17:48:13.6488228Z env:
+2026-10-21T17:48:13.6488458Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T17:48:13.6488939Z   CARGO_INCREMENTAL: 0
+2026-10-21T17:48:13.6489194Z   CARGO_TERM_COLOR: always
+2026-10-21T17:48:13.6489452Z   CACHE_ON_FAILURE: false
+2026-10-21T17:48:13.6489894Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T17:48:13.6490399Z ##[endgroup]
+2026-10-21T17:48:13.8200858Z (node:22686) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T17:48:13.8201767Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T17:48:14.0322385Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-21T17:48:14.0323528Z The least common ancestor is /home/runner/work/_temp. This will be the root directory of the artifact
+2026-10-21T17:48:14.0324640Z With the provided path, there will be 1526 files uploaded
+2026-10-21T17:48:14.0325635Z Artifact name is valid!
+2026-10-21T17:48:14.0326158Z Root directory input is valid!
+2026-10-21T17:48:14.2621123Z Beginning upload of artifact content to blob storage
+2026-10-21T17:48:15.1683466Z (node:22686) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-21T17:48:15.2780556Z Uploaded bytes 3521746
+2026-10-21T17:48:15.2926619Z Finished uploading artifact content to blob storage!
+2026-10-21T17:48:15.2928042Z SHA256 digest of uploaded artifact zip is 506e2305845052b60b3393f87cafe902e20bb5f63b0de52130596bda8399c6a6
+2026-10-21T17:48:15.2929959Z Finalizing artifact upload
+2026-10-21T17:48:15.5255513Z Artifact sitemap-membership-witnesses-7250b9a0007d0f307321e3b4c7076fa95430dbc3.zip successfully finalized. Artifact ID 12367876608
+2026-10-21T17:48:15.5257731Z Artifact sitemap-membership-witnesses-7250b9a0007d0f307321e3b4c7076fa95430dbc3 has been successfully uploaded! Final size is 3521746 bytes. Artifact ID is 12367876608
+2026-10-21T17:48:15.5262656Z Artifact download URL: https://github.com/lia-xim/open-seo-spider/actions/runs/39638818285/artifacts/12367876608
+2026-10-21T17:48:15.5569382Z ##[group]Run node renderer/server.mjs > "$RUNNER_TEMP/renderer.log" 2>&1 &
+2026-10-21T17:48:15.5569986Z [36;1mnode renderer/server.mjs > "$RUNNER_TEMP/renderer.log" 2>&1 &[0m
+2026-10-21T17:48:15.5570411Z [36;1mrenderer_pid=$![0m
+2026-10-21T17:48:15.5571021Z [36;1mtarget/debug/open-seo-spider serve --listen 127.0.0.1:8787 --data-dir "$RUNNER_TEMP/spider-data" > "$RUNNER_TEMP/spider.log" 2>&1 &[0m
+2026-10-21T17:48:15.5571663Z [36;1mspider_pid=$![0m
+2026-10-21T17:48:15.5572333Z [36;1mtarget/debug/open-seo-spider serve --listen 127.0.0.1:18789 --data-dir "$RUNNER_TEMP/spider-contract-data" > "$RUNNER_TEMP/spider-contract.log" 2>&1 &[0m
+2026-10-21T17:48:15.5573050Z [36;1mcontract_pid=$![0m
+2026-10-21T17:48:15.5573477Z [36;1mtrap 'kill "$contract_pid" "$spider_pid" "$renderer_pid" 2>/dev/null || true' EXIT[0m
+2026-10-21T17:48:15.5574961Z [36;1mnode --input-type=module -e 'const urls=["http://127.0.0.1:8787/healthz","http://127.0.0.1:18789/healthz","http://127.0.0.1:8790/health"];for(const url of urls){let ready=false;for(let i=0;i<80;i++){try{if((await fetch(url)).ok){ready=true;break}}catch{}await new Promise(r=>setTimeout(r,250))}if(!ready)throw new Error(`Service unavailable: ${url}`)}'[0m
+2026-10-21T17:48:15.5576628Z [36;1mcargo test --locked -p open-seo-spider-core --test crawl_fixtures live_browser_worker_executes_javascript_for_core_crawl -- --ignored[0m
+2026-10-21T17:48:15.5577906Z [36;1mcargo test --locked -p open-seo-spider-core --test control_fixtures live_browser_worker_pause_drains_render_and_retains_rendered_discoveries -- --ignored[0m
+2026-10-21T17:48:15.5579089Z [36;1mcargo test --locked -p open-seo-spider-core --test recrawl_fixtures live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion -- --ignored[0m
+2026-10-21T17:48:15.5580351Z [36;1mcargo test --locked -p open-seo-spider-core --test content_capture_fixtures live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness -- --ignored --exact[0m
+2026-10-21T17:48:15.5632114Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-10-21T17:48:15.5632489Z env:
+2026-10-21T17:48:15.5632724Z   CARGO_HOME: /home/runner/.cargo
+2026-10-21T17:48:15.5633023Z   CARGO_INCREMENTAL: 0
+2026-10-21T17:48:15.5633289Z   CARGO_TERM_COLOR: always
+2026-10-21T17:48:15.5633557Z   CACHE_ON_FAILURE: false
+2026-10-21T17:48:15.5634011Z   OPEN_SEO_BROWSER_PATH: /home/runner/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome
+2026-10-21T17:48:15.5634496Z ##[endgroup]
+2026-10-21T17:48:16.5595756Z [1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 0.32s
+2026-10-21T17:48:16.5686221Z [1m[92m     Running[0m tests/crawl_fixtures.rs (target/debug/deps/crawl_fixtures-2df0f8b8b7db0334)
+2026-10-21T17:48:16.5714183Z 
+2026-10-21T17:48:16.5714562Z running 1 test
+2026-10-21T17:48:17.4129050Z test live_browser_worker_executes_javascript_for_core_crawl ... ok
+2026-10-21T17:48:17.4130107Z 
+2026-10-21T17:48:17.4131180Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.84s
+2026-10-21T17:48:17.4132250Z 
+2026-10-21T17:48:17.5603239Z [1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+2026-10-21T17:48:17.5686056Z [1m[92m     Running[0m tests/control_fixtures.rs (target/debug/deps/control_fixtures-e087b448eb4b0e23)
+2026-10-21T17:48:17.5713300Z 
+2026-10-21T17:48:17.5713605Z running 1 test
+2026-10-21T17:48:18.8122136Z test live_browser_worker_pause_drains_render_and_retains_rendered_discoveries ... ok
+2026-10-21T17:48:18.8122874Z 
+2026-10-21T17:48:18.8123552Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 1.24s
+2026-10-21T17:48:18.8124204Z 
+2026-10-21T17:48:18.9572785Z [1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+2026-10-21T17:48:18.9662090Z [1m[92m     Running[0m tests/recrawl_fixtures.rs (target/debug/deps/recrawl_fixtures-3b520213e831d4f8)
+2026-10-21T17:48:18.9691815Z 
+2026-10-21T17:48:18.9692687Z running 1 test
+2026-10-21T17:48:19.7648008Z test live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion ... ok
+2026-10-21T17:48:19.7648471Z 
+2026-10-21T17:48:19.7648872Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.80s
+2026-10-21T17:48:19.7649264Z 
+2026-10-21T17:48:19.9088071Z [1m[92m    Finished[0m `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+2026-10-21T17:48:19.9174816Z [1m[92m     Running[0m tests/content_capture_fixtures.rs (target/debug/deps/content_capture_fixtures-a44470ea9a932918)
+2026-10-21T17:48:19.9203395Z 
+2026-10-21T17:48:19.9203849Z running 1 test
+2026-10-21T17:48:20.8925065Z test live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness ... ok
+2026-10-21T17:48:20.8925769Z 
+2026-10-21T17:48:20.8926431Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.97s
+2026-10-21T17:48:20.8927159Z 
+2026-10-21T17:48:20.9163001Z Post job cleanup.
+2026-10-21T17:48:21.0656562Z Cache up-to-date.
+2026-10-21T17:48:21.0846715Z Post job cleanup.
+2026-10-21T17:48:21.2251169Z (node:23086) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-21T17:48:21.2252153Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-21T17:48:21.2474035Z Post job cleanup.
+2026-10-21T17:48:21.3436467Z [command]/usr/bin/git version
+2026-10-21T17:48:21.3487470Z git version 2.55.0
+2026-10-21T17:48:21.3526590Z Temporarily overriding HOME='/home/runner/work/_temp/20c4eada-0b71-4c81-802b-1cfdd81d65a7' before making global git config changes
+2026-10-21T17:48:21.3528397Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-21T17:48:21.3532507Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/open-seo-spider/open-seo-spider
+2026-10-21T17:48:21.3576653Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-21T17:48:21.3621193Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-21T17:48:21.3937773Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-21T17:48:21.3986608Z http.https://github.com/.extraheader
+2026-10-21T17:48:21.3988878Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-21T17:48:21.4031387Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-21T17:48:21.4342915Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-21T17:48:21.4393065Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-21T17:48:21.4866631Z Cleaning up orphan processes
+2026-10-21T17:48:21.5183192Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

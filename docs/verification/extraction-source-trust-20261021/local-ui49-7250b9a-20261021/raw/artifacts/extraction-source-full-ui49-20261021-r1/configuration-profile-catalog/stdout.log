@@ -1,0 +1,5 @@
+PASS Explicit catalog list and missing/invalid/unsafe requests preserve an absent catalog directory, active profile, jobs and all network counters
+PASS Two real tabs enforce revision/hash CAS: stale PUT and confirmed DELETE return409 without modifying catalog bytes, active/working profile or browser storage
+PASS Real browser create, rename, overwrite, delete, recreate and delayed actual native Load preserve exact stored profile bytes/u64, source provenance and volatile-secret boundaries
+PASS Two positive normal native processes share the actual catalog across different origins and fresh browser contexts; cold explicit reapply preserves full bytes and missing-header refusal,320px works,410 remains through both EOF0 closes
+4 actual config-profile catalog groups passed.

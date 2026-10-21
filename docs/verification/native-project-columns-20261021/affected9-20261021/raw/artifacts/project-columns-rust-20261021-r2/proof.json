@@ -1,0 +1,73 @@
+{
+  "kind": "fresh_native_project_columns_app_tests_normal_build_strict_workspace_clippy",
+  "created_at": "2026-10-21T18:14:22.812Z",
+  "results": [
+    {
+      "name": "format",
+      "args": [
+        "fmt",
+        "--all",
+        "--check"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 3641
+    },
+    {
+      "name": "app-tests",
+      "args": [
+        "test",
+        "-p",
+        "open-seo-spider",
+        "--locked",
+        "--",
+        "--test-threads=2"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 510217
+    },
+    {
+      "name": "build",
+      "args": [
+        "build",
+        "--locked",
+        "-p",
+        "open-seo-spider"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 44842
+    },
+    {
+      "name": "clippy",
+      "args": [
+        "clippy",
+        "--workspace",
+        "--all-targets",
+        "--all-features",
+        "--locked",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "code": 0,
+      "signal": null,
+      "duration_ms": 27730
+    }
+  ],
+  "changed": [],
+  "complete": true,
+  "binary": {
+    "bytes": 91236352,
+    "sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9"
+  },
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "OPEN_SEO_BROWSER_PATH": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\browser-runtime\\chrome-155.0.8059.80-36a30716-source12-v1\\chrome.exe"
+  },
+  "scope": "Ordinary App tests on this source; unchanged Core has separate exact725 full-workspace CI proof. Ignored opt-ins are not executed here. Source list is selected compiler/product inputs, not transitive dependency attestation."
+}

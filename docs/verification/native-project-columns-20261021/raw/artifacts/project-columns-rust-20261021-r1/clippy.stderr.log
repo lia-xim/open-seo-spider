@@ -1,0 +1,34 @@
+    Checking open-seo-spider v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\crates\app)
+error: clamp-like pattern without using clamp function
+   --> crates\app\src\server\table_preferences.rs:542:30
+    |
+542 |                   let target = next
+    |  ______________________________^
+543 | |                     .max(bytes.capacity().saturating_mul(2))
+544 | |                     .max(1024)
+545 | |                     .min(MAX_REQUEST_BYTES);
+    | |___________________________________________^
+    |
+    = note: clamp will panic if max < min
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#manual_clamp
+    = note: `-D clippy::manual-clamp` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::manual_clamp)]`
+help: replace with clamp
+    |
+542 ~                 let target = next
+543 ~                     .max(bytes.capacity().saturating_mul(2)).clamp(1024, MAX_REQUEST_BYTES);
+    |
+
+error: could not compile `open-seo-spider` (bin "open-seo-spider") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: the borrowed expression implements the required traits
+   --> crates\app\src\server\table_preferences_tests.rs:413:37
+    |
+413 |     let good = serde_json::to_value(&entries()).unwrap();
+    |                                     ^^^^^^^^^^ help: change this to: `entries()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.95.0/index.html#needless_borrows_for_generic_args
+    = note: `-D clippy::needless-borrows-for-generic-args` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::needless_borrows_for_generic_args)]`
+
+error: could not compile `open-seo-spider` (bin "open-seo-spider" test) due to 2 previous errors

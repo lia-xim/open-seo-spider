@@ -15,6 +15,7 @@ pub(super) struct Lifecycle {
     pub(super) transports: super::transport::Registry,
     pub(super) spelling_gate: Arc<tokio::sync::Mutex<()>>,
     pub(super) config_profile_gate: Arc<tokio::sync::Semaphore>,
+    pub(super) table_preferences_gate: Arc<tokio::sync::Semaphore>,
     enrichments: Arc<std::sync::OnceLock<crate::enrichment_app::Service>>,
 }
 impl Default for Lifecycle {
@@ -29,6 +30,7 @@ impl Default for Lifecycle {
             source_bodies: source_body_stream::Registry::new(admission.clone()),
             spelling_gate: Default::default(),
             config_profile_gate: Arc::new(tokio::sync::Semaphore::new(2)),
+            table_preferences_gate: Arc::new(tokio::sync::Semaphore::new(2)),
             enrichments: Default::default(),
             admission,
         }

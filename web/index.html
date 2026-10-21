@@ -21,6 +21,7 @@
   <script src="/table-views-ui.js" defer></script>
   <script src="/table-xlsx.js" defer></script>
   <script src="/table-export-ui.js" defer></script>
+  <script src="/project-columns.js" defer></script>
   <script src="/app.js" defer></script>
 </head>
 <body>
@@ -143,6 +144,14 @@
             <details class="table-columns"><summary>Spalten auswählen und anordnen</summary><p>Die Identitätsspalten bleiben vorne sichtbar. Der CSV-Export enthält alle gefilterten Zeilen mit diesen Spalten und den Befundinformationen.</p><ul id="table-column-list" aria-label="Spaltenreihenfolge und Sichtbarkeit"></ul></details>
             <div class="table-column-actions"><button id="table-columns-save" class="button small" type="button" disabled>Spalten speichern</button><button id="table-columns-reset" class="button small" type="button" disabled>Spalten zurücksetzen</button><span id="table-column-storage-status" role="status" aria-live="polite"></span></div>
             <p>Die Spaltenansicht wird nur in diesem Browser für den ausgewählten Crawl und Bereich gespeichert. Suchbegriffe, Filter und Sortierung werden nicht gespeichert.</p>
+            <fieldset id="project-columns" class="table-views">
+              <legend>Projektspalten auf diesem Rechner</legend>
+              <p>Spaltenreihenfolge und Sichtbarkeit werden im Datenverzeichnis dieses Crawl-Projekts gespeichert. Zuerst den gespeicherten Stand laden; danach lassen sich die Spalten dieses Bereichs speichern. Filter und benannte Browseransichten bleiben eigenständig.</p>
+              <div class="table-column-actions"><button id="project-columns-load" class="button small" type="button" disabled>Projektspalten laden</button><button id="project-columns-save" class="button small" type="button" disabled>Spalten dieses Bereichs speichern</button><button id="project-columns-reset" class="button small" type="button" disabled>Alle Projektspalten leeren</button></div>
+              <p id="project-columns-state" role="status" aria-live="polite">Projektspalten wurden noch nicht nativ geladen.</p>
+              <p id="project-columns-error" class="message error" role="alert" hidden></p>
+              <div id="project-columns-reset-question" class="table-view-confirmation" hidden><p>Alle gespeicherten Projektspalten dieses Crawl-Projekts leeren? Die aktuelle Tabellenansicht bleibt aktiv.</p><button id="project-columns-reset-confirm" class="button small" type="button">Alle Projektspalten leeren</button><button id="project-columns-reset-cancel" class="button small" type="button">Abbrechen</button></div>
+            </fieldset>
             <fieldset id="table-views" class="table-views">
               <legend>Benannte einfache Ansichten</legend>
               <p>Speichert Suchbegriffe, Bereichsfilter, aktive Regeln, Sortierung und Spalten in diesem Browser. Eine Ansicht wird erst mit „Anwenden“ auf den ausgewählten Crawl übernommen.</p>

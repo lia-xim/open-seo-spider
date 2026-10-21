@@ -13,6 +13,7 @@ const actual=app.split(/\r?\n/).find(line=>line.trim().startsWith('const canonic
   between('  function extractionSourceState(','  function filterOptions()')+
   between('  function matchesFilter(row)','  function tableOwner()')+
   between('  function tableOwner()','  function tableIdentity(')+
+  between('  function projectColumnsAvailable()','  function bindNamedTableViews()')+
   between('  function filteredRows(','  function renderTable()')+
   between('  function captureTableProjection(','  async function serverDownload(');
 const sectionTitle=between('  function renderSection()','  function selectResponse(').split(/\r?\n/).find(line=>line.trim().startsWith("$('export-csv').title ="));
@@ -27,7 +28,7 @@ function harness(section,changes={}){
   const state={section:${JSON.stringify(section)},crawl:{id:'declared-owner',status:'completed',config:{}},generation:1,pages:[{url:'https://owned.invalid/a',indexable:true}],pageMap:new Map(),issues:[],analysis:null,analysisError:'',responses:null,fragments:null,selected:null,recrawlURLs:new Set(),settings:{},cache:{},search:'',sort:'url',direction:1,filter:'all',polling:false};
   const nodes=new Map(),downloads=[],messages=[];
   const $=id=>{if(!nodes.has(id))nodes.set(id,{hidden:false,disabled:false,checked:false,textContent:'',title:id==='export-xlsx'?${JSON.stringify(xlsxTitle)}:${JSON.stringify(ordinaryCSVTitle)},value:'',dataset:{},isConnected:true,classList:{toggle(){}},listeners:new Map(),addEventListener(type,fn){this.listeners.set(type,fn);}});return nodes.get(id);};
-  let tableExport=null,tableQueryRevision=0,tableRenderSequence=0;
+  let tableExport=null,tableQueryRevision=0,tableRenderSequence=0,projectColumns=null,projectColumnsResetOwner=null;
   const screenshotView=null,dashboardSegments=null,configProfiles=null;
   const array=value=>Array.isArray(value)?value:value==null||value===''?[]:[value],first=value=>array(value).join(' | '),primary=value=>String(array(value)[0]??'');
   const number=value=>String(value??0),effectiveStatus=row=>row.final_status??row.status??null;

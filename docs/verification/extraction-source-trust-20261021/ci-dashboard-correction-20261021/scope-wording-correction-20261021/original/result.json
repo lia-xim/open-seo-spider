@@ -1,0 +1,36 @@
+{
+  "kind": "failed_exact_CI_dashboard_and_separate_local_fixture_correction",
+  "result": "ORIGINAL_CI_UI_FAIL_RETAINED_SELECTED_LOCAL_DASHBOARD_PASS_NOT_FULL49",
+  "original": {
+    "commit": "2c573d95681e00c54c6f99991f34a55c9d2c5be4",
+    "run": 39636204158,
+    "renderer_job": 119347254180,
+    "Renderer": "FAIL",
+    "dashboard": "FAIL",
+    "canonical_suite_passes": 0,
+    "remaining_registered_suites": "48_NOT_REACHED",
+    "whole_run_status_at_original_snapshot": "in_progress",
+    "coordinator_EOF0": true
+  },
+  "local": {
+    "selected_suites": 1,
+    "suite": "dashboard",
+    "kind": "fixture",
+    "result": "PASS",
+    "fixture_sha256": "bb644161c6af4a1fcf5a5c935554df75fee0f14df9ea4a75c6098484270763b5",
+    "binary_sha256": "4d29595df29ff22bb2b56e73c702b59f69bc24e0f0b5ec0f7011eedb3535060e",
+    "compiler_inputs_unchanged": 423,
+    "coordinator_EOF0": true,
+    "scope": "Original two legacy extraction rows remain unknown. Two explicitly mocked complete-source value/zero rows exercise positive confirmed-empty and preserve unknown versus zero; CSV controls are fixture evidence, not native capture."
+  },
+  "independent_exact2c_CI_App_optin": {
+    "result": "PASS_SEPARATE_FROM_OVERALL_UI_FAIL",
+    "executed_exact_test": "server::enrichment_browser_fixture::native_enrichment_browser_fixture",
+    "test_processes": 2,
+    "natural_EOF0": 2,
+    "test_binary_sha256": "a52c16787dba012b4152f348306c1766e1b5d6e1e48ba068cda8212fcb586a7e",
+    "website_requests": 0,
+    "scope": "Actual App cfg(test) opt-in execution in the published Renderer enrichment step, independent of later dashboard failure. This does not make the local normal App binary execute these test functions, or accept49 UI suites/wholeCI."
+  },
+  "scope": "Original failure/raw snapshot declarations are unchanged. Local selected1 does not pass the original49 invocation or exact successor public CI. The public App cfg(test) opt-in is separately proven; the local normal App binary did not execute those test functions. Full49/successorCI/backlog/vendor parity remain open. No runtime stores or binaries are copied."
+}

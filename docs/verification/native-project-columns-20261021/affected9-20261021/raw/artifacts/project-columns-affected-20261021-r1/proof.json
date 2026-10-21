@@ -1,0 +1,48 @@
+{
+  "kind": "redesign_UI_E2E",
+  "results": [
+    {
+      "name": "dashboard",
+      "script": "ui-smoke.cjs",
+      "kind": "fixture",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 9150
+    },
+    {
+      "name": "table-explorer",
+      "script": "ui-table-explorer-live.cjs",
+      "kind": "owned-native",
+      "code": 0,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 16901
+    },
+    {
+      "name": "table-named-views",
+      "script": "ui-table-views-live.cjs",
+      "kind": "owned-native",
+      "code": 1,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 11152
+    }
+  ],
+  "app_origin": "http://127.0.0.1:51987",
+  "shutdown": {
+    "code": 0,
+    "signal": null
+  },
+  "binary": "E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\target\\debug\\open-seo-spider.exe",
+  "binary_sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9",
+  "binary_unchanged": true,
+  "tracked_sources_unchanged": true,
+  "changed": [],
+  "failure": "Error: table-named-views: AssertionError [ERR_ASSERTION]: named empty/zero view reused against source A first-page range is installed by Apply itself\n+ actual - expected\n\n+ 'Keine Ergebnisse'\n- '1–1 von 1'\n\n    at applyView (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-views-live.cjs:144:396)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-table-views-live.cjs:247:70\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:130:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "complete": false,
+  "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+}

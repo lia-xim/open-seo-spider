@@ -1,0 +1,107 @@
+{
+  "kind": "actual_selected9_affected_UI_regression_log_receipt",
+  "result": "PASS_SELECTED9_AFFECTED_REGRESSIONS_NATURAL_COORDINATOR_EOF0_LOG_RECEIPT_ONLY",
+  "selected": 9,
+  "fixture": 1,
+  "native": 8,
+  "registered": 50,
+  "selected_in_registry_order": [
+    {
+      "name": "dashboard",
+      "script": "ui-smoke.cjs",
+      "kind": "fixture",
+      "timeout_ms": 240000
+    },
+    {
+      "name": "table-explorer",
+      "script": "ui-table-explorer-live.cjs",
+      "kind": "owned-native",
+      "timeout_ms": 240000
+    },
+    {
+      "name": "table-named-views",
+      "script": "ui-table-views-live.cjs",
+      "kind": "owned-native",
+      "timeout_ms": 240000
+    },
+    {
+      "name": "table-expressions",
+      "script": "ui-table-expressions-live.cjs",
+      "kind": "owned-native",
+      "timeout_ms": 240000
+    },
+    {
+      "name": "table-view-portability",
+      "script": "ui-table-view-portability-live.cjs",
+      "kind": "owned-native",
+      "timeout_ms": 240000
+    },
+    {
+      "name": "table-xlsx",
+      "script": "ui-table-xlsx-live.cjs",
+      "kind": "owned-native",
+      "timeout_ms": 240000
+    },
+    {
+      "name": "table-xlsx-provenance",
+      "script": "ui-table-xlsx-provenance-live.cjs",
+      "kind": "owned-native",
+      "timeout_ms": 240000
+    },
+    {
+      "name": "table-xlsx-availability",
+      "script": "ui-table-xlsx-availability-live.cjs",
+      "kind": "owned-native",
+      "timeout_ms": 240000
+    },
+    {
+      "name": "extraction-source-trust",
+      "script": "ui-extraction-source-trust-live.cjs",
+      "kind": "owned-native",
+      "timeout_ms": 240000
+    }
+  ],
+  "wrapper_exit": {
+    "code": 0,
+    "signal": null
+  },
+  "coordinator_shutdown": {
+    "code": 0,
+    "signal": null
+  },
+  "binary_sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9",
+  "binary_unchanged": true,
+  "selected_compiler_inputs_unchanged": 426,
+  "tracked_sources_unchanged": true,
+  "duration_ms": 597713,
+  "retained_R2_failure": {
+    "complete": false,
+    "passed": 2,
+    "failed": 1,
+    "failed_suite": "table-named-views",
+    "remaining_six": "NOT_REACHED_NO_LOGS_INVENTED",
+    "binary_unchanged": true,
+    "coordinator_EOF0": true,
+    "repair": "Watch the actual browser-page origin for the existing real insecure NoLocks passthrough, with unchanged GET/finished/UI guard, assertions and deadlines."
+  },
+  "retained_R1_failure": {
+    "complete": false,
+    "passed": 2,
+    "failed": 1,
+    "failed_suite": "table-named-views",
+    "remaining_six": "NOT_REACHED_NO_LOGS_INVENTED",
+    "binary_unchanged": true,
+    "coordinator_EOF0": true,
+    "repair": "Selected-owner final refresh readiness before Apply; immediate Apply assertions and product bytes unchanged."
+  },
+  "actual_R3_owner_readiness_observations": 7,
+  "explicit_Rust_authority": "artifacts/project-columns-rust-20261021-r2",
+  "copied": "Finite coordinator proof/app log; exact18 child stdout/stderr logs; adjacent wrapper/stdout/stderr; original runner; current registry; final Rust proof/input manifest; publisher; finite original R1/R2 failures, drivers and repairs; actual R3 named owner-readiness receipt and real insecure-alias passthrough witness. No recursive data selection.",
+  "local_only": "Except for the explicitly indexed named-view receipts and witnesses, other child JSON/data receipts, downloaded files, native/SQLite stores, screenshots and relation corpus remain in the original ignored local run directory. This publication does not independently replay their data oracles.",
+  "not_proven": [
+    "This is selected9, not one complete local50 invocation or exact successor publicCI.",
+    "The new project-columns native suite is a separate selected1 proof; it is not among these9 affected suites.",
+    "Historical failed Rust/native/public CI attempts remain failures in their own receipts.",
+    "Full backlog, all-table/operator coverage, project workspace bundles and manufacturer parity remain open."
+  ]
+}

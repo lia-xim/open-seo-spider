@@ -138,7 +138,7 @@ async function sameSaved(){for(const job of[jobA,jobB]){assert.deepEqual((await 
 // All accepted import bytes below come from an actual download produced by this
 // UI. Malformed byte files are explicitly declared negative fixtures. No product
 // library/compiler/planner is imported as an expected-result oracle.
-assert.equal(assets.length,17,'Exactly the reviewed17 actual served assets');
+assert.equal(assets.length,18,'Exactly the reviewed18 actual served assets');
 assert(assets.includes('table-xlsx.js')&&assets.includes('table-export-ui.js'));
 assert(assets.includes('table-view-portability.js'));
 const mainColumns=['url','status','title_count','title_pixels'],responseColumns=['url','requested_url','response_index','status'];

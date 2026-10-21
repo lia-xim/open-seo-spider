@@ -33,11 +33,13 @@
   let configProfileCatalog = null, profileCatalogNameOwner = '', profileCatalogDelete = null;
   let screenshotController = null, screenshotView = null;
   let tableExplorer = null;
+  let projectColumns = null, projectColumnsResetOwner = null;
   let tableRenderSequence = 0;
   let tableExport = null;
   let tableViews = null, tableExpressionViews = null, tableQueryRevision = 0, tableSearchTimer = null;
   function tableQueryEdited() {
     tableQueryRevision++;
+    invalidateProjectColumns();
     clearTimeout(tableSearchTimer);tableSearchTimer=null;
     tableViews?.invalidate();
     tableExpressionViews?.invalidate();
@@ -437,6 +439,7 @@
     state.search='';state.filter='all';state.sort=state.section==='inputs'?'list_index':'url';state.direction=1;
     $('table-search').value='';$('table-filter').value='all';
     state.crawl = id ? state.crawls.find((crawl) => crawl.id === id) || { id, status: 'running' } : null;
+    invalidateProjectColumns();
     renderSourceBodies();
     state.issueMap = new Map();
     state.pageMap = new Map();
@@ -651,6 +654,7 @@
     if(dashboardSegments?.state.busy){$('export-csv').disabled=true;$('export-resources').disabled=true;$('export-visible-report').disabled=true;}
     if(tableExplorer && !$('table-view').hidden && !tableExplorer.canExport())$('export-csv').disabled=true;
     renderTableExport();
+    renderProjectColumns();
     renderDashboardSegments();
     renderSitemapBundleControls();
     renderQuotaSummary();
@@ -1099,6 +1103,57 @@
     tableQueryEdited();
     renderTable();return {ok:true,value:checked.value};
   }
+  function projectColumnsAvailable() {
+    return Boolean(state.crawl && tableExplorer && !$('table-view').hidden && !active() && !actionBusy() && !state.pollToken && !dashboardSegments?.state.busy && tableExplorer.canExport());
+  }
+  function renderProjectColumns() {
+    const controls=['project-columns-load','project-columns-save','project-columns-reset'];
+    if(!projectColumns){for(const id of controls)$(id).disabled=true;return;}
+    const current=projectColumns.state(),available=projectColumnsAvailable();
+    $('project-columns-load').disabled=!available||current.busy;
+    $('project-columns-save').disabled=!available||!projectColumns.canSave();
+    $('project-columns-reset').disabled=!available||!projectColumns.canReset();
+    $('project-columns-state').textContent=current.message;
+    $('project-columns-state').dataset.phase=current.phase;
+    $('project-columns-state').dataset.status=current.status;
+    $('project-columns-state').dataset.projectId=current.projectId||'';
+    $('project-columns-error').hidden=!current.error;
+    $('project-columns-error').textContent=current.error?.message||'';
+    if(current.busy){$('project-columns-reset-question').hidden=true;projectColumnsResetOwner=null;}
+  }
+  function invalidateProjectColumns() {
+    $('project-columns-reset-question').hidden=true;projectColumnsResetOwner=null;
+    projectColumns?.invalidate();
+  }
+  function bindProjectColumns() {
+    if(!window.ProjectColumns){$('project-columns-error').hidden=false;$('project-columns-error').textContent='Projektspalten sind nicht geladen.';renderProjectColumns();return;}
+    projectColumns=window.ProjectColumns.create({
+      owner:()=>({...tableOwner(),nativeGeneration:state.crawl?.generation??null}),
+      queryRevision:()=>tableQueryRevision,available:projectColumnsAvailable,
+      schema:()=>tableSchema().map(({key,type,mandatory})=>({key,type,mandatory:Boolean(mandatory)})),
+      visibleKeys:()=>tableExplorer.columns(tableSchema()).map(column=>column.key),
+      fetch:(...args)=>fetch(...args),changed:renderProjectColumns,
+      apply:(keys,guard)=>{
+        if(!guard()||!projectColumnsAvailable())return{ok:false,error:{code:'stale_preferences',message:'Crawl oder Tabellenansicht wurden inzwischen geändert.'}};
+        return tableExplorer.installColumns(keys,guard);
+      }
+    });
+    $('project-columns-load').addEventListener('click',()=>projectColumns.load());
+    $('project-columns-save').addEventListener('click',()=>projectColumns.save());
+    $('project-columns-reset').addEventListener('click',()=>{
+      if(!projectColumnsAvailable()||!projectColumns.canReset())return;
+      projectColumnsResetOwner=JSON.stringify([tableOwner(),tableQueryRevision]);
+      $('project-columns-reset-question').hidden=false;
+    });
+    $('project-columns-reset-cancel').addEventListener('click',()=>{$('project-columns-reset-question').hidden=true;projectColumnsResetOwner=null;});
+    $('project-columns-reset-confirm').addEventListener('click',()=>{
+      const current=projectColumnsResetOwner===JSON.stringify([tableOwner(),tableQueryRevision]);
+      $('project-columns-reset-question').hidden=true;projectColumnsResetOwner=null;
+      if(current&&projectColumnsAvailable()&&projectColumns.canReset())projectColumns.reset();
+    });
+    renderProjectColumns();
+  }
+
   function bindNamedTableViews() {
     if(!window.TableViewsUI||!window.TableViewLibrary||!window.TableViewStorage||!window.TableViewPortability||!tableExplorer){$('table-view-error').hidden=false;$('table-view-error').textContent='Benannte Tabellenansichten sind nicht geladen.';return;}
     const common={owner:tableOwner,queryRevision:()=>tableQueryRevision,download:downloadBlob};
@@ -4202,6 +4257,7 @@
     bindEvents();
     bindTableExplorer();
     bindNamedTableViews();
+    bindProjectColumns();
     bindTableExport();
     selectSection('overview');
     render();

@@ -55,6 +55,7 @@ mod sitemaps;
 mod source_bodies;
 mod source_body_stream;
 mod spelling;
+mod table_preferences;
 mod transport;
 
 #[cfg(test)]
@@ -373,6 +374,15 @@ async fn serve_with_mcp_files_ready_source_inner(
             }),
         )
         .route(
+            "/project-columns.js",
+            get(|| async {
+                (
+                    [(header::CONTENT_TYPE, "text/javascript; charset=utf-8")],
+                    include_str!("../../../web/project-columns.js"),
+                )
+            }),
+        )
+        .route(
             "/table-export-ui.js",
             get(|| async {
                 (
@@ -650,6 +660,20 @@ async fn serve_with_mcp_files_ready_source_inner(
         .route("/api/crawls", get(list_crawls).post(create_crawl))
         .route("/api/crawls/import", post(import_report))
         .route("/api/crawls/{id}", get(crawl_status))
+        .route(
+            "/api/crawls/{id}/table-preferences",
+            get(table_preferences::get)
+                .put(table_preferences::put)
+                .layer(axum::extract::DefaultBodyLimit::max(
+                    table_preferences::MAX_REQUEST_BYTES,
+                )),
+        )
+        .route(
+            "/api/crawls/{id}/table-preferences/reset",
+            post(table_preferences::reset).layer(axum::extract::DefaultBodyLimit::max(
+                table_preferences::MAX_REQUEST_BYTES,
+            )),
+        )
         .route("/api/crawls/{id}/pages", get(pages))
         .route("/api/crawls/{id}/issues", get(issues))
         .route("/api/crawls/{id}/analysis", get(advanced_analysis))

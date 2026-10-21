@@ -1,0 +1,569 @@
+{
+  "schema_version": 1,
+  "kind": "exact_published_extraction_source_trust_public_ci_terminal",
+  "result": "PASS_ALL_FOUR_JOBS_AND_ONE_CANONICAL_UI49_INVOCATION",
+  "collected_at": "2026-10-21T17:51:52.622Z",
+  "commit": "7250b9a0007d0f307321e3b4c7076fa95430dbc3",
+  "tree": "d5e2252877fc74c9de52872ecfec04f544856b5c",
+  "run": 39638818285,
+  "url": "https://github.com/lia-xim/open-seo-spider/actions/runs/39638818285",
+  "head_branch": "main",
+  "event": "push",
+  "status": "completed",
+  "conclusion": "success",
+  "run_attempt": 1,
+  "jobs": [
+    {
+      "id": 119356860489,
+      "name": "renderer",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-21T16:53:49Z",
+      "completed_at": "2026-10-21T17:48:23Z",
+      "failed_steps": []
+    },
+    {
+      "id": 119356860870,
+      "name": "test (windows-latest)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-21T16:53:49Z",
+      "completed_at": "2026-10-21T17:51:36Z",
+      "failed_steps": []
+    },
+    {
+      "id": 119356861162,
+      "name": "container",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-21T16:53:50Z",
+      "completed_at": "2026-10-21T17:07:17Z",
+      "failed_steps": []
+    },
+    {
+      "id": 119356861256,
+      "name": "test (ubuntu-latest)",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-21T16:53:49Z",
+      "completed_at": "2026-10-21T17:14:19Z",
+      "failed_steps": []
+    }
+  ],
+  "renderer": {
+    "id": 119356860489,
+    "UI_step": {
+      "name": "Redesigned UI fixture and native end-to-end workflows",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 38,
+      "started_at": "2026-10-21T16:59:26Z",
+      "completed_at": "2026-10-21T17:47:26Z"
+    },
+    "canonical_unfiltered_invocations": 1,
+    "passed_suites": 49,
+    "unique_passed_suites": 49,
+    "fixture_suites": 9,
+    "native_suites": 40,
+    "suites_in_committed_order": [
+      {
+        "name": "dashboard",
+        "script": "ui-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "pause-controls",
+        "script": "ui-crawl-control-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "recrawl-controls",
+        "script": "ui-selected-recrawl-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "policy-controls",
+        "script": "ui-policy-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "content-controls",
+        "script": "ui-content-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "resource-controls",
+        "script": "ui-resource-discovery-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "resource-ledger",
+        "script": "ui-resource-ledger-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "resource-contract",
+        "script": "ui-resource-contract-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "comparison-controls",
+        "script": "ui-saved-comparison-smoke.cjs",
+        "kind": "fixture"
+      },
+      {
+        "name": "tool-navigation",
+        "script": "ui-tools-navigation-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "rendered-crawl",
+        "script": "ui-renderer-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "dom-capture",
+        "script": "ui-dom-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "accessibility-review",
+        "script": "ui-accessibility-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "resources",
+        "script": "ui-resource-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "robots",
+        "script": "ui-robots-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "serp",
+        "script": "ui-serp-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "list-import",
+        "script": "ui-list-import-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "pause-resume",
+        "script": "ui-crawl-control-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "selected-recrawl",
+        "script": "ui-selected-recrawl-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "policy",
+        "script": "ui-policy-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "content",
+        "script": "ui-content-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "resource-discovery",
+        "script": "ui-resource-discovery-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "resource-persistence",
+        "script": "ui-resource-contract-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "saved-spelling",
+        "script": "ui-spelling-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "link-workflows",
+        "script": "ui-link-workflows-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "api-enrichment",
+        "script": "ui-enrichment-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "directory-tree",
+        "script": "ui-directory-tree-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "saved-ngrams",
+        "script": "ui-ngrams-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "saved-segments",
+        "script": "ui-segments-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "dashboard-segments",
+        "script": "ui-dashboard-segments-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "segments-repeated-metadata",
+        "script": "ui-segments-repeated-metadata-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "segments-density",
+        "script": "ui-segments-density-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "ngrams-cold-restart",
+        "script": "ui-ngrams-cold-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "segments-cold-restart",
+        "script": "ui-segments-cold-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "resource-sources",
+        "script": "ui-resource-sources-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "custom-search",
+        "script": "ui-custom-search-live.cjs",
+        "kind": "live"
+      },
+      {
+        "name": "saved-comparison",
+        "script": "ui-saved-comparison-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "comparison-bundles",
+        "script": "ui-saved-comparison-bundle-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "configuration-profiles",
+        "script": "ui-config-profiles-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "configuration-profile-catalog",
+        "script": "ui-config-profile-catalog-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "screenshot-viewport",
+        "script": "ui-screenshot-viewport-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-explorer",
+        "script": "ui-table-explorer-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-named-views",
+        "script": "ui-table-views-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-expressions",
+        "script": "ui-table-expressions-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-view-portability",
+        "script": "ui-table-view-portability-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-xlsx",
+        "script": "ui-table-xlsx-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-xlsx-provenance",
+        "script": "ui-table-xlsx-provenance-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-xlsx-availability",
+        "script": "ui-table-xlsx-availability-live.cjs",
+        "kind": "owned-native"
+      },
+      {
+        "name": "extraction-source-trust",
+        "script": "ui-extraction-source-trust-live.cjs",
+        "kind": "owned-native"
+      }
+    ],
+    "observed": [
+      {
+        "name": "dashboard",
+        "kind": "fixture"
+      },
+      {
+        "name": "pause-controls",
+        "kind": "fixture"
+      },
+      {
+        "name": "recrawl-controls",
+        "kind": "fixture"
+      },
+      {
+        "name": "policy-controls",
+        "kind": "fixture"
+      },
+      {
+        "name": "content-controls",
+        "kind": "fixture"
+      },
+      {
+        "name": "resource-controls",
+        "kind": "fixture"
+      },
+      {
+        "name": "resource-ledger",
+        "kind": "fixture"
+      },
+      {
+        "name": "resource-contract",
+        "kind": "fixture"
+      },
+      {
+        "name": "comparison-controls",
+        "kind": "fixture"
+      },
+      {
+        "name": "tool-navigation",
+        "kind": "live"
+      },
+      {
+        "name": "rendered-crawl",
+        "kind": "live"
+      },
+      {
+        "name": "dom-capture",
+        "kind": "live"
+      },
+      {
+        "name": "accessibility-review",
+        "kind": "owned-native"
+      },
+      {
+        "name": "resources",
+        "kind": "live"
+      },
+      {
+        "name": "robots",
+        "kind": "live"
+      },
+      {
+        "name": "serp",
+        "kind": "live"
+      },
+      {
+        "name": "list-import",
+        "kind": "live"
+      },
+      {
+        "name": "pause-resume",
+        "kind": "live"
+      },
+      {
+        "name": "selected-recrawl",
+        "kind": "live"
+      },
+      {
+        "name": "policy",
+        "kind": "live"
+      },
+      {
+        "name": "content",
+        "kind": "live"
+      },
+      {
+        "name": "resource-discovery",
+        "kind": "live"
+      },
+      {
+        "name": "resource-persistence",
+        "kind": "live"
+      },
+      {
+        "name": "saved-spelling",
+        "kind": "live"
+      },
+      {
+        "name": "link-workflows",
+        "kind": "live"
+      },
+      {
+        "name": "api-enrichment",
+        "kind": "live"
+      },
+      {
+        "name": "directory-tree",
+        "kind": "live"
+      },
+      {
+        "name": "saved-ngrams",
+        "kind": "live"
+      },
+      {
+        "name": "saved-segments",
+        "kind": "live"
+      },
+      {
+        "name": "dashboard-segments",
+        "kind": "owned-native"
+      },
+      {
+        "name": "segments-repeated-metadata",
+        "kind": "owned-native"
+      },
+      {
+        "name": "segments-density",
+        "kind": "owned-native"
+      },
+      {
+        "name": "ngrams-cold-restart",
+        "kind": "owned-native"
+      },
+      {
+        "name": "segments-cold-restart",
+        "kind": "owned-native"
+      },
+      {
+        "name": "resource-sources",
+        "kind": "live"
+      },
+      {
+        "name": "custom-search",
+        "kind": "live"
+      },
+      {
+        "name": "saved-comparison",
+        "kind": "owned-native"
+      },
+      {
+        "name": "comparison-bundles",
+        "kind": "owned-native"
+      },
+      {
+        "name": "configuration-profiles",
+        "kind": "owned-native"
+      },
+      {
+        "name": "configuration-profile-catalog",
+        "kind": "owned-native"
+      },
+      {
+        "name": "screenshot-viewport",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-explorer",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-named-views",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-expressions",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-view-portability",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-xlsx",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-xlsx-provenance",
+        "kind": "owned-native"
+      },
+      {
+        "name": "table-xlsx-availability",
+        "kind": "owned-native"
+      },
+      {
+        "name": "extraction-source-trust",
+        "kind": "owned-native"
+      }
+    ],
+    "accepted": true
+  },
+  "log_errors": [],
+  "registered_suite_source": {
+    "commit": "7250b9a0007d0f307321e3b4c7076fa95430dbc3",
+    "path": "scripts/ui-e2e.mjs",
+    "local_copy": "registered-ui-e2e.mjs",
+    "bytes": 10214,
+    "sha256": "766e8d128bf54d94263ab6bcd55789eacf248124e04c6fc49903e7ccfed88841"
+  },
+  "workflow_source": {
+    "commit": "7250b9a0007d0f307321e3b4c7076fa95430dbc3",
+    "path": ".github/workflows/ci.yml",
+    "local_copy": "committed-ci.yml",
+    "bytes": 25180,
+    "sha256": "33999a2019e25edfdc8e785744511a71ea6c24695c5370e1627756f25ecc1840"
+  },
+  "raw": [
+    {
+      "path": "run.json",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/runs/39638818285",
+      "bytes": 12477,
+      "sha256": "5adb495e9d050f60093a2e6a209ef37ad21fe7f5f7a1c7e6c86805434814301e"
+    },
+    {
+      "path": "jobs.json",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/runs/39638818285/jobs?per_page=100",
+      "bytes": 33417,
+      "sha256": "7184c27b5c45a0ed1aebf44ea8a6bf527a2072b1ba5a48accc9e7fb512088f6b"
+    },
+    {
+      "path": "renderer.log",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/jobs/119356860489/logs",
+      "bytes": 194123,
+      "sha256": "f38519afddc71e109f3351e88ec66c3733d1e1c5a72ef23d1b87766331c9ab28"
+    },
+    {
+      "path": "windows.log",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/jobs/119356860870/logs",
+      "bytes": 501402,
+      "sha256": "bc8ca1541ce4880b6c5e12f2c4187aa4574fe327c91a91ce203f58d8e08cfa07"
+    },
+    {
+      "path": "container.log",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/jobs/119356861162/logs",
+      "bytes": 66825,
+      "sha256": "0ca1f8124f9af9b23bd2c8bdc638498ab7e582598b499759044901a04a83544f"
+    },
+    {
+      "path": "ubuntu.log",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/jobs/119356861256/logs",
+      "bytes": 446146,
+      "sha256": "d957f4d07e755713a863b41ac2cfcd8576e698754dfa70e811827a835dafae47"
+    }
+  ],
+  "scope": "Exact published main7250b9a only. Original2c573d9 public UI failure at its first dashboard fixture remains FAIL with zero completed canonical suites; its other Windows/Ubuntu jobs were cancelled by configured new-push concurrency, separately from its successful container. The corrected local dashboard-only invocation remains a separate selected1 PASS, not a full49 run. This public result binds all four terminal jobs and one complete unfiltered49-suite invocation to immutable committed registry/workflow bytes, including extraction-source-trust. The earlier423 selected compiler/product inputs and selected pure/live source pins remain explicit source sets, not transitive toolchain/dependency or whole metadata closure. No fresh full local49 run is inferred. Original Rust R1/R2 and native extraction R1/R2/R3 failures remain FAIL; native R4 selected1 PASS, separate existing named-view/expression selected2 PASS, ordinary workspace tests and four Core renderer opt-ins remain separately scoped in their original receipts. App native_enrichment_browser_fixture opt-in is not inferred executed unless this exact public log expressly proves it. Earlier905a248 public48 and22fc522 public46 apply only to those predecessor commits. Duplicate branch39638818133 cancellation is separate from this main run. The inert archived .gitattributes.raw storage-path qualification changes no raw source bytes. Subsequent TODO implementation is outside this commit. No all29-schema/operator, specialist/cursor/bulk/streaming/multisheet export acceptance, arbitrary corruption/crash/resource behavior, Excel/LibreOffice GUI interoperability, installed upgrade, full workflow completion or manufacturer parity is inferred."
+}

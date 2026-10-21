@@ -4063,7 +4063,8 @@
       "group": "storage",
       "remaining_acceptance": [
         "Copy/open an archive in a second directory and validate all declared portable artifacts plus manifest/schema version.",
-        "The former repeated-metadata R1 long-path failure now has a bounded product correction and actual five-case Windows acceptance with original archives, read-only aliases and cold reopening: docs/verification/windows-store-paths-20261018/README.md. Live UNC shares, ambiguous long legacy aliases, further namespaces and full archive portability remain unproven; portable storage remains partial."
+        "The former repeated-metadata R1 long-path failure now has a bounded product correction and actual five-case Windows acceptance with original archives, read-only aliases and cold reopening: docs/verification/windows-store-paths-20261018/README.md. Live UNC shares, ambiguous long legacy aliases, further namespaces and full archive portability remain unproven; portable storage remains partial.",
+        "Native per-job column sidecars do not provide portable project archives. Native V1/V2 catalogs, exact original-report bytes, atomic report-plus-workspace import under a new UUID, directory portability and selected-recrawl adapters remain open under docs/native-project-workspace-plan.md."
       ],
       "parity_status": "NOT_PROVEN"
     },
@@ -4565,13 +4566,22 @@
             "ui.filter-details-export"
           ],
           "proves": "Genuine native captures contain 107 pages and one page. All 106 title rows and 103 filtered rows were compared across 50-row pages, including NFC/case matching, inclusive numeric bounds, zero/empty/unknown states, both sort directions and duplicate response source identities. Five complete CSV files preserve all 521 data rows and their provenance cells. Explicit per-crawl/section browser column preferences survive a fresh-context same-origin cold reopen; genuine quota, corrupt storage and stale controls were tested. The fresh R4 full 42-suite run and reused R3 workspace result (1,831 passed, zero failed, five ignored) are bound separately. No new R4 Rust-workspace execution is claimed."
+        },
+        {
+          "verification_run_ids": [
+            "native-project-columns-20261021"
+          ],
+          "granular_workflow_ids": [
+            "ui.filter-details-export"
+          ],
+          "proves": "Explicit native columns per existing job/section preserve active queries, browser catalogs and report bytes. Fresh App550/Node579/semantic40 and NativeR2 six complete export pairs258rows plus selected-nine R3 pass. This is a bounded column workflow; complete project portability/full50 successorCI and whole workflow remain open."
         }
       ],
       "parity_evidence": [],
       "group": "ui",
       "remaining_acceptance": [
-        "Multiple named column views and portable cross-project view import/export are not part of the one-projection browser preference slice.",
-        "OR and nested predicates, XLSX output and the remaining commas/newlines/formulas combinations in granular workflow ui.filter-details-export need separate complete workflow acceptance.",
+        "Browser-local V1/V2 named catalogs and JSON portability have separately bounded acceptance. Native per-job columns now have their own bounded acceptance; native named catalogs and portable report-plus-workspace migration remain open.",
+        "Bounded AND/OR expressions and CSV/XLSX exports have separate evidence. Complete granular workflow ui.filter-details-export, all relevant schema/operator/source combinations and specialist/cursor/bulk/large-data exports still need their full acceptance.",
         "Specialist policy/content/resource/sitemap inventories keep separate controls and native cursor/export contracts; test their complete traversal and all relevant tables without treating the main-table acceptance as universal.",
         "Measure larger filtering corpora and interactive latency/memory; native API-prepared fixtures do not establish every Start path, cross-browser behavior or full manufacturer parity."
       ],
@@ -6847,6 +6857,38 @@
       ],
       "scope": "Actual native API-prepared saved crawls; typed numeric/text AND rules, NFC search, stable multi-page sort, exact full projected CSV and inspectors, browser-origin column preferences with corruption/quota/stale controls, and same-origin cold reopen.",
       "limits": "This accepts a bounded part of ui.filter-details-export. OR/nested expressions, XLSX, multiple named or portable views, specialist cursor workflows, larger corpora and manufacturer parity remain open. API preparation does not prove the main Start path. Browser preferences are not native portable project data. Public parent CI 25b failed during catalog Create A response capture; fresh public CI remains pending. R4 changes only six test files: owned original-response capture and the independent custom-search identity-tie oracle. Product/native sources and the binary are unchanged."
+    },
+    {
+      "id": "native-project-columns-20261021",
+      "date": "2026-10-21",
+      "result": "PASS_BOUNDED_LOCAL_COLUMNS_AND_SELECTED9_PUBLIC50_PENDING",
+      "artifact": "docs/verification/native-project-columns-20261021/README.md",
+      "evidence": "docs/verification/native-project-columns-20261021/receipt.json",
+      "evidence_bytes": 7980,
+      "evidence_sha256": "7b8a421bfbab6298416134e1626c12869bffa537332cc92e73d21145ef0ef200",
+      "source_gates": "docs/verification/native-project-columns-20261021/raw/artifacts/project-columns-rust-20261021-r2/proof.json",
+      "source_gates_sha256": "136e2c7a26a41ff0b83b808ed1a1d02e0b11323de6a5ba23faa9454b9a298bec",
+      "source_debug_sha256": "b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9",
+      "frozen_acceptance_input_count": 426,
+      "frozen_acceptance_manifest_sha256": "bb33ffd3ae9fca051cca8c850263415082b0da8d6ef6c59e8b986f223f065dc7",
+      "ui_full_registry_count": 50,
+      "ui_full_registry_invocation": false,
+      "ui_selected_invocations": [
+        {
+          "suites": 1,
+          "authority": "NativeR2"
+        },
+        {
+          "suites": 9,
+          "authority": "AffectedR3"
+        }
+      ],
+      "command": "579 selected pure tests;40 semantic groups; fresh RustR2 App550, fmt, normal build, strict workspace Clippy; separate native columns R2 and selected-nine R3 invocations.",
+      "granular_workflow_ids": [
+        "ui.filter-details-export"
+      ],
+      "scope": "Explicit per-job native columns, two genuine UI-start captures, complete independently checked CSV/XLSX, bounded native storage/CAS/failure/cold controls; local Windows only.",
+      "limits": "No combined full50 UI invocation/public successorCI, fresh ordinary Core/renderer opt-in execution, complete native workspace, native named catalogs, portable bundle/import/recrawl migration or manufacturer parity. Original RustR1/NativeR1/AffectedR1/R2 failures remain FAIL."
     }
   ],
   "reference_workflows": [
@@ -7107,11 +7149,58 @@
   "last_verified_at": "2026-10-19T21:34:57.502Z",
   "current_work": [
     {
+      "id": "native-project-columns-20261021",
+      "title_de": "Native Spaltenpräferenzen je Crawl lokal begrenzt abgenommen",
+      "priority": -19,
+      "status": "PASS_LOCAL_COLUMNS_R2_AND_AFFECTED9_R3_PUBLIC50_PENDING",
+      "summary_de": "Explizite native Spaltenpräferenzen je Crawl und Haupttabellenbereich sind lokal begrenzt abgenommen:579 Node-Tests,40 semantische Gruppen, frischer RustR2 mit550 App-Tests/Build/Format/Clippy, NativeR2 mit sechs vollständigen CSV/XLSX-Paaren und die separate gesamte Neun-Suiten-RegressionR3 bestehen. Der neue vollständige50er-Public-CI-Lauf und der native Workspace-Gesamtvertrag bleiben offen.",
+      "completed_acceptance_de": [
+        "Native Metadaten speichern je bestehender Crawl-UUID und Tabellenbereich ausschließlich Schema und sichtbare Spaltenschlüssel samt Reihenfolge. Explizites Laden erhält Suche, Filter, Sortierung und akzeptierte V1-AND-/V2-ODER-Abfragen. Browserlokale Spalten und globale V1/V2-Kataloge bleiben unverändert; es gibt kein automatisches natives Laden/Speichern bei Start oder Bereichswechsel.",
+        "Strikte missing/present/invalid-Fingerprints, Raw-SHA-CAS, getrennt bestätigtes Leeren aller gespeicherten Bereiche mit neuer present-empty-Revision, Pflichtspaltenprefix und Grenzen sind implementiert. Konflikte werden ohne automatische Wiederholung sichtbar verweigert;15s-Anfrage-/Bodyfrist und Besitzer-/Abfrageguards verhindern veraltete Anwendung. Berichtbytes und native Crawl-Generationen werden nicht geändert.",
+        "579 frische ausgewählte Node-Tests einschließlich44 neuer Controller-/tatsächlicher Adapterkontrollen und40 separate semantische Gruppen bestehen. Reine Transport-/DOM-Senkenkontrollen werden nicht als native Browserbelege gezählt.",
+        "Frischer RustR2 besteht Format, normalen Build, strenges Workspace-Clippy und550 App-Tests mit0 Fehlern und1 bewusst ignoriertem Opt-in. Normales Binary91236352B, SHA256 b245edcfa1b8f2a7b61155726fdd9c79c0b82c34f3835915d77bed3931798db9;426 ausgewählte Eingaben unverändert. Kein frischer gewöhnlicher Core-/Workspace- oder Renderer-Opt-in-Lauf und keine vollständige transitive Toolchainclosure wird daraus abgeleitet.",
+        "NativeR2 besteht einen vollständigen ausgewählten Aufruf mit14 protokollierten Gruppen: zwei echte Jobs mit63/3 Seiten, Titles/Status, sechs geordnete vollständige CSV/XLSX-Paare,258 Datenzeilen sowie2316 Datenzellen und52 Kopfzellen je Format,12 Downloadereignisse und unabhängige Werte-/Typ-/Provenienzprüfung. Mehrseitige Exporte enthalten die komplette Population, nicht nur50 sichtbare Zeilen.",
+        "Fünf tatsächliche Negativkontrollarten prüfen konkurrierende409-/ResetABA-Schreibstände, beschädigte Speicherung, reguläre Blockerdatei vor dem Präferenzverzeichnis, Teil-PUT-Disconnect mit anschließender gültiger Erholung und veralteten Read bei abweichenden Arbeitsspalten. Nichtleere lokale Spalten/V1/V2-Kataloge und Originalberichte bleiben erhalten. Sechs Geometrieprüfungen bei1440/320, zwei natürliche nativeEOF0, geänderter kalter Ursprung mit leerem Browserspeicher, zwei positive410-Kontrollen und null Offline-Neuabrufe bestehen; auch warme Präferenzaktionen dürfen keine neue Websiteanfrage auslösen.",
+        "Ursprüngliche RustR1-/NativeR1-Fehler bleiben mit exakten Quellen/Logs/Reparaturbelegen im Parentnachweis erhalten. Die separate Zusatzregression bewahrt ihre R1/R2-Fehler im affected9-Beleg. Erfolgreiche Teilprüfungen machen keinen ursprünglichen Gesamtlauf erfolgreich; die Fehlerhistorien werden nicht mit finalen Gates vermischt.",
+        "Die vollständige separate Neun-Suiten-Auswahl besteht in R3: Dashboard sowie Tabellenexplorer, benannte Ansichten, Ausdrücke, Portabilität, XLSX, Provenienz, Quellverfügbarkeit und Extraktionen. Alle9 eindeutigen Suiten in einem ausgewählten Aufruf, natürlicheCoordinatorEOF0, normaleApp und426 ausgewählte kompilierteEingaben bleiben unverändert. Die ursprünglichenR1/R2-Fehler bleiben mit jeweils2PASS/1FAIL/6NOT_REACHED erhalten; nur Named-View-Testbereitschaft wurde korrigiert, einschließlich tatsächlichem Browser-Aliasursprung. UnmittelbareApply- und vollständigeDaten-/Exportassertions bleiben erhalten. Dies ist kein zusammengefügter10er- oder ungefilterter50er-Nachweis."
+      ],
+      "pending_acceptance_de": [
+        "Vollständigen neuen50-Suiten-Aufruf und exakte öffentliche CI des veröffentlichten Nachfolgers separat abnehmen. Die frühere grüne725-/49-Suiten-CI bindet ihren eigenen Stand und umfasst diese neue Implementierung nicht.",
+        "Weitere Haupttabellenschemata, Plattform-/Crash-/Ressourcen- und Race-Varianten gesondert prüfen. Exakte Schemaübereinstimmung ist keine automatische Migration zwischen Jobs oder Softwareversionen.",
+        "Vollständigen nativen Workspace weiter ausbauen: projektlokaleV1/V2-Kataloge, portable Pakete mit exakten Originalberichtsbytes, atomarer Bericht-plus-Workspace-Import in neueUUID, Verzeichniswechsel, benannte Projektgruppierung, ausgewählter Recrawl-Adapter und weitere Einstellungen bleiben offen.",
+        "Den gesamten ui.filter-details-export-Vertrag und übrigen144-Fähigkeiten-/416-Filter-/32-Abläufe-Backlog weiterführen.39/68/37 bleiben unverändert; Herstellerparität ist NOT_PROVEN. Eine Benutzerinstallation oder Migration vorhandener Benutzerstores wird nicht behauptet."
+      ],
+      "documentation": [
+        "docs/native-project-columns.md",
+        "docs/native-project-workspace-plan.md",
+        "docs/e2e-testing.md",
+        "docs/verification/native-project-columns-20261021/README.md",
+        "docs/verification/native-project-columns-20261021/receipt.json",
+        "docs/verification/native-project-columns-20261021/affected9-20261021/README.md"
+      ],
+      "gates": {
+        "implementation": "IMPLEMENTED_BOUNDED_PER_JOB_COLUMNS",
+        "pure": "PASS579_FRESH_SELECTED_NODE_INCLUDING44_NEW",
+        "semantic": "PASS40_SEPARATE_PURE_GROUPS",
+        "App_Rust": "PASS550_FAIL0_IGNORE1_FRESH_R2",
+        "normal_build_fmt_clippy": "PASS_FRESH_R2",
+        "selected_inputs": "PASS426_UNCHANGED",
+        "native_browser": "PASS_R2_ONE_SELECTED_SUITE14_GROUPS6_PAIRS258_ROWS2316_DATA52_HEADER_CELLS_PER_FORMAT12_DOWNLOADS",
+        "native_guards": "PASS5_NEGATIVE_KINDS6_GEOMETRY1440_320_TWO_EOF0_CHANGED_ORIGIN_TWO410_ZERO_OFFLINE_REFETCH",
+        "affected9_regression": "PASS_R3_ALL9_ONE_SELECTED_INVOCATION_R1_R2_FAIL_RETAINED",
+        "new_full_UI50": "PENDING",
+        "new_public_CI": "PENDING",
+        "ordinary_Core_workspace_renderer": "NOT_FRESHLY_RUN_HERE",
+        "complete_native_workspace": "OPEN",
+        "manufacturer_parity": "NOT_PROVEN"
+      }
+    },
+    {
       "id": "extraction-source-trust-20261021",
       "title_de": "Quellvertrauen eigener Extraktionen durch Core, Tabelle und Export erhalten",
       "priority": -20,
-      "status": "LOCAL_DASHBOARD_LEGACY_CONTRACT_FIX_PASS_PUBLIC_SUCCESSOR49_PENDING",
-      "summary_de": "Quellvertrauen eigener Extraktionen ist durch Core, Haupttabelle und Exporte geführt; lokale Rust1843-/Node535-/NativeR4-Gates bleiben gültig. Die öffentliche CI von2c573d9 scheitert im ersten Dashboard-Fixturetest: ein historischer Befund ohne Quellbeleg wurde fälschlich als bestätigt leer erwartet.48 weitere Suiten werden nicht erreicht. Der korrigierte Fixturetest besteht separat und erhält beide Legacy-Befunde als unbekannt sowie getrennte ausdrücklich deklarierte Mock-Positiv-/Nullkontrollen. Vollständige49-Suiten-CI des Nachfolgers bleibt offen; Produktquellen und normales Binary sind unverändert.",
+      "status": "PASS_LOCAL_FULL49_AND_EXACT_PUBLIC_7250B9A_ALL4_BACKLOG_OPEN",
+      "summary_de": "Quellvertrauen eigener Extraktionen ist durch Core, Haupttabelle und Exporte geführt. Der korrigierte veröffentlichte7250b9a besteht alle49 Suiten in einem ungefilterten öffentlichen CI-Aufruf sowie allevierJobs. Ein unabhängiger vollständiger lokaler49er-Aufruf besteht auf demselben Stand mit unverändertem normalenBinary und423 ausgewählten Compiler-/Produkteingaben. Der ursprüngliche2c573d9-Dashboardfehler bleibt FAIL; die Nachfolgerabnahme ersetzt ihn nicht rückwirkend. Der gesamte Feature-Backlog und nativeWorkspace-Gesamtvertrag bleiben offen.",
       "completed_acceptance_de": [
         "Optionaler versionierter source_observation-Beleg erhält Status, Auswertung, Dekodierung, Dokument-URL, Zeit, native Generation, Input-SHA/UTF8-Länge und Quellrevision. Historische None und reine Bibliotheksaufrufe werden nicht nachträglich als native Capture-Belege eingestuft. Import, Storage, Startup und ausgewählter Recrawl validieren vorhandene Belege einschließlich RawMetadata.",
         "Vollständiges HTML bei404,206-/Range-Antworten, Bodylimit, Lesefehler, unsichere Dekodierung, nicht ausgewertete Inhalte, XPath0/false/Leerstring und unabhängige Ergebnislimits sind getrennt. Eine Teilinput-Anzahl ist keine allgemeine Untergrenze. DOM-Beleg und rohe Rückfallquelle bleiben unabhängig; ein optionaler Rendererfehler entwertet den vollständigen HTTP-Input nicht.",
@@ -7125,10 +7214,10 @@
         "373 ursprüngliche Quelldateien und Nachweise bleiben bytegetreu archiviert. Die README-Präzisierung und die inerte Ablage der archivierten .gitattributes unter .gitattributes.raw sind separat qualifiziert; der Git-Blob-Abgleich bestätigt446 exakte Dateien im veröffentlichten2c573d9. Beide unabhängigen Archivprüfungen bleiben nachvollziehbar. Der volle native Workspace-/Paketvertrag ist weiterhin offen.",
         "Der ursprüngliche öffentliche Rendererjob119347254180 aus Run39636204158 bleibt FAIL:0 abgeschlossene UI-Suiten, Dashboard-Assertion statt Timeout,48 nicht erreichte Suiten. Originales GitHub-Log, Artefakt-ZIP, Coordinatorbeleg und eingefrorener alter Fixturecode bleiben erhalten; die übrigen Jobzustände sind vom Zeitpunkt der jeweiligen Abfrage abhängig und werden nicht als Erfolg erklärt.",
         "Die einzige Testkorrektur bewahrt die beiden historischen Extraktionsobjekte unverändert, prüft sie explizit als unbekannt und ergänzt zwei ausdrücklich deklarierte Mock-Kontrollen für vollständigen positiven und leeren Input. Haupttabellen-CSV, vier Zeilen, bestätigt leer1, unbekannt2, positiv2 und beide Inspektorfälle bestehen im realen Browser. Dies ist eine mockbasierte Fixture-Suite, kein nativer Capture-Nachweis. Der separate ausgewählte Dashboard-Aufruf endet natürlich mitEOF0; normale App und423 kompilierte Eingaben bleiben unverändert.",
-        "Der öffentliche2c573d9-Rendererlauf hat vor seinem späteren Dashboardfehler den App-Opt-in server::enrichment_browser_fixture::native_enrichment_browser_fixture tatsächlich zweimal im eigenen Testhost ausgeführt: initial und kalt jeweils1 PASS,0 FAIL,0 IGNORE sowie natürlicheEOF0. Originales Enrichment-Artefakt, exakter Runner und Einzelbeleg sind erhalten; dies schließt nur diese öffentliche App-Opt-in-Bedingung, ergänzt keinen lokalen Lauf und macht die fehlgeschlagene49-Suiten-Abnahme nicht erfolgreich."
+        "Der öffentliche2c573d9-Rendererlauf hat vor seinem späteren Dashboardfehler den App-Opt-in server::enrichment_browser_fixture::native_enrichment_browser_fixture tatsächlich zweimal im eigenen Testhost ausgeführt: initial und kalt jeweils1 PASS,0 FAIL,0 IGNORE sowie natürlicheEOF0. Originales Enrichment-Artefakt, exakter Runner und Einzelbeleg sind erhalten; dies schließt nur diese öffentliche App-Opt-in-Bedingung, ergänzt keinen lokalen Lauf und macht die fehlgeschlagene49-Suiten-Abnahme nicht erfolgreich.",
+        "Der exakte veröffentlichte7250b9a/tree d5e2252 besteht Run39638818285: Renderer, Windows, Ubuntu undContainer terminalSUCCESS. Das originaleRendererprotokoll bestätigt genau einen ungefilterten Aufruf mit49 eindeutigen erfolgreichen Suiten in registrierterReihenfolge, neunFixture- und40nativeSuiten. Der separate komplette lokale49er-Aufruf endet natürlich mitEOF0; normalesBinary4d29595d und423 ausgewählte kompilierteEingaben bleiben bytegleich. Beide endlichen Nachweiskinder erhalten die Originalprotokolle separat. Dies umfasst keine spätere50-Suiten-Implementierung oder Herstellerparität."
       ],
       "pending_acceptance_de": [
-        "Alle49 registrierten UI-Suiten in einem ungefilterten CI-Aufruf des exakten korrigierten Nachfolgers prüfen. Der öffentliche2c573d9-Aufruf bleibt im ersten Fixturetest fehlgeschlagen; der lokale korrigierte Ein-Suiten-PASS ersetzt keine vollständige49-Suiten-Abnahme. Die erfolgreiche Vorgänger-CI von905a248 mit48 Suiten bindet ihren eigenen Stand.",
         "Weitere Quellzustände/Operatoren der29 Haupttabellen nativ prüfen, insbesondere nicht konfigurierte Custom-Search-/Renderer-/Cookie-Quellen und Spezial-/Cursor-/Bulk-Exporte. Vollständige Fehler-, MIME-/Zeit-, Zeichensatz-, Bereichsantwort-, große Corpus- und beliebige Race-Varianten bleiben offen.",
         "Portable native Projektpräferenzen nach dem vollständigen Workspace-/Bundle-/CAS-/atomaren Import-/Portwechsel-Vertrag implementieren und E2E abnehmen. Browserlokale Ansichten sind keine native Projektmigration.",
         "Verbleibende XPath-/Regex-/DOM-Ausgabefälle, weitere Extraktionsansichten/Importkombinationen, Ressourcen-/Crash-/Latenzgrenzen und den gesamten144-Fähigkeiten-/416-Filter-/32-Abläufe-Backlog abarbeiten. Herstellerparität bleibt NOT_PROVEN; installierter Source16-Pilot und Benutzerstores bleiben unverändert."
@@ -7139,7 +7228,9 @@
         "docs/native-project-workspace-plan.md",
         "docs/verification/extraction-source-trust-20261021/README.md",
         "docs/verification/extraction-source-trust-20261021/existing-views-20261021/README.md",
-        "verification/extraction-source-trust-20261021/ci-dashboard-correction-20261021/README.md"
+        "docs/verification/extraction-source-trust-20261021/ci-dashboard-correction-20261021/README.md",
+        "docs/verification/extraction-source-trust-20261021/public-ci-7250b9a-20261021/README.md",
+        "docs/verification/extraction-source-trust-20261021/local-ui49-7250b9a-20261021/README.md"
       ],
       "gates": {
         "implementation": "PASS_BOUNDED_SOURCE_TRUST_V1",
@@ -7155,12 +7246,13 @@
         "existing_views": "PASS_SEPARATE_TWO_SUITE_INVOCATION",
         "prior_attempts": "RUST_R1_R2_AND_NATIVE_R1_R2_R3_FAIL_UNCHANGED",
         "source_binding": "PASS423_SELECTED_COMPILER_INPUTS_RUNTIME_BINARY_EXACT_HARNESS_ONLY_FIXES",
-        "full_UI49": "FAIL_EXACT_2C573D9_DASHBOARD_ZERO_COMPLETED_OTHER48_NOT_REACHED",
-        "exact_public_CI": "FAIL_RENDERER_2C573D9_RUN39636204158_SUCCESSOR_PENDING",
+        "full_UI49": "PASS_LOCAL_UNFILTERED49_EXACT725_AND_PUBLIC_CANONICAL49_EXACT725",
+        "exact_public_CI": "PASS_ALL4_EXACT725_RUN39638818285",
         "installation": "UNCHANGED_SOURCE16",
         "manufacturer_parity": "NOT_PROVEN",
         "dashboard_fixture_correction": "PASS_ONE_SELECTED_MOCK_SUITE_ORIGINAL2_LEGACY_UNCHANGED_2_EXPLICIT_COMPLETE_CONTROLS",
-        "public_App_enrichment_optin": "PASS_EXACT_2C573D9_INITIAL_AND_COLD_ONE_APP_TEST_EACH_OWN_HOST_EOF0"
+        "public_App_enrichment_optin": "PASS_EXACT_2C573D9_INITIAL_AND_COLD_ONE_APP_TEST_EACH_OWN_HOST_EOF0",
+        "historical_2c573d9_CI": "FAIL_DASHBOARD_ZERO_COMPLETED48_NOT_REACHED_OTHER_JOBS_LATER_CONCURRENCY_CANCELLED"
       },
       "reference_parity": "NOT_PROVEN"
     },

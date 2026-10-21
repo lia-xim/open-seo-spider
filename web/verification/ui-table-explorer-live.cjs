@@ -13,7 +13,7 @@ const chrome=process.env.OPEN_SEO_BROWSER_PATH||process.env.SPIDER_CHROME;assert
 const output=path.resolve(process.env.SPIDER_TABLE_EXPLORER_OUTPUT||path.join(process.env.SPIDER_TEST_ARTIFACT_DIR||path.join(root,'artifacts'),'table-explorer-'+Date.now()+'-'+randomUUID().slice(0,8)));
 assert(!fs.existsSync(output),'Fresh owned output required');fs.mkdirSync(output,{recursive:true});process.env.SPIDER_TEST_ARTIFACT_DIR=output;
 const artifactPath=require('./artifact-path.cjs'),store=path.join(output,'store'),nonce=randomUUID();
-const assets=['index.html','app.js','styles.css','table-explorer.js','table-explorer-ui.js'];
+const assets=['index.html','app.js','styles.css','table-explorer.js','table-explorer-ui.js','project-columns.js'];
 const pins=[__filename,path.join(__dirname,'artifact-path.cjs'),path.join(__dirname,'csv-records.cjs'),binary,chrome,...assets.map(name=>path.join(root,'web',name))].map(file=>({file,sha256:sha(fs.readFileSync(file))}));
 const checks=[],owners=[],served=[],nativeReads=[],downloads=[],errors=[],external=[],siteHits=[],offlineHits=[],witnesses=[],views=[],geometry=[],negativeControls=[],preferences=[];
 const titleKeys=['url','title_text','title_length','title_pixels','title_count','duplicates','status'];
