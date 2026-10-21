@@ -10,7 +10,7 @@ const actual=app.split(/\r?\n/).find(line=>line.trim().startsWith('const canonic
   between('  function installDashboardSegmentView(','  function renderDashboardSegments()')+
   between('  function duplicateValues(','  function externalRows()')+
   between('  function renderControls()','  function renderMetrics()')+
-  between('  function getRows()','  function filterOptions()')+
+  between('  function extractionSourceState(','  function filterOptions()')+
   between('  function matchesFilter(row)','  function tableOwner()')+
   between('  function tableOwner()','  function tableIdentity(')+
   between('  function filteredRows(','  function renderTable()')+

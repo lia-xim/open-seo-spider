@@ -13,6 +13,20 @@ function ok(result){assert.equal(result.ok,true,JSON.stringify(result));return r
 function rejected(result,code){assert.equal(result.ok,false);assert.equal(Object.hasOwn(result,'value'),false);if(code)assert.equal(result.error.code,code);return result.error;}
 const entry=(id=A,name='Café',current=contract,query=view)=>ok(library.makeEntry({id,name},current,query));
 
+for (const version of [1,2]) test(`extraction source v1 supports new version${version} views and refuses stale filter semantics`,()=>{
+  const definitions=require('../table-view-library.js');
+  const currentLibrary=version===2?definitions.createExpression(explorer):library;
+  const base=version===2?definitions.EXPRESSION_QUERY_SEMANTICS:QUERY_SEMANTICS;
+  const current={...contract,section:'extractions',query_semantics:base+'/extraction-source-v1'};
+  const query=version===2?{sectionFilter:'all',search:'',expression:null,sort:{key:'url',direction:1},visibleKeys:['url']}:view;
+  const selected=ok(currentLibrary.makeEntry({id:A,name:'Source trust'},current,query));
+  const decoded=ok(currentLibrary.decodeCatalog(ok(currentLibrary.encodeCatalog([selected])))).entries[0];
+  assert.equal(ok(currentLibrary.prepareApply(decoded,current)).query_semantics,current.query_semantics);
+  rejected(currentLibrary.prepareApply({...decoded,query_semantics:base},current),'query_semantics_mismatch');
+  rejected(currentLibrary.prepareView({...current,query_semantics:base},query),'query_semantics_mismatch');
+  rejected(currentLibrary.prepareView({...current,section:'titles'},query),'query_semantics_mismatch');
+});
+
 test('full atomic payload retains every accepted query field and no capture identity or result data',()=>{
   const original=JSON.stringify(view),selected=entry(),applied=ok(library.prepareApply(selected,contract));
   assert.deepEqual(applied,{section:'titles',query_semantics:QUERY_SEMANTICS,sectionFilter:'all',search:' CAFE\u0301 ',rules:[{key:'count',op:'range',min:0,max:2},{key:'title',op:'equals',text:'café'}],sort:{key:'count',direction:-1},visibleKeys:['url']});

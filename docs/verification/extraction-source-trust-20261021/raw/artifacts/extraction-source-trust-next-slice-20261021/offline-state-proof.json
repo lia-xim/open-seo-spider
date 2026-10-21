@@ -1,0 +1,133 @@
+{
+  "result": "REPRODUCED_OFFLINE_STATE_AMBIGUITY",
+  "scope": "Actual unchanged App getRows/columns/matchesFilter on five declared negative/control states. No native/browser/Cargo/worker/network proof.",
+  "app_sha256": "aef8cd313a93fa83bcabd25bff04859b6c587b2d50e6e56a7e8ab34de8507b9f",
+  "app_bytes": 527607,
+  "rows": [
+    {
+      "url": "https://owned.invalid/complete-source-zero-control",
+      "page_truncated": false,
+      "page_error": null,
+      "page_warning": [],
+      "enters_empty_filter": true,
+      "enters_result_truncation_filter": false,
+      "projection": {
+        "url": "https://owned.invalid/complete-source-zero-control",
+        "name": "Missing selector",
+        "method": "css",
+        "output": "auto",
+        "result_type": "text",
+        "selector": ".missing",
+        "attribute": "—",
+        "source": "HTML-Antwort",
+        "matches": 0,
+        "matched_count": 0,
+        "truncated": false,
+        "values": "",
+        "error": null
+      }
+    },
+    {
+      "url": "https://owned.invalid/body-prefix-zero-control",
+      "page_truncated": true,
+      "page_error": null,
+      "page_warning": [],
+      "enters_empty_filter": true,
+      "enters_result_truncation_filter": false,
+      "projection": {
+        "url": "https://owned.invalid/body-prefix-zero-control",
+        "name": "Missing selector",
+        "method": "css",
+        "output": "auto",
+        "result_type": "text",
+        "selector": ".missing",
+        "attribute": "—",
+        "source": "HTML-Antwort",
+        "matches": 0,
+        "matched_count": 0,
+        "truncated": false,
+        "values": "",
+        "error": null
+      }
+    },
+    {
+      "url": "https://owned.invalid/partial-body-read-zero-control",
+      "page_truncated": false,
+      "page_error": "Response body read failed: declared negative transport control",
+      "page_warning": [],
+      "enters_empty_filter": true,
+      "enters_result_truncation_filter": false,
+      "projection": {
+        "url": "https://owned.invalid/partial-body-read-zero-control",
+        "name": "Missing selector",
+        "method": "css",
+        "output": "auto",
+        "result_type": "text",
+        "selector": ".missing",
+        "attribute": "—",
+        "source": "HTML-Antwort",
+        "matches": 0,
+        "matched_count": 0,
+        "truncated": false,
+        "values": "",
+        "error": null
+      }
+    },
+    {
+      "url": "https://owned.invalid/lossy-source-zero-control",
+      "page_truncated": false,
+      "page_error": null,
+      "page_warning": [
+        "Response text contains invalid bytes for the declared character encoding"
+      ],
+      "enters_empty_filter": true,
+      "enters_result_truncation_filter": false,
+      "projection": {
+        "url": "https://owned.invalid/lossy-source-zero-control",
+        "name": "Missing selector",
+        "method": "css",
+        "output": "auto",
+        "result_type": "text",
+        "selector": ".missing",
+        "attribute": "—",
+        "source": "HTML-Antwort",
+        "matches": 0,
+        "matched_count": 0,
+        "truncated": false,
+        "values": "",
+        "error": null
+      }
+    },
+    {
+      "url": "https://owned.invalid/legacy-source-zero-control",
+      "page_truncated": false,
+      "page_error": null,
+      "page_warning": [],
+      "enters_empty_filter": true,
+      "enters_result_truncation_filter": false,
+      "projection": {
+        "url": "https://owned.invalid/legacy-source-zero-control",
+        "name": "Missing selector",
+        "method": "css",
+        "output": "auto",
+        "result_type": "text",
+        "selector": ".missing",
+        "attribute": "—",
+        "source": "HTML-Antwort",
+        "matches": 0,
+        "matched_count": 0,
+        "truncated": false,
+        "values": "",
+        "error": null
+      }
+    }
+  ],
+  "assertions": [
+    "all five enter empty filter",
+    "none enters result truncation filter",
+    "all exported source/count/result scalars are identical except URL",
+    "page truncation/error/decode warning are omitted from main projection"
+  ],
+  "native_runs": 0,
+  "browser_runs": 0
+}

@@ -1,6 +1,17 @@
 # End-to-end checks for the redesigned application
 
-The [source-availability/provenance follow-up](verification/table-xlsx-provenance-20261021/README.md) fixes missing-source false success, Boolean export representation and confirmed-empty native segment export. Fresh510 selected Node tests,40 semantic groups, format/build/strict Clippy and one complete focused20-suite invocation pass (9 fixture/11 native). Independent Python reconstruction checks43 distinct original pairs,3062 rows and65321 physical cells plus188 read-only segment POST observations. Direct R3 provenance35 is PASS inside an original failed aggregate; R4 availability8 is a separate selected PASS. NativeR1/R2/R3 failures remain unchanged. Fresh ordinary Rust tests/renderer opt-ins, full local48 and exact successor public CI are not claimed. The609 selected inputs bind this slice; metadata/transitive dependency closure and installed pilot update are separate.
+The [bounded extraction source trust acceptance](verification/extraction-source-trust-20261021/README.md) now passes one selected native suite with 19 CSV/XLSX pairs, 712 rows and four separate native API CSV files with 265 rows. It includes actual source hashes, both saved-view modes, import controls and cold reopen. Ordinary Rust1843/ignore5, Node535, semantic40, normal build/format/Clippy and four separately executed Core renderer tests pass. Core tests execute their own test binaries; App native_enrichment_browser_fixture remains separate. A [different selected two-suite invocation](verification/extraction-source-trust-20261021/existing-views-20261021/README.md) passes existing named-view and expression workflows. No combined full49 run or exact new public CI is inferred. All prior failures remain recorded.
+
+The [extraction source trust contract](extraction-source-trust.md) adds
+`node scripts/ui-e2e.mjs --only extraction-source-trust`, an owned native path
+for complete/incomplete/unavailable inputs, raw/DOM observations, CSV/XLSX and
+cold reopen. Registration is not a passing run; current gates are in
+[FEATURE_TODO.md](FEATURE_TODO.md). There are now 49 registered suites; earlier
+46-/48-suite receipts bind their own revisions. The new pure regression runs
+actual App functions through
+`node --test web/verification/extraction-source-trust.test.cjs`.
+
+The [source-availability/provenance follow-up](verification/table-xlsx-provenance-20261021/README.md) fixes missing-source false success, Boolean export representation and confirmed-empty native segment export. Fresh510 selected Node tests,40 semantic groups, format/build/strict Clippy and one complete focused20-suite invocation pass (9 fixture/11 native). Independent Python reconstruction checks43 distinct original pairs,3062 rows and65321 physical cells plus188 read-only segment POST observations. Direct R3 provenance35 is PASS inside an original failed aggregate; R4 availability8 is a separate selected PASS. NativeR1/R2/R3 failures remain unchanged. Fresh ordinary Rust tests/renderer opt-ins and a full local48 run were not performed for that follow-up. The exact `905a248` subsequently passes [all four public jobs and one unfiltered48-suite invocation](verification/table-xlsx-provenance-20261021/public-ci-905a248-20261021/README.md); this is separate from the newer49-suite extraction implementation. The609 selected inputs bind this slice; metadata/transitive dependency closure and installed pilot update are separate.
 
 The supported story is: open the redesigned interface, configure a crawl, fetch
 owned pages through the Rust backend, inspect the saved result, and export or

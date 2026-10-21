@@ -1,0 +1,559 @@
+✖ App has one source classifier and preserves complete-source zero independently from result limit (9.1596ms)
+✖ legacy never enters confirmed-empty or acquires an exact count (2.0238ms)
+✖ truncated source never enters confirmed-empty or acquires an exact count (1.4876ms)
+✖ lossy source never enters confirmed-empty or acquires an exact count (1.4539ms)
+✖ unknown charset never enters confirmed-empty or acquires an exact count (1.5601ms)
+✖ evaluation error never enters confirmed-empty or acquires an exact count (1.2312ms)
+✖ complete input with result-budget truncation keeps exact count3 and retained values2 (1.2965ms)
+✖ partial input values are evaluated-input-only, not a complete count or generic lower bound (1.5699ms)
+✖ XPath scalar "0" is one retained value, distinct from empty nodeset (1.3847ms)
+✖ XPath scalar "false" is one retained value, distinct from empty nodeset (1.4498ms)
+✖ XPath scalar "" is one retained value, distinct from empty nodeset (1.6904ms)
+✖ optional renderer failure does not revoke complete raw-source evidence (1.329ms)
+✖ unavailable not-run source is visible and never becomes an evaluated zero (1.198ms)
+✖ malformed wrong contract engine remains unknown with null exact count (1.5362ms)
+✖ malformed wrong source binding remains unknown with null exact count (1.2922ms)
+✖ malformed malformed hash remains unknown with null exact count (1.189ms)
+✖ malformed invalid byte count remains unknown with null exact count (1.5549ms)
+✖ malformed unknown status remains unknown with null exact count (1.1579ms)
+✖ malformed nonarray reasons remains unknown with null exact count (1.1612ms)
+✖ missing configured result remains an explicit unknown row without synthesized matches (1.5003ms)
+✖ unconfigured no-observation extraction source refuses header-only export (1.4473ms)
+✖ historical present observations remain readable even when configuration is absent (1.3392ms)
+✖ actual columns carry typed trust fields and keep zero/empty/null scalars separate (2.1885ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 0
+ℹ fail 23
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 118.148
+
+✖ failing tests:
+
+test at web\verification\extraction-source-trust.test.cjs:19:1
+✖ App has one source classifier and preserves complete-source zero independently from result limit (9.1596ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:20:82)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:28:3
+✖ legacy never enters confirmed-empty or acquires an exact count (2.0238ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:29:82)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:28:3
+✖ truncated source never enters confirmed-empty or acquires an exact count (1.4876ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:29:82)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:28:3
+✖ lossy source never enters confirmed-empty or acquires an exact count (1.4539ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:29:82)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:28:3
+✖ unknown charset never enters confirmed-empty or acquires an exact count (1.5601ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:29:82)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:28:3
+✖ evaluation error never enters confirmed-empty or acquires an exact count (1.2312ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:29:130)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:31:1
+✖ complete input with result-budget truncation keeps exact count3 and retained values2 (1.2965ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:32:137)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:34:1
+✖ partial input values are evaluated-input-only, not a complete count or generic lower bound (1.5699ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:35:210)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:37:76
+✖ XPath scalar "0" is one retained value, distinct from empty nodeset (1.3847ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:38:230)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:37:76
+✖ XPath scalar "false" is one retained value, distinct from empty nodeset (1.4498ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:38:230)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:37:76
+✖ XPath scalar "" is one retained value, distinct from empty nodeset (1.6904ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:38:230)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:40:1
+✖ optional renderer failure does not revoke complete raw-source evidence (1.329ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:41:139)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:43:1
+✖ unavailable not-run source is visible and never becomes an evaluated zero (1.198ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:44:282)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:48:3
+✖ malformed wrong contract engine remains unknown with null exact count (1.5362ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:49:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:48:3
+✖ malformed wrong source binding remains unknown with null exact count (1.2922ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:49:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:48:3
+✖ malformed malformed hash remains unknown with null exact count (1.189ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:49:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:48:3
+✖ malformed invalid byte count remains unknown with null exact count (1.5549ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:49:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:48:3
+✖ malformed unknown status remains unknown with null exact count (1.1579ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:49:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:48:3
+✖ malformed nonarray reasons remains unknown with null exact count (1.1612ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:49:95)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:51:1
+✖ missing configured result remains an explicit unknown row without synthesized matches (1.5003ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:52:238)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:54:1
+✖ unconfigured no-observation extraction source refuses header-only export (1.4473ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:55:134)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:57:1
+✖ historical present observations remain readable even when configuration is absent (1.3392ms)
+  AssertionError [ERR_ASSERTION]: App must expose actual extractionSourceState
+  + actual - expected
+  
+  + 'object'
+  - 'function'
+  
+      at state (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:17:43)
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:58:197)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'object',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at web\verification\extraction-source-trust.test.cjs:60:1
+✖ actual columns carry typed trust fields and keep zero/empty/null scalars separate (2.1885ms)
+  AssertionError [ERR_ASSERTION]: source_status
+      at TestContext.<anonymous> (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\web\verification\extraction-source-trust.test.cjs:61:367)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -669,6 +669,7 @@ pub fn write_custom_extractions_csv<W: std::io::Write>(
     sink: W,
     extra: &[(String, String)],
 ) -> anyhow::Result<W> {
+    crate::validate_report_extraction_observations(report)?;
     let raw_report = report;
     let visible_report = crate::reported_report(report);
     let report = visible_report.as_ref();
@@ -689,9 +690,66 @@ pub fn write_custom_extractions_csv<W: std::io::Write>(
         "Truncated",
         "Error",
         "Output Mode",
+        "Source Status",
+        "Evaluation Status",
+        "Decode Status",
+        "Exact Match Count",
+        "Count Scope",
+        "Source Reasons",
+        "Document URL",
+        "Observed Generation",
+        "Observed At",
+        "Input SHA256",
+        "Input UTF8 Bytes",
+        "Source Revision",
+        "Source Engine",
     ])?;
     for page in &report.pages {
-        for extraction in &page.custom_extractions {
+        // Match configured occurrences once each. Historical reports may omit
+        // entire configured rules; emit unknown evidence without mutating them.
+        let mut matched = vec![false; page.custom_extractions.len()];
+        let mut missing = Vec::new();
+        for definition in &report.config.custom_extractions {
+            if let Some((index, _)) =
+                page.custom_extractions
+                    .iter()
+                    .enumerate()
+                    .find(|(index, saved)| {
+                        !matched[*index]
+                            && saved.name == definition.name
+                            && saved.selector == definition.selector
+                            && saved.attribute == definition.attribute
+                            && saved.method == definition.method
+                            && saved.output == definition.output
+                    })
+            {
+                matched[index] = true;
+            } else {
+                missing.push(crate::CustomExtraction {
+                    name: definition.name.clone(),
+                    selector: definition.selector.clone(),
+                    attribute: definition.attribute.clone(),
+                    method: definition.method,
+                    output: definition.output,
+                    ..Default::default()
+                });
+            }
+        }
+        for (extraction, is_missing) in page
+            .custom_extractions
+            .iter()
+            .map(|row| (row, false))
+            .chain(missing.iter().map(|row| (row, true)))
+        {
+            let source_reasons = if let Some(row) = &extraction.source_observation {
+                serde_json::to_string(&row.reasons)?
+            } else {
+                serde_json::to_string(&[if is_missing {
+                    "missing_saved_observation"
+                } else {
+                    "source_observation_not_saved"
+                }])?
+            };
             let rows = if extraction.values.is_empty() {
                 vec![(String::new(), String::new())]
             } else {
@@ -728,7 +786,11 @@ pub fn write_custom_extractions_csv<W: std::io::Write>(
                         .matched_count
                         .map(|count| count.to_string())
                         .unwrap_or_default(),
-                    extraction.truncated.to_string(),
+                    if is_missing {
+                        String::new()
+                    } else {
+                        extraction.truncated.to_string()
+                    },
                     csv_text(extraction.error.as_deref().unwrap_or_default()),
                     match extraction.output {
                         crate::ExtractionOutput::Auto => "auto",
@@ -738,6 +800,92 @@ pub fn write_custom_extractions_csv<W: std::io::Write>(
                         crate::ExtractionOutput::FunctionValue => "function_value",
                     }
                     .into(),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .map(|row| match row.status {
+                            crate::ExtractionSourceStatus::Complete => "complete",
+                            crate::ExtractionSourceStatus::Incomplete => "incomplete",
+                            crate::ExtractionSourceStatus::Unavailable => "unavailable",
+                        })
+                        .unwrap_or("unknown")
+                        .into(),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .map(|row| match row.evaluation {
+                            crate::ExtractionEvaluationStatus::Evaluated => "evaluated",
+                            crate::ExtractionEvaluationStatus::Error => "error",
+                            crate::ExtractionEvaluationStatus::NotRun => "not_run",
+                        })
+                        .unwrap_or("unknown")
+                        .into(),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .map(|row| match row.decode_status {
+                            crate::ContentCaptureDecodeStatus::Exact => "exact",
+                            crate::ContentCaptureDecodeStatus::Lossy => "lossy",
+                            crate::ContentCaptureDecodeStatus::Unknown => "unknown",
+                        })
+                        .unwrap_or("unknown")
+                        .into(),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .and_then(|row| row.exact_count(extraction))
+                        .map(|count| count.to_string())
+                        .unwrap_or_default(),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .map(|row| row.count_scope(extraction))
+                        .unwrap_or("unknown")
+                        .into(),
+                    csv_text(&source_reasons),
+                    csv_text(
+                        extraction
+                            .source_observation
+                            .as_ref()
+                            .and_then(|row| row.document_url.as_deref())
+                            .unwrap_or_default(),
+                    ),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .and_then(|row| row.observed_generation)
+                        .map(|generation| generation.to_string())
+                        .unwrap_or_default(),
+                    csv_text(
+                        extraction
+                            .source_observation
+                            .as_ref()
+                            .and_then(|row| row.observed_at.as_deref())
+                            .unwrap_or_default(),
+                    ),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .and_then(|row| row.input_sha256.clone())
+                        .unwrap_or_default(),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .and_then(|row| row.input_utf8_bytes)
+                        .map(|count| count.to_string())
+                        .unwrap_or_default(),
+                    extraction
+                        .source_observation
+                        .as_ref()
+                        .and_then(|row| row.source_revision.clone())
+                        .unwrap_or_default(),
+                    csv_text(
+                        extraction
+                            .source_observation
+                            .as_ref()
+                            .map(|row| row.engine.as_str())
+                            .unwrap_or_default(),
+                    ),
                 ])?;
             }
         }
@@ -2105,7 +2253,7 @@ mod tests {
             ]
         );
         assert_eq!(
-            &headers[8..],
+            &headers[8..15],
             [
                 "Method",
                 "Engine",
@@ -2119,14 +2267,14 @@ mod tests {
         assert_eq!(rows.len(), 4);
         assert_eq!(&rows[0][4..8], ["rendered_html", "2", "1", "10,\"quote\""]);
         assert_eq!(
-            &rows[0][8..],
+            &rows[0][8..15],
             ["regex", "rust-regex", "string", "5", "true", "", "auto"]
         );
         assert_eq!(rows[1][7], "20\nline");
         assert_eq!(rows[2][5], "0");
         assert_eq!(rows[2][6], "");
         assert_eq!(
-            &rows[2][8..],
+            &rows[2][8..15],
             [
                 "xpath",
                 "sxd-xpath",

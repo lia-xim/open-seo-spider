@@ -332,13 +332,16 @@ pub(crate) fn validate_custom_extractions(config: &[CustomExtractionConfig]) -> 
     crate::extraction_engine::validate_custom_extractions(config)
 }
 
-pub(crate) fn apply_custom_extractions(
+pub(crate) fn apply_custom_extractions_observed(
     page: &mut PageRecord,
-    html: &str,
     config: &[CustomExtractionConfig],
-    source: &str,
+    input: crate::ExtractionInputContext<'_>,
 ) {
-    page.custom_extractions = crate::extraction_engine::extract_all(html, config, source);
+    page.custom_extractions = crate::extraction_observation::extract_observed(config, input);
+    append_extraction_warnings(page);
+}
+
+fn append_extraction_warnings(page: &mut PageRecord) {
     for result in &page.custom_extractions {
         if let Some(error) = &result.error {
             page.warnings

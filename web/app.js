@@ -844,6 +844,42 @@
   }
   const accessibilityLabel=value=>({needs_review:'Manuell prüfen',violations:'Automatisierte Verstöße',observed_zero:'Keine automatisierten Befunde',missing:'Nicht erfasst',renderer_error:'Rendererfehler',error:'Prüfung fehlgeschlagen',malformed:'Unbekannt: ungültige Daten'}[value]||'Unbekannt');
 
+  // Trust describes the captured extraction input, independently of max_results.
+  // Imported observations are validated natively; these checks also fail closed
+  // for stale/malformed browser data. A hash is an input binding, not website authenticity.
+  function extractionSourceState(row) {
+    const unknown=reason=>({status:'unknown',evaluation:'unknown',decode:'unknown',exactCount:null,scope:'unknown',reasons:[reason]});
+    const o=row?.source_observation;
+    if(o==null)return unknown('missing_saved_observation');
+    const hash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
+    const natural=value=>Number.isSafeInteger(value)&&value>=0;
+    const values=Array.isArray(row.values)?row.values:[];
+    if(typeof o!=='object'||Array.isArray(o)||o.engine!=='open-seo-spider/extraction-source-v1'||!['raw_html','rendered_html'].includes(o.source)||o.source!==row.source||!['complete','incomplete','unavailable'].includes(o.status)||!['evaluated','error','not_run'].includes(o.evaluation)||!['exact','lossy','unknown'].includes(o.decode_status)||!Array.isArray(o.reasons)||o.reasons.some(reason=>typeof reason!=='string'||!reason||reason.length>256)||o.reasons.length>16||!hash(o.source_revision)||(o.observed_generation!=null&&!natural(o.observed_generation)))return unknown('invalid_source_observation');
+    const hasInput=hash(o.input_sha256)&&natural(o.input_utf8_bytes);
+    const noInput=o.input_sha256==null&&o.input_utf8_bytes==null;
+    const evaluated=o.evaluation==='evaluated'&&!row.error&&natural(row.matched_count)&&row.matched_count>=values.length&&typeof row.truncated==='boolean'&&row.truncated===(row.matched_count>values.length);
+    const failed=o.evaluation==='error'&&typeof row.error==='string'&&Boolean(row.error)&&row.matched_count==null&&!values.length&&row.truncated===false;
+    const notRun=o.evaluation==='not_run'&&!row.error&&row.matched_count==null&&!values.length&&row.truncated===false;
+    if(o.status==='unavailable'?(!noInput||!notRun||!o.reasons.length):(!hasInput||!(evaluated||failed)))return unknown('invalid_source_observation');
+    if(o.status==='complete'&&(o.decode_status!=='exact'||o.reasons.length||typeof o.document_url!=='string'||!o.document_url||typeof o.observed_at!=='string'||!Number.isFinite(Date.parse(o.observed_at))))return unknown('invalid_source_observation');
+    if(o.status==='incomplete'&&!o.reasons.length)return unknown('invalid_source_observation');
+    return {status:o.status,evaluation:o.evaluation,decode:o.decode_status,exactCount:o.status==='complete'&&evaluated?row.matched_count:null,scope:evaluated?(o.status==='complete'?'complete_source':'evaluated_input_only'):failed?'evaluation_failed':'not_evaluated',reasons:o.reasons};
+  }
+  const extractionSourceLabel=status=>({complete:'Vollständig erfasst',incomplete:'Quelle unvollständig',unavailable:'Nicht ausgewertet',unknown:'Quellvertrauen unbekannt'}[status]||'Unbekannt');
+  function extractionRows() {
+    if(state.cache.extractions)return state.cache.extractions;
+    const configs=array(state.crawl?.config?.custom_extractions);
+    const identity=entry=>JSON.stringify([entry?.name||'',entry?.selector||'',entry?.attribute??null,entry?.method||'css',entry?.output||'auto']);
+    const rows=[];
+    for(const page of internals()){
+      const saved=array(page.custom_extractions),remaining=new Map();
+      for(const entry of saved){const key=identity(entry);remaining.set(key,(remaining.get(key)||0)+1);rows.push({...entry,url:page.url,name:entry?.name||entry?.selector||'',values:array(entry?.values),_page:page});}
+      for(const config of configs){const key=identity(config),count=remaining.get(key)||0;if(count){remaining.set(key,count-1);continue;}rows.push({...config,url:page.url,name:config.name||config.selector,source:'',values:[],matched_count:null,truncated:null,error:null,_page:page,_missingObservation:true});}
+    }
+    state.cache.extractions=rows;
+    return rows;
+  }
+
   function getRows() {
     switch (state.section) {
       case 'inputs': return array(state.crawl?.config?.input_imports).flatMap((result, index) => array(result.rows).map((row, rowIndex) => ({ ...row, list_index: index + 1, occurrence_index: rowIndex, input_sha256: result.input_sha256, _import: result, url: row.normalized_url || '' })));
@@ -861,7 +897,7 @@
       case 'issues': return state.issues.map((issue) => ({ ...issue, _page: state.pageMap.get(issue.url) }));
       case 'linkmetrics': return array(state.analysis?.graph?.nodes).map((node) => ({ ...node, _page: state.pageMap.get(node.url) }));
       case 'structured': return array(state.analysis?.structured_data).map((entry) => ({ ...entry, types_text: Object.entries(entry.types || {}).map(([type, count]) => `${type} (${count})`).join(' | '), _page: state.pageMap.get(entry.url) }));
-      case 'extractions': return internals().flatMap((page) => page.custom_extractions.map((entry) => ({ ...entry, url: page.url, name: entry.name || entry.selector, values: array(entry.values), _page: page })));
+      case 'extractions': return extractionRows();
       case 'custom-search': return customSearchRows();
       case 'javascript': return internals().flatMap(page => page.custom_javascript_results.map(entry => ({ ...entry, url: page.url, value_json: entry.error ? '' : JSON.stringify(entry.value), _page: page })));
       case 'cookies': return internals().flatMap(page => page.browser_cookies.map(entry => ({ ...entry, url: page.url, _page: page })));
@@ -909,7 +945,7 @@
       case 'issues': return [urlColumn, { key: 'severity', label: 'Priorität', value: (row) => row.severity, render: (row) => `<span class="badge ${row.severity === 'error' ? 'danger' : row.severity === 'warning' ? 'warning' : 'neutral'}">${row.severity === 'error' ? 'Fehler' : row.severity === 'warning' ? 'Warnung' : 'Hinweis'}</span>` }, textColumn('code', 'Problem', (row) => issueTitle(row.code)), textColumn('message', 'Details'), numberColumn('related', 'Weitere URLs', (row) => array(row.related_urls).length)];
       case 'linkmetrics': return [urlColumn, { key: 'link_score', label: 'Eigener Linkscore', value: (row) => row.link_score, render: (row) => Number(row.link_score || 0).toLocaleString('de-DE', { maximumFractionDigits: 2 }) }, numberColumn('in_degree', 'Verlinkende URLs'), numberColumn('out_degree', 'Verlinkte URLs'), numberColumn('inlink_occurrences', 'Eingehende Anker'), numberColumn('outlink_occurrences', 'Ausgehende Anker'), numberColumn('crawl_depth', 'Crawl-Tiefe'), numberColumn('shortest_link_depth', 'Kürzester Linkweg'), indexColumn];
       case 'structured': return [urlColumn, numberColumn('parsed_blocks', 'JSON-LD-Blöcke'), numberColumn('invalid_json_blocks', 'Ungültiges JSON'), textColumn('types_text', 'Beobachtete @type-Werte'), numberColumn('typed_nodes', 'Knoten mit @type', (row) => array(row.typed_nodes).length), textColumn('validation', 'Schema-Validierung', () => 'Nicht ausgeführt')];
-      case 'extractions': return [urlColumn, textColumn('name', 'Feldname'), textColumn('method', 'Methode', row => row.method || 'css'), textColumn('output', 'Ausgabe', row => row.output || 'auto'), textColumn('result_type', 'Ergebnistyp'), textColumn('selector', 'Ausdruck'), textColumn('attribute', 'Attribut', (row) => row.attribute || '—'), textColumn('source', 'Quelle', (row) => row.source === 'raw_html' ? 'HTML-Antwort' : row.source === 'rendered_html' ? 'Gerenderter DOM' : row.source || 'Unbekannt'), numberColumn('matches', 'Erfasste Werte', (row) => row.values.length), numberColumn('matched_count', 'Beobachtete Treffer'), booleanColumn('truncated', 'Abgeschnitten', row => row.truncated ? 'Ja' : 'Nein'), textColumn('values', 'Werte', (row) => row.values.join(' | ')), textColumn('error', 'Fehler')];
+      case 'extractions': return [urlColumn, textColumn('name', 'Feldname'), textColumn('method', 'Methode', row => row.method || 'css'), textColumn('output', 'Ausgabe', row => row.output || 'auto'), textColumn('result_type', 'Ergebnistyp'), textColumn('selector', 'Ausdruck'), textColumn('attribute', 'Attribut', row => row.attribute || '—'), textColumn('source', 'Quelle', row => row.source === 'raw_html' ? 'HTML-Antwort' : row.source === 'rendered_html' ? 'Gerenderter DOM' : row.source || 'Unbekannt'), numberColumn('matches', 'Erfasste Werte', row => row.values.length), numberColumn('matched_count', 'Treffer im ausgewerteten Input'), booleanColumn('truncated', 'Werte begrenzt', row => row.truncated == null ? 'Unbekannt' : row.truncated ? 'Ja' : 'Nein'), textColumn('values', 'Werte', row => row.values.join(' | ')), textColumn('error', 'Fehler'), {key:'source_status',label:'Quellzustand',type:'text',value:row=>extractionSourceState(row).status,render:row=>escape(extractionSourceLabel(extractionSourceState(row).status))}, textColumn('evaluation_status', 'Auswertung', row => extractionSourceState(row).evaluation), textColumn('decode_status', 'Quelldekodierung', row => extractionSourceState(row).decode), numberColumn('exact_count', 'Exakte Gesamtanzahl', row => extractionSourceState(row).exactCount), textColumn('count_scope', 'Zählbereich', row => extractionSourceState(row).scope), textColumn('source_reasons', 'Quellhinweise', row => extractionSourceState(row).reasons.join(' | ')), textColumn('document_url', 'Dokument-URL', row => row.source_observation?.document_url), numberColumn('observed_generation', 'Erfasste Generation', row => row.source_observation?.observed_generation), textColumn('observed_at', 'Erfasst am', row => row.source_observation?.observed_at), textColumn('input_sha256', 'Eingabe-SHA256', row => row.source_observation?.input_sha256), numberColumn('input_utf8_bytes', 'Eingabe-UTF8-Bytes', row => row.source_observation?.input_utf8_bytes), textColumn('source_revision', 'Quellrevision', row => row.source_observation?.source_revision), textColumn('source_engine', 'Quellvertrag', row => row.source_observation?.engine)];
       case 'javascript': return [urlColumn, textColumn('name', 'Feldname'), textColumn('value_type', 'Datentyp'), textColumn('value_json', 'JSON-Rückgabe'), textColumn('error', 'Auswertungsfehler'), { key: 'elapsed_ms', label: 'Ausführungszeit', value: row => row.elapsed_ms, render: row => duration(row.elapsed_ms) }];
       case 'cookies': return [urlColumn, textColumn('name', 'Cookie-Name'), textColumn('domain', 'Domain'), textColumn('path', 'Pfad'), textColumn('sameSite', 'SameSite'), booleanColumn('httpOnly', 'HttpOnly', row => row.httpOnly ? 'Ja' : 'Nein'), booleanColumn('secure', 'Secure', row => row.secure ? 'Ja' : 'Nein'), numberColumn('value_length', 'Wertlänge in Bytes'), textColumn('expires', 'Ablauf', row => row.expires < 0 ? 'Session' : new Date(row.expires * 1000).toISOString())];
       case 'pagination': return [urlColumn, textColumn('pagination_next', 'Next', row => first(row.pagination_next)), textColumn('pagination_prev', 'Prev', row => first(row.pagination_prev)), textColumn('amphtml', 'AMP-Ziel', row => first(row.amphtml)), statusColumn, indexColumn];
@@ -942,7 +978,7 @@
       case 'external': return [...base, ['unverified', 'Nicht geprüft'], ['error', 'HTTP-Fehler'], ['nofollow', 'Nofollow']];
       case 'linkmetrics': return [...base, ['zero', 'Keine beobachteten Eingangslinks'], ['unreachable', 'Kein beobachteter Weg ab Start-URL']];
       case 'structured': return [...base, ['invalid', 'Mit ungültigem JSON'], ['types', 'Mit @type-Werten']];
-      case 'extractions': return [...base, ['present', 'Mit Werten'], ['empty', 'Ohne Werte'], ['error', 'Mit Fehler'], ['truncated', 'Erfassung abgeschnitten']];
+      case 'extractions': return [...base, ['present', 'Mit erfassten Werten'], ['empty', 'Bestätigt keine Werte'], ['error', 'Mit Auswertungsfehler'], ['truncated', 'Ergebniswerte begrenzt'], ['incomplete', 'Quelle unvollständig'], ['unknown', 'Quellvertrauen unbekannt'], ['unavailable', 'Nicht ausgewertet']];
       case 'javascript': return [...base, ['success', 'Mit Rückgabe'], ['error', 'Mit Auswertungsfehler']];
       case 'cookies': return [...base, ['insecure', 'Ohne Secure'], ['scriptable', 'Ohne HttpOnly'], ['session', 'Session-Cookies']];
       case 'pagination': return [...base, ['present', 'Mit Pagination'], ['amp', 'Mit AMP-Verweis']];
@@ -973,7 +1009,7 @@
     if (state.section === 'issues') return row.severity === filter;
     if (state.section === 'linkmetrics') return filter === 'zero' ? row.in_degree === 0 : row.shortest_link_depth == null;
     if (state.section === 'structured') return filter === 'invalid' ? row.invalid_json_blocks > 0 : Boolean(row.types_text);
-    if (state.section === 'extractions') return filter === 'present' ? row.values.length > 0 : filter === 'error' ? Boolean(row.error) : filter === 'truncated' ? row.truncated : !row.error && row.values.length === 0;
+    if (state.section === 'extractions') { const source=extractionSourceState(row);return filter==='present'?row.values.length>0:filter==='empty'?source.exactCount===0:filter==='error'?Boolean(row.error):filter==='truncated'?row.truncated===true:['incomplete','unknown','unavailable'].includes(filter)?source.status===filter:false; }
     if (state.section === 'javascript') return filter === 'error' ? Boolean(row.error) : !row.error;
     if (state.section === 'cookies') return filter === 'insecure' ? !row.secure : filter === 'scriptable' ? !row.httpOnly : row.expires < 0;
     if (state.section === 'pagination') return filter === 'amp' ? array(row.amphtml).length > 0 : array(row.pagination_next).length + array(row.pagination_prev).length > 0;
@@ -1038,7 +1074,8 @@
     return JSON.stringify([row.requested_url??row._page?.url??row.url??row.normalized_url??'',row.url??'',row.list_index??null,row.occurrence_index??null,row.source_index??null,row.response_index??null,row.dom_location?.index??null,row.rule_name??null,row.source??null,row._segmentOrdinal??row._page?._segmentOrdinal??null]);
   }
   function tableViewContract(version=1) {
-    return {section:state.section,query_semantics:version===2?window.TableViewLibrary.EXPRESSION_QUERY_SEMANTICS:window.TableViewLibrary.QUERY_SEMANTICS,columns:tableSchema(),sectionFilters:filterOptions().map(option=>option[0])};
+    const semantics=version===2?window.TableViewLibrary.EXPRESSION_QUERY_SEMANTICS:window.TableViewLibrary.QUERY_SEMANTICS;
+    return {section:state.section,query_semantics:state.section==='extractions'?`${semantics}/extraction-source-v1`:semantics,columns:tableSchema(),sectionFilters:filterOptions().map(option=>option[0])};
   }
   function tableViewSnapshot(version=1) {
     if(!state.crawl?.id||!tableExplorer)return {ok:false,error:{code:'no_crawl',message:'Zuerst einen Crawl und eine Ergebnistabelle auswählen.'}};
@@ -1380,8 +1417,8 @@
         ['Browser-Konsole', array(page.console_errors).length ? JSON.stringify(page.console_errors, null, 2) : 'Keine erfassten Fehler'],
         ['Browser-Requests', page.network_requests == null ? '—' : `${number(array(page.network_requests).length)} erfasst${page.network_events_dropped > 0 ? ` · ${number(page.network_events_dropped)} weitere Netzwerkereignisse nicht gespeichert (Aufzeichnung abgeschnitten)` : ''}`],
         ['Axe-Ergebnis', page.accessibility ? JSON.stringify(page.accessibility, null, 2) : 'Keine Prüfung erfasst'],
-        ['Eigene Extraktionen', page.custom_extractions.length ? page.custom_extractions.map((entry) => `${entry.name || entry.selector} (${entry.method || 'css'}; ${entry.output || 'auto'}; ${entry.result_type || 'Typ unbekannt'}; ${entry.selector}${entry.attribute ? ` @${entry.attribute}` : ''}; ${entry.source || 'Quelle unbekannt'}; beobachtete Treffer ${entry.matched_count ?? 'unbekannt'}${entry.truncated ? '; Ergebnis abgeschnitten' : ''}): ${entry.error ? `Fehler: ${entry.error}` : array(entry.values).length ? array(entry.values).join(' | ') : '[keine Werte]'}`).join('\n') : 'Keine Extraktionen konfiguriert oder erfasst'],
-        ['Extraktionen vor Rendering', page.raw_metadata ? array(page.raw_metadata.custom_extractions).map((entry) => `${entry.name || entry.selector}: ${array(entry.values).join(' | ') || '[keine Werte]'}`).join('\n') || '[keine Extraktionen]' : '—'],
+        ['Eigene Extraktionen', page.custom_extractions.length ? page.custom_extractions.map(entry => {const s=extractionSourceState(entry),o=entry.source_observation;return `${entry.name || entry.selector} (${entry.method || 'css'}; ${entry.output || 'auto'}; ${entry.source || 'Quelle unbekannt'}): ${entry.error ? `Fehler: ${entry.error}` : array(entry.values).length ? array(entry.values).join(' | ') : '[keine erfassten Werte]'}\n${extractionSourceLabel(s.status)}; Auswertung ${s.evaluation}; Dekodierung ${s.decode}; Treffer im Input ${entry.matched_count ?? 'unbekannt'}; exakte Gesamtanzahl ${s.exactCount ?? 'unbekannt'}; Zählbereich ${s.scope}; Werte begrenzt ${entry.truncated ?? 'unbekannt'}\n${s.reasons.join(' | ')}\n${o ? JSON.stringify(o) : 'Keine gespeicherte Quellbeobachtung'}`;}).join('\n\n') : 'Keine Extraktionen konfiguriert oder erfasst'],
+        ['Extraktionen vor Rendering', page.raw_metadata ? array(page.raw_metadata.custom_extractions).map(entry => `${entry.name || entry.selector}: ${array(entry.values).join(' | ') || '[keine erfassten Werte]'}; ${extractionSourceLabel(extractionSourceState(entry).status)}; exakte Gesamtanzahl ${extractionSourceState(entry).exactCount ?? 'unbekannt'}; ${entry.source_observation ? JSON.stringify(entry.source_observation) : 'Keine gespeicherte Quellbeobachtung'}`).join('\n') || '[keine Extraktionen]' : '—'],
         ['JavaScript-Auswertungen', page.custom_javascript_results.length ? page.custom_javascript_results.map(entry => `${entry.name} (${entry.value_type || 'Fehler'}; ${duration(entry.elapsed_ms)}): ${entry.error || JSON.stringify(entry.value)}`).join('\n') : 'Keine Auswertungen erfasst'],
         ['Browser-Cookies', page.browser_cookies.length ? JSON.stringify(page.browser_cookies, null, 2) : 'Keine erfasst; Aufnahme ist optional und pro Seitenaufruf isoliert'],
         ['HTTP-Header', Object.entries(page.headers || {}).map(([key, value]) => `${key}: ${value}`).join('\n') || '—']
@@ -1592,6 +1629,7 @@
       const loaded=object(state.analysis)&&(state.section==='linkmetrics'?object(state.analysis.graph)&&Array.isArray(state.analysis.graph.nodes):Array.isArray(state.analysis.structured_data));
       return loaded?{ok:true,captured:true}:unavailable(`${label}: Die native Analyse ist nicht geladen oder unvollständig. Ein leerer Export wäre kein bestätigter Befund.`);
     }
+    if(state.section==='extractions'&&!array(state.crawl?.config?.custom_extractions).length&&!extractionRows().length)return unavailable('Eigene Extraktionen nicht erfasst: Für diesen Lauf sind keine Regeln oder gespeicherten Beobachtungen verfügbar.');
     if(state.section==='inputs'){
       const imports=state.crawl?.config?.input_imports;
       if(!Array.isArray(imports)||!imports.length)return unavailable('Eingabeherkunft nicht erfasst: Für diesen Lauf ist keine erfasste Importquelle verfügbar.');

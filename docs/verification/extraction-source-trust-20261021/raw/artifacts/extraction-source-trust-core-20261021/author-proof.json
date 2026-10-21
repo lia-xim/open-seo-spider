@@ -1,0 +1,73 @@
+{
+  "schema": "extraction-source-core-author-proof/v1",
+  "scope": "Rust source authoring only; Root owns format, compiler, runtime and final acceptance",
+  "owned_sources": [
+    {
+      "path": "crates/core/src/models.rs",
+      "bytes": 46376,
+      "sha256": "59b36a0025d5e1dda019a9951431c8f21872a777ce44b26f96dfc7845fedc6a3"
+    },
+    {
+      "path": "crates/core/src/extraction_observation.rs",
+      "bytes": 32792,
+      "sha256": "4418b63336e98c3a1b77e94c6a320d4d0197f33d2a0186a659aa8537aa0eccea"
+    },
+    {
+      "path": "crates/core/src/lib.rs",
+      "bytes": 9336,
+      "sha256": "74a6cfc674e46e001f17692407ea461c9eb579d345508af794a5a2c365de5a3d"
+    },
+    {
+      "path": "crates/core/src/export.rs",
+      "bytes": 94477,
+      "sha256": "18f05fb3e7a8fb31114f413bf3368abc42890005452aafb4c8a11f9ae7afc199"
+    },
+    {
+      "path": "crates/core/src/extract.rs",
+      "bytes": 15586,
+      "sha256": "092c58f453d93444fee2ccae837dc69cfa5db72a4170cd2f40ab305d0ff9a550"
+    },
+    {
+      "path": "crates/core/src/recrawl.rs",
+      "bytes": 21742,
+      "sha256": "bc7f06c7e58a520f936beca6009d72571fe3aa8245aa9f13c9cdf537634bb94d"
+    },
+    {
+      "path": "crates/core/src/store.rs",
+      "bytes": 157363,
+      "sha256": "7f3abdaafc6ce9659d289aa080da94e56d46a0950ec9bd85bb39628cce64be6a"
+    },
+    {
+      "path": "crates/core/tests/extraction_observation_fixtures.rs",
+      "bytes": 7349,
+      "sha256": "1e9d6c07d46824b64b3e5b213edbe5e5f75131f0bf3fbcc1b2fc58bf7359d1aa"
+    }
+  ],
+  "authored_unit_tests": 11,
+  "authored_real_core_http_tests": 1,
+  "http_categories": 10,
+  "executed_by_author": [],
+  "runtime_result": "NOT_RUN_BY_AUTHOR",
+  "revision_tuple": [
+    "engine constant",
+    "source",
+    "document_url",
+    "observed_at",
+    "observed_generation",
+    "input_sha256",
+    "input_utf8_bytes"
+  ],
+  "revision_encoding": "UTF8 compact serde_json array, null Options, lowercase SHA256",
+  "first_csv_columns_preserved": 15,
+  "additive_csv_columns": 13,
+  "legacy_observations": "None accepted and omitted on serialization; never synthesized on read",
+  "missing_configured_rules": "Export-only multiset matching name/selector/attribute/method/output; unknown counts and blank Truncated",
+  "qualified_limits": [
+    "Hashes bind declarations, not authentication of imported HTML or extraction values",
+    "No full-document lowerbound claim for partial DOM/XPath/regex results",
+    "matched_count describes extractable values in evaluated input, max_results independently bounds retained values",
+    "No author native, browser, Cargo or Git execution",
+    "No claim of complete manufacturer parity"
+  ],
+  "source_freeze": "Parent authorized formatting/gate after author freeze; no concurrent author source edits"
+}

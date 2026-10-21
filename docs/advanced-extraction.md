@@ -23,6 +23,11 @@ Filter einer anderen Software belegen keine Verhaltensgleichheit.
 
 ## Quelle und Ergebnis
 
+Der additive native [Quellvertrauensvertrag](extraction-source-trust.md)
+unterscheidet vollständigen Input, unvollständige Beobachtungen und unbekannte
+historische Ergebnisse in Tabelle und Export. Er ergänzt die folgenden
+Ergebnisfelder, ohne ihre bisherigen Bedeutungen zu ändern.
+
 Ohne Browserrenderer stammt die Extraktion aus `raw_html`. Nach erfolgreichem
 Rendering wird dieselbe Definition auf `rendered_html` angewandt; diese Ergebnisse
 stehen in `page.custom_extractions`. `page.raw_metadata.custom_extractions` bewahrt

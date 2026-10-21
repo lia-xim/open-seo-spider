@@ -1,0 +1,29 @@
+   Compiling open-seo-spider-core v0.1.0 (E:\CodexWork\open-seo-spider-01a12ac3-20261013\mcp-file-tools-v1\crates\core)
+error[E0308]: `if` and `else` have incompatible types
+   --> crates\core\src\extraction_observation.rs:272:21
+    |
+269 |                    let expected = if row.source == "rendered_html" {
+    |  _________________________________-
+270 | |                      page.rendered_url.as_deref()
+    | |                      ---------------------------- expected because of this
+271 | |                  } else {
+272 | |/                     Some(if page.final_url.is_empty() {
+273 | ||                         &page.url
+274 | ||                     } else {
+275 | ||                         &page.final_url
+276 | ||                     })
+    | ||______________________^ expected `Option<&str>`, found `Option<&String>`
+277 | |                  };
+    | |__________________- `if` and `else` have incompatible types
+    |
+    = note: expected enum `std::option::Option<&str>`
+               found enum `std::option::Option<&std::string::String>`
+help: try converting the passed type into a `&str`
+    |
+276 |                     }).map(|x| x.as_str())
+    |                       ++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `open-seo-spider-core` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `open-seo-spider-core` (lib test) due to 1 previous error

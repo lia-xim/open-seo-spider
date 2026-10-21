@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "kind": "bounded_extraction_source_trust_local_evidence",
+  "result": "PASS_SELECTED_LOCAL_GATES_NOT_FULL_BACKLOG_OR_MANUFACTURER_PARITY",
+  "selected_final_rust": "artifacts/extraction-source-rust-20261021-r3",
+  "selected_final_native": "artifacts/extraction-source-native-20261021-r4",
+  "binary_sha256": "4d29595df29ff22bb2b56e73c702b59f69bc24e0f0b5ec0f7011eedb3535060e",
+  "rust_attempts": [
+    {
+      "attempt": 1,
+      "source": "artifacts/extraction-source-rust-20261021-r1/proof.json",
+      "complete": false,
+      "failure": "AssertionError [ERR_ASSERTION]: workspace-tests failed\n\n101 !== 0\n\n    at E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\run-extraction-source-rust-20261021-r1.cjs:13:221\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+      "results": [
+        {
+          "name": "format",
+          "args": [
+            "fmt",
+            "--all",
+            "--check"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 3570
+        },
+        {
+          "name": "workspace-tests",
+          "args": [
+            "test",
+            "--workspace",
+            "--all-features",
+            "--locked"
+          ],
+          "code": 101,
+          "signal": null,
+          "duration_ms": 53916
+        }
+      ]
+    },
+    {
+      "attempt": 2,
+      "source": "artifacts/extraction-source-rust-20261021-r2/proof.json",
+      "complete": false,
+      "failure": "AssertionError [ERR_ASSERTION]: workspace-tests failed\n\n101 !== 0\n\n    at E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\artifacts\\run-extraction-source-rust-20261021-r2.cjs:13:221\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+      "results": [
+        {
+          "name": "format",
+          "args": [
+            "fmt",
+            "--all",
+            "--check"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 4393
+        },
+        {
+          "name": "workspace-tests",
+          "args": [
+            "test",
+            "--workspace",
+            "--all-features",
+            "--locked"
+          ],
+          "code": 101,
+          "signal": null,
+          "duration_ms": 359799
+        }
+      ]
+    },
+    {
+      "attempt": 3,
+      "source": "artifacts/extraction-source-rust-20261021-r3/proof.json",
+      "complete": true,
+      "failure": null,
+      "results": [
+        {
+          "name": "format",
+          "args": [
+            "fmt",
+            "--all",
+            "--check"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 3417
+        },
+        {
+          "name": "workspace-tests",
+          "args": [
+            "test",
+            "--workspace",
+            "--locked",
+            "--",
+            "--test-threads=2"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 1199521
+        },
+        {
+          "name": "build",
+          "args": [
+            "build",
+            "--locked",
+            "-p",
+            "open-seo-spider"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 45621
+        },
+        {
+          "name": "clippy",
+          "args": [
+            "clippy",
+            "--workspace",
+            "--all-targets",
+            "--all-features",
+            "--locked",
+            "--",
+            "-D",
+            "warnings"
+          ],
+          "code": 0,
+          "signal": null,
+          "duration_ms": 68573
+        }
+      ]
+    }
+  ],
+  "native_attempts": [
+    {
+      "attempt": 1,
+      "wrapper": "artifacts/extraction-source-native-20261021-r1.wrapper.json",
+      "wrapper_code": 1,
+      "wrapper_signal": null,
+      "complete": false,
+      "failure": "Error: extraction-source-trust: page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[name=custom_extractions_json]')\u001b[22m\n\u001b[2m    - locator resolved to <textarea rows=\"6\" spellcheck=\"false\" name=\"custom_extractions_json\">[]</textarea>\u001b[22m\n\u001b[2m    - fill(\"[{\"name\":\"A missing\",\"selector\":\".missing\"},{\"name\":\"B paragraphs\",\"selector\":\"p\"},{\"name\":\"C last paragraph\",\"selector\":\"body > p:last-child\"},{\"name\":\"D count\",\"method\":\"xpath\",\"selector\":\"count(//p)\",\"output\":\"function_value\"},{\"name\":\"E false\",\"method\":\"xpath\",\"selector\":\"false()\",\"output\":\"function_value\"},{\"name\":\"F empty string\",\"method\":\"xpath\",\"selector\":\"string(//missing)\",\"output\":\"function_value\"},{\"name\":\"G anchored prefix\",\"method\":\"regex\",\"selector\":\"</p>$\"},{\"name\":\"H limited values\",\"selector\":\"li\",\"max_results\":2}]\")\u001b[22m\n\u001b[2m  - attempting fill action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying fill action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    58 × waiting for element to be visible, enabled and editable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying fill action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\n    at settings (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-extraction-source-trust-live.cjs:73:107)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-extraction-source-trust-live.cjs:116:173\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:129:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+      "missing_inner_receipt": false
+    },
+    {
+      "attempt": 2,
+      "wrapper": "artifacts/extraction-source-native-20261021-r2.wrapper.json",
+      "wrapper_code": 1,
+      "wrapper_signal": null,
+      "complete": false,
+      "failure": "Error: extraction-source-trust: AssertionError [ERR_ASSERTION]: warm-main visible\n    at downloaded (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-extraction-source-trust-live.cjs:113:80)\n    at async Promise.all (index 1)\n    at async nativeCSV (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-extraction-source-trust-live.cjs:116:90)\n    at async E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-extraction-source-trust-live.cjs:128:546\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:129:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+      "missing_inner_receipt": false
+    },
+    {
+      "attempt": 3,
+      "wrapper": "artifacts/extraction-source-native-20261021-r3.wrapper.json",
+      "wrapper_code": 1,
+      "wrapper_signal": null,
+      "complete": false,
+      "failure": "Error: extraction-source-trust: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#crawl-history option[value=\"0790fbda-a1a9-4c90-a34f-a2a81151137f\"]')\u001b[22m\n\n    at select (E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-extraction-source-trust-live.cjs:88:100)\n    at E:\\CodexWork\\open-seo-spider-01a12ac3-20261013\\mcp-file-tools-v1\\web\\verification\\ui-extraction-source-trust-live.cjs:149:341\n\n    at file:///E:/CodexWork/open-seo-spider-01a12ac3-20261013/mcp-file-tools-v1/scripts/ui-e2e.mjs:129:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+      "missing_inner_receipt": false
+    },
+    {
+      "attempt": 4,
+      "wrapper": "artifacts/extraction-source-native-20261021-r4.wrapper.json",
+      "wrapper_code": 0,
+      "wrapper_signal": null,
+      "complete": true,
+      "failure": null,
+      "missing_inner_receipt": false
+    }
+  ],
+  "selected_compiler_inputs": {
+    "file": "artifacts/extraction-source-rust-20261021-r3/inputs.json",
+    "entries": 423,
+    "scope": "Ordinary workspace tests; explicitly ignored opt-ins are not executed here. Source list is selected compiler/product inputs, not transitive toolchain/dependency attestation."
+  },
+  "pure": {
+    "tests": 535,
+    "source": "artifacts/extraction-source-pure-20261021-r2/proof.json",
+    "scope": "Selected Node tests. App23 and the library suite below are subsets, not additional counts."
+  },
+  "saved_semantic_fixture_groups": 40,
+  "separate_Core_renderer_optins": {
+    "source": "artifacts/extraction-source-renderer-optins-20261021.proof.json",
+    "complete": true,
+    "code": 0,
+    "binary_sha256": "4d29595df29ff22bb2b56e73c702b59f69bc24e0f0b5ec0f7011eedb3535060e",
+    "executed": [
+      "live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness",
+      "live_browser_worker_pause_drains_render_and_retains_rendered_discoveries",
+      "live_browser_worker_executes_javascript_for_core_crawl",
+      "live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion"
+    ],
+    "scope": "Four actual Core renderer opt-ins on an owned worker. App native_enrichment_browser_fixture remains separately unexecuted.",
+    "App_native_enrichment_browser_fixture": "NOT_RUN"
+  },
+  "actual_App_red": {
+    "tests": 23,
+    "passed": 0,
+    "failed": 23
+  },
+  "actual_App_green": {
+    "tests": 23,
+    "passed": 23,
+    "failed": 0
+  },
+  "two_new_library_regressions_red": {
+    "tests": 2,
+    "passed": 0,
+    "failed": 2
+  },
+  "library_suite_green": {
+    "tests": 20,
+    "passed": 20,
+    "failed": 0
+  },
+  "native": {
+    "coordinator": "artifacts/extraction-source-native-20261021-r4/proof.json",
+    "original_child_receipt": "artifacts/extraction-source-native-20261021-r4/extraction-source-trust/extraction-source-1792594436777-57445339/ui-extraction-source-trust-live.json",
+    "selected_suites": [
+      {
+        "name": "extraction-source-trust",
+        "kind": "owned-native"
+      }
+    ],
+    "downloaded_pairs": 19,
+    "downloaded_rows": 712,
+    "downloads": 38,
+    "original_projects": [
+      {
+        "id": "058552a9-e1a7-462d-9b82-4d9541631ad5",
+        "label": "main",
+        "project_sha256": "ef87df8e80eda77eff828db67e39c4c0fc7e729970775712b6fb0b0e0e9f619b",
+        "saved_sha256": "e6671ebe82df78b2a5ee674441abe76dac9d138f3d42f70f5f10e5aa7e5a0d02",
+        "pages": 10
+      },
+      {
+        "id": "8acda894-55ee-4847-ad45-f83048521683",
+        "label": "rendered",
+        "project_sha256": "64e61112b107d444e53704f6fe38ec9b902d1b72e22c847177ca6b40ff93b789",
+        "saved_sha256": "46cd6a5bf9f38029dcacbcd9c7b2703f4b7554cc8f23ea4eee401a6aae05515f",
+        "pages": 2
+      },
+      {
+        "id": "7f56b369-4484-4362-91b5-88f299a1f1b9",
+        "label": "unconfigured",
+        "project_sha256": "f784a77cbbb46c3a43554dfc13d527c76f99e2cbd70293eaaefbca6da46b63a1",
+        "saved_sha256": "a22ede53d39da76ba85c60fe37c5dd88ea67ec09cad1a005fbc5ec63bada24d3",
+        "pages": 1
+      },
+      {
+        "id": "78886224-0d3f-4d8e-b94b-42b0e7ff25cb",
+        "label": "legacy-source-omission",
+        "project_sha256": "795a5818082d09afcf2bb019c81860967cc5b8f21a305efeca7536d98c33fd65",
+        "saved_sha256": "e3e4e416dac2312ebaa41f3b3bd7362cc7a23327e541aeb598d265b16203183a",
+        "pages": 10
+      }
+    ],
+    "natural_child_EOF0": 2,
+    "coordinator_EOF0": true,
+    "positive_410_witnesses": 4,
+    "offline_product_requests": 0,
+    "worker_response_files": 2,
+    "negative_controls": [
+      {
+        "kind": "genuine_unconfigured_no_observations_refuses_CSV_XLSX_even_forced_UI_buttons",
+        "downloads": 0,
+        "website_requests": 0
+      },
+      {
+        "kind": "actual_tampered_source_revision_native400",
+        "request_sha256": "93ff6bae61642c2f302ecc7d08ed83e6a8ec6deefb86e7f8a84c18ab8e9e5c95",
+        "new_jobs": 0,
+        "website_requests": 0
+      },
+      {
+        "kind": "deliberate_legacy_source_observation_only_omission",
+        "source_id": "058552a9-e1a7-462d-9b82-4d9541631ad5",
+        "imported_id": "78886224-0d3f-4d8e-b94b-42b0e7ff25cb",
+        "source_sha256": "ef87df8e80eda77eff828db67e39c4c0fc7e729970775712b6fb0b0e0e9f619b",
+        "request_sha256": "e3e4e416dac2312ebaa41f3b3bd7362cc7a23327e541aeb598d265b16203183a",
+        "imported_sha256": "795a5818082d09afcf2bb019c81860967cc5b8f21a305efeca7536d98c33fd65",
+        "omitted_results": 80,
+        "all_other_PageRecord_fields_unchanged": true,
+        "website_requests": 0,
+        "browser_history_refresh": "actual_page_reload_connected_and_loaded_history_option_after_native_API_import"
+      }
+    ],
+    "declared_scope": "Actual browser settings and native HTTP/Chromium captures;80main result rows, independent source input SHA/UTF8/revision, actual browser main CSV/XLSX downloads and separately recorded API-only native extraction CSV response files, result budget vs source trust, real renderer success and failed-navigation raw fallback, strict tampered import rejection, explicitly declared legacy-observation omission, two same-binary fresh-store processes and two saved-read windows with four qualified offline410 witnesses. No product classifier/compiler/writer import or positive HTTP mock.",
+    "declared_not_proven": [
+      "All29 main tables and broader feature backlog remain open.",
+      "Legacy omission is a deliberately derived negative, not an attested historical report.",
+      "Other engines/platforms, cursor/bulk exports, arbitrary script/race schedules and manufacturer parity remain open."
+    ]
+  },
+  "preserved_failures": "Every original earlier selected Rust/native attempt is archived without changing its complete/failure/code declarations. R1 compile failure and R2 all-features LanguageTool endpoint failure are historical FAILs; later PASS does not relabel them.",
+  "scope_limits": [
+    "Source input manifests are selected explicit files, not a transitive dependency/toolchain closure.",
+    "Hashes bind declarations and exact archived bytes; they do not authenticate arbitrary imported HTML or values.",
+    "App and library tests are pure declared-state regressions; native acceptance is separately bound to the original coordinator and child receipts.",
+    "Only the selected extraction-source-trust native suite is claimed. No combined full49 run, public CI or manufacturer parity is inferred.",
+    "SQLite/WAL/SHM, native executables, browser profiles, private runtime caches and links are excluded. Original receipt declarations are never rewritten.",
+    "The materializer verifies raw byte bindings and retains original readers/expectations; it does not independently rerun extraction or claim Excel GUI conformance."
+  ]
+}

@@ -38,6 +38,8 @@ mod dom_facts;
 mod export;
 mod extract;
 mod extraction_engine;
+mod extraction_observation;
+pub use extraction_observation::*;
 mod fragments;
 pub mod segments;
 pub use cdn_classification::{

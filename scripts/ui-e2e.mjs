@@ -61,6 +61,7 @@ const suites = [
   ['table-xlsx', 'ui-table-xlsx-live.cjs', 'owned-native'],
   ['table-xlsx-provenance', 'ui-table-xlsx-provenance-live.cjs', 'owned-native'],
   ['table-xlsx-availability', 'ui-table-xlsx-availability-live.cjs', 'owned-native'],
+  ['extraction-source-trust', 'ui-extraction-source-trust-live.cjs', 'owned-native'],
 ];
 const args = process.argv.slice(2);
 assert(args.length === 0 || (args.length === 2 && args[0] === '--only'), 'Usage: node scripts/ui-e2e.mjs [--only name,name]');

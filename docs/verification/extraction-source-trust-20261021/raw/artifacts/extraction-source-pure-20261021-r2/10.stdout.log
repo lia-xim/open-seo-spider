@@ -1,0 +1,22 @@
+✔ raw classification separates unknown, observed empty, zero, finite positive and wrong numeric types (3.6272ms)
+✔ text normalization uses NFC and German lowercase without losing accents or merging internal whitespace (3.3108ms)
+✔ AND numeric bounds are inclusive and text rules retain every matching row beyond the first hundred (1.4033ms)
+✔ known, empty and unknown rules are disjoint and numeric zero is never fabricated from missing data (0.5949ms)
+✔ hidden columns supply raw filter and sort values while global search also retains scalar display labels (0.8021ms)
+✔ numeric ordering keeps empty before unknown at the end in both directions and distinguishes 2 from 10 (0.2828ms)
+✔ natural text sort has ascending identity and ordinal ties independent of primary direction, preserving duplicate observations (0.5337ms)
+✔ projection preserves requested order, appends mandatory identity and rejects duplicate or unknown keys (0.4815ms)
+✔ invalid rule/schema/sort limits refuse before evaluating rows or causing a partial result (1.2715ms)
+✔ preferences save only visible columns with exact project/section identity, retaining other scopes and no view state (1.151ms)
+✔ corrupt, wrong-scope, stale-column and oversized preferences remain unchanged and visibly fail instead of resetting (1.022ms)
+✔ unavailable or failed browser storage is an explicit Result, preserving bytes and never automatically writing (0.8446ms)
+✔ reset explicitly removes only its current scope, and invalid contexts do not access storage (0.5284ms)
+✔ browser UMD installs only its namespace and constructing/compiling never accesses storage or network (3.3925ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 140.3489

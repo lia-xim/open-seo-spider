@@ -242,6 +242,7 @@ pub fn prepare_selected_recrawl(
     let mut pages = HashMap::new();
     for (ordinal, page) in base_report.pages.iter().enumerate() {
         crate::content_binding::validate_native_content_captures(page, &config, None, false)?;
+        crate::validate_page_extraction_observations(page)?;
         if let Some(results) = &page.custom_search {
             crawler
                 .compiled_custom_search()

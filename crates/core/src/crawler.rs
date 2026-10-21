@@ -3208,6 +3208,26 @@ impl FetchContext {
         if let Some(search) = &self.custom_search {
             crate::custom_search_binding::initialize(&mut page, search, self.generation);
         }
+        // Every configured rule has an explicit not-run observation, including
+        // early policy/network exits. A missing input is never an evaluated zero.
+        if matches!(purpose, FetchPurpose::PageDocument) {
+            let document_url = page.final_url.clone();
+            let observed_at = page.fetched_at.clone();
+            crate::extract::apply_custom_extractions_observed(
+                &mut page,
+                &self.config.custom_extractions,
+                crate::ExtractionInputContext {
+                    html: None,
+                    source: "raw_html",
+                    status: crate::ExtractionSourceStatus::Unavailable,
+                    decode_status: crate::ContentCaptureDecodeStatus::Unknown,
+                    document_url: Some(&document_url),
+                    observed_generation: self.generation,
+                    observed_at: Some(&observed_at),
+                    reasons: vec!["source_not_observed".into()],
+                },
+            );
+        }
         // Purpose comes only from private document/protocol wrappers. A supplied
         // policy role cannot select a different transport privilege.
         if entry
@@ -3949,11 +3969,48 @@ impl FetchContext {
                 &self.config.link_position_rules,
                 "raw_html",
             );
-            crate::extract::apply_custom_extractions(
+            let document_url = page.final_url.clone();
+            let observed_at = page.fetched_at.clone();
+            let mut reasons = Vec::new();
+            if page.truncated {
+                reasons.push("body_limit_reached".into());
+            }
+            if page.error.is_some() {
+                reasons.push("response_read_or_transport_error".into());
+            }
+            if page.final_status == Some(206) || page.headers.contains_key("content-range") {
+                reasons.push("range_response".into());
+            }
+            if matches!(page.final_status, Some(204 | 205 | 304)) {
+                reasons.push("no_content_response".into());
+            }
+            if !matches!(page.final_status, Some(status) if status >= 200) {
+                reasons.push("response_status_unverified".into());
+            }
+            if page.blocked_by_robots {
+                reasons.push("blocked_by_robots".into());
+            }
+            if decode_status != crate::ContentCaptureDecodeStatus::Exact {
+                reasons.push("decode_uncertain".into());
+            }
+            let status = if reasons.is_empty() {
+                crate::ExtractionSourceStatus::Complete
+            } else {
+                crate::ExtractionSourceStatus::Incomplete
+            };
+            crate::extract::apply_custom_extractions_observed(
                 &mut page,
-                text,
                 &self.config.custom_extractions,
-                "raw_html",
+                crate::ExtractionInputContext {
+                    html: Some(text),
+                    source: "raw_html",
+                    status,
+                    decode_status,
+                    document_url: Some(&document_url),
+                    observed_generation: self.generation,
+                    observed_at: Some(&observed_at),
+                    reasons,
+                },
             );
             page.html_head_observation =
                 Some(crate::html_head::observe(&page, text, decode_status));

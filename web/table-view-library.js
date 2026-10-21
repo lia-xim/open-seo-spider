@@ -120,7 +120,10 @@ function createVersion(explorer,overrides={},expression=false) {
   }
   function contract(value){
     checkShape(value,['section','query_semantics','columns','sectionFilters']);identifier(value.section,explorer.LIMITS.maxSectionBytes,'invalid_section');identifier(value.query_semantics,256,'invalid_query_semantics');
-    if(value.query_semantics!==querySemantics)fail('query_semantics_mismatch','Unsupported current query/section-filter semantics');
+    // Extraction absence now requires complete source evidence. Accept the
+    // explicit section version while refusing old definitions at apply time.
+    const expectedSemantics=value.section==='extractions'?querySemantics+'/extraction-source-v1':querySemantics;
+    if(value.query_semantics!==expectedSemantics)fail('query_semantics_mismatch','Unsupported current query/section-filter semantics');
     const columns=checkArray(value.columns,explorer.LIMITS.maxColumns,'invalid_schema');
     if(expression)for(const column of columns){
       if(!column||typeof column!=='object'||Array.isArray(column))fail('invalid_schema','Invalid column contract');

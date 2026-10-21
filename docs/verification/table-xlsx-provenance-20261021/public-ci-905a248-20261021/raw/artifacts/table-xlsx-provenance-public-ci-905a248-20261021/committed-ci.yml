@@ -1,0 +1,394 @@
+name: Rust checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node scripts/container-e2e.mjs
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: cargo fmt --all --check
+      # Each native fixture may own several runtimes and fsync-heavy stores.
+      # Bound simultaneous Windows fixtures; retain every test and its deadlines.
+      - name: Rust workspace tests within the Windows fixture resource budget
+        if: runner.os == 'Windows'
+        run: cargo test --workspace --locked -- --test-threads=2
+      - name: Rust workspace tests
+        if: runner.os != 'Windows'
+        run: cargo test --workspace --locked
+      - run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+      - run: node scripts/check-ui-fixtures.mjs
+      - run: cargo build --locked -p open-seo-spider
+      - name: Install the locked Windows browser test dependencies
+        if: runner.os == 'Windows'
+        run: npm ci --ignore-scripts
+        working-directory: renderer
+      - name: Install the matching Windows Chromium
+        if: runner.os == 'Windows'
+        run: node node_modules/playwright-core/cli.js install chromium
+        working-directory: renderer
+      - name: Select Windows Chromium and pin the native path-test binary
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          node --input-type=module -e 'import {chromium} from "./renderer/node_modules/playwright-core/index.mjs"; import {appendFileSync} from "node:fs"; appendFileSync(process.env.GITHUB_ENV, `OPEN_SEO_BROWSER_PATH=${chromium.executablePath()}\n`);'
+          if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}
+          $pathTestBinary=Join-Path (Get-Location) 'target/debug/open-seo-spider.exe'
+          "SPIDER_BINARY_SHA256=$((Get-FileHash -LiteralPath $pathTestBinary -Algorithm SHA256).Hash.ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+      - name: Windows requested long stores, original archives and cold browser reads
+        if: runner.os == 'Windows'
+        run: node scripts/windows-store-paths-e2e.cjs
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider.exe
+          SPIDER_WINDOWS_PATH_OUTPUT: ${{ runner.temp }}/windows-store-paths
+      - name: Save Windows path-test evidence
+        if: always() && runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-store-paths-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/windows-store-paths/**
+      - name: Raw CLI configuration and explicit profile-envelope refusal
+        run: node scripts/crawl-config-cli-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_CLI_CONFIG_OUTPUT: ${{ runner.temp }}/crawl-config-cli
+      - name: Save CLI configuration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawl-config-cli-${{ runner.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/crawl-config-cli/**
+      - name: Sitemap transport ownership and final-witness controls
+        run: node --test scripts/sitemap-transport-oracles.test.mjs
+      - name: Stored sitemap proof validator negative controls
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $validatorControls=& ./scripts/verify-sitemap-transport-proof-controls.ps1 -OutputDirectory (Join-Path $env:RUNNER_TEMP 'sitemap-proof-validator-controls')
+          if($validatorControls.result -ne 'PASS_VALIDATOR_ONLY_CONTROLS' -or $validatorControls.negative_controls -ne 24){throw 'Stored proof validator controls did not pass'}
+      - name: Native bounded sitemap transport in ordinary and policy modes
+        run: node scripts/sitemap-transport-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_TRANSPORT_PROOF: ${{ runner.temp }}/sitemap-transport-debug-e2e.json
+      - name: Native stored sitemap restart and inheritance
+        run: node scripts/run-sitemap-native-checks.mjs ledger
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-ledger-debug
+      - name: Verify stored debug sitemap proof and raw companions
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $debugSitemapValidation=& ./scripts/verify-sitemap-transport-proof.ps1 -ProofPath (Join-Path $env:RUNNER_TEMP 'sitemap-transport-debug-e2e.json') -BinaryPath './target/debug/open-seo-spider.exe' -HarnessPath './scripts/sitemap-transport-e2e.mjs' -SourceCommit $env:GITHUB_SHA
+          if($debugSitemapValidation.result -ne 'PASS_PROOF_VALIDATION'){throw 'Stored debug sitemap proof did not validate'}
+          $debugSitemapValidation | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $env:RUNNER_TEMP 'sitemap-transport-debug-validation.json') -Encoding utf8NoBOM
+      - run: node scripts/api-e2e.mjs
+      - run: node scripts/list-import-e2e.mjs
+      - run: node scripts/crawl-control-e2e.mjs
+      - run: node scripts/selected-recrawl-e2e.mjs
+      - run: node scripts/crawl-policy-e2e.mjs
+      - run: node scripts/content-analysis-e2e.mjs
+      - run: node scripts/content-capture-e2e.mjs
+      - run: node scripts/resource-discovery-e2e.mjs
+      - run: npm ci --ignore-scripts
+        working-directory: scripts
+      - run: node scripts/mcp-e2e.mjs
+      - run: node scripts/saved-comparison-e2e.mjs
+      - name: Saved-comparison mapping oracle negative controls
+        run: node --test scripts/saved-comparison-mapping-oracles.test.mjs
+        env:
+          SPIDER_COMPARISON_MAPPING_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-mapping-oracle-controls.json
+      - name: Native saved-comparison cross-origin mappings and collisions
+        run: node scripts/saved-comparison-mapping-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_COMPARISON_MAPPING_PROOF: ${{ runner.temp }}/saved-comparison-mapping-e2e.json
+          SPIDER_COMPARISON_MAPPING_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-mapping-oracle-controls.json
+      - run: node scripts/resource-contract-e2e.mjs
+      - name: Original-report bundle oracle negative controls
+        run: node --test scripts/saved-comparison-bundle-oracles.test.mjs
+        env:
+          SPIDER_BUNDLE_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-oracle-controls.json
+      - name: Native saved-comparison complete original reports
+        run: node scripts/saved-comparison-bundle-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_BUNDLE_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-e2e.json
+          SPIDER_BUNDLE_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-oracle-controls.json
+      - name: Native CLI original-report bundle fixed byte ceiling
+        run: node scripts/saved-comparison-bundle-budget-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ github.workspace }}/${{ runner.os == 'Windows' && 'target/debug/open-seo-spider.exe' || 'target/debug/open-seo-spider' }}
+          SPIDER_BUNDLE_BUDGET_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-cli-budget.json
+      - name: Build immutable optimized Windows artifact
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $releaseSourcePaths=@('Cargo.toml','Cargo.lock','crates/core/src','crates/app/src','crates/core/Cargo.toml','crates/app/Cargo.toml','crates/app/build.rs','assets','web')
+          git diff --quiet HEAD -- $releaseSourcePaths
+          if($LASTEXITCODE -ne 0){throw 'Compiled source differs from the exact CI commit'}
+          cargo build --release --locked -p open-seo-spider
+          if($LASTEXITCODE -ne 0){exit $LASTEXITCODE}
+          git diff --quiet HEAD -- $releaseSourcePaths
+          if($LASTEXITCODE -ne 0){throw 'Compiled source changed during release build'}
+          $releaseTestBinary=Join-Path (Get-Location) 'target/release/open-seo-spider.exe'
+          "SPIDER_BINARY_SHA256=$((Get-FileHash -LiteralPath $releaseTestBinary -Algorithm SHA256).Hash.ToLowerInvariant())" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+      - name: Verify optimized Windows original-report bundle
+        if: runner.os == 'Windows'
+        run: node scripts/saved-comparison-bundle-e2e.mjs
+        env:
+          SPIDER_BINARY: target/release/open-seo-spider.exe
+          SPIDER_BUNDLE_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-release-e2e.json
+          SPIDER_BUNDLE_CONTROL_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-oracle-controls.json
+      - name: Verify optimized Windows bundle byte ceiling
+        if: runner.os == 'Windows'
+        run: node scripts/saved-comparison-bundle-budget-e2e.mjs
+        env:
+          SPIDER_BINARY: ${{ github.workspace }}/target/release/open-seo-spider.exe
+          SPIDER_BUNDLE_BUDGET_PROOF: ${{ runner.temp }}/saved-comparison-original-bundle-release-cli-budget.json
+      - name: Verify optimized Windows sitemap transport
+        if: runner.os == 'Windows'
+        run: node scripts/sitemap-transport-e2e.mjs
+        env:
+          SPIDER_BINARY: target/release/open-seo-spider.exe
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_TRANSPORT_PROOF: ${{ runner.temp }}/sitemap-transport-release-e2e.json
+      - name: Verify optimized Windows stored sitemap restart and inheritance
+        if: runner.os == 'Windows'
+        run: node scripts/run-sitemap-native-checks.mjs ledger
+        env:
+          SPIDER_BINARY: target/release/open-seo-spider.exe
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-ledger-release
+      - name: Bind the optimized Windows artifact to its source and tests
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $releaseCommit=(git rev-parse HEAD).Trim()
+          if($releaseCommit -ne $env:GITHUB_SHA){throw 'Unexpected artifact source commit'}
+          $releaseExe=Join-Path (Get-Location) 'target/release/open-seo-spider.exe'
+          $releaseBundleProof=Join-Path $env:RUNNER_TEMP 'saved-comparison-original-bundle-release-e2e.json'
+          $releaseBudgetProof=Join-Path $env:RUNNER_TEMP 'saved-comparison-original-bundle-release-cli-budget.json'
+          $releaseSitemapProof=Join-Path $env:RUNNER_TEMP 'sitemap-transport-release-e2e.json'
+          $releaseHash=(Get-FileHash -LiteralPath $releaseExe -Algorithm SHA256).Hash.ToLowerInvariant()
+          foreach($releaseProofPath in @($releaseBundleProof,$releaseBudgetProof)){
+            $releaseProof=Get-Content -LiteralPath $releaseProofPath -Raw | ConvertFrom-Json
+            if($releaseProof.result -ne 'PASS' -or $releaseProof.binary_sha256 -ne $releaseHash){throw 'Optimized proof/binary mismatch'}
+          }
+          $releaseSitemapValidation=& ./scripts/verify-sitemap-transport-proof.ps1 -ProofPath $releaseSitemapProof -BinaryPath $releaseExe -HarnessPath './scripts/sitemap-transport-e2e.mjs' -SourceCommit $releaseCommit
+          if($releaseSitemapValidation.result -ne 'PASS_PROOF_VALIDATION'){throw 'Optimized sitemap proof/companions did not validate'}
+          $releaseSitemapRequests=$releaseSitemapProof+'.requests.json'
+          $releaseSitemapLog=$releaseSitemapProof+'.app.log'
+          $releaseSitemapValidationPath=Join-Path $env:RUNNER_TEMP 'sitemap-transport-release-validation.json'
+          $releaseSitemapValidation | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $releaseSitemapValidationPath -Encoding utf8NoBOM
+          $sitemapArchive=@{
+            proof=@{name=[IO.Path]::GetFileName($releaseSitemapProof);sha256=$releaseSitemapValidation.proof_sha256;bytes=$releaseSitemapValidation.proof_bytes}
+            requests=@{name=[IO.Path]::GetFileName($releaseSitemapRequests);sha256=$releaseSitemapValidation.requests_sha256;bytes=$releaseSitemapValidation.requests_bytes}
+            app_log=@{name=[IO.Path]::GetFileName($releaseSitemapLog);sha256=$releaseSitemapValidation.app_log_sha256;bytes=$releaseSitemapValidation.app_log_bytes}
+            validation=@{name=[IO.Path]::GetFileName($releaseSitemapValidationPath);sha256=(Get-FileHash -LiteralPath $releaseSitemapValidationPath -Algorithm SHA256).Hash.ToLowerInvariant();bytes=(Get-Item -LiteralPath $releaseSitemapValidationPath).Length}
+            harness_sha256=$releaseSitemapValidation.harness_sha256
+            validator_sha256=(Get-FileHash -LiteralPath './scripts/verify-sitemap-transport-proof.ps1' -Algorithm SHA256).Hash.ToLowerInvariant()
+            validation_location='Original generated paths before archive copy; fixed names and complete hashes bind copied companions'
+          }
+          $releaseManifest=@{source_commit=$releaseCommit;run_id=$env:GITHUB_RUN_ID;profile='release';platform='windows-x86_64-msvc';binary_sha256=$releaseHash;binary_bytes=(Get-Item -LiteralPath $releaseExe).Length;rustc=(rustc --version);bundle_proof_sha256=(Get-FileHash -LiteralPath $releaseBundleProof -Algorithm SHA256).Hash.ToLowerInvariant();budget_proof_sha256=(Get-FileHash -LiteralPath $releaseBudgetProof -Algorithm SHA256).Hash.ToLowerInvariant();sitemap_transport_proof_sha256=$releaseSitemapValidation.proof_sha256;sitemap_transport_archive=$sitemapArchive;scope='Optimized executable from exact CI source; native bundle, CLI ceiling and16 drained sitemap transport cases pass. Sitemap proof and complete raw companions validated at original paths and archived. Local browser/install and all other CI jobs are separate gates.'}
+          $releaseArtifactFolder=Join-Path (Get-Location) 'target/release-artifact'
+          New-Item -ItemType Directory -Path $releaseArtifactFolder -Force | Out-Null
+          $releaseManifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $releaseArtifactFolder 'open-seo-spider-windows-release.json') -Encoding utf8NoBOM
+          Copy-Item -LiteralPath $releaseExe -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath LICENSE -Destination (Join-Path $releaseArtifactFolder 'LICENSE')
+          Copy-Item -LiteralPath assets/fonts/LICENSE.txt -Destination (Join-Path $releaseArtifactFolder 'ROBOTO-LICENSE.txt')
+          Copy-Item -LiteralPath THIRD_PARTY_NOTICES.md -Destination (Join-Path $releaseArtifactFolder 'THIRD_PARTY_NOTICES.md')
+          Copy-Item -LiteralPath $releaseBundleProof -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseBudgetProof -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseSitemapProof -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseSitemapRequests -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseSitemapLog -Destination $releaseArtifactFolder
+          Copy-Item -LiteralPath $releaseSitemapValidationPath -Destination $releaseArtifactFolder
+      - name: Save the optimized Windows artifact
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: open-seo-spider-windows-release-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: error
+          path: target/release-artifact/*
+      - name: Save sitemap transport debug and release witnesses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-transport-witnesses-${{ runner.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/sitemap-transport-debug-e2e.json*
+            ${{ runner.temp }}/sitemap-transport-release-e2e.json*
+            ${{ runner.temp }}/sitemap-transport-debug-validation.json
+            ${{ runner.temp }}/sitemap-transport-release-validation.json
+      - name: Save stored sitemap debug and release witnesses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-ledger-witnesses-${{ runner.os }}-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/sitemap-ledger-debug/**
+            ${{ runner.temp }}/sitemap-ledger-release/**
+  renderer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: npm ci --ignore-scripts
+        working-directory: renderer
+      - run: node node_modules/playwright-core/cli.js install chromium --with-deps
+        working-directory: renderer
+      - name: Select the matching installed Playwright Chromium
+        working-directory: renderer
+        run: node --input-type=module -e 'import {chromium} from "playwright-core"; import {appendFileSync} from "node:fs"; appendFileSync(process.env.GITHUB_ENV, `OPEN_SEO_BROWSER_PATH=${chromium.executablePath()}\n`);'
+      - name: Allow the selected Chromium to create its Linux sandbox
+        shell: bash
+        run: |
+          if [[ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]]; then
+            # Exact downloaded executable only; Chromium sandbox remains enabled.
+            sudo tee /etc/apparmor.d/open-seo-spider-ci-chromium > /dev/null <<EOF
+          abi <abi/4.0>,
+          include <tunables/global>
+          profile open-seo-spider-ci-chromium "$OPEN_SEO_BROWSER_PATH" flags=(unconfined) {
+            userns,
+          }
+          EOF
+            sudo apparmor_parser -r /etc/apparmor.d/open-seo-spider-ci-chromium
+          fi
+      - run: npm test
+        working-directory: renderer
+      - run: node web/verification/saved-comparison-contract.test.cjs
+      - run: node web/verification/saved-comparison-native-fence.test.cjs
+      - run: node web/verification/saved-comparison-bundle-native-fence.test.cjs
+      - run: node scripts/update-feature-todo.mjs --check
+      - run: node --test web/verification/serp-state-race.test.cjs
+      - run: node --test web/verification/robots-input-state.test.cjs
+      - run: node --test web/verification/list-import-state.test.mjs
+      - run: node --test web/verification/api-enrichment-state.test.cjs
+      - run: node --test web/verification/accessibility-state.test.cjs
+      - run: node --test web/verification/dashboard-segments-state.test.cjs
+      - run: node --test web/verification/config-profiles-state.test.cjs
+      - run: node --test web/verification/profile-response-capture.test.cjs
+      - name: Actual browser profile response capture controls
+        run: node --test web/verification/profile-response-capture-browser.test.cjs
+      - run: node --test web/verification/config-profile-catalog-state.test.cjs
+      - run: node --test web/verification/screenshot-state.test.cjs
+      - run: node --test web/verification/table-explorer-state.test.cjs
+      - run: node --test web/verification/table-view-library.test.cjs web/verification/table-view-storage.test.cjs web/verification/table-views-ui.test.cjs
+      - run: node --test web/verification/table-expression-state.test.cjs web/verification/expression-view-state.test.cjs web/verification/table-expression-ui.test.cjs
+      - run: node --test web/verification/table-view-portability.test.cjs
+      - run: node --test web/verification/table-xlsx.test.cjs web/verification/table-export-ui.test.cjs
+      - run: node --test web/verification/table-source-availability.test.cjs
+      - run: cargo build --locked -p open-seo-spider
+      - name: Opt-in Rust browser fixtures on an owned renderer
+        run: node scripts/renderer-rust-e2e.mjs
+      - name: API enrichment browser, local provider and cold native restart
+        run: node scripts/run-enrichment-browser-checks.mjs
+        env:
+          SPIDER_ENRICHMENT_ARTIFACT_DIR: ${{ runner.temp }}/enrichment-browser-e2e
+      - name: Save API enrichment native browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enrichment-browser-e2e-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/enrichment-browser-e2e/**
+      - run: npm ci --ignore-scripts
+        working-directory: scripts
+      - name: Redesigned UI fixture and native end-to-end workflows
+        run: node scripts/ui-e2e.mjs
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider
+          SPIDER_E2E_OUTPUT: ${{ runner.temp }}/redesign-ui-e2e
+      - name: Save redesigned UI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redesign-ui-e2e-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: ${{ runner.temp }}/redesign-ui-e2e/**
+      - name: Native stored sitemap API CSV SDK and browser
+        run: node scripts/run-sitemap-native-checks.mjs membership
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-membership-native
+      - name: Native declared sitemap source coverage and lastmod
+        run: node scripts/run-sitemap-native-checks.mjs assessment
+        env:
+          SPIDER_BINARY: target/debug/open-seo-spider
+          SPIDER_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_EXPECTED_SOURCE_COMMIT: ${{ github.sha }}
+          SPIDER_SITEMAP_NATIVE_OUTPUT: ${{ runner.temp }}/sitemap-assessment-native
+      - name: Save stored sitemap API and browser witnesses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitemap-membership-witnesses-${{ github.sha }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            ${{ runner.temp }}/sitemap-membership-native/**
+            ${{ runner.temp }}/sitemap-assessment-native/**
+      - name: Rust and browser integration
+        shell: bash
+        run: |
+          node renderer/server.mjs > "$RUNNER_TEMP/renderer.log" 2>&1 &
+          renderer_pid=$!
+          target/debug/open-seo-spider serve --listen 127.0.0.1:8787 --data-dir "$RUNNER_TEMP/spider-data" > "$RUNNER_TEMP/spider.log" 2>&1 &
+          spider_pid=$!
+          target/debug/open-seo-spider serve --listen 127.0.0.1:18789 --data-dir "$RUNNER_TEMP/spider-contract-data" > "$RUNNER_TEMP/spider-contract.log" 2>&1 &
+          contract_pid=$!
+          trap 'kill "$contract_pid" "$spider_pid" "$renderer_pid" 2>/dev/null || true' EXIT
+          node --input-type=module -e 'const urls=["http://127.0.0.1:8787/healthz","http://127.0.0.1:18789/healthz","http://127.0.0.1:8790/health"];for(const url of urls){let ready=false;for(let i=0;i<80;i++){try{if((await fetch(url)).ok){ready=true;break}}catch{}await new Promise(r=>setTimeout(r,250))}if(!ready)throw new Error(`Service unavailable: ${url}`)}'
+          cargo test --locked -p open-seo-spider-core --test crawl_fixtures live_browser_worker_executes_javascript_for_core_crawl -- --ignored
+          cargo test --locked -p open-seo-spider-core --test control_fixtures live_browser_worker_pause_drains_render_and_retains_rendered_discoveries -- --ignored
+          cargo test --locked -p open-seo-spider-core --test recrawl_fixtures live_browser_worker_selected_recrawl_replaces_rendered_artifacts_without_expansion -- --ignored
+          cargo test --locked -p open-seo-spider-core --test content_capture_fixtures live_browser_worker_captures_actual_raw_and_rendered_sources_and_selected_freshness -- --ignored --exact

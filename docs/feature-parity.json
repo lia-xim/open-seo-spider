@@ -7107,11 +7107,63 @@
   "last_verified_at": "2026-10-19T21:34:57.502Z",
   "current_work": [
     {
+      "id": "extraction-source-trust-20261021",
+      "title_de": "Quellvertrauen eigener Extraktionen durch Core, Tabelle und Export erhalten",
+      "priority": -20,
+      "status": "PASS_LOCAL_RUST1843_NODE535_NATIVE_R4_AND_EXISTING_VIEWS_PUBLIC49_PENDING",
+      "summary_de": "Native Extraktionen unterscheiden vollständigen Input, Teilbefunde, nicht ausgeführte Regeln und unbekannte historische Quellen. matched_count bleibt eine Anzahl im ausgewerteten Input; truncated betrifft ausschließlich max_results. Frisch bestehen535 Node-Tests,40 semantische Gruppen,1843 reguläre Rust-Tests, vier separate Core-Renderer-Tests, normaler Build, Format und strenges Clippy. NativeR4 prüft19 CSV-/XLSX-Paare mit712 Zeilen, vier API-CSV-Dateien mit265 Zeilen, gespeicherte Ansichten und kalten Neustart. Zwei bestehende Ansichts-Suiten bestehen separat. Vollständige49-Suiten-/neue öffentliche CI und der gesamte Backlog bleiben offen;39/68/37 bleibt unverändert.",
+      "completed_acceptance_de": [
+        "Optionaler versionierter source_observation-Beleg erhält Status, Auswertung, Dekodierung, Dokument-URL, Zeit, native Generation, Input-SHA/UTF8-Länge und Quellrevision. Historische None und reine Bibliotheksaufrufe werden nicht nachträglich als native Capture-Belege eingestuft. Import, Storage, Startup und ausgewählter Recrawl validieren vorhandene Belege einschließlich RawMetadata.",
+        "Vollständiges HTML bei404,206-/Range-Antworten, Bodylimit, Lesefehler, unsichere Dekodierung, nicht ausgewertete Inhalte, XPath0/false/Leerstring und unabhängige Ergebnislimits sind getrennt. Eine Teilinput-Anzahl ist keine allgemeine Untergrenze. DOM-Beleg und rohe Rückfallquelle bleiben unabhängig; ein optionaler Rendererfehler entwertet den vollständigen HTTP-Input nicht.",
+        "Tabelle, Inspektor und CSV/XLSX zeigen Quellzustand, Zählbereich und exakte Anzahl nur bei vollständiger erfolgreicher Auswertung. Bestätigte Nullbefunde, unvollständige Quellen und unbekannte Altdaten haben eigene Filter. Fehlende konfigurierte Ergebnisse bleiben unbekannte Zeilen; keine Regeln/Beobachtungen verweigern den Haupttabellenexport, eine vorhandene Quelle mit null Abfragetreffern exportiert Kopfzeilen.",
+        "Native Extraktions-CSV behält ihre ersten15 Spalten und ergänzt13 Quellfelder. Fehlende konfigurierte Regeln liefern unbekannte Multiset-Sentinels ohne erfundene Matches oder Ergebnislimit-Flags. Alte benannte Extraktionsansichten werden wegen neuer Semantik abgewiesen; neue V1-/V2-Ansichten lassen sich speichern und anwenden. Andere Tabellen behalten ihre bisherigen Abfrageverträge.",
+        "535 ausgewählte Node-Tests bestehen, einschließlich23 tatsächlich roten und danach grünen App-Regressionen sowie zwei roten/grünen Bibliotheksfällen.40 semantische Gruppen bestehen separat ohne Browser-/Engine-Behauptung. Frische reguläre Workspace-Prüfung:1843 PASS,0 FAIL,5 vorgesehene Opt-ins ignoriert; davon533 App-Tests und1310 Core-Tests. Vier Core-Renderer-Opt-ins wurden anschließend separat real ausgeführt; der App-Enrichment-Opt-in bleibt separat ungetestet.",
+        "Frisch bestehen normaler Build, Rustfmt und strenges Clippy. Das normale App-Binary ist90578432 Bytes groß, SHA256 4d29595df29ff22bb2b56e73c702b59f69bc24e0f0b5ec0f7011eedb3535060e.423 explizite Compiler-/Produkteingaben bleiben bytegleich; dies ist keine transitive Toolchain-/Abhängigkeitsclosure. Die späteren drei Treiberkorrekturen verändern nur Testbedienung/API-Lesepfad; Produkt und Binary bleiben unverändert.",
+        "NativeR4 besteht als ein vollständiger explizit ausgewählter Aufruf:19 vollständige UI-CSV-/XLSX-Paare,712 Zeilen,38 echte Downloadereignisse, vier separat deklarierte API-CSV-Antwortdateien mit265 Zeilen und vollständigen28-Spalten-Vergleichen.80 Hauptzeilen, echte HTTP-/DOM-Inputhashes, AND/gruppiertesOR, V1/V2-Speichern/Ändern/Anwenden, Legacy-Import und kalter Neustart sind geprüft. Zwei natürliche nativeEOF0, vier410-Kontrollen und null Website-Neuabrufe in zwei qualifizierten Lesefenstern bestehen.",
+        "NativeR1/R2/R3 bleiben FAIL: verborgener Einstellungsbereich; irrtümlich angenommener nativer CSV-Button; fehlendes Browser-Neuladen nach API-Import. Sichtbare Navigation, tatsächlicher API-GET und reguläres Neuladen korrigieren den Treiber ohne Produktänderung, positive HTTP-Mocks, erzwungene Erfolgsbedienung, abgeschwächte Zellenprüfungen oder verlängerte240s-Grenzen. Originaldateien und Eingabe-Snapshots bleiben erhalten.",
+        "Die bestehenden Suiten table-named-views und table-expressions bestehen in einem separaten vollständigen Zwei-Suiten-Aufruf mit demselben normalen Binary und unveränderten getrackten Quellen. Das ist keine gemeinsame Drei-Suiten- oder vollständige49-Suiten-Abnahme. Ihre Rohlogs/Coordinatorbelege sind veröffentlicht; der große Downloadkorpus dieser Zusatzregression bleibt lokal.",
+        "373 ursprüngliche Quelldateien und Nachweise sind bytegetreu archiviert; die erzeugte README wurde danach ausschließlich zur Unterscheidung von Core-Testbinaries und unverändertem App-Binary präzisiert und im Index neu gebunden. Die ursprünglichen Rohbelege bleiben unverändert. Der offene native Workspace-Vertrag ist dauerhaft dokumentiert, weiterhin nicht implementiert."
+      ],
+      "pending_acceptance_de": [
+        "Alle49 registrierten UI-Suiten in einem ungefilterten aktuellen Aufruf und öffentliche CI des exakten neuen Commits gesondert prüfen. Die erfolgreiche öffentliche48-Suiten-CI von905a248 bindet ihren eigenen Vorgängerstand. Der App-native_enrichment_browser_fixture ist durch die vier Core-Renderer-Tests nicht abgedeckt.",
+        "Weitere Quellzustände/Operatoren der29 Haupttabellen nativ prüfen, insbesondere nicht konfigurierte Custom-Search-/Renderer-/Cookie-Quellen und Spezial-/Cursor-/Bulk-Exporte. Vollständige Fehler-, MIME-/Zeit-, Zeichensatz-, Bereichsantwort-, große Corpus- und beliebige Race-Varianten bleiben offen.",
+        "Portable native Projektpräferenzen nach dem vollständigen Workspace-/Bundle-/CAS-/atomaren Import-/Portwechsel-Vertrag implementieren und E2E abnehmen. Browserlokale Ansichten sind keine native Projektmigration.",
+        "Verbleibende XPath-/Regex-/DOM-Ausgabefälle, weitere Extraktionsansichten/Importkombinationen, Ressourcen-/Crash-/Latenzgrenzen und den gesamten144-Fähigkeiten-/416-Filter-/32-Abläufe-Backlog abarbeiten. Herstellerparität bleibt NOT_PROVEN; installierter Source16-Pilot und Benutzerstores bleiben unverändert."
+      ],
+      "documentation": [
+        "docs/extraction-source-trust.md",
+        "docs/advanced-extraction.md",
+        "docs/native-project-workspace-plan.md",
+        "docs/verification/extraction-source-trust-20261021/README.md",
+        "docs/verification/extraction-source-trust-20261021/existing-views-20261021/README.md"
+      ],
+      "gates": {
+        "implementation": "PASS_BOUNDED_SOURCE_TRUST_V1",
+        "pure": "PASS535_SELECTED_NODE",
+        "semantic": "PASS40_PURE_GROUPS",
+        "ordinary_Rust": "PASS1843_FAIL0_IGNORE5_FRESH_WINDOWS_THREAD2",
+        "Core_renderer_optins": "PASS4_FRESH_SEPARATE_CORE_TEST_BINARIES",
+        "App_enrichment_optin": "NOT_RUN_HERE",
+        "build": "PASS_FRESH_NORMAL_FMT_STRICT_CLIPPY",
+        "native": "PASS_R4_ONE_SELECTED_SUITE19_PAIRS712_ROWS4_API_CSV265_ROWS",
+        "cold": "PASS2_NATURAL_CHILD_EOF0_4_HTTP410_0_OFFLINE_REFETCH",
+        "negative_controls": "PASS_NO_RULE_EXPORT_REFUSAL_TAMPERED_IMPORT400_LEGACY_UNKNOWN",
+        "existing_views": "PASS_SEPARATE_TWO_SUITE_INVOCATION",
+        "prior_attempts": "RUST_R1_R2_AND_NATIVE_R1_R2_R3_FAIL_UNCHANGED",
+        "source_binding": "PASS423_SELECTED_COMPILER_INPUTS_RUNTIME_BINARY_EXACT_HARNESS_ONLY_FIXES",
+        "full_UI49": "NOT_RUN",
+        "exact_public_CI": "PENDING_PUBLICATION",
+        "installation": "UNCHANGED_SOURCE16",
+        "manufacturer_parity": "NOT_PROVEN"
+      },
+      "reference_parity": "NOT_PROVEN"
+    },
+    {
       "id": "table-xlsx-provenance-20261021",
       "title_de": "Fehlende Exportquellen, echte Boolean-Zellen und Segment-/Wiederaufnahme-Herkunft absichern",
       "priority": -19,
-      "status": "LOCAL_FOCUSED20_PASS_R1_R2_R3_FAILS_RETAINED_EXACT_SUCCESSOR48_CI_PENDING",
-      "summary_de": "CSV und XLSX unterscheiden fehlende Analyse-/Importquellen von bestätigten leeren Ergebnissen. Bekannte boolesche Felder erhalten eigene XLSX-Werte bei unveränderten Textabfragen und CSV-Anzeigen. Bestätigte leere native Segmente exportieren Kopfzeilen. Frisch510 Node-Tests,40 semantische Gruppen, Format/Build/Clippy und20 eindeutige betroffene E2E-Suiten in einem vollständigen Aufruf bestehen. Unabhängig rekonstruierte43 originale CSV-/XLSX-Paare enthalten3062 Datenzeilen und65321 physische Zellen. Frühere native Fehlläufe bleiben unverändert; vollständige48-Suiten-/exakte Nachfolger-CI und der gesamte Feature-Backlog bleiben offen.",
+      "status": "PASS_PUBLIC_EXACT_905A248_UI48_LOCAL_FOCUSED20_BACKLOG_OPEN",
+      "summary_de": "CSV und XLSX unterscheiden fehlende Analyse-/Importquellen von bestätigten leeren Ergebnissen. Bekannte boolesche Felder erhalten eigene XLSX-Werte bei unveränderten Textabfragen und CSV-Anzeigen. Bestätigte leere native Segmente exportieren Kopfzeilen. Frisch510 Node-Tests,40 semantische Gruppen, Format/Build/Clippy und20 eindeutige betroffene E2E-Suiten in einem vollständigen Aufruf bestehen. Unabhängig rekonstruierte43 originale CSV-/XLSX-Paare enthalten3062 Datenzeilen und65321 physische Zellen. Frühere native Fehlläufe bleiben unverändert; Die öffentliche CI für exakt905a248 besteht alle vier Jobs und einen ungefilterten48-Suiten-Lauf. Ein zusätzlicher vollständiger lokaler48-Lauf, spätere49-Suiten-Stände und der gesamte Feature-Backlog bleiben offen.",
       "completed_acceptance_de": [
         "Gemeinsame Quellenprüfung für Linkmetriken, strukturierte Daten und Eingabeherkunft sperrt fehlende/fehlerhafte Quellen in beiden Exporten. Tatsächlich geladene leere Analysen und eine vorhandene Quelle mit null Abfragetreffern bleiben exportierbar; unverfügbare Quellen werden nicht als positive leere Dateien gewertet.",
         "Eigene typisierte Exportgetter erhalten bekannte true/false/null-Werte einschließlich nativer Header-Verfügbarkeit und abgeleiteter Canonical-Selbstreferenz. Bestehende lokalisierte Textfilter und32 CSV-Baselinefälle bleiben unverändert. Breitere Tabellenfamilien sind rein geprüft, nicht vollständig nativ abgenommen.",
@@ -7121,10 +7173,10 @@
         "Unabhängiger Python-ZIP/CRC/XML/CSV-Audit rekonstruiert alle43 eindeutigen Originalpaare mit3062 Zeilen/65321 Zellen und188 qualifizierten Segment-Lese-POSTs aus echten Originalberichten und Kontexten. Erwartungsdateien dienen nur als redundanter Vergleich; Produkt-/JS-Orakel werden nicht importiert.",
         "Frisch:510 ausgewählte Node-Tests einschließlich51 neuer Regressionen,40 reine semantische Gruppen, Format, normaler Build und striktes Clippy. Gewöhnliche Rust-Tests und Renderer-Opt-ins wurden in diesem Folgeschnitt nicht erneut ausgeführt.",
         "Eine vollständige ausgewählte20-Suiten-Regression besteht in einem Aufruf:neun API-Fixtures undelf native Suiten.609 ausdrücklich ausgewählte Produkt-/Harness-Inputs sind gebunden; keine transitive Toolchain-/Abhängigkeitsclosure. Die veröffentlichte fokussierte Evidenz umfasst Coordinator-/Suitenlogs; ihr vollständiger Downloadkorpus bleibt lokal, die direkten tief geprüften R3-/R4-Dateien sind veröffentlicht. Nach den Runtime-Gates wurde ausschließlich eine gebundene Whitespace-Policy-Zeile ergänzt;608 andere Eingaben und sämtliche kompilierten Produkt-/Harnessbytes bleiben exakt.",
-        "Originale nativeR1/R2/R3 bleiben FAIL: R1 zählte einen zusätzlichen nicht indexierbaren Redirect falsch; R2 deckte den Produktfehler und einen unbehandelten Download-Wait auf, ohne eigenen inneren EOF-Beleg; R3 scheiterte am falschen Frischcrawl-Import-Fixture. Die Fehlerbehandlung wurde mit sofortigem Promise.all und positiven Enabled-Prüfungen repariert; Assertions und240s-Suitengrenzen bleiben erhalten."
+        "Originale nativeR1/R2/R3 bleiben FAIL: R1 zählte einen zusätzlichen nicht indexierbaren Redirect falsch; R2 deckte den Produktfehler und einen unbehandelten Download-Wait auf, ohne eigenen inneren EOF-Beleg; R3 scheiterte am falschen Frischcrawl-Import-Fixture. Die Fehlerbehandlung wurde mit sofortigem Promise.all und positiven Enabled-Prüfungen repariert; Assertions und240s-Suitengrenzen bleiben erhalten.",
+        "Öffentliche CI39609409363 für exakt905a248: alle vier Jobs erfolgreich und genau ein ungefilterter Aufruf mit48 eindeutigen Suiten in unveränderter Reihenfolge, neun Fixture- und39 native Suiten. Frischer Terminalbeleg, unveränderte Workflow-/Registry-Bytes und Rohlogs sind separat veröffentlicht. Das ist keine Abnahme des späteren Extraktionsvertrags mit49 Suiten."
       ],
       "pending_acceptance_de": [
-        "Alle48 aktuell registrierten UI-Suiten in einem vollständigen aktuellen Lauf und öffentliche CI des exakten Nachfolgercommits gesondert prüfen. Ältere22fc522-CI bindet ihren eigenen46-Suiten-Stand und ersetzt diese Abnahme nicht.",
         "Die verbleibenden Haupttabellenverträge innerhalb der29 Schemata und ihre Erfassungszustände nativ prüfen, insbesondere nicht konfigurierte Custom-Search-/Extraction-Regeln, Renderer-/Cookie-/Accessibility-Quellen, Body-/Header-Teilbefunde und Ressourcen-/DOM-Vorkommen.",
         "Weitere Segmentoperatoren, Auswahlkombinationen und Tabellen abnehmen. Ausstehende selektierte historische Seiten haben keinen aktuellen PageRecord; positive selected_pending_not_refreshed-XLSX-Zeilen werden nicht erfunden.",
         "Spezial-/Ressourcen-/Policy-/Content-/Sitemap-Exporte, serverseitige Cursor-/Bulk-XLSX-Integration, große Streaming-/Mehrblattdateien und echte Excel-/LibreOffice-GUI-Kompatibilität weiter ausbauen.",
@@ -7133,7 +7185,8 @@
       "documentation": [
         "docs/table-xlsx.md",
         "docs/e2e-testing.md",
-        "docs/verification/table-xlsx-provenance-20261021/README.md"
+        "docs/verification/table-xlsx-provenance-20261021/README.md",
+        "docs/verification/table-xlsx-provenance-20261021/public-ci-905a248-20261021/README.md"
       ],
       "gates": {
         "implementation": "PASS_BOUNDED_SOURCE_AVAILABILITY_EMPTY_SEGMENT_AND_BOOLEAN_EXPORT_GETTERS",
@@ -7146,8 +7199,8 @@
         "native_availability": "PASS_R4_SELECTED_ONLY8_PAIRS12_ROWS258_CELLS",
         "independent_actual_audit": "PASS43_UNIQUE_PAIRS3062_ROWS65321_CELLS188_QUALIFIED_NATIVE_READS",
         "focused_UI20": "PASS_ONE_COMPLETE_INVOCATION9_FIXTURE11_NATIVE",
-        "full_UI48": "NOT_RUN_LOCALLY",
-        "exact_successor_public_CI": "PENDING",
+        "full_UI48": "PASS_PUBLIC_EXACT_905A248_ONE_UNFILTERED48_UNIQUE_LOCAL_NOT_RUN",
+        "exact_successor_public_CI": "PASS_EXACT_905A248_RUN39609409363_ALL4_JOBS",
         "source_binding": "PASS609_SELECTED_608_EXACT_ONE_POST_GATE_WHITESPACE_POLICY_QUALIFIED_RUNTIME_HARNESS_EXACT",
         "installation": "UNCHANGED_SOURCE16",
         "manufacturer_parity": "NOT_PROVEN"
@@ -10478,6 +10531,7 @@
     }
   ],
   "active_work_ids": [
+    "extraction-source-trust-20261021",
     "table-xlsx-provenance-20261021",
     "table-xlsx-export-20261021",
     "table-view-portability-20261019",

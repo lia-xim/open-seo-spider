@@ -1963,6 +1963,7 @@ impl CrawlStore {
             bool,
         )>,
     ) -> anyhow::Result<Vec<QueueEntry>> {
+        crate::validate_page_extraction_observations(page)?;
         let page_text = serde_json::to_string(page)?;
         let mut connection = self
             .connection
@@ -2226,12 +2227,14 @@ impl CrawlStore {
             .map(|value| {
                 let page: PageRecord = crate::heap_deserialize::from_str(&value)?;
                 crate::validate_page_content_captures(&page)?;
+                crate::validate_page_extraction_observations(&page)?;
                 Ok(page)
             })
             .collect()
     }
 
     pub fn save_report(&self, report: &CrawlReport) -> anyhow::Result<()> {
+        crate::validate_report_extraction_observations(report)?;
         crate::validate_sitemap_coverage_inventory(
             &report.config,
             report.sitemap_catalog.as_ref(),
@@ -2287,6 +2290,7 @@ impl CrawlStore {
         verify_saved_content_captures(&transaction)?;
         for page in &report.pages {
             crate::validate_page_content_captures(page)?;
+            crate::validate_page_extraction_observations(page)?;
             if page.content_captures.is_some() {
                 let stored: String = transaction.query_row(
                     "SELECT data FROM pages WHERE url=?1",
@@ -2388,6 +2392,7 @@ impl CrawlStore {
                 )?;
                 for page in &report.pages {
                     crate::validate_page_content_captures(page)?;
+                    crate::validate_page_extraction_observations(page)?;
                 }
                 if let Some(catalog) = &report.sitemap_catalog {
                     crate::sitemap_ledger::validate_catalog(catalog)?;
@@ -2716,7 +2721,11 @@ fn verify_saved_content_captures(connection: &Connection) -> anyhow::Result<()> 
     };
     if config.content_capture.is_none() {
         let has_captures: bool = connection.query_row("SELECT EXISTS(SELECT 1 FROM pages WHERE json_type(data,'$.content_captures') IS NOT NULL AND json_type(data,'$.content_captures') <> 'null' LIMIT 1)", [], |row| row.get(0))?;
-        if !has_captures {
+        let has_extraction_observations: bool = connection.query_row(
+            "SELECT EXISTS(SELECT 1 FROM pages, json_each(pages.data, '$.custom_extractions') AS extraction WHERE json_type(extraction.value, '$.source_observation') IS NOT NULL AND json_type(extraction.value, '$.source_observation') <> 'null' UNION ALL SELECT 1 FROM pages, json_each(pages.data, '$.raw_metadata.custom_extractions') AS extraction WHERE json_type(extraction.value, '$.source_observation') IS NOT NULL AND json_type(extraction.value, '$.source_observation') <> 'null' LIMIT 1)",
+            [], |row| row.get(0),
+        )?;
+        if !has_captures && !has_extraction_observations {
             return Ok(());
         }
     }
@@ -2744,6 +2753,7 @@ fn verify_saved_content_captures(connection: &Connection) -> anyhow::Result<()> 
         crate::content_binding::validate_native_content_captures(
             &page, &config, committed, !inherited,
         )?;
+        crate::validate_page_extraction_observations(&page)?;
         if !inherited && let Some(captures) = &page.content_captures {
             for capture in captures {
                 if !capture.observed_generation.is_some_and(|generation| {

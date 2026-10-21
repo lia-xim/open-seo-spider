@@ -1,0 +1,47 @@
+✔ version2 full declaration roundtrips and applies without v1 properties or auto migration (8.622ms)
+✔ version2 rejects incompatible full schema/semantics, rules/version fields and partial invalid groups atomically (3.3486ms)
+✔ v2 storage writes and resets exactly its own key/lock without touching v1 or legacy bytes (2.2516ms)
+✔ v1 bytes and APIs remain identical while v2 constants and explicit factories are separate (1.0468ms)
+✔ v2 declarations are complete, lossless, deeply frozen and evaluated against a second set of observations (3.4493ms)
+✔ v2 rejects hidden/symbol/accessor fields and decorated/sparse lists before inspecting rows (0.8822ms)
+✔ two catalogs permit exactly32 entries each, per-section names and strict independent byte limits (24.4915ms)
+✔ v2 held-lock snapshot cannot be retargeted by nested caller changes and stale revisions refuse (1.9484ms)
+✔ v2 byte CAS and lock refusal never overwrite or cross-mutate another catalog (1.5184ms)
+✔ v2 corrupt or oversized bytes require explicit exact-byte recovery and preserve all other storage (1.348ms)
+✔ nested all/any obey independent truth tables and single-child groups (6.1281ms)
+✔ OR preserves each original occurrence exactly once without URL/object deduplication (0.4031ms)
+✔ every v1 leaf keeps exact v1 known/empty/unknown/zero/NFC semantics (2.7178ms)
+✔ full AST validates before any row access even behind a satisfied OR branch (0.4654ms)
+✔ each occurrence caches one raw read across repeated leaves, hidden search and sort (0.525ms)
+✔ serialized declarations retain lossless text while validated snapshots are deeply immutable (0.3851ms)
+✔ null, one rule and all-rules conversion preserve declaration order and original text (0.6572ms)
+✔ empty groups, null children, unknown operators/fields and old v1 query properties refuse (0.6116ms)
+✔ sparse/inherited/accessor arrays and object accessors are refused without invoking getters (0.4769ms)
+✔ cycles and hidden/symbol declaration fields cannot become silently serialized data (0.3591ms)
+✔ 31 nodes/16 leaves/four group levels are admitted at boundaries and refused beyond (2.2992ms)
+✔ 128KiB serialized AST limit is exact and never retroactively constrains v1 rules (8.2454ms)
+✔ pure structural append/wrap/kind/move edits preserve the original tree and real leaf data (3.5293ms)
+✔ pure insertion requires actual rules, wraps a leaf with AND and never invents an empty group (0.3262ms)
+✔ pure removal recursively drops empty ancestors but preserves genuine unary grouping (0.5242ms)
+✔ pure invalid paths, impossible moves and leaf group-kind edits refuse without changing data (0.5816ms)
+✔ pure flat conversion preserves DFS AND order and refuses real OR rather than weakening it (0.4223ms)
+✔ pure clone rejects accessors, cycles, sparse children and shared branches without running getters (0.6112ms)
+✔ pure node paths describe the actual hierarchy, not flattened OR groups (0.4479ms)
+✔ simple mode retains the exact legacy draft shape and explicit conversion clones its AND rules (18.5156ms)
+✔ actual control callbacks construct a genuinely nested four-level mixed AND/OR tree (25.1473ms)
+✔ group type, sibling movement and removal controls edit only accepted tree nodes with immediate invalidation (10.3946ms)
+✔ invalid depth/range edits preserve accepted expression/rows and visibly disable export until corrected (12.0524ms)
+✔ OR conversion refusal keeps the tree and mode; Clear removes AST without implicitly switching mode (8.0465ms)
+✔ explicit all-only and unary-any conversion preserves DFS rule order and original v1 state shape (4.2522ms)
+✔ v2 installation validates every field before mutation, copies data and performs no hooks/storage/render (3.7582ms)
+✔ accepted OR query preserves every matching original occurrence beyond pagination and hidden search columns (6.9497ms)
+✔ detached and old-revision group controls cannot change current rules, owner or export state (6.2362ms)
+✔ node selection does not change the query, and action rerender restores connected focus (5.877ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 244.7944

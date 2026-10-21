@@ -1,0 +1,41 @@
+✔ raw field views retain unsafe integers, nested arrays, strings and absence (1.4519ms)
+✔ MiB projections roundtrip exact byte budgets including beyond JS safe integer (0.3906ms)
+✔ malformed UTF8 file never reaches native inspection or mutates accepted state/storage (1.1048ms)
+✔ raw duplicate keys reach native validator without parse/stringify collapse (0.2486ms)
+✔ late file A cannot issue native inspection after B owns the draft (0.4289ms)
+✔ late native response cannot overwrite B or release B busy ownership (0.3564ms)
+✔ stale selected-crawl owner refuses a valid late reply (0.2468ms)
+✔ storage quota refusal leaves active profile, staged text and prior bytes unchanged (0.6898ms)
+✔ case-distinct and prototype-like header names retain exact volatile bindings only (0.6529ms)
+✔ explicit empty header differs from unresolved and is not persisted (0.482ms)
+✔ native response containing header values cannot reach working draft or storage (0.3019ms)
+✔ an incompatible native engine cannot stage or persist a profile (0.2454ms)
+✔ valid export leaves active/staged profile and storage unchanged (0.565ms)
+✔ restore validates stored JSON text without rounding or rewriting the storage key (0.3966ms)
+✔ closing dialog invalidates pending native result and keeps active storage unchanged (0.2454ms)
+✔ explicit source replacement clears all header values while retaining exact requirements (0.4317ms)
+✔ canceling another staged profile cannot transfer its header secrets to the active profile (0.4653ms)
+✔ saving then closing retains only the explicitly resolved active-session header values (0.2508ms)
+✔ corrupt, incompatible and native-refused restores remain blocked through dialog/edit/import until a validated atomic Save (2.7185ms)
+✔ storage read refusal blocks restore without deleting or writing a profile (0.3816ms)
+✔ a superseded late restore refusal cannot block a newer explicitly saved profile (0.557ms)
+✔ opening Settings during pending restore cannot enable a fallback Start before an explicit valid Save (26.3683ms)
+✔ actual App projection preserves exact non-MiB/unsafe values without committing or dirty patches (3.8639ms)
+✔ actual unrelated form edit emits only its path and preserves all native-only declarations (3.9614ms)
+✔ actual renderer edit patches one leaf instead of replacing native max_response_bytes (3.6889ms)
+✔ actual body edit maps decimal MiB to an exact integer JSON token (3.7198ms)
+✔ actual optional disable removes only a declared key, never absent linked limits (3.9442ms)
+✔ actual imported quota projection and unrelated quota edit retain untouched original pattern rows (3.3369ms)
+✔ actual quota row edit is detected independently of hidden JSON formatting (4.1791ms)
+✔ actual header input and unresolve listeners survive synchronous rerender without losing typed values (4.2262ms)
+✔ actual Save preserves an explicit toolbar target after header reentry and Start emits original-source replacement patches (7.0559ms)
+✔ actual Save deliberately projects a changed profile source instead of retaining an old toolbar override (6.6932ms)
+✔ actual App blocks button and both programmatic Start paths after corrupt restore while keeping recovery reachable (5.0332ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 175.5046

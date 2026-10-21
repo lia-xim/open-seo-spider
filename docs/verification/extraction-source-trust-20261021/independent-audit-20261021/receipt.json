@@ -1,0 +1,84 @@
+{
+  "kind": "independent_read_only_extraction_publication_audit",
+  "result": "PASS_READ_ONLY_FINITE_PUBLICATION_AND_SOURCE_BINDINGS",
+  "created_at": "2026-10-21T15:02:13.679412+00:00",
+  "packages": [
+    {
+      "path": "docs/verification/extraction-source-trust-20261021",
+      "index_sha256": "deb282a6314b90f179bdf2a4a9e2668dcd3584bf83b7e32baaf11e715c95d2b2",
+      "unique_original_sources": 373,
+      "raw_copies": 373,
+      "generated": 2,
+      "gzip": 0,
+      "raw_bytes": 13555596,
+      "stored_raw_bytes": 13555596,
+      "all_original_bytes_exact": true,
+      "unindexed_additional_child_roots_not_reviewed": [
+        "existing-views-20261021"
+      ]
+    },
+    {
+      "path": "docs/verification/table-xlsx-provenance-20261021/public-ci-905a248-20261021",
+      "index_sha256": "3c94d8085a9b8488e1e8a5e72c3ee6d14ec757369a3e42bc121c4b9eec2743ca",
+      "unique_original_sources": 11,
+      "raw_copies": 11,
+      "generated": 2,
+      "gzip": 0,
+      "raw_bytes": 1322979,
+      "stored_raw_bytes": 1322979,
+      "all_original_bytes_exact": true,
+      "unindexed_additional_child_roots_not_reviewed": []
+    }
+  ],
+  "post_materializer_generated_qualification": {
+    "original_plan_outputs_not_claimed_unchanged": true,
+    "original_index_sha256": "dfab2ee29d5e637e3a069cff4e401c5dfe9376dfe5f850e6cd82088296a14cfa",
+    "current_index_sha256": "deb282a6314b90f179bdf2a4a9e2668dcd3584bf83b7e32baaf11e715c95d2b2",
+    "current_README": {
+      "path": "README.md",
+      "bytes": 3697,
+      "sha256": "1777a3b1d40f1b77e008bc0969fbff1f1a49b4ad557ed1a65954f6ec9904959c"
+    },
+    "scope": "Clarifies that Core renderer opt-ins execute Core test binaries, while the separately tested normal App binary remains unchanged. Original raw receipts, input manifests and their byte hashes are untouched."
+  },
+  "ordinary_Rust": {
+    "passed": 1843,
+    "failed": 0,
+    "ignored": 5
+  },
+  "fresh_separate_Core_renderer_optins": 4,
+  "compiler_inputs_current_exact": 423,
+  "selected_pure_tests": 535,
+  "pure_inputs_current_exact": 49,
+  "semantic_groups": 40,
+  "semantic_targets_current_exact": 4,
+  "live_pins_current_exact": 22,
+  "native_selected_suites": 1,
+  "actual_browser_pairs": 19,
+  "actual_browser_pair_rows": 712,
+  "browser_download_events": 38,
+  "API_only_CSV_files": 4,
+  "API_only_CSV_rows": 265,
+  "natural_child_EOF0": 2,
+  "witnesses410": 4,
+  "offline_product_refetches": 0,
+  "original_Rust_FAIL_attempts": [
+    1,
+    2
+  ],
+  "original_native_FAIL_attempts": [
+    1,
+    2,
+    3
+  ],
+  "predecessor_public_CI": {
+    "commit": "905a2480c54d431a42eae1ed93e43f094a3e7a76",
+    "run": 39609409363,
+    "jobs": 4,
+    "unique_unfiltered_suites": 48,
+    "fixtures": 9,
+    "native": 39
+  },
+  "scope": "Read-only byte-copy, terminal receipt/log, current input, and raw API CSV shape audit. No project runtime executed, no extraction/result oracle rerun, no all49 or GUI/vendor parity claim.",
+  "audit_sha256": "aaa51318d54ee5fd011c791bacabe41716bbf9f03d908cdcb7feec0b034a0da3"
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "name": "format",
+    "args": [
+      "fmt",
+      "--all",
+      "--check"
+    ],
+    "code": 0,
+    "signal": null,
+    "duration_ms": 3417
+  },
+  {
+    "name": "workspace-tests",
+    "args": [
+      "test",
+      "--workspace",
+      "--locked",
+      "--",
+      "--test-threads=2"
+    ],
+    "code": 0,
+    "signal": null,
+    "duration_ms": 1199521
+  },
+  {
+    "name": "build",
+    "args": [
+      "build",
+      "--locked",
+      "-p",
+      "open-seo-spider"
+    ],
+    "code": 0,
+    "signal": null,
+    "duration_ms": 45621
+  },
+  {
+    "name": "clippy",
+    "args": [
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--all-features",
+      "--locked",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "code": 0,
+    "signal": null,
+    "duration_ms": 68573
+  }
+]

@@ -1,0 +1,856 @@
+* text=auto
+*.rs text eol=lf
+*.toml text eol=lf
+*.lock text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.ps1 text eol=lf
+*.cmd text eol=crlf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+.dockerignore text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.xml text eol=lf
+*.csv text eol=lf
+docs/parity/**/*.csv -text whitespace=cr-at-eol
+crates/core/tests/fixtures/list-import/** -text whitespace=cr-at-eol
+crates/core/tests/fixtures/crawl-policy/** -text whitespace=cr-at-eol
+Dockerfile text eol=lf
+
+# Preserve evidence and embedded UI bytes for SHA-bound cross-platform proofs.
+docs/verification/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/sitemap-native-20261013/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/sitemap-local-windows-20261013/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+crates/core/tests/fixtures/resource-contract/*.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+web/app.js -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+web/index.html -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+web/styles.css -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+web/saved-comparison.js -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+web/verification/saved-comparison*.cjs -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+web/verification/ui-saved-comparison*.cjs -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+web/verification/ui-resource-contract-live.cjs -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/sitemap-assessment-windows-20261014/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+scripts/sitemap-assessment-e2e.mjs -text whitespace=-blank-at-eol
+docs/verification/sitemap-budget-windows-20261014/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+crates/app/src/mcp/saved_comparison_tests.rs -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+scripts/verification/sitemap-output-target-v2/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+crates/core/src/sitemap/count-retained-golden.* -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+docs/verification/sitemap-source-protocol-runner-20261014/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+crates/core/src/sitemap_source_schema.sql text eol=lf
+docs/verification/sitemap-streaming-read-20261014/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+docs/verification/sitemap-rich-read-20261014/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+docs/verification/sitemap-csv-streaming-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+docs/verification/sitemap-findings-core-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+scripts/sitemap-findings-mcp-e2e.mjs -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/sitemap-findings-surfaces-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+assets/fonts/LICENSE.txt -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+crates/core/src/schema.sql -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/sitemap-source-processing-ui-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/sitemap-findings-native-preparation-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/sitemap-native-ui-rebind-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/sitemap-source-ui-suite-failed-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/sitemap-compile-repair-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+
+/docs/verification/mcp-file-tools-source-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+
+/docs/verification/csv-registry-lifecycle-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/combined-core-repairs-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/combined-workspace-v2-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/clippy-corrections-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/combined-workspace-v3-20261015/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+docs/verification/combined-optimized-native-v3-20261015/** -text
+docs/verification/combined-workspace-v4-20261015/** -text
+docs/verification/combined-workspace-v4-20261015/actual-suite/*.log -text whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/combined-native-v4-checkpoint-1-20261015/** -text
+
+/docs/verification/combined-native-v4-browser-r2-20261015/** -text
+/docs/verification/combined-native-v4-browser-r2-20261015/**/*.log whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-native-v4-large-failed-20261015/** -text
+/docs/verification/combined-native-v4-large-failed-20261015/**/*.log whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-source-v5-compile-failed-20261015/** -text
+/docs/verification/combined-source-v5-compile-failed-20261015/**/*.log whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-source-v5-r2-source-20261015/** -text
+/docs/verification/combined-source-v5-r2-source-20261015/*.log whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-source-v5-r2-clippy-failed-20261015/** -text
+/docs/verification/combined-source-v5-r2-clippy-failed-20261015/**/*.log whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+/docs/verification/combined-source-v5-r2-clippy-failed-20261015/*.log whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-source-v5-r3-source-20261015/** -text
+/docs/verification/combined-source-v5-r3-source-20261015/**/*.log whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+/docs/verification/combined-source-v5-r3-source-20261015/*.log whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+/docs/verification/combined-source-v5-r2-clippy-failed-20261015/actual-suite/clippy.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-workspace-v5-r3-20261015/** -text
+/docs/verification/combined-workspace-v5-r3-20261015/*.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-optimized-v5-r3-20261015/** -text
+/docs/verification/combined-optimized-v5-r3-20261015/*.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-native-v5-r3-eof-failed-20261015/** -text
+/docs/verification/combined-native-v5-r3-eof-failed-20261015/*.log whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-native-v5-r3-six-scopes-20261015/** -text
+/docs/verification/combined-native-v5-r3-six-scopes-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-native-v5-r3-eof-r2-pass-20261015/** -text
+/docs/verification/combined-native-v5-r3-eof-r2-pass-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source6-7-reviewed-drafts-20261015/** -text
+/docs/verification/source6-7-reviewed-drafts-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-native-v5-r3-large-pass-20261015/** -text
+/docs/verification/combined-native-v5-r3-large-pass-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source6-draft4-preliminary-pass-20261015/** -text
+/docs/verification/source6-draft4-preliminary-pass-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-native-v5-r3-installed-20261015/** -text
+/docs/verification/combined-native-v5-r3-installed-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-workspace-v6-cancel-hang-failed-20261015/** -text
+/docs/verification/combined-workspace-v6-cancel-hang-failed-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source6-r2-reviewed-repair-20261015/** -text
+/docs/verification/source6-r2-reviewed-repair-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-workspace-v6-r2-20261015/** -text
+/docs/verification/combined-workspace-v6-r2-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-workspace-v7-20261015/** -text
+/docs/verification/combined-workspace-v7-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source7-native-checkpoint-1-20261015/** -text
+/docs/verification/source7-native-checkpoint-1-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-workspace-v8-20261015/** -text
+/docs/verification/combined-workspace-v8-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source8-native-checkpoint-1-20261015/** -text
+/docs/verification/source8-native-checkpoint-1-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source8-physical-pass-20261015/** -text
+/docs/verification/source8-physical-pass-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source9-preliminary-failed-20261015/** -text
+/docs/verification/source9-preliminary-failed-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/sitemap-read-performance-20261015/** -text
+/docs/verification/sitemap-read-performance-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+web/broken-sources.* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source9-directed-checkpoint-1-20261015/** -text
+/docs/verification/source9-directed-checkpoint-1-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/next-batch-source-proposals-20261015/** -text
+/docs/verification/next-batch-source-proposals-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-workspace-v9-20261015/** -text
+/docs/verification/combined-workspace-v9-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source9-native-checkpoint-20261015/** -text
+/docs/verification/source9-native-checkpoint-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+web/saved-ngrams.* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source10-directed-checkpoint-20261015/** -text
+/docs/verification/source10-directed-checkpoint-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/combined-workspace-v10-20261015/** -text
+/docs/verification/combined-workspace-v10-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source10-native-first-20261015/** -text
+/docs/verification/source10-native-first-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source10-response-registry-20261015/** -text
+/docs/verification/source10-response-registry-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source11-directed-checkpoint-20261015/** -text
+/docs/verification/source11-directed-checkpoint-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source11-suite-build-20261015/** -text
+/docs/verification/source11-suite-build-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source11-native-four-20261015/** -text
+/docs/verification/source11-native-four-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source11-native-ten-20261015/** -text
+/docs/verification/source11-native-ten-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source11-native-eleven-20261015/** -text
+/docs/verification/source11-native-eleven-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source12-preliminary-tests-20261015/** -text
+/docs/verification/source12-preliminary-tests-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source11-installed-generator-20261015/** -text
+/docs/verification/source11-installed-generator-20261015/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source12-suite-20261016/** -text
+/docs/verification/source12-suite-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source12-build-native-20261016/** -text
+/docs/verification/source12-build-native-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source13-tested-preview-20261016/** -text
+/docs/verification/source13-tested-preview-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source12-metadata-native-20261016/** -text
+/docs/verification/source12-metadata-native-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source12-small6-20261016/** -text
+/docs/verification/source12-small6-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/next-feature-reviewed-20261016/** -text
+/docs/verification/next-feature-reviewed-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source12-runtime-drift-20261016/** -text
+/docs/verification/source12-runtime-drift-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/api-only-rust-failure-20261016/** -text
+/docs/verification/api-only-rust-failure-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/api-runtime-pass-20261016/** -text
+/docs/verification/api-runtime-pass-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source12-selected-four-20261016/** -text
+/docs/verification/source12-selected-four-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source12-thirteen-scopes-20261016/** -text
+/docs/verification/source12-thirteen-scopes-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve exact bytes for the reviewed Source13 owned product slice.
+/Cargo.lock -text
+/crates/app/src/cdn_cli_tests.rs -text
+/crates/app/src/enrichment_app.rs -text
+/crates/app/src/enrichment_app_tests.rs -text
+/crates/app/src/main.rs -text
+/crates/app/src/mcp.rs -text
+/crates/app/src/mcp/cdn_classification_tests.rs -text
+/crates/app/src/mcp/enrichment.rs -text
+/crates/app/src/mcp/enrichment_tests.rs -text
+/crates/app/src/mcp/wiring_tests.rs -text
+/crates/app/src/server.rs -text
+/crates/app/src/server/cdn_classification_tests.rs -text
+/crates/app/src/server/enrichment.rs -text
+/crates/app/src/server/enrichment_tests.rs -text
+/crates/app/src/server/lifecycle.rs -text
+/crates/app/src/server/lifecycle_tests.rs -text
+/crates/core/Cargo.toml -text
+/crates/core/src/api_enrichment.rs -text
+/crates/core/src/api_enrichment/pagespeed.rs -text
+/crates/core/src/api_enrichment_tests.rs -text
+/crates/core/src/audit.rs -text
+/crates/core/src/cdn_classification.rs -text
+/crates/core/src/cdn_classification_tests.rs -text
+/crates/core/src/crawler.rs -text
+/crates/core/src/crawler/discovery_ledger_tests.rs -text
+/crates/core/src/crawler/sitemap_capture_tests.rs -text
+/crates/core/src/crawler/sitemap_protocol_tests.rs -text
+/crates/core/src/html_head.rs -text
+/crates/core/src/html_head_tests.rs -text
+/crates/core/src/lib.rs -text
+/crates/core/src/models.rs -text
+/web/api-enrichment.css -text
+/web/api-enrichment.html -text
+/web/api-enrichment.js -text
+/web/app.js -text
+/web/index.html -text
+
+/docs/verification/installed12-source13-progress-20261016/** -text
+/docs/verification/installed12-source13-progress-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source13-api-native-progress-20261016/** -text
+/docs/verification/source13-api-native-progress-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source13-installed-segments-progress-20261016/** -text
+/docs/verification/source13-installed-segments-progress-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve exact Source14 product bytes
+/crates/app/src/cdn_directory_cli_tests.rs -text
+/crates/app/src/main.rs -text
+/crates/app/src/mcp.rs -text
+/crates/app/src/mcp/cdn_directory_reporting_tests.rs -text
+/crates/app/src/mcp/segments.rs -text
+/crates/app/src/mcp/segments_tests.rs -text
+/crates/app/src/mcp/wiring_tests.rs -text
+/crates/app/src/segments_app.rs -text
+/crates/app/src/segments_app_tests.rs -text
+/crates/app/src/segments_cli_tests.rs -text
+/crates/app/src/server.rs -text
+/crates/app/src/server/cdn_directory_reporting_tests.rs -text
+/crates/app/src/server/lifecycle_tests.rs -text
+/crates/app/src/server/segments.rs -text
+/crates/app/src/server/segments_tests.rs -text
+/crates/core/src/cdn_directory_reporting.rs -text
+/crates/core/src/cdn_directory_reporting_tests.rs -text
+/crates/core/src/crawler.rs -text
+/crates/core/src/crawler/discovery_ledger_tests.rs -text
+/crates/core/src/crawler/sitemap_capture_tests.rs -text
+/crates/core/src/crawler/sitemap_protocol_tests.rs -text
+/crates/core/src/lib.rs -text
+/crates/core/src/models.rs -text
+/crates/core/src/segments.rs -text
+/crates/core/src/segments_tests.rs -text
+/web/app.js -text
+/web/index.html -text
+/web/saved-segments.css -text
+/web/saved-segments.html -text
+/web/saved-segments.js -text
+/web/verification/saved-segments-regressions.cjs -text
+
+/docs/verification/source14-code-sitemap-matrix-progress-20261016/** -text
+/docs/verification/source14-code-sitemap-matrix-progress-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source14-full-suite-20261016/** -text
+/docs/verification/source14-full-suite-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/source14-three-native-progress-20261016/** -text
+/docs/verification/source14-three-native-progress-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+/docs/verification/quotas-tested-main-retry-20261016/** -text
+/docs/verification/quotas-tested-main-retry-20261016/** whitespace=-blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/main-negative-cap-and-reference-20261016/main-third-native-failed.json -text
+docs/verification/main-negative-cap-and-reference-20261016/main-v4-source-review.json -text
+docs/verification/main-negative-cap-and-reference-20261016/negative-size-diagnosis.json -text
+docs/reference24-detail-gaps-20261016.md -text
+docs/feature-parity.json -text
+docs/parity/granular-acceptance.json -text
+docs/verification/main-negative-cap-and-reference-20261016/index.json -text
+docs/FEATURE_TODO.md -text
+docs/verification/source14-four-native-pass-20261016/main-18-pass.json -text
+docs/verification/source14-four-native-pass-20261016/main-v8-source-review.json -text
+docs/verification/source14-four-native-pass-20261016/main-v7-source-finding.json -text
+docs/verification/source14-four-native-pass-20261016/main-fourth-focus-failed.json -text
+docs/verification/source14-four-native-pass-20261016/main-fifth-close-failed.json -text
+docs/verification/source14-four-native-pass-20261016/cdn-model-origins-review.json -text
+docs/verification/source14-four-native-pass-20261016/cdn-worker-review.json -text
+docs/verification/source14-four-native-pass-20261016/cdn-inner-transform-review.json -text
+docs/verification/source14-four-native-pass-20261016/cdn-net-wrapper-review.json -text
+docs/verification/source14-four-native-pass-20261016/cdn-net-wrapper-findings.md -text
+docs/verification/source14-four-native-pass-20261016/index.json -text
+docs/verification/source14-installed-20261016/installer-source-review.json -text
+docs/verification/source14-installed-20261016/cold-source-review.json -text
+docs/verification/source14-installed-20261016/main-native-actual-audit.json -text
+docs/verification/source14-installed-20261016/installation-actual-audit.json -text
+docs/verification/source14-installed-20261016/installed-summary.json -text
+
+# Preserve exact Source15 quota product bytes
+/crates/app/src/crawl_quotas_app.rs -text
+/crates/app/src/main.rs -text
+/crates/app/src/mcp.rs -text
+/crates/app/src/mcp/crawl_quotas.rs -text
+/crates/app/src/mcp/crawl_quotas_tests.rs -text
+/crates/app/src/mcp/segments_tests.rs -text
+/crates/app/src/mcp/wiring_tests.rs -text
+/crates/app/src/server.rs -text
+/crates/app/src/server/broken_sources_tests.rs -text
+/crates/app/src/server/comparison_tests.rs -text
+/crates/app/src/server/crawl_quotas.rs -text
+/crates/app/src/server/crawl_quotas_tests.rs -text
+/crates/app/src/server/directory_tree_tests.rs -text
+/crates/app/src/server/migration_tests.rs -text
+/crates/app/src/server/ngram_corpus_tests.rs -text
+/crates/app/src/server/resource_broken_sources_tests.rs -text
+/crates/app/src/server/segments_tests.rs -text
+/crates/app/src/server/sitemap_findings_tests.rs -text
+/crates/app/src/server/sitemaps_streaming_fixture.rs -text
+/crates/app/src/server/sitemaps_tests.rs -text
+/crates/core/src/crawl_quota_ledger.rs -text
+/crates/core/src/crawl_quota_runtime.rs -text
+/crates/core/src/crawl_quotas.rs -text
+/crates/core/src/crawl_quotas_tests.rs -text
+/crates/core/src/crawler.rs -text
+/crates/core/src/crawler/crawl_quotas_tests.rs -text
+/crates/core/src/crawler/discovery_ledger_tests.rs -text
+/crates/core/src/crawler/sitemap_capture_tests.rs -text
+/crates/core/src/crawler/sitemap_protocol_tests.rs -text
+/crates/core/src/lib.rs -text
+/crates/core/src/models.rs -text
+/crates/core/src/store.rs -text
+/crates/core/src/store/crawl_quota_adapter.rs -text
+/web/app.js -text
+/web/index.html -text
+docs/verification/source15-code-integration-20261016/frontdoor-source-audit.json -text
+docs/verification/source15-code-integration-20261016/index.json -text
+docs/verification/source15-code-integration-20261016/frontdoor-source-audit.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/source15-suite-failure-20261016/full-suite-failed.json -text
+docs/verification/source15-suite-failure-20261016/index.json -text
+
+# Preserve exact Source15 retry2 fixture bytes
+/crates/app/src/mcp/wiring_tests.rs -text
+/crates/app/src/server/lifecycle_tests.rs -text
+docs/verification/retry2-and-cli-progress-20261016/fixture-source-review.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/retry2-and-cli-progress-20261016/retry2-format.json -text
+docs/verification/retry2-and-cli-progress-20261016/retry2-format-review.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/retry2-and-cli-progress-20261016/retry2-clippy.json -text
+docs/verification/retry2-and-cli-progress-20261016/retry2-three-retained.json -text
+docs/verification/retry2-and-cli-progress-20261016/cli-v1-source-finding.json -text
+docs/verification/retry2-and-cli-progress-20261016/cli-v2-source-review.json -text
+docs/verification/retry2-and-cli-progress-20261016/cli-draft/manifest.json -text
+docs/verification/retry2-and-cli-progress-20261016/cli-draft/source/crates/app/src/main.rs -text
+docs/verification/retry2-and-cli-progress-20261016/cli-draft/source/crates/app/src/server.rs -text
+docs/verification/retry2-and-cli-progress-20261016/cli-draft/source/crates/app/src/crawl_resume.rs -text
+docs/verification/retry2-and-cli-progress-20261016/cli-draft/source/crates/app/src/crawl_resume_tests.rs -text
+docs/verification/retry2-and-cli-progress-20261016/index.json -text
+docs/verification/source15-retry2-suite-20261016/actual-suite.json -text
+docs/verification/source15-retry2-suite-20261016/driver-source-review.json -text
+docs/verification/source15-retry2-suite-20261016/scalar-source-review.json -text
+docs/verification/source15-retry2-suite-20261016/sqlite-stage04-finding.json -text
+docs/verification/source15-retry2-suite-20261016/sqlite-stage05-source-review.json -text
+docs/verification/source15-retry2-suite-20261016/sqlite-primitives-actual.json -text
+docs/verification/source15-retry2-suite-20261016/sqlite-primitives-review.json -text
+docs/verification/source15-retry2-suite-20261016/sqlite-ddl-primitives-actual.json -text
+docs/verification/source15-retry2-suite-20261016/sqlite-ddl-primitives-review.json -text
+docs/verification/source15-retry2-suite-20261016/cli-parent-composition-source-review.json -text
+docs/verification/source15-retry2-suite-20261016/freeze-before-suite.json -text
+docs/verification/source15-retry2-suite-20261016/index.json -text
+docs/verification/source15-build-cli-native-failure-20261016/actual-build.json -text
+docs/verification/source15-build-cli-native-failure-20261016/cli-format.json -text
+docs/verification/source15-build-cli-native-failure-20261016/cli-format-review.json -text
+docs/verification/source15-build-cli-native-failure-20261016/cli-producer-review.json -text
+docs/verification/source15-build-cli-native-failure-20261016/cli-clippy.json -text
+docs/verification/source15-build-cli-native-failure-20261016/cli-eleven.json -text
+docs/verification/source15-build-cli-native-failure-20261016/quota-native-first-failure.json -text
+docs/verification/source15-build-cli-native-failure-20261016/index.json -text
+docs/verification/source15-four-native-20261016/actual-api.json -text
+docs/verification/source15-four-native-20261016/actual-head.json -text
+docs/verification/source15-four-native-20261016/actual-main.json -text
+docs/verification/source15-four-native-20261016/actual-sitemap.json -text
+docs/verification/source15-four-native-20261016/api-actual-review.json -text
+docs/verification/source15-four-native-20261016/legacy-v4-source-findings.json -text
+docs/verification/source15-four-native-20261016/legacy-current-source-review.json -text
+docs/verification/source15-four-native-20261016/sitemap-current-review.json -text
+docs/verification/source15-four-native-20261016/quota-second-failure.json -text
+docs/verification/source15-four-native-20261016/quota-v4-source-review.json -text
+docs/verification/source15-four-native-20261016/sitemap-admission-failure.json -text
+docs/verification/source15-four-native-20261016/index.json -text
+docs/verification/source15-five-native-audited-20261016/actual-quota-v5.json -text
+docs/verification/source15-five-native-audited-20261016/quota-actual-review.json -text
+docs/verification/source15-five-native-audited-20261016/head-actual-review.json -text
+docs/verification/source15-five-native-audited-20261016/main-actual-review.json -text
+docs/verification/source15-five-native-audited-20261016/sitemap-actual-review.json -text
+docs/verification/source15-five-native-audited-20261016/quota-source-review.json -text
+docs/verification/source15-five-native-audited-20261016/quota-reader-review.json -text
+docs/verification/source15-five-native-audited-20261016/quota-mutator-review.json -text
+docs/verification/source15-five-native-audited-20261016/quota-adapter-review.json -text
+docs/verification/source15-five-native-audited-20261016/quota-third-failure.json -text
+docs/verification/source15-five-native-audited-20261016/quota-third-failure-diagnosis.json -text
+docs/verification/source15-five-native-audited-20261016/quota-root-execution-witness.json -text
+docs/verification/source15-five-native-audited-20261016/installer-wip-v2-findings.json -text
+docs/verification/source15-five-native-audited-20261016/index.json -text
+docs/verification/source15-installed-20261016/installer-source-review.json -text
+docs/verification/source15-installed-20261016/cold-source-review.json -text
+docs/verification/source15-installed-20261016/installer-v3-source-finding.json -text
+docs/verification/source15-installed-20261016/installation-actual-audit.json -text
+docs/verification/source15-installed-20261016/installed-summary.json -text
+.gitattributes -text
+crates/app/src/crawl_resume.rs -text
+crates/app/src/crawl_resume_tests.rs -text
+crates/app/src/main.rs -text
+crates/app/src/server.rs -text
+docs/verification/source16-cli-suite-20261016/code-publication.json -text
+docs/verification/source16-cli-suite-20261016/code-actual-audit.json -text
+docs/verification/source16-cli-suite-20261016/publisher-source-review.json -text
+docs/verification/source16-cli-suite-20261016/driver-source-review.json -text
+docs/verification/source16-cli-suite-20261016/scalar-source-review.json -text
+docs/verification/source16-cli-suite-20261016/freeze-source-review.json -text
+docs/verification/source16-cli-suite-20261016/actual-freeze.json -text
+docs/verification/source16-cli-suite-20261016/resource-quota-proposal-source-review.json -text
+docs/verification/source16-cli-suite-20261016/full-suite.json -text
+docs/verification/source16-cli-suite-20261016/index.json -text
+docs/verification/source16-build-resource-format-20261016/actual-build.json -text
+docs/verification/source16-build-resource-format-20261016/native-core-five.json -text
+docs/verification/source16-build-resource-format-20261016/resources-actual-format.json -text
+docs/verification/source16-build-resource-format-20261016/native-inputs-root-witness.json -text
+docs/verification/source16-build-resource-format-20261016/native-five-source-wip-review.json -text
+docs/verification/source16-build-resource-format-20261016/cli-native-source-wip-review.json -text
+docs/verification/source16-build-resource-format-20261016/cli-native-previous-source-finding.json -text
+docs/verification/source16-build-resource-format-20261016/resources-composition-source-review.json -text
+docs/verification/source16-build-resource-format-20261016/resources-producers-source-review.json -text
+docs/verification/source16-build-resource-format-20261016/index.json -text
+docs/verification/source16-three-native-resource-repair-20261016/api-native.json -text
+docs/verification/source16-three-native-resource-repair-20261016/sitemap-native.json -text
+docs/verification/source16-three-native-resource-repair-20261016/head-native.json -text
+docs/verification/source16-three-native-resource-repair-20261016/cli-first-native-failure-root-witness.json -text
+docs/verification/source16-three-native-resource-repair-20261016/cli-fixed-native-source-review.json -text
+docs/verification/source16-three-native-resource-repair-20261016/cli-fixed-helper-source-review.json -text
+docs/verification/source16-three-native-resource-repair-20261016/resources-first-clippy-failed.json -text
+docs/verification/source16-three-native-resource-repair-20261016/resources-compile-repair-source-review.json -text
+docs/verification/source16-three-native-resource-repair-20261016/resources-v2-composition-source-review.json -text
+docs/verification/source16-three-native-resource-repair-20261016/resources-v2-producers-source-review.json -text
+docs/verification/source16-three-native-resource-repair-20261016/resources-v2-actual-format.json -text
+docs/verification/source16-three-native-resource-repair-20261016/index.json -text
+docs/verification/source16-six-native-audits-20261016/cli-native-retry1.json -text
+docs/verification/source16-six-native-audits-20261016/main-native.json -text
+docs/verification/source16-six-native-audits-20261016/api-actual-audit.json -text
+docs/verification/source16-six-native-audits-20261016/sitemap-actual-audit.json -text
+docs/verification/source16-six-native-audits-20261016/head-actual-audit.json -text
+docs/verification/source16-six-native-audits-20261016/main-actual-audit-v2.json -text
+docs/verification/source16-six-native-audits-20261016/quota-actual-audit.json -text
+docs/verification/source16-six-native-audits-20261016/cli-actual-audit.json -text
+docs/verification/source16-six-native-audits-20261016/six-native-root-close.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v2-clippy.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v2-thirteen-tests-failed.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v3-oracle-source-review.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v3-composition-source-review.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v3-producers-source-review.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v3-format.json -text
+docs/verification/source16-six-native-audits-20261016/installer-wip-source-finding.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v3-format-mechanical-review.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v3-clippy.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v3-thirteen-tests.json -text
+docs/verification/source16-six-native-audits-20261016/resources-v3-nine-node-tests.json -text
+docs/verification/source16-six-native-audits-20261016/installer-final-v1-source-finding.json -text
+docs/verification/source16-six-native-audits-20261016/cold-final-v1-source-finding.json -text
+docs/verification/source16-six-native-audits-20261016/source17-driver-wip-finding.json -text
+docs/verification/source16-six-native-audits-20261016/quota-native-summary.json -text
+docs/verification/source16-six-native-audits-20261016/index.json -text
+docs/CLI_RESUME.md -text
+docs/verification/source16-installed-20261016/installer-final-v4-source-review.json -text
+docs/verification/source16-installed-20261016/cold-final-v4-source-review.json -text
+docs/verification/source16-installed-20261016/private-verifier-v2-source-review.json -text
+docs/verification/source16-installed-20261016/actual-installation-audit.json -text
+docs/verification/source16-installed-20261016/verifier-v1-failure-preserved.json -text
+docs/verification/source16-installed-20261016/resources-native-WIP2-ui-finding.json -text
+docs/verification/source16-installed-20261016/index.json -text
+crates/app/src/mcp/crawl_quotas.rs -text
+crates/core/src/models.rs -text
+crates/core/tests/resource_quota_fixtures.rs -text
+docs/verification/source17-suite-build-20261016/full-suite.json -text
+docs/verification/source17-suite-build-20261016/optimized-build.json -text
+docs/verification/source17-suite-build-20261016/product-source-review.json -text
+docs/verification/source17-suite-build-20261016/private-publication-actual-audit.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/source17-suite-build-20261016/final-driver-source-review.json -text
+docs/verification/source17-suite-build-20261016/final-scalar-source-review.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/verification/source17-suite-build-20261016/resource-quota-ui-regressions.mjs -text
+docs/verification/source17-suite-build-20261016/index.json -text
+docs/verification/source17-six-native-audits-20261016/api-actual-audit.json -text
+docs/verification/source17-six-native-audits-20261016/sitemap-actual-audit.json -text
+docs/verification/source17-six-native-audits-20261016/head-actual-audit.json -text
+docs/verification/source17-six-native-audits-20261016/segments-cdn-directory-actual-audit.json -text
+docs/verification/source17-six-native-audits-20261016/durable-quotas-actual-audit.json -text
+docs/verification/source17-six-native-audits-20261016/cli-resume-actual-audit.json -text
+docs/verification/source17-six-native-audits-20261016/index.json -text
+docs/verification/source18-directive-focused-20261016/product-source-review.json -text
+docs/verification/source18-directive-focused-20261016/formatted-source-mechanical-review.json -text
+docs/verification/source18-directive-focused-20261016/format-check.json -text
+docs/verification/source18-directive-focused-20261016/focused-rust.json -text
+docs/verification/source18-directive-focused-20261016/ui-driver-source-review.json -text
+docs/verification/source18-directive-focused-20261016/actual-ui-vm.json -text
+docs/verification/source18-directive-focused-20261016/actual-ui-root-close.json -text
+docs/verification/source18-directive-focused-20261016/focused-actual-independent-review.json -text
+docs/verification/source18-directive-focused-20261016/ui-case-inventory.json -text
+docs/verification/source18-directive-focused-20261016/ui-execution-contract.json -text
+docs/verification/source18-directive-focused-20261016/cargo-check-all-targets.stdout.log -text
+docs/verification/source18-directive-focused-20261016/cargo-check-all-targets.stderr.log -text
+docs/verification/source18-directive-focused-20261016/cargo-directive-unit.stdout.log -text whitespace=-blank-at-eof
+docs/verification/source18-directive-focused-20261016/cargo-directive-unit.stderr.log -text
+docs/verification/source18-directive-focused-20261016/cargo-eight-profile-loopback.stdout.log -text whitespace=-blank-at-eof
+docs/verification/source18-directive-focused-20261016/cargo-eight-profile-loopback.stderr.log -text
+docs/verification/source18-directive-focused-20261016/format-stdout.log -text
+docs/verification/source18-directive-focused-20261016/format-stderr.log -text
+docs/verification/source18-directive-focused-20261016/ui-stdout.log -text
+docs/verification/source18-directive-focused-20261016/ui-stderr.log -text
+docs/verification/source18-directive-focused-20261016/index.json -text
+docs/verification/source18-reporting-candidate-20261016/composition.json -text
+docs/verification/source18-reporting-candidate-20261016/product-candidate.patch -text -diff
+docs/verification/source18-reporting-candidate-20261016/patch-manifest.json -text
+docs/verification/source18-reporting-candidate-20261016/full-suite.json -text
+docs/verification/source18-reporting-candidate-20261016/build.json -text
+docs/verification/source18-reporting-candidate-20261016/actual-independent-review.json -text
+docs/verification/source18-reporting-candidate-20261016/actual-ui-vm.json -text
+docs/verification/source18-reporting-candidate-20261016/actual-baseline-ui.json -text
+docs/verification/source18-reporting-candidate-20261016/UI-test-repair.json -text
+docs/verification/source18-reporting-candidate-20261016/remaining-consumer-map.json -text
+docs/verification/source18-reporting-candidate-20261016/consumer-source-review.json -text
+docs/verification/source18-reporting-candidate-20261016/UI-source-review.json -text
+docs/verification/source18-reporting-candidate-20261016/source17-read-phase-failed-diagnostic.json -text
+docs/verification/source18-reporting-candidate-20261016/source17-failed-run-root-close.json -text
+docs/verification/source18-reporting-candidate-20261016/cargo-format.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/cargo-workspace.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/cargo-clippy.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/build.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/actual-ui-vm-root-close.json -text
+docs/verification/source18-reporting-candidate-20261016/ui-vm-stdout.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/baseline-ui-stdout.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/ui-vm-stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/baseline-ui-stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/index.json -text
+docs/verification/source18-reporting-candidate-20261016/UI-source-review.json -text whitespace=cr-at-eol
+docs/verification/source18-reporting-candidate-20261016/source17-failed-run-root-close.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/composition.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/product-candidate.patch -text -diff
+docs/verification/source19-directory-and-source18-native-20261016/patch-manifest.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/full-suite.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/build.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/suite-independent-actual-review.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/product-independent-source-review.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source18-native-pass.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source18-native-independent-actual-review.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source18-native-Root-close.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source18-native-release-intent.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source18-native-current-helper-source-review.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source18-native-current-Root-source-review.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source19-first-native-failed.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source19-failed-native-Root-close.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source17-run6-genuine23-pass.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source17-run6-wrapper-failed.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source17-run6-Root-close.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source17-run7-wrapper-failed.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source17-run7-genuine23-pass.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source17-run7-derived-absent-pass.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source17-run7-derived-present-failed.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/source17-run7-Root-close.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/blob-native-path-alone-diagnostic.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/cargo-format.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/cargo-format-pre-spawn.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/cargo-workspace.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/cargo-workspace-pre-spawn.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/cargo-clippy.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/cargo-clippy-pre-spawn.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/build.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/build-pre-spawn.json -text whitespace=cr-at-eol
+docs/verification/source19-directory-and-source18-native-20261016/index.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/product-candidate.patch -text -diff
+docs/verification/source21-segments-suite-20261016/patch-manifest.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/composition.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/suite.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/independent-source-review.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/independent-actual-suite-review.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/required-tests.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/renderer.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/Root-suite-runner.mjs -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/acceptance.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/format.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-segments-suite-20261016/format-pre-spawn.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/workspace.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-segments-suite-20261016/workspace-pre-spawn.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/clippy.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-segments-suite-20261016/clippy-pre-spawn.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/optimized-build.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/optimized-build.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-segments-suite-20261016/optimized-build-pre-spawn.json -text whitespace=cr-at-eol
+docs/verification/source21-segments-suite-20261016/index.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/native-proof.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/independent-native-review.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/independent-native-audit.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/Root-close.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/Root-intent.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/Root-prerequisites.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/core9-attempt8-failure.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/core9-attempt8-drained.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/owned-SHM-diagnostic.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-byte-deltas.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/source22-typecheck-failure.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/source23-typecheck-pass.json -text whitespace=cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-baseline-quota.stdout.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-baseline-quota.stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-baseline-resource.stdout.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-baseline-resource.stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-unprimed.bin -text -diff
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-node-read-1.bin -text -diff
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-node-read-2.bin -text -diff
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-node-read-3.bin -text -diff
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-actual-quota-6.stdout.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-actual-quota-6.stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-actual-quota-6-after.bin -text -diff
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-actual-resource-8.stdout.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-actual-resource-8.stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-actual-resource-8-after.bin -text -diff
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-actual-quota-10.stdout.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-actual-quota-10.stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-actual-quota-10-after.bin -text -diff
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-actual-resource-12.stdout.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/diagnostic-actual-resource-12.stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/SHM-actual-resource-12-after.bin -text -diff
+docs/verification/source21-native-and-storage-diagnostic-20261016/source22-typecheck.stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/source23-typecheck.stderr.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source21-native-and-storage-diagnostic-20261016/index.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source24-candidate.patch -text whitespace=-blank-at-eol,cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source24-patch-manifest.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source24-source-review.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source24-source-audit.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source24-focused-proof.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source23-full-suite-failure.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/core10-actual-proof.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/core10-independent-actual-review.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/core10-Root-close.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/core10-Root-release.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source25-typecheck.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source25-original-VM-proof.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/source25-open-validation-finding.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/core10-independent-actual-audit.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/index.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/full-resource-preflight1-closed.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/full-resource-preflight1-failure.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/full-resource-preflight2-closed.json -text whitespace=cr-at-eol
+docs/verification/source24-review-and-core10-20261016/full-resource-preflight2-failure.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-candidate.patch -text whitespace=-blank-at-eol,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-patch-manifest.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-source-review.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-source-audit.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-C3-typecheck.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-C3-ui-vm23.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-full-suite.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-required-tests.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-suite-actual-review.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-optimized-build.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source25-subset-failure.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source25-http-oracle-failure.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/native17-attempt3-failure.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/native17-attempt3-Root-drain.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/native17-attempt4-failure.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/native17-attempt4-Root-drain.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-C3-full-suite-Clippy-failure.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-C3-Clippy-failure.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-C4-Clippy-failure.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-C4-Clippy-failure.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-C5-Clippy-first-pass.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/native17-attempt5-failure.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/native17-attempt5-Root-drain.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/native23-current-caller-source-review.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-suite-actual-audit.json -text whitespace=cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-format.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-workspace.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-ui-content-vm.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-ui-sitemap-vm.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-clippy.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/source26-build.log -text whitespace=-blank-at-eof,cr-at-eol
+docs/verification/source26-comparison-and-resource-drain-20261016/index.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-candidate.patch -text whitespace=-blank-at-eol,cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-patch-manifest.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-source-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-source-audit.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-full-suite.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-required-tests.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-suite-actual-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-suite-actual-audit.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-optimized-build.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-focused.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native23-actual.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native23-actual-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native23-actual-audit.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native25-actual.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native25-actual-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native25-actual-audit.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-r6-drain.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-r7-drain.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-r8-drain.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-r8-first-failure.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-r8-partial.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-r8-diagnosis.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-r8-capsule-sizes.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-v1-source-findings.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-v1-source-audit.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-r4-abrupt-batch.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-r4-abrupt-drain.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-r5-actual.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-r4-actual.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-current-caller-manifest.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-current-caller-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-caller-source-0-Root-runner.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-caller-source-1-broken-owner-http.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-caller-source-2-broken-owner-process.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-helper-manifest.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-helper-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-helper-source-0-broken-positive-fixture.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-helper-source-1-broken-native-cases.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-helper-source-2-broken-request-transport.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native24-helper-source-3-runtime.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-current-caller-manifest.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-current-caller-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-caller-source-0-Root-runner.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-caller-source-1-runtime.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-caller-source-2-comparison-request-transport.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-caller-source-3-comparison-process-callbacks.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-helper-manifest.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-helper-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-helper-source-0-comparison-oracles.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native26-helper-source-1-comparison-native-cases.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-capsule-proposal.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-capsule-source-review.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-capsule-code.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-capsule-fixtures.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-capsule-actual-fixtures.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/native17-capsule-actual-fixture-results.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-native-plan.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source27-native-plan.md -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-v2-source-manifest.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-v2-source-findings.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-engine-pilot-v4.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-engine-owned-adapter.java -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-engine-Root-runner.mjs -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-engine-pilot-v1-failure.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-engine-pilot-v2-failure.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/source28-engine-pilot-v3-failure.json -text whitespace=cr-at-eol
+docs/verification/source27-tls-and-native-progress-20261016/index.json -text whitespace=cr-at-eol
+
+"crates/app/src/comparison_app/reporting.rs" -text
+"crates/app/src/comparison_app/reporting_tests.rs" -text
+"crates/app/src/content_cohort_reporting_tests.rs" -text
+"crates/app/src/mcp/broken_sources.rs" -text
+"crates/app/src/mcp/broken_sources_tests.rs" -text
+"crates/app/src/mcp/ngrams.rs" -text
+"crates/app/src/mcp/ngrams_tests.rs" -text
+"crates/app/src/tls_config.rs" -text
+"crates/core/src/directive_reporting.rs" -text
+"crates/core/src/store/tls_state.rs" -text
+"crates/core/src/tls.rs" -text
+"crates/core/src/tls/local_tls_tests.rs" -text
+"crates/core/src/tls/tests.rs" -text
+"crates/core/tests/directive_reporting_crawl.rs" -text
+"web/verification/ui-content-reporting.cjs" -text
+"web/verification/ui-sitemap-bundle-reporting.cjs" -text
+"web/verification/ui-tls-certificate-staging.cjs" -text
+"crates/app/src/mcp/spelling.rs" -text
+"crates/app/src/mcp/spelling/tests.rs" -text
+"crates/app/src/server/spelling.rs" -text
+"crates/app/src/spelling_app.rs" -text
+"crates/app/src/spelling_app/tests.rs" -text
+"crates/core/src/spelling.rs" -text
+"crates/core/src/spelling/tests.rs" -text
+"web/spelling.html" -text
+"web/spelling.js" -text
+"web/verification/ui-saved-spelling.cjs" -text
+# Keep generated verification records out of language statistics.
+docs/verification/** linguist-generated=true
+
+# Frozen CRLF test source: retain normal whitespace checks while accepting CRLF.
+crates/app/src/mcp/wiring_tests.rs whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve hash-bound raw verification records and their natural log EOF bytes.
+/docs/verification/source28-open-source-alpha-20261016/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+/docs/verification/source28-open-source-alpha-20261016/*.log.txt whitespace=blank-at-eol,-blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve exact bytes of the source-bound validator fixture.
+scripts/fixtures/validator-only-binary.bin -text whitespace=cr-at-eol
+# Preserve original native CSV and retained verification log bytes.
+/docs/verification/table-query-expressions-20261019-r4/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/screenshot-response-harness-20261019-r5/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/docs/verification/table-query-readiness-20261019-r6/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+# Keep the already accepted native driver's original terminal blank line.
+/web/verification/ui-table-expressions-live.cjs whitespace=-blank-at-eof
+# Keep complete native portability downloads and their verification logs raw.
+/docs/verification/table-view-portability-20261019/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+
+# Preserve exact XLSX ZIPs, CSV downloads and original verification logs.
+/docs/verification/table-xlsx-export-20261021/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+
+# Preserve the reviewed native XLSX driver terminal blank lines.
+/web/verification/ui-table-xlsx-live.cjs whitespace=-blank-at-eof
+
+# Preserve native source-availability/provenance follow-up downloads and logs.
+/docs/verification/table-xlsx-provenance-20261021/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol
+/web/verification/ui-table-xlsx-availability-live.cjs whitespace=-blank-at-eof
+/docs/verification/extraction-source-trust-20261021/** -text whitespace=-blank-at-eol,-blank-at-eof,-space-before-tab,cr-at-eol

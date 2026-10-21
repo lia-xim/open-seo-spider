@@ -147,11 +147,55 @@ pub(crate) async fn render_page(
                 &config.link_position_rules,
                 "rendered_html",
             );
-            crate::extract::apply_custom_extractions(
+            let mut extraction_reasons = Vec::new();
+            let html_type = document.headers.iter().any(|(name, value)| {
+                name.eq_ignore_ascii_case("content-type")
+                    && matches!(
+                        value
+                            .split(';')
+                            .next()
+                            .unwrap_or("")
+                            .trim()
+                            .to_ascii_lowercase()
+                            .as_str(),
+                        "text/html" | "application/xhtml+xml"
+                    )
+            });
+            if !html_type {
+                extraction_reasons.push("rendered_content_type_unknown_or_non_html".into());
+            }
+            if document.rendered_at.is_none() {
+                extraction_reasons.push("render_timestamp_not_observed".into());
+            }
+            if !matches!(document.status, Some(status) if status >= 200 && !matches!(status, 204 | 205 | 206 | 304))
+            {
+                extraction_reasons.push("rendered_status_unverified_or_partial".into());
+            }
+            if document
+                .headers
+                .keys()
+                .any(|name| name.eq_ignore_ascii_case("content-range"))
+            {
+                extraction_reasons.push("range_response".into());
+            }
+            let extraction_status = if extraction_reasons.is_empty() {
+                crate::ExtractionSourceStatus::Complete
+            } else {
+                crate::ExtractionSourceStatus::Incomplete
+            };
+            crate::extract::apply_custom_extractions_observed(
                 page,
-                &document.html,
                 &config.custom_extractions,
-                "rendered_html",
+                crate::ExtractionInputContext {
+                    html: Some(&document.html),
+                    source: "rendered_html",
+                    status: extraction_status,
+                    decode_status: crate::ContentCaptureDecodeStatus::Exact,
+                    document_url: Some(&document.final_url),
+                    observed_generation: generation,
+                    observed_at: document.rendered_at.as_deref(),
+                    reasons: extraction_reasons,
+                },
             );
             page.final_url = native_final_url;
             page.rendered = true;

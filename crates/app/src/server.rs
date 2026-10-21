@@ -2399,6 +2399,8 @@ async fn import_report(
     Ok(Json(json!({"id":id,"status":"completed"})))
 }
 async fn persist_import(state: &AppState, id: Uuid, mut report: CrawlReport) -> ApiResult<()> {
+    open_seo_spider_core::validate_report_extraction_observations(&report)
+        .map_err(|error| api_error(StatusCode::BAD_REQUEST, error))?;
     crate::analysis::extend_report(&mut report);
     write_json(state.data_dir.join(format!("{id}.json")), &report)
         .await
@@ -2540,6 +2542,12 @@ async fn load_reports(state: &AppState) -> anyhow::Result<()> {
         };
         match report {
             Some(report) => {
+                if let Err(error) =
+                    open_seo_spider_core::validate_report_extraction_observations(&report)
+                {
+                    tracing::warn!(path=?path,%error,"Ignoring invalid saved extraction evidence");
+                    continue;
+                }
                 // Loading a historical snapshot is read-only. Importing a new
                 // report is a separate operation that may derive and persist
                 // current analysis; startup must not overwrite stored bytes.

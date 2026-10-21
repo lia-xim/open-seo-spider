@@ -940,6 +940,9 @@ pub struct CustomExtraction {
     pub matched_count: Option<usize>,
     pub truncated: bool,
     pub error: Option<String>,
+    /// Optional capture provenance. Historical/pure results remain unknown.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source_observation: Option<crate::ExtractionSourceObservation>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
