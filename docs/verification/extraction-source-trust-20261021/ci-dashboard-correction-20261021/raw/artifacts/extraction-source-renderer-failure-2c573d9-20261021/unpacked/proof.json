@@ -1,0 +1,28 @@
+{
+  "kind": "redesign_UI_E2E",
+  "results": [
+    {
+      "name": "dashboard",
+      "script": "ui-smoke.cjs",
+      "kind": "fixture",
+      "code": 1,
+      "signal": null,
+      "timed_out": false,
+      "timeout_ms": 240000,
+      "duration_ms": 4518
+    }
+  ],
+  "app_origin": "http://127.0.0.1:39745",
+  "shutdown": {
+    "code": 0,
+    "signal": null
+  },
+  "binary": "/home/runner/work/open-seo-spider/open-seo-spider/target/debug/open-seo-spider",
+  "binary_sha256": "a7661a57616a770ce78ba2394bcba68f07d5b5024029f26f60b4e439b57927fb",
+  "binary_unchanged": true,
+  "tracked_sources_unchanged": true,
+  "changed": [],
+  "failure": "Error: dashboard: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ '0 Ergebnisse'\n- '1 Ergebnisse'\n\n    at /home/runner/work/open-seo-spider/open-seo-spider/web/verification/ui-smoke.cjs:108:188 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: '0 Ergebnisse',\n  expected: '1 Ergebnisse',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\n    at file:///home/runner/work/open-seo-spider/open-seo-spider/scripts/ui-e2e.mjs:129:53\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "complete": false,
+  "scope": "Isolated owned local app/data/renderer and synthetic fixtures. Mocked-API fixture suites are labelled separately from live native flows. No installed app or user crawl store used."
+}

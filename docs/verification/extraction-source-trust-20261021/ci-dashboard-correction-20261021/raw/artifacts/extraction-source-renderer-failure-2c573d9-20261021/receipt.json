@@ -1,0 +1,44 @@
+{
+  "kind": "exact_renderer_failure_main_not_terminal",
+  "result": "FAIL_RENDERER_UI_MAIN_OTHER_JOBS_PENDING",
+  "commit": "2c573d95681e00c54c6f99991f34a55c9d2c5be4",
+  "run": 39636204158,
+  "main_status": "in_progress",
+  "main_conclusion": null,
+  "renderer": {
+    "id": 119347254180,
+    "status": "completed",
+    "conclusion": "failure",
+    "failed_steps": [
+      {
+        "name": "Redesigned UI fixture and native end-to-end workflows",
+        "status": "completed",
+        "conclusion": "failure",
+        "number": 38,
+        "started_at": "2026-10-21T16:41:37Z",
+        "completed_at": "2026-10-21T16:41:46Z"
+      }
+    ]
+  },
+  "raw": [
+    {
+      "path": "renderer.log",
+      "bytes": 182099,
+      "sha256": "13701487f99cd0651672a79aa1e53beab257261eaeadaf5285451d7cde1b5213",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/jobs/119347254180/logs"
+    },
+    {
+      "path": "jobs.json",
+      "bytes": 28917,
+      "sha256": "15e5cd15b33e10acae3c2f790ba34c4b0a5171ebb4384d78f0fb22feb8cd92cf",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/runs/39636204158/jobs?per_page=100"
+    },
+    {
+      "path": "run.json",
+      "bytes": 12486,
+      "sha256": "463e03b1825ee963c52ece2baae29d01d5166e0050538bef3faf4dd4f40d67f9",
+      "endpoint": "repos/lia-xim/open-seo-spider/actions/runs/39636204158"
+    }
+  ],
+  "scope": "Original raw failure evidence only. No49-suite or all-four-job PASS inferred. Main workflow untouched."
+}

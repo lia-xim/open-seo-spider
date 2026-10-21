@@ -1,0 +1,50 @@
+diff --git a/artifacts/dashboard-extraction-fixture-contract-20261021/ui-smoke-before.cjs b/web/verification/ui-smoke.cjs
+index 46add1d..794ec2d 100644
+--- a/artifacts/dashboard-extraction-fixture-contract-20261021/ui-smoke-before.cjs
++++ b/web/verification/ui-smoke.cjs
+@@ -7,6 +7,7 @@ const path = require('node:path');
+ const {pathToFileURL}=require('node:url');
+ const assert = require('node:assert/strict');
+ const {createHash} = require('node:crypto');
++const csvRecords = require('./csv-records.cjs');
+ const web = path.resolve(__dirname, '..');
+ const moduleCandidates = [process.env.SPIDER_PLAYWRIGHT_MODULE, path.resolve(web, '../renderer/node_modules/playwright-core'), 'playwright-core', path.join(process.env.APPDATA || '', 'npm/node_modules/rea-agents/node_modules/playwright-core')].filter(Boolean);
+ let playwright;
+@@ -23,6 +24,16 @@ const pages = Array.from({ length: 115 }, (_, i) => {
+     links: [{ url: `https://fixture.test/page-${String((i + 1) % 115).padStart(3, '0')}`, text: 'Next page', internal: true, kind: 'anchor', nofollow: false, rel: '' }, { url: 'https://external.test/', text: 'External', internal: false, kind: 'anchor', nofollow: true, rel: 'nofollow' }],
+     word_count: 100 + i, indexable: i < 113, indexability_reasons: [], headers: { 'content-type': 'text/html' }, redirect_chain: [], size_bytes: 1024, structured_data: [], invalid_structured_data: 0, custom_extractions: i===1||i===2?[{name:'price',selector:'.price',attribute:null,values:i===1?['42.00']:[],source:'raw_html'}]:[], browser_version:i===1?'Fixture Chromium 154':null,rendered_viewport:i===1?{width:1280,height:800}:null,render_wait_ms:i===1?500:null,network_requests:i===1?[{url:'https://fixture.test/sample'}]:[],network_events_dropped:i===1?7:0 };
+ });
++// Explicit MOCK complete-source controls for this isolated UI fixture. The two
++// original page1/page2 legacy records above stay unchanged and remain unknown;
++// these declarations do not claim a native HTTP capture or website observation.
++for(const [index,sourceHTML,values]of [[3,'<span class="price">84.00</span>',['84.00']],[4,'<p>No price element in this mock source</p>',[]]]){
++  const page=pages[index],input=Buffer.from(sourceHTML),observed_at='2026-10-11T12:00:05Z';
++  const source_observation={engine:'open-seo-spider/extraction-source-v1',source:'raw_html',status:'complete',evaluation:'evaluated',decode_status:'exact',document_url:page.final_url,observed_generation:1,observed_at,input_sha256:createHash('sha256').update(input).digest('hex'),input_utf8_bytes:input.length,reasons:[]};
++  source_observation.source_revision=createHash('sha256').update(JSON.stringify([source_observation.engine,source_observation.source,source_observation.document_url,observed_at,source_observation.observed_generation,source_observation.input_sha256,source_observation.input_utf8_bytes])).digest('hex');
++  page.fetched_at=observed_at;
++  page.custom_extractions=[{name:'price',selector:'.price',attribute:null,method:'css',output:'auto',engine:'scraper-html5-css',result_type:'text',values,source:'raw_html',matched_count:values.length,truncated:false,error:null,source_observation}];
++}
+ pages[3].html_canonical=[pages[3].url,pages[3].url];pages[3].title_pixel_widths=[700];
+ // Imported or website-controlled text must remain safe when a user opens the CSV in Excel.
+ for(const [index,value]of [[4,' \t=SUM(1,2)'],[5,'\uFEFF\r\t+SUM(2,3)'],[6,'-SUM(3,4)'],[7,'@SUM(4,5)']])pages[index].titles=[value];
+@@ -105,7 +116,19 @@ const server = http.createServer(async (req, res) => {
+     await page.click('[data-section=issues]'); await page.selectOption('#table-filter', 'notice'); assert.equal(await page.locator('#result-count').innerText(), '1 Ergebnisse'); checked('advanced issue filter');
+     await page.click('[data-section=linkmetrics]'); assert.equal(await page.locator('#result-count').innerText(), '115 Ergebnisse');
+     await page.click('[data-section=structured]'); assert.equal(await page.locator('#result-count').innerText(), '1 Ergebnisse'); checked('link metrics and JSON-LD');
+-    await page.click('[data-section=extractions]'); assert.equal(await page.locator('#result-count').innerText(),'2 Ergebnisse'); await page.selectOption('#table-filter','empty'); assert.equal(await page.locator('#result-count').innerText(),'1 Ergebnisse'); await page.selectOption('#table-filter','present'); await page.locator('#results-table tbody tr.click-row').click(); assert.match(await page.locator('#inspector-content').innerText(),/42\.00/); assert.match(await page.locator('#inspector-content').innerText(),/raw_html/); checked('CSS extraction results and source in table and inspector');
++    await page.click('[data-section=extractions]'); assert.equal(await page.locator('#result-count').innerText(),'4 Ergebnisse');
++    const [extractionDownload]=await Promise.all([page.waitForEvent('download'),page.click('#export-csv')]);
++    const extractionCSV=fs.readFileSync(await extractionDownload.path());fs.writeFileSync(artifactPath('mock-extraction-source-controls.csv'),extractionCSV);
++    const extractionRecords=csvRecords(extractionCSV.subarray(-2).equals(Buffer.from('\r\n'))?extractionCSV:Buffer.concat([extractionCSV,Buffer.from('\r\n')]));
++    assert.deepEqual(extractionRecords.map(row=>row.URL),[1,2,3,4].map(index=>pages[index].url));
++    for(const index of [1,2]){assert.equal(Object.hasOwn(pages[index].custom_extractions[0],'source_observation'),false);const row=extractionRecords.find(row=>row.URL===pages[index].url);assert.equal(row.Quellzustand,'unknown');assert.equal(row['Exakte Gesamtanzahl'],'');assert.equal(row.Quellhinweise,'missing_saved_observation');}
++    assert.equal(extractionRecords[0].Werte,'42.00');assert.equal(extractionRecords[1].Werte,'');
++    for(const[index,count]of [[3,1],[4,0]]){const row=extractionRecords.find(row=>row.URL===pages[index].url),observation=pages[index].custom_extractions[0].source_observation;assert.equal(row.Quellzustand,'complete');assert.equal(row.Auswertung,'evaluated');assert.equal(row.Quelldekodierung,'exact');assert.equal(row['Exakte Gesamtanzahl'],String(count));assert.equal(row['Treffer im ausgewerteten Input'],String(count));assert.equal(row.Zählbereich,'complete_source');assert.equal(row['Eingabe-SHA256'],observation.input_sha256);assert.equal(row.Quellrevision,observation.source_revision);assert.equal(row.Werte,index===3?'84.00':'');}
++    checked('mock extraction CSV keeps both unchanged legacy observations unknown and separately declares complete positive and true-zero controls');
++    await page.selectOption('#table-filter','empty');assert.equal(await page.locator('#result-count').innerText(),'1 Ergebnisse');assert.equal(await page.locator('#results-table tbody tr.click-row').count(),1);assert.match(await page.locator('#results-table tbody').innerText(),/page-004/);
++    await page.selectOption('#table-filter','unknown');assert.equal(await page.locator('#result-count').innerText(),'2 Ergebnisse');assert.deepEqual(await page.locator('#results-table tbody tr.click-row').evaluateAll(rows=>rows.map(row=>row.querySelector('td').textContent.trim())),[pages[1].url,pages[2].url]);
++    await page.selectOption('#table-filter','present');assert.equal(await page.locator('#result-count').innerText(),'2 Ergebnisse');await page.locator('#results-table tbody tr.click-row').filter({hasText:pages[3].url}).click();assert.match(await page.locator('#inspector-content').innerText(),/84\.00/);assert.match(await page.locator('#inspector-content').innerText(),/raw_html/);
++    await page.locator('#results-table tbody tr.click-row').filter({hasText:pages[1].url}).click();assert.match(await page.locator('#inspector-content').innerText(),/42\.00/);assert.match(await page.locator('#inspector-content').innerText(),/raw_html/);checked('mock CSS source controls distinguish confirmed empty1 unknown legacy2 and retained positive2 in table and inspector');
+     const provenance=await page.locator('#inspector-content').innerText();assert.match(provenance,/Fixture Chromium 154/);assert.match(provenance,/"width":1280,"height":800/);assert.match(provenance,/500 ms/);assert.match(provenance,/7 weitere Netzwerkereignisse nicht gespeichert \(Aufzeichnung abgeschnitten\)/);checked('renderer provenance and explicit dropped network observations');
+     await page.click('[data-section=graph]'); assert.equal(await page.locator('.graph-node').count(), 70); assert.equal(await page.locator('#graph-view svg path').count(), 69); checked('bounded real anchor graph');
+     for (const [id, pattern] of [['export-csv', /internal/], ['export-sitemap', /sitemap.xml$/], ['export-project', /fixture.json$/]]) { const pending = page.waitForEvent('download'); await page.click(`#${id}`); assert.match((await pending).suggestedFilename(), pattern); } checked('CSV sitemap project downloads');
